@@ -78,7 +78,7 @@ describe "SendGrid4r::Client" do
   describe "Version" do
 
     it "Validate version" do
-      expect(SendGrid4r::VERSION).to eq("0.0.3")
+      expect(SendGrid4r::VERSION).to eq("0.0.4")
     end
 
   end
