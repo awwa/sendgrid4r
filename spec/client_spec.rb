@@ -72,6 +72,7 @@ describe "SendGrid4r::Client" do
       expect(client.respond_to?("patch_version")).to eq(true)
       expect(client.respond_to?("delete_version")).to eq(true)
 
+
     end
   end
 
