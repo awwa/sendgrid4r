@@ -26,8 +26,17 @@ describe "SendGrid4r::REST::Ips::Addresses" do
   end
 
   context "if account is silver" do
+    TEST_POOL = "test_pool"
     before :all do
       @client = SendGrid4r::Client.new(ENV["SILVER_SENDGRID_USERNAME"], ENV["SILVER_SENDGRID_PASSWORD"])
+      # refresh the pool
+      pools = @client.get_pools
+      pools.each {|pool|
+        @client.delete_pool(TEST_POOL) if pool == TEST_POOL
+      }
+      @client.post_pool(TEST_POOL)
+      #ips = @client.get_ips
+      #@client.delete_ip_from_pool(TEST_POOL, ips[0].ip)
     end
 
     describe "#get_ips" do
@@ -45,5 +54,27 @@ describe "SendGrid4r::REST::Ips::Addresses" do
       end
     end
 
+    describe "#post_ip_to_pool" do
+      it "add ip to pool successfully" do
+        ips = @client.get_ips
+        actual = @client.post_ip_to_pool(TEST_POOL, ips[0].ip)
+        expect(actual.ip).to eq(ips[0].ip)
+        expect(actual.pool_name).to eq(TEST_POOL)
+      end
+    end
+
+    # Could not test because POST an IP to a pool takes 60 sec
+    # describe "#delete_ip_from_pool" do
+    #   it "delete ip from pool successfully" do
+    #     begin
+    #       ips = @client.get_ips
+    #       @client.post_ip_to_pool(TEST_POOL, ips[0].ip)
+    #       @client.delete_ip_from_pool(TEST_POOL, ips[0].ip)
+    #     rescue => e
+    #       puts e.inspect
+    #       raise e
+    #     end
+    #   end
+    # end
   end
 end

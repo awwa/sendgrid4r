@@ -171,7 +171,7 @@ puts ip.pool_name     # => "new_test5"
 ##### DELETE
 Remove an IP address from a pool.
 ```Ruby
-client.delete_ip_from_pool("xxx.xxx.xxx.xxx")
+client.delete_ip_from_pool("pool_name", "xxx.xxx.xxx.xxx")
 ```
 
 #### IP Pools

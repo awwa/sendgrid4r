@@ -30,10 +30,8 @@ module SendGrid4r
           Address.create(post(@auth, "#{SendGrid4r::Client::BASE_URL}/ips/pools/#{pool_name}/ips", params))
         end
 
-        def delete_ip_from_pool(ip)
-          params = Hash.new
-          params["ip"] = ip
-          delete(@auth,"#{SendGrid4r::Client::BASE_URL}/ips/pools/#{pool_name}/ips", params)
+        def delete_ip_from_pool(pool_name, ip)
+          delete(@auth,"#{SendGrid4r::Client::BASE_URL}/ips/pools/#{pool_name}/ips/#{ip}")
         end
 
       end
@@ -49,7 +47,7 @@ module SendGrid4r
           value["pools"].each{|pool|
             ver = Pool.create(pool)
             obj.pools.push(ver)
-          }
+          } if value["pools"] != nil
           obj.warmup = value["warmup"]
           obj.start_date = value["start_date"]
           obj.pool_name = value["pool_name"]
