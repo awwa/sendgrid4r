@@ -41,7 +41,6 @@ module SendGrid4r
         end
 
       end
-
     end
   end
 end
