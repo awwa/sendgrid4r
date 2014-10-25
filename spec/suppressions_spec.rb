@@ -40,7 +40,7 @@ describe "SendGrid4r::REST::Asm::Groups::Suppressions" do
         expect(suppressed_emails[2]).to eq(@email3)
         # get the suppressions
         suppressions = client.get_suppressions(@email1)
-        expect(suppressions.length).to eq(1)
+        expect(suppressions.length>1).to eq(true)
         expect(suppressions[0].name).to eq(@group_name)
         expect(suppressions[0].description).to eq(@group_desc)
         expect(suppressions[0].suppressed).to eq(true)
