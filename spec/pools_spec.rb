@@ -3,15 +3,16 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe "SendGrid4r::REST::Ips::Pools" do
 
+  POOL_NAME = "pool_test"
+  POOL_EDIT = "pool_edit"
+
   before :all do
     Dotenv.load
-    @pool_name = "pool_test"
-    @pool_edit = "pool_edit"
+    @client = SendGrid4r::Client.new(ENV["SILVER_SENDGRID_USERNAME"], ENV["SILVER_SENDGRID_PASSWORD"])
   end
 
-  context "free account" do
+  context "if account is free" do
     it "raise error" do
-
       begin
         #client = SendGrid4r::Client.new(ENV["SENDGRID_USERNAME"], ENV["SENDGRID_PASSWORD"])
         # get ip pools
@@ -28,48 +29,35 @@ describe "SendGrid4r::REST::Ips::Pools" do
         puts ex.inspect
         raise ex
       end
-
     end
-
   end
 
-  context "silver account" do
+  context "if account is silver" do
     it "is normal" do
-
-      begin
-        client = SendGrid4r::Client.new(ENV["SILVER_SENDGRID_USERNAME"], ENV["SILVER_SENDGRID_PASSWORD"])
-        # clean up test env
-        pools = client.get_pools
-        expect(pools.length >= 0).to eq(true)
-        pools.each{|pool|
-          if pool == @pool_name || pool == @pool_edit then
-            client.delete_pool(pool)
-          end
-        }
-        # post a pool
-        new_pool = client.post_pool(@pool_name)
-        expect(@pool_name).to eq(new_pool.name)
-        # put the pool
-        edit_pool = client.put_pool(@pool_name, @pool_edit)
-        expect(@pool_edit).to eq(edit_pool.name)
-        # get the pool
-        pool = client.get_pool(@pool_edit)
-        expect(SendGrid4r::REST::Ips::Pool).to be(pool.class)
-        # delete the pool
-        client.delete_pool(pool.name)
-        expect{client.get_pool(pool.name)}
-        ips = client.get_ips
-        expect(ips.length).to be(1)
-        expect(ips[0].class).to be(SendGrid4r::REST::Ips::Address)
-        expect(client.get_ip(ips[0].ip).class).to be(SendGrid4r::REST::Ips::Address)
-
-      rescue => ex
-        puts ex.inspect
-        raise ex
-      end
-
+      # clean up test env
+      pools = @client.get_pools
+      expect(pools.length >= 0).to eq(true)
+      pools.each{|pool|
+        if pool == POOL_NAME || pool == POOL_EDIT then
+          @client.delete_pool(pool)
+        end
+      }
+      # post a pool
+      new_pool = @client.post_pool(POOL_NAME)
+      expect(POOL_NAME).to eq(new_pool.name)
+      # put the pool
+      edit_pool = @client.put_pool(POOL_NAME, POOL_EDIT)
+      expect(POOL_EDIT).to eq(edit_pool.name)
+      # get the pool
+      pool = @client.get_pool(POOL_EDIT)
+      expect(SendGrid4r::REST::Ips::Pool).to be(pool.class)
+      # delete the pool
+      @client.delete_pool(pool.name)
+      expect{@client.get_pool(pool.name)}
+      ips = @client.get_ips
+      expect(ips.length).to be(1)
+      expect(ips[0].class).to be(SendGrid4r::REST::Ips::Address)
+      expect(@client.get_ip(ips[0].ip).class).to be(SendGrid4r::REST::Ips::Address)
     end
-
   end
-
 end
