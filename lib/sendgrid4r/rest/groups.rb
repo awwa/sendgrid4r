@@ -62,9 +62,7 @@ module SendGrid4r
           }
           hash
         end
-
       end
-
     end
   end
 end
