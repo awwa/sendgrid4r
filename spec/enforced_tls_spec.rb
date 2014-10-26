@@ -5,13 +5,10 @@ describe "SendGrid4r::REST::Settings::EnforcedTls" do
 
   before :all do
     Dotenv.load
+    @client = SendGrid4r::Client.new(ENV["SENDGRID_USERNAME"], ENV["SENDGRID_PASSWORD"])
   end
 
   context "always" do
-
-    before :all do
-      @client = SendGrid4r::Client.new(ENV["SENDGRID_USERNAME"], ENV["SENDGRID_PASSWORD"])
-    end
 
     describe "#get_enforced_tls" do
       it "returns EnforcedTls instance" do
