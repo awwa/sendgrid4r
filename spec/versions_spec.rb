@@ -3,13 +3,12 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe "SendGrid4r::REST::Templates::Versions" do
 
-  TEMPLATE_NAME = "version_test"
-  VERSION1_NAME = "version1_test"
-  VERSION2_NAME = "version2_test"
-
   before :all do
     Dotenv.load
     @client = SendGrid4r::Client.new(ENV["SENDGRID_USERNAME"], ENV["SENDGRID_PASSWORD"])
+    @template_edit = "version_test"
+    @version1_name = "version1_test"
+    @version2_name = "version2_test"
   end
 
   context "always" do
@@ -17,7 +16,7 @@ describe "SendGrid4r::REST::Templates::Versions" do
       # celan up test env
       tmps = @client.get_templates
       tmps.each{|tmp|
-        if tmp.name == TEMPLATE_NAME then
+        if tmp.name == @template_edit then
           tmp.versions.each{|ver|
             @client.delete_version(tmp.id, ver.id)
           }
@@ -25,11 +24,11 @@ describe "SendGrid4r::REST::Templates::Versions" do
         end
       }
       # post a template
-      new_template = @client.post_template(TEMPLATE_NAME)
-      expect(TEMPLATE_NAME).to eq(new_template.name)
+      new_template = @client.post_template(@template_edit)
+      expect(@template_edit).to eq(new_template.name)
       # post a version
       factory = SendGrid4r::VersionFactory.new
-      ver1 = factory.create(VERSION1_NAME)
+      ver1 = factory.create(@version1_name)
       ver1 = @client.post_version(new_template.id, ver1)
       # get the version
       actual = @client.get_version(new_template.id, ver1.id)
@@ -56,7 +55,7 @@ describe "SendGrid4r::REST::Templates::Versions" do
       expect(edit_ver1.plain_content).to eq(actual.plain_content)
       expect(edit_ver1.subject).to eq(actual.subject)
       # post a version 2
-      ver2 = factory.create(VERSION2_NAME, "<%subject%>", "<%body%>", "<%body%>")
+      ver2 = factory.create(@version2_name, "<%subject%>", "<%body%>", "<%body%>")
       ver2 = @client.post_version(new_template.id, ver2)
       # activate version 2
       @client.activate_version(new_template.id, ver2.id)
