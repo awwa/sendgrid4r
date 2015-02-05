@@ -2,61 +2,52 @@
 $:.unshift File.dirname(__FILE__)
 
 require "sendgrid4r/rest/request"
-
 require "versions"
 
 module SendGrid4r
   module REST
+
+    Template = Struct.new(:id, :name, :versions)
+
     module Templates
 
       include SendGrid4r::REST::Request
 
+      def self.create_template(resp)
+        vers = Array.new
+        resp["versions"].each{|ver|
+          vers.push(SendGrid4r::REST::Templates::create_version(ver))
+        }
+        Template.new(resp["id"], resp["name"], vers)
+      end
+
       def get_templates
-        response = get(@auth, "#{SendGrid4r::Client::BASE_URL}/templates")
+        resp_a = get(@auth, "#{SendGrid4r::Client::BASE_URL}/templates")
         tmps = Array.new
-        response["templates"].each{|template|
-          tmp = Template.create(template)
-          tmps.push(tmp)
-        } if response["templates"] != nil
+        resp_a["templates"].each{|resp|
+          tmps.push(SendGrid4r::REST::Templates::create_template(resp))
+        }
         tmps
       end
 
       def get_template(template_id)
-        Template.create(get(@auth, "#{SendGrid4r::Client::BASE_URL}/templates/#{template_id}"))
+        resp = get(@auth, "#{SendGrid4r::Client::BASE_URL}/templates/#{template_id}")
+        SendGrid4r::REST::Templates.create_template(resp)
       end
 
       def post_template(name)
-        params = Hash.new
-        params["name"] = name
-        Template.create(post(@auth, "#{SendGrid4r::Client::BASE_URL}/templates", params))
+        resp = post(@auth, "#{SendGrid4r::Client::BASE_URL}/templates", { "name" => name })
+        SendGrid4r::REST::Templates.create_template(resp)
       end
 
       def patch_template(template_id, name)
-        params = Hash.new
-        params["name"] = name
-        Template.create(patch(@auth, "#{SendGrid4r::Client::BASE_URL}/templates/#{template_id}", params))
+        resp = patch(
+          @auth, "#{SendGrid4r::Client::BASE_URL}/templates/#{template_id}", { "name" => name })
+        SendGrid4r::REST::Templates.create_template(resp)
       end
 
       def delete_template(template_id)
         delete(@auth, "#{SendGrid4r::Client::BASE_URL}/templates/#{template_id}")
-      end
-
-    end
-
-    class Template
-
-      attr_accessor :id, :name, :versions
-
-      def self.create(value)
-        obj = Template.new
-        obj.id = value["id"]
-        obj.name = value["name"]
-        obj.versions = []
-        value["versions"].each{|version|
-          ver = Templates::Version.create(version)
-          obj.versions.push(ver)
-        }
-        obj
       end
 
     end

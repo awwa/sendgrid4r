@@ -6,28 +6,41 @@ require "sendgrid4r/rest/request"
 module SendGrid4r
   module REST
     module Ips
+
+      Address = Struct.new(:ip, :pools, :warmup, :start_date, :pool_name)
+
+      def self.create_address(resp)
+        Address.new(
+          resp["ip"],
+          resp["pools"],
+          resp["warmup"],
+          resp["start_date"],
+          resp["pool_name"]
+        )
+      end
+
       module Addresses
 
         include SendGrid4r::REST::Request
 
         def get_ips
-          response = get(@auth, "#{SendGrid4r::Client::BASE_URL}/ips")
+          resp_a = get(@auth, "#{SendGrid4r::Client::BASE_URL}/ips")
           ips = Array.new
-          response.each{|ip|
-            ip_address = Address.create(ip)
-            ips.push(ip_address)
-          } if response.length > 0
+          resp_a.each{|resp|
+            ips.push(SendGrid4r::REST::Ips::create_address(resp))
+          }
           ips
         end
 
         def get_ip(ip)
-          Address.create(get(@auth, "#{SendGrid4r::Client::BASE_URL}/ips/#{ip}"))
+          resp = get(@auth, "#{SendGrid4r::Client::BASE_URL}/ips/#{ip}")
+          SendGrid4r::REST::Ips::create_address(resp)
         end
 
         def post_ip_to_pool(pool_name, ip)
-          params = Hash.new
-          params["ip"] = ip
-          Address.create(post(@auth, "#{SendGrid4r::Client::BASE_URL}/ips/pools/#{pool_name}/ips", params))
+          resp = post(
+            @auth, "#{SendGrid4r::Client::BASE_URL}/ips/pools/#{pool_name}/ips", {:ip => ip})
+          SendGrid4r::REST::Ips::create_address(resp)
         end
 
         def delete_ip_from_pool(pool_name, ip)
@@ -35,28 +48,6 @@ module SendGrid4r
         end
 
       end
-
-      class Address
-
-        attr_accessor :ip, :pools, :warmup, :start_date, :pool_name
-
-        def self.create(value)
-          obj = Address.new
-          obj.ip = value["ip"]
-          obj.pools = []
-          value["pools"].each{|pool|
-            ver = Pool.create(pool)
-            obj.pools.push(ver)
-          } if value["pools"] != nil
-          obj.warmup = value["warmup"]
-          obj.start_date = value["start_date"]
-          obj.pool_name = value["pool_name"]
-          obj
-        end
-
-      end
-
     end
-
   end
 end

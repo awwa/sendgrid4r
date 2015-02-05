@@ -6,6 +6,13 @@ require "sendgrid4r/rest/request"
 module SendGrid4r
   module REST
     module Ips
+
+      Pool = Struct.new(:name, :ips)
+
+      def self.create_pool(resp)
+        Pool.new(resp["name"], resp["ips"])
+      end
+
       module Pools
 
         include SendGrid4r::REST::Request
@@ -15,36 +22,23 @@ module SendGrid4r
         end
 
         def post_pool(name)
-          params = Hash.new
-          params["name"] = name
-          Pool.create(post(@auth, "#{SendGrid4r::Client::BASE_URL}/ips/pools", params))
+          resp = post(@auth, "#{SendGrid4r::Client::BASE_URL}/ips/pools", {"name" => name})
+          SendGrid4r::REST::Ips::create_pool(resp)
         end
 
         def get_pool(name)
-          Pool.create(get(@auth, "#{SendGrid4r::Client::BASE_URL}/ips/pools/#{name}"))
+          resp = get(@auth, "#{SendGrid4r::Client::BASE_URL}/ips/pools/#{name}")
+          SendGrid4r::REST::Ips::create_pool(resp)
         end
 
         def put_pool(name, new_name)
-          params = Hash.new
-          params["name"] = new_name
-          Pool.create(put(@auth, "#{SendGrid4r::Client::BASE_URL}/ips/pools/#{name}", params))
+          resp = put(
+            @auth, "#{SendGrid4r::Client::BASE_URL}/ips/pools/#{name}", {"name" => new_name})
+          SendGrid4r::REST::Ips::create_pool(resp)
         end
 
         def delete_pool(name)
           delete(@auth,"#{SendGrid4r::Client::BASE_URL}/ips/pools/#{name}")
-        end
-
-      end
-
-      class Pool
-
-        attr_accessor :name, :ips
-
-        def self.create(value)
-          obj = Pool.new
-          obj.name = value["name"]
-          obj.ips = value["ips"]
-          obj
         end
 
       end

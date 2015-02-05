@@ -6,62 +6,53 @@ require "sendgrid4r/rest/request"
 module SendGrid4r
   module REST
     module Asm
+
+      Group = Struct.new(:id, :name, :description, :last_email_sent_at, :unsubscribes)
+
+      def self.create_group(resp)
+        Group.new(
+          resp["id"],
+          resp["name"],
+          resp["description"],
+          resp["last_email_sent_at"],
+          resp["unsubscribes"]
+        )
+      end
+
       module Groups
 
         include SendGrid4r::REST::Request
 
         def get_groups
-          response = get(@auth, "#{SendGrid4r::Client::BASE_URL}/asm/groups")
+          resp_a = get(@auth, "#{SendGrid4r::Client::BASE_URL}/asm/groups")
           groups = Array.new
-          response.each{|grp|
-            group = Group.create(grp)
-            groups.push(group)
-          } if response.length != 0
+          resp_a.each{|resp|
+            groups.push(SendGrid4r::REST::Asm::create_group(resp))
+          }
           groups
         end
 
         def get_group(group_id)
-          Group.create(get(@auth, "#{SendGrid4r::Client::BASE_URL}/asm/groups/#{group_id}"))
+          resp = get(@auth, "#{SendGrid4r::Client::BASE_URL}/asm/groups/#{group_id}")
+          SendGrid4r::REST::Asm::create_group(resp)
         end
 
         def post_group(name, description)
-          params = Hash.new
-          params["name"] = name
-          params["description"] = description
-          Group.create(post(@auth, "#{SendGrid4r::Client::BASE_URL}/asm/groups", params))
+          params = {"name" => name, "description" => description}
+          resp = post(@auth, "#{SendGrid4r::Client::BASE_URL}/asm/groups", params)
+          SendGrid4r::REST::Asm::create_group(resp)
         end
 
         def patch_group(group_id, group)
-          Group.create(patch(@auth, "#{SendGrid4r::Client::BASE_URL}/asm/groups/#{group_id}", group.to_hash))
+          resp = patch(
+            @auth, "#{SendGrid4r::Client::BASE_URL}/asm/groups/#{group_id}", group.to_h)
+          SendGrid4r::REST::Asm::create_group(resp)
         end
 
         def delete_group(group_id)
           delete(@auth, "#{SendGrid4r::Client::BASE_URL}/asm/groups/#{group_id}")
         end
 
-      end
-
-      class Group
-
-        attr_accessor :id, :name, :description, :last_email_sent_at, :unsubscribes
-
-        def self.create(value)
-          obj = Group.new
-          obj.id = value["id"]
-          obj.name = value["name"]
-          obj.description = value["description"]
-          obj.last_email_sent_at = value["last_email_sent_at"]
-          obj.unsubscribes = value["unsubscribes"]
-          obj
-        end
-
-        def to_hash
-          hash = {
-            "name" => @name,
-            "description" => @description,
-          }
-          hash
-        end
       end
     end
   end
