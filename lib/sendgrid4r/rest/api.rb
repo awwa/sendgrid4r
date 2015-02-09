@@ -7,6 +7,7 @@ require "sendgrid4r/rest/enforced_tls"
 require "sendgrid4r/rest/addresses"
 require "sendgrid4r/rest/pools"
 require "sendgrid4r/rest/warmup"
+require "sendgrid4r/rest/categories"
 
 module SendGrid4r
   module REST
@@ -20,6 +21,7 @@ module SendGrid4r
       include SendGrid4r::REST::Ips::Addresses
       include SendGrid4r::REST::Ips::Warmup
       include SendGrid4r::REST::Ips::Pools
+      include SendGrid4r::REST::Categories::Categories
     end
   end
 end

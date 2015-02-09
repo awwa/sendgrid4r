@@ -9,9 +9,10 @@ module SendGrid4r
   module REST
     module Request
 
-      def get(auth, endpoint)
+      def get(auth, endpoint, params = nil)
         resource = RestClient::Resource.new(endpoint, auth.get_username, auth.get_password)
-        body = resource.get.body
+        p = {"params" => params} if !params.nil?
+        body = resource.get(p)
         JSON.parse(body)
       end
 

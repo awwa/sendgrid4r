@@ -377,6 +377,21 @@ Delete a version.
 client.delete_version(template_id, version_id)
 ```
 
+----
+### Categories
+
+#### Categories
+
+##### GET
+Retrieve all categories.
+```Ruby
+categories = client.get_categories
+categories.each {|category|
+  puts category.category
+}
+```
+
+
 ## Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/sendgrid4r/fork )
