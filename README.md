@@ -391,6 +391,13 @@ categories.each {|category|
 }
 ```
 
+Retrieve some categories that have the name "Newsletter" 2 items from index 40.
+```Ruby
+categories = client.get_categories("Newsletter", nil, nil)
+categories.each {|category|
+  puts category.category
+}
+```
 
 ## Contributing
 
