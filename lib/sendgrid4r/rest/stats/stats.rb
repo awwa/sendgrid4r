@@ -16,11 +16,11 @@ module SendGrid4r
       TopStat  = Struct.new(:date, :stats)
       Stat        = Struct.new(:metrics, :name, :type)
       Metric      = Struct.new(:blocks, :bounce_drops,
-        :bounces, :clicks, :deferred, :delivered,
+        :bounces, :clicks, :deferred, :delivered, :drops,
         :invalid_emails, :opens, :processed, :requests,
         :spam_report_drops, :spam_reports,
         :unique_clicks, :unique_opens, :unsubscribe_drops,
-        :unsubscribes
+        :unsubscribes, :received
       )
 
       def self.create_top_stat(resp)
@@ -46,6 +46,7 @@ module SendGrid4r
           resp["clicks"],
           resp["deferred"],
           resp["delivered"],
+          resp["drops"],
           resp["invalid_emails"],
           resp["opens"],
           resp["processed"],
@@ -55,7 +56,8 @@ module SendGrid4r
           resp["unique_clicks"],
           resp["unique_opens"],
           resp["unsubscribe_drops"],
-          resp["unsubscribe"])
+          resp["unsubscribes"],
+          resp["received"])
       end
     end
   end

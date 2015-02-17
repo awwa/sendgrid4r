@@ -13,6 +13,7 @@ require "sendgrid4r/rest/stats/global"
 require "sendgrid4r/rest/stats/category"
 require "sendgrid4r/rest/stats/subuser"
 require "sendgrid4r/rest/stats/advanced"
+require "sendgrid4r/rest/stats/parse"
 
 module SendGrid4r
   module REST
@@ -31,6 +32,7 @@ module SendGrid4r
       include SendGrid4r::REST::Stats::Category
       include SendGrid4r::REST::Stats::Subuser
       include SendGrid4r::REST::Stats::Advanced
+      include SendGrid4r::REST::Stats::Parse
     end
   end
 end

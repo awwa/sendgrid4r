@@ -21,6 +21,10 @@ describe "SendGrid4r::REST::Stats::Advanced" do
           stats.each{|stat|
             expect(stat.class).to be(SendGrid4r::REST::Stats::Stat)
             expect(stat.metrics.class).to be(SendGrid4r::REST::Stats::Metric)
+            expect(stat.metrics.clicks.nil?).to be(false)
+            expect(stat.metrics.opens.nil?).to be(false)
+            expect(stat.metrics.unique_clicks.nil?).to be(false)
+            expect(stat.metrics.unique_opens.nil?).to be(false)
           }
         }
       end
@@ -52,6 +56,8 @@ describe "SendGrid4r::REST::Stats::Advanced" do
           stats.each{|stat|
             expect(stat.class).to be(SendGrid4r::REST::Stats::Stat)
             expect(stat.metrics.class).to be(SendGrid4r::REST::Stats::Metric)
+            expect(stat.metrics.opens.nil?).to be(false)
+            expect(stat.metrics.unique_opens.nil?).to be(false)
           }
         }
       end
@@ -83,6 +89,8 @@ describe "SendGrid4r::REST::Stats::Advanced" do
           stats.each{|stat|
             expect(stat.class).to be(SendGrid4r::REST::Stats::Stat)
             expect(stat.metrics.class).to be(SendGrid4r::REST::Stats::Metric)
+            expect(stat.metrics.opens.nil?).to be(false)
+            expect(stat.metrics.unique_opens.nil?).to be(false)
           }
         }
       end
@@ -114,6 +122,8 @@ describe "SendGrid4r::REST::Stats::Advanced" do
           stats.each{|stat|
             expect(stat.class).to be(SendGrid4r::REST::Stats::Stat)
             expect(stat.metrics.class).to be(SendGrid4r::REST::Stats::Metric)
+            expect(stat.metrics.opens.nil?).to be(false)
+            expect(stat.metrics.unique_opens.nil?).to be(false)
           }
         }
       end
@@ -145,6 +155,16 @@ describe "SendGrid4r::REST::Stats::Advanced" do
           stats.each{|stat|
             expect(stat.class).to be(SendGrid4r::REST::Stats::Stat)
             expect(stat.metrics.class).to be(SendGrid4r::REST::Stats::Metric)
+            expect(stat.metrics.blocks.nil?).to be(false)
+            expect(stat.metrics.bounces.nil?).to be(false)
+            expect(stat.metrics.clicks.nil?).to be(false)
+            expect(stat.metrics.deferred.nil?).to be(false)
+            expect(stat.metrics.delivered.nil?).to be(false)
+            expect(stat.metrics.drops.nil?).to be(false)
+            expect(stat.metrics.opens.nil?).to be(false)
+            expect(stat.metrics.spam_reports.nil?).to be(false)
+            expect(stat.metrics.unique_clicks.nil?).to be(false)
+            expect(stat.metrics.unique_opens.nil?).to be(false)
           }
         }
       end
@@ -175,6 +195,8 @@ describe "SendGrid4r::REST::Stats::Advanced" do
           stats.each{|stat|
             expect(stat.class).to be(SendGrid4r::REST::Stats::Stat)
             expect(stat.metrics.class).to be(SendGrid4r::REST::Stats::Metric)
+            expect(stat.metrics.clicks.nil?).to be(false)
+            expect(stat.metrics.unique_clicks.nil?).to be(false)
           }
         }
       end
