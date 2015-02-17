@@ -12,13 +12,17 @@ module SendGrid4r
       def get(auth, endpoint, params = nil)
         resource = RestClient::Resource.new(endpoint, auth.get_username, auth.get_password)
         p = {"params" => params} if !params.nil?
-        body = resource.get(p)
+        if p.nil?
+          body = resource.get
+        else
+          body = resource.get(p)
+        end
         JSON.parse(body)
       end
 
       def post(auth, endpoint, params = nil)
         resource = RestClient::Resource.new(endpoint, auth.get_username, auth.get_password)
-        if params == nil
+        if params.nil?
           body = resource.post(:content_type => :json).body
         else
           body = resource.post(params.to_json, :content_type => :json).body
