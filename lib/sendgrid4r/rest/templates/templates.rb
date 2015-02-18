@@ -7,9 +7,9 @@ require "versions"
 module SendGrid4r
   module REST
 
-    Template = Struct.new(:id, :name, :versions)
-
     module Templates
+
+      Template = Struct.new(:id, :name, :versions)
 
       include SendGrid4r::REST::Request
 
