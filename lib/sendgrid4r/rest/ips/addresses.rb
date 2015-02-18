@@ -24,7 +24,7 @@ module SendGrid4r
         include SendGrid4r::REST::Request
 
         def get_ips
-          resp_a = get(@auth, "#{SendGrid4r::Client::BASE_URL}/ips")
+          resp_a = get(@auth, "#{SendGrid4r::Client::BASE_URL}/ips/assigned")
           ips = Array.new
           resp_a.each{|resp|
             ips.push(SendGrid4r::REST::Ips::create_address(resp))

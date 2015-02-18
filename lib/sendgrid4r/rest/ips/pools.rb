@@ -7,10 +7,14 @@ module SendGrid4r
   module REST
     module Ips
 
-      Pool = Struct.new(:name, :ips)
+      Pool = Struct.new(:pool_name, :name, :ips)
 
       def self.create_pool(resp)
-        Pool.new(resp["name"], resp["ips"])
+        ips = Array.new
+        Array(resp["ips"]).each{|ip|
+          ips.push(ip)
+        }
+        Pool.new(resp["pool_name"], resp["name"], ips)
       end
 
       module Pools
@@ -18,7 +22,12 @@ module SendGrid4r
         include SendGrid4r::REST::Request
 
         def get_pools
-          get(@auth, "#{SendGrid4r::Client::BASE_URL}/ips/pools")
+          resp_a = get(@auth, "#{SendGrid4r::Client::BASE_URL}/ips/pools")
+          pools = Array.new
+          resp_a.each{|resp|
+            pools.push(SendGrid4r::REST::Ips::create_pool(resp))
+          }
+          pools
         end
 
         def post_pool(name)

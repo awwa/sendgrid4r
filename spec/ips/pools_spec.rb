@@ -1,5 +1,5 @@
 # encoding: utf-8
-require File.dirname(__FILE__) + '/spec_helper'
+require File.dirname(__FILE__) + '/../spec_helper'
 
 describe "SendGrid4r::REST::Ips::Pools" do
 
@@ -37,8 +37,8 @@ describe "SendGrid4r::REST::Ips::Pools" do
       pools = @client.get_pools
       expect(pools.length >= 0).to eq(true)
       pools.each{|pool|
-        if pool == @pool_name || pool == @pool_edit then
-          @client.delete_pool(pool)
+        if pool.name == @pool_name || pool.name == @pool_edit then
+          @client.delete_pool(pool.name)
         end
       }
       # post a pool
@@ -51,7 +51,7 @@ describe "SendGrid4r::REST::Ips::Pools" do
       pool = @client.get_pool(@pool_edit)
       expect(SendGrid4r::REST::Ips::Pool).to be(pool.class)
       # delete the pool
-      @client.delete_pool(pool.name)
+      @client.delete_pool(pool.pool_name)
       expect{@client.get_pool(pool.name)}
       ips = @client.get_ips
       expect(ips.length).to be(1)

@@ -1,5 +1,5 @@
 # encoding: utf-8
-require File.dirname(__FILE__) + '/spec_helper'
+require File.dirname(__FILE__) + '/../spec_helper'
 
 describe "SendGrid4r::REST::Ips::Addresses" do
 
@@ -20,7 +20,12 @@ describe "SendGrid4r::REST::Ips::Addresses" do
 
     describe "#get_ip" do
       it "raise error" do
-        expect{@client.get_ip("10.10.10.10").to raise_error(RestClient::Forbidden)}
+        begin
+          expect{@client.get_ip("10.10.10.10").to raise_error(RestClient::Forbidden)}
+        rescue => e
+          puts e.inspect
+          raise e
+        end
       end
     end
   end
@@ -28,15 +33,20 @@ describe "SendGrid4r::REST::Ips::Addresses" do
   context "if account is silver" do
     TEST_POOL = "test_pool"
     before :all do
-      @client = SendGrid4r::Client.new(ENV["SILVER_SENDGRID_USERNAME"], ENV["SILVER_SENDGRID_PASSWORD"])
-      # refresh the pool
-      pools = @client.get_pools
-      pools.each {|pool|
-        @client.delete_pool(TEST_POOL) if pool == TEST_POOL
-      }
-      @client.post_pool(TEST_POOL)
-      #ips = @client.get_ips
-      #@client.delete_ip_from_pool(TEST_POOL, ips[0].ip)
+      begin
+        @client = SendGrid4r::Client.new(ENV["SILVER_SENDGRID_USERNAME"], ENV["SILVER_SENDGRID_PASSWORD"])
+        # refresh the pool
+        pools = @client.get_pools
+        pools.each {|pool|
+          @client.delete_pool(TEST_POOL) if pool.name == TEST_POOL
+        }
+        @client.post_pool(TEST_POOL)
+        #ips = @client.get_ips
+        #@client.delete_ip_from_pool(TEST_POOL, ips[0].ip)
+      rescue => e
+        puts e.inspect
+        raise e
+      end
     end
 
     describe "#get_ips" do
@@ -49,8 +59,13 @@ describe "SendGrid4r::REST::Ips::Addresses" do
 
     describe "#get_ip" do
       it "returns Address instance" do
-        ips = @client.get_ips
-        expect(@client.get_ip(ips[0].ip).class).to be(SendGrid4r::REST::Ips::Address)
+        begin
+          ips = @client.get_ips
+          expect(@client.get_ip(ips[0].ip).class).to be(SendGrid4r::REST::Ips::Address)
+        rescue => e
+          puts e.inspect
+          raise e
+        end
       end
     end
 
@@ -59,7 +74,8 @@ describe "SendGrid4r::REST::Ips::Addresses" do
         ips = @client.get_ips
         actual = @client.post_ip_to_pool(TEST_POOL, ips[0].ip)
         expect(actual.ip).to eq(ips[0].ip)
-        expect(actual.pool_name).to eq(TEST_POOL)
+        expect(actual.pools).to include(TEST_POOL)
+        expect(actual.pools.class).to be(Array)
       end
     end
 
