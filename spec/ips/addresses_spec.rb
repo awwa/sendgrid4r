@@ -12,9 +12,9 @@ describe "SendGrid4r::REST::Ips::Addresses" do
       @client = SendGrid4r::Client.new(ENV["SENDGRID_USERNAME"], ENV["SENDGRID_PASSWORD"])
     end
 
-    describe "#get_ips" do
+    describe "#get_ips_assigned" do
       it "raise error" do
-        expect{@client.get_ips}.to raise_error(RestClient::Forbidden)
+        expect{@client.get_ips_assigned}.to raise_error(RestClient::Forbidden)
       end
     end
 
@@ -53,6 +53,19 @@ describe "SendGrid4r::REST::Ips::Addresses" do
       it "returns Array of Address instance" do
         ips = @client.get_ips
         expect(ips.length > 0).to be(true)
+        ip = ips[0]
+        expect(ip.class).to be(SendGrid4r::REST::Ips::Address)
+        expect(ip.ip.nil?).to be(false)
+        #expect(ip.pools.nil?).to be(false)
+        #expect(ip.start_date.nil?).to be(false)
+        expect(ip.warmup.nil?).to be(false)
+      end
+    end
+
+    describe "#get_ips_assigned" do
+      it "returns Array of Address instance" do
+        ips = @client.get_ips_assigned
+        expect(ips.length > 0).to be(true)
         expect(ips[0].class).to be(SendGrid4r::REST::Ips::Address)
       end
     end
@@ -60,7 +73,7 @@ describe "SendGrid4r::REST::Ips::Addresses" do
     describe "#get_ip" do
       it "returns Address instance" do
         begin
-          ips = @client.get_ips
+          ips = @client.get_ips_assigned
           expect(@client.get_ip(ips[0].ip).class).to be(SendGrid4r::REST::Ips::Address)
         rescue => e
           puts e.inspect
@@ -71,7 +84,7 @@ describe "SendGrid4r::REST::Ips::Addresses" do
 
     describe "#post_ip_to_pool" do
       it "add ip to pool successfully" do
-        ips = @client.get_ips
+        ips = @client.get_ips_assigned
         actual = @client.post_ip_to_pool(TEST_POOL, ips[0].ip)
         expect(actual.ip).to eq(ips[0].ip)
         expect(actual.pools).to include(TEST_POOL)
