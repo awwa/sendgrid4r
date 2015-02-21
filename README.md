@@ -3,7 +3,7 @@
 This gem allows you to quickly and easily access to SendGrid Web API v3 for Ruby.
 See [api reference](https://sendgrid.com/docs/API_Reference/Web_API_v3/index.html) for more detail
 
-[![Build Status](https://travis-ci.org/awwa/sendgrid4r.svg?branch=master)](https://travis-ci.org/awwa/sendgrid4r.svg?branch=master)
+[![Build Status](https://travis-ci.org/awwa/sendgrid4r.svg?branch=master)](https://travis-ci.org/awwa/sendgrid4r)
 
 ## Installation
 
