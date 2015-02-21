@@ -1,7 +1,14 @@
-module SendGrid4r
-  class VersionFactory
+# -*- encoding: utf-8 -*-
+$LOAD_PATH.unshift File.dirname(__FILE__)
 
-    def create(name, subject = "<%subject%>", html_content = "<%body%>", plain_content = "<%body%>", active = 1)
+module SendGrid4r
+  #
+  # SendGrid Web API v3 Factory Class implementation
+  #
+  class VersionFactory
+    def create(
+      name, subject = '<%subject%>',
+      html_content = '<%body%>', plain_content = '<%body%>', active = 1)
       SendGrid4r::REST::Templates::Version.new(
         nil,
         nil,
@@ -13,6 +20,5 @@ module SendGrid4r
         nil
       )
     end
-
   end
 end

@@ -1,84 +1,99 @@
 # encoding: utf-8
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe "SendGrid4r::Client" do
-
+describe 'SendGrid4r::Client' do
   before :all do
     Dotenv.load
   end
 
-  context "always" do
-
+  context 'always' do
     before :all do
-      @client = SendGrid4r::Client.new("username", "password")
+      @client = SendGrid4r::Client.new('username', 'password')
     end
 
-    describe "#initialize" do
-      it "create instance" do
+    describe '#initialize' do
+      it 'create instance' do
         expect(@client.class).to eq(SendGrid4r::Client)
       end
     end
 
-    describe "methods" do
-      it "available" do
+    describe 'methods' do
+      it 'available' do
         # Advanced Suppression Manager
         # groups
-        expect(@client.respond_to?("get_groups")).to eq(true)
-        expect(@client.respond_to?("get_group")).to eq(true)
-        expect(@client.respond_to?("post_group")).to eq(true)
-        expect(@client.respond_to?("patch_group")).to eq(true)
-        expect(@client.respond_to?("delete_group")).to eq(true)
+        expect(@client.respond_to?('get_groups')).to eq(true)
+        expect(@client.respond_to?('get_group')).to eq(true)
+        expect(@client.respond_to?('post_group')).to eq(true)
+        expect(@client.respond_to?('patch_group')).to eq(true)
+        expect(@client.respond_to?('delete_group')).to eq(true)
         # suppressions
-        expect(@client.respond_to?("post_suppressed_emails")).to eq(true)
-        expect(@client.respond_to?("get_suppressions")).to eq(true)
-        expect(@client.respond_to?("get_suppressed_emails")).to eq(true)
-        expect(@client.respond_to?("delete_suppressed_email")).to eq(true)
+        expect(@client.respond_to?('post_suppressed_emails')).to eq(true)
+        expect(@client.respond_to?('get_suppressions')).to eq(true)
+        expect(@client.respond_to?('get_suppressed_emails')).to eq(true)
+        expect(@client.respond_to?('delete_suppressed_email')).to eq(true)
         # global suppressions
-        expect(@client.respond_to?("post_global_suppressed_emails")).to eq(true)
-        expect(@client.respond_to?("get_global_suppressed_email")).to eq(true)
-        expect(@client.respond_to?("delete_global_suppressed_email")).to eq(true)
+        expect(@client.respond_to?('post_global_suppressed_emails')).to eq(true)
+        expect(@client.respond_to?('get_global_suppressed_email')).to eq(true)
+        expect(
+          @client.respond_to?('delete_global_suppressed_email')
+        ).to eq(true)
         # IP Management
         # ip addresses
-        expect(@client.respond_to?("get_ips")).to eq(true)
-        expect(@client.respond_to?("get_ip")).to eq(true)
-        expect(@client.respond_to?("post_ip_to_pool")).to eq(true)
-        expect(@client.respond_to?("delete_ip_from_pool")).to eq(true)
+        expect(@client.respond_to?('get_ips')).to eq(true)
+        expect(@client.respond_to?('get_ips_assigned')).to eq(true)
+        expect(@client.respond_to?('get_ip')).to eq(true)
+        expect(@client.respond_to?('post_ip_to_pool')).to eq(true)
+        expect(@client.respond_to?('delete_ip_from_pool')).to eq(true)
         # pool
-        expect(@client.respond_to?("get_pools")).to eq(true)
-        expect(@client.respond_to?("post_pool")).to eq(true)
-        expect(@client.respond_to?("get_pool")).to eq(true)
-        expect(@client.respond_to?("put_pool")).to eq(true)
-        expect(@client.respond_to?("delete_pool")).to eq(true)
+        expect(@client.respond_to?('get_pools')).to eq(true)
+        expect(@client.respond_to?('post_pool')).to eq(true)
+        expect(@client.respond_to?('get_pool')).to eq(true)
+        expect(@client.respond_to?('put_pool')).to eq(true)
+        expect(@client.respond_to?('delete_pool')).to eq(true)
         # warmup
-        expect(@client.respond_to?("get_warmup_ips")).to eq(true)
-        expect(@client.respond_to?("get_warmup_ip")).to eq(true)
-        expect(@client.respond_to?("post_warmup_ip")).to eq(true)
-        expect(@client.respond_to?("delete_warmup_ip")).to eq(true)
+        expect(@client.respond_to?('get_warmup_ips')).to eq(true)
+        expect(@client.respond_to?('get_warmup_ip')).to eq(true)
+        expect(@client.respond_to?('post_warmup_ip')).to eq(true)
+        expect(@client.respond_to?('delete_warmup_ip')).to eq(true)
         # Settings
         # enforced_tls
-        expect(@client.respond_to?("get_enforced_tls")).to eq(true)
-        expect(@client.respond_to?("patch_enforced_tls")).to eq(true)
+        expect(@client.respond_to?('get_enforced_tls')).to eq(true)
+        expect(@client.respond_to?('patch_enforced_tls')).to eq(true)
         # Template Engine
         # templates
-        expect(@client.respond_to?("get_templates")).to eq(true)
-        expect(@client.respond_to?("get_template")).to eq(true)
-        expect(@client.respond_to?("post_template")).to eq(true)
-        expect(@client.respond_to?("patch_template")).to eq(true)
-        expect(@client.respond_to?("delete_template")).to eq(true)
+        expect(@client.respond_to?('get_templates')).to eq(true)
+        expect(@client.respond_to?('get_template')).to eq(true)
+        expect(@client.respond_to?('post_template')).to eq(true)
+        expect(@client.respond_to?('patch_template')).to eq(true)
+        expect(@client.respond_to?('delete_template')).to eq(true)
         # versions
-        expect(@client.respond_to?("get_version")).to eq(true)
-        expect(@client.respond_to?("post_version")).to eq(true)
-        expect(@client.respond_to?("activate_version")).to eq(true)
-        expect(@client.respond_to?("patch_version")).to eq(true)
-        expect(@client.respond_to?("delete_version")).to eq(true)
+        expect(@client.respond_to?('get_version')).to eq(true)
+        expect(@client.respond_to?('post_version')).to eq(true)
+        expect(@client.respond_to?('activate_version')).to eq(true)
+        expect(@client.respond_to?('patch_version')).to eq(true)
+        expect(@client.respond_to?('delete_version')).to eq(true)
+        # Categories
+        expect(@client.respond_to?('get_categories')).to eq(true)
+        # Stats
+        expect(@client.respond_to?('get_global_stats')).to eq(true)
+        expect(@client.respond_to?('get_categories_stats')).to eq(true)
+        expect(@client.respond_to?('get_categories_stats_sums')).to eq(true)
+        expect(@client.respond_to?('get_subusers_stats')).to eq(true)
+        expect(@client.respond_to?('get_subusers_stats_sums')).to eq(true)
+        expect(@client.respond_to?('get_geo_stats')).to eq(true)
+        expect(@client.respond_to?('get_devices_stats')).to eq(true)
+        expect(@client.respond_to?('get_clients_stats')).to eq(true)
+        expect(@client.respond_to?('get_clients_type_stats')).to eq(true)
+        expect(@client.respond_to?('get_esp_stats')).to eq(true)
+        expect(@client.respond_to?('get_browsers_stats')).to eq(true)
+        expect(@client.respond_to?('get_parse_stats')).to eq(true)
       end
     end
 
-    describe "VERSION" do
-      it "returns VERSION value" do
-        expect(SendGrid4r::VERSION).to eq("0.0.6")
+    describe 'VERSION' do
+      it 'returns VERSION value' do
+        expect(SendGrid4r::VERSION).to eq('0.1.0')
       end
     end
-
   end
 end

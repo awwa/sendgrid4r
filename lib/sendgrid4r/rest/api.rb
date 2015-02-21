@@ -1,22 +1,28 @@
-require "sendgrid4r/rest/templates/templates"
-require "sendgrid4r/rest/templates/versions"
-require "sendgrid4r/rest/asm/groups"
-require "sendgrid4r/rest/asm/suppressions"
-require "sendgrid4r/rest/asm/global_suppressions"
-require "sendgrid4r/rest/settings/enforced_tls"
-require "sendgrid4r/rest/ips/addresses"
-require "sendgrid4r/rest/ips/pools"
-require "sendgrid4r/rest/ips/warmup"
-require "sendgrid4r/rest/categories/categories"
-require "sendgrid4r/rest/stats/stats"
-require "sendgrid4r/rest/stats/global"
-require "sendgrid4r/rest/stats/category"
-require "sendgrid4r/rest/stats/subuser"
-require "sendgrid4r/rest/stats/advanced"
-require "sendgrid4r/rest/stats/parse"
+# -*- encoding: utf-8 -*-
+$LOAD_PATH.unshift File.dirname(__FILE__)
+
+require 'sendgrid4r/rest/templates/templates'
+require 'sendgrid4r/rest/templates/versions'
+require 'sendgrid4r/rest/asm/groups'
+require 'sendgrid4r/rest/asm/suppressions'
+require 'sendgrid4r/rest/asm/global_suppressions'
+require 'sendgrid4r/rest/settings/enforced_tls'
+require 'sendgrid4r/rest/ips/addresses'
+require 'sendgrid4r/rest/ips/pools'
+require 'sendgrid4r/rest/ips/warmup'
+require 'sendgrid4r/rest/categories/categories'
+require 'sendgrid4r/rest/stats/stats'
+require 'sendgrid4r/rest/stats/global'
+require 'sendgrid4r/rest/stats/category'
+require 'sendgrid4r/rest/stats/subuser'
+require 'sendgrid4r/rest/stats/advanced'
+require 'sendgrid4r/rest/stats/parse'
 
 module SendGrid4r
   module REST
+    #
+    # SendGrid Web API v3
+    #
     module API
       include SendGrid4r::REST::Templates
       include SendGrid4r::REST::Templates::Versions

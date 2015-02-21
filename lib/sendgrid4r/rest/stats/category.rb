@@ -1,39 +1,45 @@
 # -*- encoding: utf-8 -*-
-$:.unshift File.dirname(__FILE__)
+$LOAD_PATH.unshift File.dirname(__FILE__)
 
-require "sendgrid4r/rest/request"
+require 'sendgrid4r/rest/request'
 
 module SendGrid4r
   module REST
     module Stats
+      #
+      # SendGrid Web API v3 Stats - Category
+      #
       module Category
-        def get_categories_stats(categories, start_date, end_date = nil, aggregated_by = nil)
-          params = Hash.new
-          params["start_date"] = start_date if !start_date.nil?
-          params["end_date"] = end_date if !end_date.nil?
-          params["aggregated_by"] = aggregated_by if !aggregated_by.nil?
-          #params["categories"] = Array(categories) if !categories.nil?
-          params["categories"] = categories if !categories.nil?
-          top_stats = Array.new
+        def get_categories_stats(
+            start_date:, end_date: nil, aggregated_by: nil, categories:)
+          params = {
+            start_date: start_date,
+            end_date: end_date,
+            aggregated_by: aggregated_by,
+            categories: categories
+          }
+          # TODO: categories does not support array yet
           resp_a = get(
             @auth, "#{SendGrid4r::Client::BASE_URL}/categories/stats", params)
-          resp_a.each{|resp|
-            top_stats.push(
-              SendGrid4r::REST::Stats::create_top_stat(resp))
-          }
-          top_stats
+          SendGrid4r::REST::Stats.create_top_stats(resp_a)
         end
-        def get_categories_stats_sums(start_date, end_date = nil, sort_by_metric = nil, sort_by_direction = nil, limit = nil, offset = nil)
-          params = Hash.new
-          params["start_date"] = start_date if !start_date.nil?
-          params["end_date"] = end_date if !end_date.nil?
-          params["sort_by_metric"] = sort_by_metric if !sort_by_metric.nil?
-          params["soft_by_direction"] = sort_by_direction if !sort_by_direction.nil?
-          params["limit"] = limit if !limit.nil?
-          params["offset"] = offset if !offset.nil?
+
+        def get_categories_stats_sums(
+            start_date:, end_date: nil, sort_by_metric: nil,
+            sort_by_direction: nil, limit: nil, offset: nil)
+          params = {
+            start_date: start_date,
+            end_date: end_date,
+            sort_by_metric: sort_by_metric,
+            sort_by_direction: sort_by_direction,
+            limit: limit,
+            offset: offset
+          }
           resp = get(
-            @auth, "#{SendGrid4r::Client::BASE_URL}/categories/stats/sums", params)
-          SendGrid4r::REST::Stats::create_top_stat(resp)
+            @auth,
+            "#{SendGrid4r::Client::BASE_URL}/categories/stats/sums",
+            params)
+          SendGrid4r::REST::Stats.create_top_stat(resp)
         end
       end
     end

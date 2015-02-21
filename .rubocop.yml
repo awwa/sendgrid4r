@@ -1,0 +1,21 @@
+# メソッド名のprefixに「set_」「get_」を許可
+AccessorMethodName:
+  Enabled: false
+
+# メソッドの行数上限を変更
+MethodLength:
+  CountComments: true  # count full line comments?
+  Max: 20
+
+# 引数上限を変更
+ParameterLists:
+  Max: 6
+  CountKeywordArgs: true
+
+# AbcSizeの上限を変更
+AbcSize:
+  Max: 20
+
+# %r 内で利用できるスラッシュの数の制限変更
+RegexpLiteral:
+  MaxSlashes: 0
