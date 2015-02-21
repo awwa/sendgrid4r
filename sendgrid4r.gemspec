@@ -1,7 +1,7 @@
 # coding: utf-8
 src = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(src) unless $LOAD_PATH.include?(src)
-require 'sendgrid4r/sendgrid4r'
+require 'sendgrid4r'
 
 Gem::Specification.new do |spec|
   spec.name          = 'sendgrid4r'
