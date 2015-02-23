@@ -9,7 +9,7 @@ describe 'SendGrid4r::VersionFactory' do
 
   context 'always' do
     it 'is simple case' do
-      version = @factory.create('version_name')
+      version = @factory.create(name: 'version_name')
       expect(version.name).to eq('version_name')
       expect(version.subject).to eq('<%subject%>')
       expect(version.html_content).to eq('<%body%>')
@@ -19,11 +19,11 @@ describe 'SendGrid4r::VersionFactory' do
 
     it 'is full params case' do
       version = @factory.create(
-        'version_name',
-        'This is subject <%subject%>',
-        'This is html content <%body%>',
-        'This is plain content <%body%>',
-        0
+        name: 'version_name',
+        subject: 'This is subject <%subject%>',
+        html_content: 'This is html content <%body%>',
+        plain_content: 'This is plain content <%body%>',
+        active: 0
       )
       expect(version.name).to eq('version_name')
       expect(version.subject).to eq('This is subject <%subject%>')
