@@ -28,6 +28,11 @@ module SendGrid4r
         Template.new(resp['id'], resp['name'], vers)
       end
 
+      def post_template(name)
+        resp = post(@auth, SendGrid4r::REST::Templates.url, 'name' => name)
+        SendGrid4r::REST::Templates.create_template(resp)
+      end
+
       def get_templates
         resp_a = get(@auth, SendGrid4r::REST::Templates.url)
         tmps = []
@@ -39,11 +44,6 @@ module SendGrid4r
 
       def get_template(temp_id)
         resp = get(@auth, SendGrid4r::REST::Templates.url(temp_id))
-        SendGrid4r::REST::Templates.create_template(resp)
-      end
-
-      def post_template(name)
-        resp = post(@auth, SendGrid4r::REST::Templates.url, 'name' => name)
         SendGrid4r::REST::Templates.create_template(resp)
       end
 

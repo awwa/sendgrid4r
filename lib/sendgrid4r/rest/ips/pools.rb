@@ -23,6 +23,13 @@ module SendGrid4r
           Pool.new(resp['pool_name'], resp['name'], ips)
         end
 
+        def post_pool(name)
+          resp = post(
+            @auth, "#{SendGrid4r::Client::BASE_URL}/ips/pools", name: name
+          )
+          SendGrid4r::REST::Ips::Pools.create_pool(resp)
+        end
+
         def get_pools
           resp_a = get(@auth, "#{SendGrid4r::Client::BASE_URL}/ips/pools")
           pools = []
@@ -30,13 +37,6 @@ module SendGrid4r
             pools.push(SendGrid4r::REST::Ips::Pools.create_pool(resp))
           end
           pools
-        end
-
-        def post_pool(name)
-          resp = post(
-            @auth, "#{SendGrid4r::Client::BASE_URL}/ips/pools", name: name
-          )
-          SendGrid4r::REST::Ips::Pools.create_pool(resp)
         end
 
         def get_pool(name)

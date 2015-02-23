@@ -25,6 +25,14 @@ module SendGrid4r
           )
         end
 
+        def post_group(name, description)
+          params = { name: name, description: description }
+          resp = post(
+            @auth, "#{SendGrid4r::Client::BASE_URL}/asm/groups", params
+          )
+          SendGrid4r::REST::Asm::Groups.create_group(resp)
+        end
+
         def get_groups
           resp_a = get(@auth, "#{SendGrid4r::Client::BASE_URL}/asm/groups")
           groups = []
@@ -37,14 +45,6 @@ module SendGrid4r
         def get_group(group_id)
           resp = get(
             @auth, "#{SendGrid4r::Client::BASE_URL}/asm/groups/#{group_id}"
-          )
-          SendGrid4r::REST::Asm::Groups.create_group(resp)
-        end
-
-        def post_group(name, description)
-          params = { name: name, description: description }
-          resp = post(
-            @auth, "#{SendGrid4r::Client::BASE_URL}/asm/groups", params
           )
           SendGrid4r::REST::Asm::Groups.create_group(resp)
         end

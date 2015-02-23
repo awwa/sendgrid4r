@@ -7,9 +7,10 @@ module SendGrid4r
   #
   class VersionFactory
     def create(
-      name, subject = '<%subject%>',
-      html_content = '<%body%>', plain_content = '<%body%>', active = 1)
+      name:, subject: '<%subject%>',
+      html_content: '<%body%>', plain_content: '<%body%>', active: 1)
       SendGrid4r::REST::Templates::Version.new(
+        nil,
         nil,
         nil,
         active,

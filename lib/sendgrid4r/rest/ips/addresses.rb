@@ -30,6 +30,15 @@ module SendGrid4r
           )
         end
 
+        def post_ip_to_pool(pool_name, ip)
+          resp = post(
+            @auth,
+            "#{SendGrid4r::Client::BASE_URL}/ips/pools/#{pool_name}/ips",
+            ip: ip
+          )
+          SendGrid4r::REST::Ips::Addresses.create_address(resp)
+        end
+
         def get_ips
           resp_a = get(@auth, "#{SendGrid4r::Client::BASE_URL}/ips")
           ips = []
@@ -50,15 +59,6 @@ module SendGrid4r
 
         def get_ip(ip)
           resp = get(@auth, "#{SendGrid4r::Client::BASE_URL}/ips/#{ip}")
-          SendGrid4r::REST::Ips::Addresses.create_address(resp)
-        end
-
-        def post_ip_to_pool(pool_name, ip)
-          resp = post(
-            @auth,
-            "#{SendGrid4r::Client::BASE_URL}/ips/pools/#{pool_name}/ips",
-            ip: ip
-          )
           SendGrid4r::REST::Ips::Addresses.create_address(resp)
         end
 

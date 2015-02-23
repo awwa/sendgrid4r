@@ -17,8 +17,16 @@ module SendGrid4r
         p = { params: params } unless params.nil?
         if p.nil?
           body = resource.get
+          # TODO handle ratelimit headers
+          #   { |response, request, result, &block|
+          #   puts "response.headers #{response.headers}"
+          # }
         else
           body = resource.get(p)
+          # TODO handle ratelimit headers
+          # { |response, request, result, &block|
+          #   puts "response.headers #{response.headers}"
+          # }
         end
         JSON.parse(body)
       end

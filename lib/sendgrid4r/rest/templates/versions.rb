@@ -10,12 +10,13 @@ module SendGrid4r
     #
     module Templates
       Version = Struct.new(
-        :id, :template_id, :active, :name, :html_content,
+        :id, :user_id, :template_id, :active, :name, :html_content,
         :plain_content, :subject, :updated_at)
 
       def self.create_version(resp)
         Version.new(
           resp['id'],
+          resp['user_id'],
           resp['template_id'],
           resp['active'],
           resp['name'],
@@ -37,13 +38,6 @@ module SendGrid4r
           url
         end
 
-        def get_version(temp_id, ver_id)
-          resp = get(
-            @auth,
-            "#{SendGrid4r::REST::Templates::Versions.url(temp_id, ver_id)}")
-          SendGrid4r::REST::Templates.create_version(resp)
-        end
-
         def post_version(temp_id, version)
           resp = post(
             @auth,
@@ -59,6 +53,13 @@ module SendGrid4r
             @auth,
             "#{url}/activate"
           )
+          SendGrid4r::REST::Templates.create_version(resp)
+        end
+
+        def get_version(temp_id, ver_id)
+          resp = get(
+            @auth,
+            "#{SendGrid4r::REST::Templates::Versions.url(temp_id, ver_id)}")
           SendGrid4r::REST::Templates.create_version(resp)
         end
 
