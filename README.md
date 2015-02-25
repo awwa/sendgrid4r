@@ -5,7 +5,7 @@ See [api reference](https://sendgrid.com/docs/API_Reference/Web_API_v3/index.htm
 
 [![Build Status](https://travis-ci.org/awwa/sendgrid4r.svg?branch=master)](https://travis-ci.org/awwa/sendgrid4r)
 
-# [Documentation](wiki)
+# [Documentation](https://github.com/awwa/sendgrid4r/wiki)
 
 # Contributing
 
