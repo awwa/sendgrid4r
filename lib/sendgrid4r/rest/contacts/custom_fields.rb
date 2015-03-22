@@ -11,7 +11,7 @@ module SendGrid4r
       #
       module CustomFields
         include SendGrid4r::REST::Request
-
+        # TODO: add key for eql? and hash
         Field = Struct.new(:id, :name, :type, :value)
         Fields = Struct.new(:custom_fields)
 
