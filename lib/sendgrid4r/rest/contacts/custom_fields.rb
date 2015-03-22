@@ -11,14 +11,27 @@ module SendGrid4r
       #
       module CustomFields
         include SendGrid4r::REST::Request
-        # TODO: add key for eql? and hash
-        Field = Struct.new(:id, :name, :type, :value)
+
+        Field = Struct.new(:id, :name, :type, :value) do
+          def eql?(other)
+            id.eql?(other.id)
+          end
+
+          def hash
+            id.hash
+          end
+        end
+
         Fields = Struct.new(:custom_fields)
 
         def self.url(custom_field_id = nil)
           url = "#{SendGrid4r::Client::BASE_URL}/contactdb/custom_fields"
           url = "#{url}/#{custom_field_id}" unless custom_field_id.nil?
           url
+        end
+
+        def self.create_field(resp)
+          Field.new(resp['id'], resp['name'], resp['type'], resp['value'])
         end
 
         def self.create_fields(resp)
@@ -29,10 +42,6 @@ module SendGrid4r
             )
           end
           Fields.new(custom_fields)
-        end
-
-        def self.create_field(resp)
-          Field.new(resp['id'], resp['name'], resp['type'], resp['value'])
         end
 
         def post_custom_field(name, type)

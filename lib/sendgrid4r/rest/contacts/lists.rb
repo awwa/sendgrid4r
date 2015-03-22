@@ -27,16 +27,16 @@ module SendGrid4r
           url
         end
 
+        def self.create_list(resp)
+          List.new(resp['id'], resp['name'], resp['recipient_count'])
+        end
+
         def self.create_lists(resp)
           lists = []
           resp['lists'].each do |list|
             lists.push(SendGrid4r::REST::Contacts::Lists.create_list(list))
           end
           Lists.new(lists)
-        end
-
-        def self.create_list(resp)
-          List.new(resp['id'], resp['name'], resp['recipient_count'])
         end
 
         def post_list(name)

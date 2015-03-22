@@ -12,7 +12,6 @@ module SendGrid4r
       module ReservedFields
         include SendGrid4r::REST::Request
 
-        Fields = Struct.new(:reserved_fields)
         Field = Struct.new(:name, :type) do
           def eql?(other)
             name.eql?(other.name)
@@ -22,6 +21,8 @@ module SendGrid4r
             name.hash
           end
         end
+
+        Fields = Struct.new(:reserved_fields)
 
         def self.create_fields(resp)
           reserved_fields = []

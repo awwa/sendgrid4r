@@ -12,8 +12,6 @@ module SendGrid4r
       module Recipients
         include SendGrid4r::REST::Request
 
-        Recipients = Struct.new(:recipients)
-
         Recipient = Struct.new(
           :created_at,
           :custom_fields,
@@ -27,15 +25,7 @@ module SendGrid4r
           :updated_at
         )
 
-        def self.create_recipients(resp)
-          recipients = []
-          resp['recipients'].each do |recipient|
-            recipients.push(
-              SendGrid4r::REST::Contacts::Recipients.create_recipient(recipient)
-            )
-          end
-          Recipients.new(recipients)
-        end
+        Recipients = Struct.new(:recipients)
 
         def self.create_recipient(resp)
           custom_fields = []
@@ -56,6 +46,16 @@ module SendGrid4r
             resp['last_opend'],
             resp['updated_at']
           )
+        end
+
+        def self.create_recipients(resp)
+          recipients = []
+          resp['recipients'].each do |recipient|
+            recipients.push(
+              SendGrid4r::REST::Contacts::Recipients.create_recipient(recipient)
+            )
+          end
+          Recipients.new(recipients)
         end
 
         def self.url(recipient_id = nil)

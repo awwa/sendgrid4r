@@ -25,7 +25,7 @@ describe 'SendGrid4r::REST::Contacts::CustomFields' do
         expect(new_field.id.is_a?(Fixnum)).to eq(true)
         expect(new_field.name).to eq(@name)
         expect(new_field.type).to eq(@type)
-        # post same custom filed
+        # post same custom fieled
         expect do
           @client.post_custom_field(@name, @type)
         end.to raise_error(RestClient::BadRequest)

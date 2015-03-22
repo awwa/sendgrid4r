@@ -12,14 +12,13 @@ module SendGrid4r
       module Segments
         include SendGrid4r::REST::Request
 
-        Segments = Struct.new(:segments)
-        Segment = Struct.new(
-          :id, :name, :list_id, :conditions, :recipient_count
-        )
-
         Condition = Struct.new(
           :field, :value, :operator, :and_or
         )
+        Segment = Struct.new(
+          :id, :name, :list_id, :conditions, :recipient_count
+        )
+        Segments = Struct.new(:segments)
 
         def self.url(segment_id = nil)
           url = "#{SendGrid4r::Client::BASE_URL}/contactdb/segments"
@@ -27,14 +26,10 @@ module SendGrid4r
           url
         end
 
-        def self.create_segments(resp)
-          segments = []
-          resp['segments'].each do |segment|
-            segments.push(
-              SendGrid4r::REST::Contacts::Segments.create_segment(segment)
-            )
-          end
-          Segments.new(segments)
+        def self.create_condition(resp)
+          Condition.new(
+            resp['field'], resp['value'], resp['operator'], resp['and_or']
+          )
         end
 
         def self.create_segment(resp)
@@ -53,10 +48,14 @@ module SendGrid4r
           )
         end
 
-        def self.create_condition(resp)
-          Condition.new(
-            resp['field'], resp['value'], resp['operator'], resp['and_or']
-          )
+        def self.create_segments(resp)
+          segments = []
+          resp['segments'].each do |segment|
+            segments.push(
+              SendGrid4r::REST::Contacts::Segments.create_segment(segment)
+            )
+          end
+          Segments.new(segments)
         end
 
         def post_segment(params)
