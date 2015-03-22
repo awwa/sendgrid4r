@@ -19,3 +19,7 @@ AbcSize:
 # %r 内で利用できるスラッシュの数の制限変更
 RegexpLiteral:
   MaxSlashes: 0
+
+# 数値の区切りをなくす
+NumericLiterals:
+  MinDigits: 20

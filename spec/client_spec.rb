@@ -87,12 +87,48 @@ describe 'SendGrid4r::Client' do
         expect(@client.respond_to?('get_esp_stats')).to eq(true)
         expect(@client.respond_to?('get_browsers_stats')).to eq(true)
         expect(@client.respond_to?('get_parse_stats')).to eq(true)
+        # Contacts
+        # CustomFields
+        expect(@client.respond_to?('post_custom_field')).to eq(true)
+        expect(@client.respond_to?('get_custom_fields')).to eq(true)
+        expect(@client.respond_to?('get_custom_field')).to eq(true)
+        expect(@client.respond_to?('delete_custom_field')).to eq(true)
+        # Lists
+        expect(@client.respond_to?('post_list')).to eq(true)
+        expect(@client.respond_to?('get_lists')).to eq(true)
+        expect(@client.respond_to?('get_list')).to eq(true)
+        expect(@client.respond_to?('patch_list')).to eq(true)
+        expect(@client.respond_to?('delete_list')).to eq(true)
+        expect(@client.respond_to?('post_recipients_to_list')).to eq(true)
+        expect(@client.respond_to?('get_recipients_from_list')).to eq(true)
+        expect(@client.respond_to?('post_recipients_to_list')).to eq(true)
+        expect(@client.respond_to?('delete_recipient_from_list')).to eq(true)
+        expect(@client.respond_to?('delete_lists')).to eq(true)
+        # Recipients
+        expect(@client.respond_to?('post_recipient')).to eq(true)
+        expect(@client.respond_to?('delete_recipients')).to eq(true)
+        expect(@client.respond_to?('get_recipients')).to eq(true)
+        expect(@client.respond_to?('get_recipients_count')).to eq(true)
+        expect(@client.respond_to?('search_recipients')).to eq(true)
+        expect(@client.respond_to?('get_recipient')).to eq(true)
+        expect(@client.respond_to?('delete_recipient')).to eq(true)
+        expect(@client.respond_to?('get_lists_recipient_belong')).to eq(true)
+        expect(@client.respond_to?('post_recipients')).to eq(true)
+        # ReservedFields
+        expect(@client.respond_to?('get_reserved_fields')).to eq(true)
+        # Segments
+        expect(@client.respond_to?('post_segment')).to eq(true)
+        expect(@client.respond_to?('get_segments')).to eq(true)
+        expect(@client.respond_to?('get_segment')).to eq(true)
+        expect(@client.respond_to?('put_segment')).to eq(true)
+        expect(@client.respond_to?('delete_segment')).to eq(true)
+        expect(@client.respond_to?('get_recipients_from_segment')).to eq(true)
       end
     end
 
     describe 'VERSION' do
       it 'returns VERSION value' do
-        expect(SendGrid4r::VERSION).to eq('0.1.0')
+        expect(SendGrid4r::VERSION).to eq('0.2.0')
       end
     end
   end

@@ -17,6 +17,11 @@ require 'sendgrid4r/rest/stats/category'
 require 'sendgrid4r/rest/stats/subuser'
 require 'sendgrid4r/rest/stats/advanced'
 require 'sendgrid4r/rest/stats/parse'
+require 'sendgrid4r/rest/contacts/custom_fields'
+require 'sendgrid4r/rest/contacts/lists'
+require 'sendgrid4r/rest/contacts/recipients'
+require 'sendgrid4r/rest/contacts/reserved_fields'
+require 'sendgrid4r/rest/contacts/segments'
 
 module SendGrid4r
   module REST
@@ -39,6 +44,11 @@ module SendGrid4r
       include SendGrid4r::REST::Stats::Subuser
       include SendGrid4r::REST::Stats::Advanced
       include SendGrid4r::REST::Stats::Parse
+      include SendGrid4r::REST::Contacts::CustomFields
+      include SendGrid4r::REST::Contacts::Lists
+      include SendGrid4r::REST::Contacts::Recipients
+      include SendGrid4r::REST::Contacts::ReservedFields
+      include SendGrid4r::REST::Contacts::Segments
     end
   end
 end
