@@ -28,7 +28,7 @@ describe 'SendGrid4r::REST::Templates::Versions' do
         new_template = @client.post_template(@template_edit)
         expect(@template_edit).to eq(new_template.name)
         # post a version
-        factory = SendGrid4r::VersionFactory.new
+        factory = SendGrid4r::Factory::VersionFactory.new
         ver1 = factory.create(name: @version1_name)
         ver1 = @client.post_version(new_template.id, ver1)
         # get the version

@@ -2,10 +2,10 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 # TODO: move to factory folder
-describe 'SendGrid4r::VersionFactory' do
+describe 'SendGrid4r::Factory::VersionFactory' do
   before :all do
     Dotenv.load
-    @factory = SendGrid4r::VersionFactory.new
+    @factory = SendGrid4r::Factory::VersionFactory.new
   end
 
   context 'always' do
