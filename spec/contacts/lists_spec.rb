@@ -2,39 +2,57 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe 'SendGrid4r::REST::Contacts::Lists' do
-  before :all do
-    Dotenv.load
-    @client = SendGrid4r::Client.new(
-      ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
-    @name = 'test_list'
-    @edit_name = 'test_list_edit'
-    @recipients = ['jones@example.com', 'miller@example.com']
-  end
+  context 'it test' do
+    before :all do
+      Dotenv.load
+      @client = SendGrid4r::Client.new(
+        ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
+      @list_name1 = 'test_list1'
+      @edit_name1 = 'test_list1_edit'
+      @list_name2 = 'test_list2'
+      @email1 = 'jones@example.com'
+      @email2 = 'miller@example.com'
+      @last_name1 = 'Jones'
+      @last_name2 = 'Miller'
+      @pet1 = 'Fluffy'
+      @pet2 = 'FrouFrou'
+      @custom_field_name = 'pet'
+      @recipients = [@email1, @email2]
+    end
 
-  context 'always' do
     it 'is normal' do
       begin
-        # celan up test env
+        # celan up test env(lists)
         lists = @client.get_lists
         expect(lists.lists.length >= 0).to eq(true)
         lists.lists.each do |list|
-          next if list.name != @name && list.name != @edit_name
+          next if list.name != @list_name1
+          next if list.name != @edit_name1
+          next if list.name != @list_name2
           @client.delete_list(list.id)
         end
-        # post a list
-        new_list = @client.post_list(@name)
+        # celan up test env(recipients)
+        recipients = @client.get_recipients
+        expect(recipients.recipients.length >= 0).to eq(true)
+        recipients.recipients.each do |recipient|
+          next if recipient.email != @email1
+          next if recipient.email != @email2
+          @client.delete_recipient(recipient.id)
+        end
+        # post a first list
+        new_list = @client.post_list(@list_name1)
         expect(new_list.id.is_a?(Fixnum)).to eq(true)
-        expect(new_list.name).to eq(@name)
+        expect(new_list.name).to eq(@list_name1)
         expect(new_list.recipient_count).to eq(0)
-        # post same lists
+        # post same list
         expect do
-          @client.post_list(@name)
+          @client.post_list(@list_name1)
         end.to raise_error(RestClient::BadRequest)
         # get all list
         lists = @client.get_lists
         expect(lists.length >= 1).to eq(true)
         lists.lists.each do |list|
-          next if list.name != @name
+          next if list.name != @list_name1
           expect(list.id).to eq(new_list.id)
           expect(list.name).to eq(new_list.name)
           expect(list.recipient_count).to eq(0)
@@ -45,44 +63,57 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
         expect(actual_list.name).to eq(new_list.name)
         expect(actual_list.recipient_count).to eq(0)
         # update the list
-        edit_list = @client.patch_list(new_list.id, @edit_name)
+        edit_list = @client.patch_list(new_list.id, @edit_name1)
         expect(edit_list.id).to eq(new_list.id)
-        expect(edit_list.name).to eq(@edit_name)
-        # TODO: expect(edit_list.recipient_count).to eq(0)
+        expect(edit_list.name).to eq(@edit_name1)
+        # add multiple recipients
+        recipient1 = {}
+        recipient1['email'] = @email1
+        recipient1['last_name'] = @last_name1
+        recipient1[@custom_field_name] = @pet1
+        @client.post_recipient(recipient1)
+        recipient2 = {}
+        recipient2['email'] = @email2
+        recipient2['last_name'] = @last_name2
+        recipient2[@custom_field_name] = @pet2
+        @client.post_recipient(recipient2)
         # Add multiple recipients to a single list
-        # @client.post_recipients_to_list(edit_list.id, @recipients)
-        # add_list = @client.get_list(new_list.id)
-        # expect(add_list.recipient_ount).to eq(2)
+        @client.post_recipients_to_list(edit_list.id, @recipients)
         # list recipients from a single list
         recipients = @client.get_recipients_from_list(new_list.id)
         recipients.recipients.each do |recipient|
           expect(
-            recipient.is_a?
-          ).to eq(SendGrid4r::REST::Contacts::Recipients::Recipients)
+            recipient.is_a?(SendGrid4r::REST::Contacts::Recipients::Recipient)
+          ).to eq(true)
         end
         # list recipients from a single list with offset & limit
         recipients = @client.get_recipients_from_list(new_list.id, 10, 0)
         recipients.recipients.each do |recipient|
           expect(
-            recipient.is_a?
-          ).to eq(SendGrid4r::REST::Contacts::Recipients::Recipients)
+            recipient.is_a?(SendGrid4r::REST::Contacts::Recipients::Recipient)
+          ).to eq(true)
         end
         # Add single recipient to a list
-        # TODO
+        @client.post_recipient_to_list(edit_list.id, @email1)
+        # get a single list
+        actual_list = @client.get_list(new_list.id)
+        expect(actual_list.recipient_count).to eq(2)
         # delete a single recipient from a single list
-        # TODO
+        # This
+        @client.delete_recipient_from_list(edit_list.id, @email1)
         # delete the list
         @client.delete_list(new_list.id)
         expect do
           @client.get_list(new_list.id)
         end.to raise_error(RestClient::ResourceNotFound)
-
       rescue => e
         puts e.inspect
         raise e
       end
     end
+  end
 
+  context 'unit test' do
     it 'creates list instance' do
       json =
         '{'\

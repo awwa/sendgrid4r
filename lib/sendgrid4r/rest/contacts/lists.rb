@@ -71,6 +71,7 @@ module SendGrid4r
           delete(@auth, SendGrid4r::REST::Contacts::Lists.url(list_id))
         end
 
+        # no bodies returned
         def post_recipients_to_list(list_id, recipients)
           url = SendGrid4r::REST::Contacts::Lists.url(list_id)
           post(
@@ -78,7 +79,6 @@ module SendGrid4r
             "#{url}/recipients_batch",
             recipients
           )
-          # TODO: parse response
         end
 
         def get_recipients_from_list(list_id, limit = nil, offset = nil)
@@ -100,10 +100,9 @@ module SendGrid4r
               list_id, recipient_id
             )
           )
-          # TODO: parse response
         end
 
-        def delete_recipient_from_list
+        def delete_recipient_from_list(list_id, recipient_id)
           delete(
             @auth,
             SendGrid4r::REST::Contacts::Lists.recipients_url(
@@ -112,13 +111,14 @@ module SendGrid4r
           )
         end
 
-        def delete_lists(list_ids)
-          delete(
-            @auth,
-            "#{SendGrid4r::Client::BASE_URL}/contactdb/lists_batch",
-            list_ids
-          )
-        end
+        # TODO: rest-client does not support the body for delete method
+        # def delete_lists(list_ids)
+        #   delete(
+        #     @auth,
+        #     "#{SendGrid4r::Client::BASE_URL}/contactdb/lists_batch",
+        #     list_ids
+        #   )
+        # end
       end
     end
   end

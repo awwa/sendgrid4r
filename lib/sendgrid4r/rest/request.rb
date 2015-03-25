@@ -36,7 +36,7 @@ module SendGrid4r
         else
           body = resource.post(params.to_json, content_type: :json).body
         end
-        JSON.parse(body)
+        JSON.parse(body) if body.length > 1
       end
 
       def patch(auth, endpoint, params)

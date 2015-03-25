@@ -31,7 +31,7 @@ describe 'SendGrid4r::REST::Contacts::Recipients' do
           @client.delete_custom_field(custom_field.id)
         end
         @client.post_custom_field(@custom_field_name, 'text')
-        # post a list
+        # post a recipient
         params = {}
         params['email'] = @email1
         params['last_name'] = @last_name1
