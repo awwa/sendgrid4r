@@ -18,7 +18,6 @@ module SendGrid4r
             aggregated_by: aggregated_by,
             categories: categories
           }
-          # TODO: categories does not support array yet
           resp_a = get(
             @auth, "#{SendGrid4r::Client::BASE_URL}/categories/stats", params)
           SendGrid4r::REST::Stats.create_top_stats(resp_a)

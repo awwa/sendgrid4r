@@ -68,7 +68,7 @@ describe 'SendGrid4r::REST::Stats::Cateogry' do
         actual = @client.get_categories_stats_sums(start_date: '2015-01-01')
         expect(actual.class).to be(SendGrid4r::REST::Stats::TopStat)
         stats = actual.stats
-        expect(stats.length).to eq(3)
+        expect(stats.length > 0).to eq(true)
         stats.each do |stat|
           expect(stat.class).to be(SendGrid4r::REST::Stats::Stat)
           expect(stat.metrics.class).to be(SendGrid4r::REST::Stats::Metric)

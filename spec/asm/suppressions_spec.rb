@@ -38,9 +38,12 @@ describe 'SendGrid4r::REST::Asm::Groups::Suppressions' do
       # get the suppressions
       suppressions = @client.get_suppressions(@email1)
       expect(suppressions.length >= 1).to eq(true)
-      expect(suppressions[0].name).to eq(@group_name)
-      expect(suppressions[0].description).to eq(@group_desc)
-      expect(suppressions[0].suppressed).to eq(true)
+      suppressions.each do |suppression|
+        next unless suppression.name == @group_name
+        expect(suppression.name).to eq(@group_name)
+        expect(suppression.description).to eq(@group_desc)
+        expect(suppression.suppressed).to eq(true)
+      end
       # get the recipient emails
       actual_emails = @client.get_suppressed_emails(new_group.id)
       expect(actual_emails.length).to eq(suppressed_emails.length)

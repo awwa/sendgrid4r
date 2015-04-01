@@ -103,7 +103,7 @@ describe 'SendGrid4r::Client' do
         expect(@client.respond_to?('get_recipients_from_list')).to eq(true)
         expect(@client.respond_to?('post_recipients_to_list')).to eq(true)
         expect(@client.respond_to?('delete_recipient_from_list')).to eq(true)
-        expect(@client.respond_to?('delete_lists')).to eq(true)
+        # TODO: expect(@client.respond_to?('delete_lists')).to eq(true)
         # Recipients
         expect(@client.respond_to?('post_recipient')).to eq(true)
         expect(@client.respond_to?('delete_recipients')).to eq(true)

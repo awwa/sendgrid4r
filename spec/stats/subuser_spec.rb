@@ -76,7 +76,7 @@ describe 'SendGrid4r::REST::Stats::Subuser' do
         actual = @client.get_subusers_stats_sums(start_date: '2015-01-01')
         expect(actual.class).to be(SendGrid4r::REST::Stats::TopStat)
         stats = actual.stats
-        expect(stats.length).to eq(2)
+        expect(stats.length > 1).to eq(true)
         stats.each do |stat|
           expect(stat.class).to be(SendGrid4r::REST::Stats::Stat)
           expect(stat.metrics.class).to be(SendGrid4r::REST::Stats::Metric)

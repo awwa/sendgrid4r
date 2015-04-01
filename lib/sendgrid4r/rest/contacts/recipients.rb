@@ -89,14 +89,15 @@ module SendGrid4r
           SendGrid4r::REST::Contacts::Recipients.create_recipients(resp)
         end
 
-        def get_recipients_by_id(recipient_ids)
-          resp = get(
-            @auth,
-            "#{SendGrid4r::REST::Contacts::Recipients.url}/batch",
-            recipient_ids
-          )
-          SendGrid4r::REST::Contacts::Recipients.create_recipients(resp)
-        end
+        # TODO: rest-client does not support body for get method
+        # def get_recipients_by_id(recipient_ids)
+        #   resp = get(
+        #     @auth,
+        #     "#{SendGrid4r::REST::Contacts::Recipients.url}/batch",
+        #     recipient_ids
+        #   )
+        #   SendGrid4r::REST::Contacts::Recipients.create_recipients(resp)
+        # end
 
         def get_recipients_count
           resp = get(

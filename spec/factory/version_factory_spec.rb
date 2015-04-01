@@ -1,7 +1,6 @@
 # encoding: utf-8
 require File.dirname(__FILE__) + '/../spec_helper'
 
-# TODO: move to factory folder
 describe 'SendGrid4r::Factory::VersionFactory' do
   before :all do
     Dotenv.load
