@@ -63,16 +63,16 @@ describe 'SendGrid4r::REST::Contacts::Recipients' do
             recipient.is_a?(SendGrid4r::REST::Contacts::Recipients::Recipient)
           ).to eq(true)
         end
-        # TODO: not implemented yet
         # get multiple recipients
-        # recipient_ids = [@email1, @email2]
-        # actual_recipients = @client.get_recipients_by_id(recipient_ids)
-        # expect(actual_recipients.recipients.is_a?(Array)).to eq(true)
-        # actual_recipients.recipients.each do |recipient|
-        #   expect(
-        #     recipient.is_a?(SendGrid4r::REST::Contacts::Recipients::Recipient)
-        #   ).to eq(true)
-        # end
+        recipient_ids = [@email1, @email2]
+        actual_recipients = @client.get_recipients_by_id(recipient_ids)
+        expect(actual_recipients.recipients.is_a?(Array)).to eq(true)
+        expect(actual_recipients.recipients.length).to eq(2)
+        actual_recipients.recipients.each do |recipient|
+          expect(
+            recipient.is_a?(SendGrid4r::REST::Contacts::Recipients::Recipient)
+          ).to eq(true)
+        end
         # read a count of recipients
         actual_count = @client.get_recipients_count
         expect(actual_count > 0).to eq(true)

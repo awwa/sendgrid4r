@@ -108,6 +108,7 @@ describe 'SendGrid4r::Client' do
         expect(@client.respond_to?('post_recipient')).to eq(true)
         expect(@client.respond_to?('delete_recipients')).to eq(true)
         expect(@client.respond_to?('get_recipients')).to eq(true)
+        expect(@client.respond_to?('get_recipients_by_id')).to eq(true)
         expect(@client.respond_to?('get_recipients_count')).to eq(true)
         expect(@client.respond_to?('search_recipients')).to eq(true)
         expect(@client.respond_to?('get_recipient')).to eq(true)
