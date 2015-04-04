@@ -93,11 +93,7 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
         end
         # Add single recipient to a list
         @client.post_recipient_to_list(edit_list.id, @email1)
-        # get a single list
-        actual_list = @client.get_list(new_list.id)
-        expect(actual_list.recipient_count).to eq(2)
         # delete a single recipient from a single list
-        # This
         @client.delete_recipient_from_list(edit_list.id, @email1)
         # delete the list
         @client.delete_list(new_list.id)
