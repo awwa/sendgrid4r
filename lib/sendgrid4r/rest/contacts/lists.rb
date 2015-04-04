@@ -112,13 +112,13 @@ module SendGrid4r
         end
 
         # TODO: rest-client does not support the body for delete method
-        # def delete_lists(list_ids)
-        #   delete(
-        #     @auth,
-        #     "#{SendGrid4r::Client::BASE_URL}/contactdb/lists_batch",
-        #     list_ids
-        #   )
-        # end
+        def delete_lists(list_ids)
+          delete(
+            @auth,
+            "#{SendGrid4r::Client::BASE_URL}/contactdb/lists_batch",
+            list_ids
+          )
+        end
       end
     end
   end

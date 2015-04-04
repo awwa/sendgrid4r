@@ -26,18 +26,16 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
         lists = @client.get_lists
         expect(lists.lists.length >= 0).to eq(true)
         lists.lists.each do |list|
-          next if list.name != @list_name1
-          next if list.name != @edit_name1
-          next if list.name != @list_name2
-          @client.delete_list(list.id)
+          @client.delete_list(list.id) if list.name == @list_name1
+          @client.delete_list(list.id) if list.name == @edit_name1
+          @client.delete_list(list.id) if list.name == @list_name2
         end
         # celan up test env(recipients)
         recipients = @client.get_recipients
         expect(recipients.recipients.length >= 0).to eq(true)
         recipients.recipients.each do |recipient|
-          next if recipient.email != @email1
-          next if recipient.email != @email2
-          @client.delete_recipient(recipient.id)
+          @client.delete_recipient(recipient.id) if recipient.email == @email1
+          @client.delete_recipient(recipient.id) if recipient.email == @email2
         end
         # post a first list
         new_list = @client.post_list(@list_name1)
@@ -106,6 +104,10 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
         expect do
           @client.get_list(new_list.id)
         end.to raise_error(RestClient::ResourceNotFound)
+        # post 2 lists
+        list1 = @client.post_list(@list_name1)
+        list2 = @client.post_list(@list_name2)
+        @client.delete_lists([list1.id,list2.id])
       rescue => e
         puts e.inspect
         raise e

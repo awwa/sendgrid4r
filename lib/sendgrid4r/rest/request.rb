@@ -53,10 +53,17 @@ module SendGrid4r
         JSON.parse(body)
       end
 
-      def delete(auth, endpoint)
-        resource = RestClient::Resource.new(
-          endpoint, auth.username, auth.password)
-        resource.delete
+      def delete(auth, endpoint, params = nil)
+        # We need to add payload for delete method.
+        args = {}
+        args[:method] = :delete
+        args[:url] = endpoint
+        args[:user] = auth.username
+        args[:password] = auth.password
+        args[:headers] = {content_type: :json}
+        args[:payload] = params.to_json unless params.nil?
+        request = RestClient::Request.new(args)
+        request.execute()
       end
     end
   end
