@@ -107,7 +107,7 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
         # post 2 lists
         list1 = @client.post_list(@list_name1)
         list2 = @client.post_list(@list_name2)
-        @client.delete_lists([list1.id,list2.id])
+        @client.delete_lists([list1.id, list2.id])
       rescue => e
         puts e.inspect
         raise e
