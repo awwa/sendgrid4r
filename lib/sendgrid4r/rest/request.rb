@@ -13,51 +13,39 @@ module SendGrid4r
     module Request
       # TODO: handle ratelimit headers
       def get(auth, endpoint, params = nil, payload = nil)
+        execute(:get, auth, endpoint, params, payload)
+      end
+
+      def post(auth, endpoint, payload = nil)
+        execute(:post, auth, endpoint, nil, payload)
+      end
+
+      def patch(auth, endpoint, payload)
+        execute(:patch, auth, endpoint, nil, payload)
+      end
+
+      def put(auth, endpoint, payload)
+        execute(:put, auth, endpoint, nil, payload)
+      end
+
+      def delete(auth, endpoint, payload = nil)
+        execute(:delete, auth, endpoint, nil, payload)
+      end
+
+      def execute(method, auth, endpoint, params, payload)
         args = {}
-        args[:method] = :get
+        args[:method] = method
         args[:url] = process_url_params(endpoint, params)
         args[:user] = auth.username
         args[:password] = auth.password
         args[:headers] = { content_type: :json }
         args[:payload] = payload.to_json unless payload.nil?
-        JSON.parse(RestClient::Request.execute(args))
-      end
-
-      def post(auth, endpoint, payload = nil)
-        resource = RestClient::Resource.new(
-          endpoint, auth.username, auth.password)
-        if payload.nil?
-          body = resource.post(content_type: :json).body
+        body = RestClient::Request.execute(args)
+        if body.nil? || body.length < 2
+          body
         else
-          body = resource.post(payload.to_json, content_type: :json).body
+          JSON.parse(body)
         end
-        JSON.parse(body) if body.length > 1
-      end
-
-      def patch(auth, endpoint, payload)
-        resource = RestClient::Resource.new(
-          endpoint, auth.username, auth.password)
-        body = resource.patch(payload.to_json, content_type: :json).body
-        JSON.parse(body)
-      end
-
-      def put(auth, endpoint, payload)
-        resource = RestClient::Resource.new(
-          endpoint, auth.username, auth.password)
-        body = resource.put(payload.to_json, content_type: :json).body
-        JSON.parse(body)
-      end
-
-      def delete(auth, endpoint, payload = nil)
-        # We need to add payload for delete method.
-        args = {}
-        args[:method] = :delete
-        args[:url] = endpoint
-        args[:user] = auth.username
-        args[:password] = auth.password
-        args[:headers] = { content_type: :json }
-        args[:payload] = payload.to_json unless payload.nil?
-        RestClient::Request.execute(args)
       end
 
       def process_url_params(endpoint, params)
