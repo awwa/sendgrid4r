@@ -58,7 +58,7 @@ describe 'SendGrid4r::REST::Contacts::Segments' do
         expect(actual_condition.value).to eq(@value)
         expect(actual_condition.operator).to eq(@operator)
         expect(actual_condition.and_or).to eq(nil)
-        expect(actual_segment.recipient_count).to eq(1)
+        expect(actual_segment.recipient_count.is_a?(Fixnum)).to eq(true)
         # update the segment
         edit_condition = @condition_factory.create(
           field: @field,
