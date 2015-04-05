@@ -115,6 +115,8 @@ describe 'SendGrid4r::REST::Contacts::Recipients' do
         expect do
           @client.get_recipient(new_recipient.id)
         end.to raise_error(RestClient::ResourceNotFound)
+        # delete multiple recipients
+        @client.delete_recipients([@email1, @email2])
       rescue => e
         puts e.inspect
         raise e
