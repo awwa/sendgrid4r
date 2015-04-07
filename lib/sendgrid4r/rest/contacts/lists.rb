@@ -32,6 +32,7 @@ module SendGrid4r
         end
 
         def self.create_lists(resp)
+          return resp if resp.nil?
           lists = []
           resp['lists'].each do |list|
             lists.push(SendGrid4r::REST::Contacts::Lists.create_list(list))

@@ -28,6 +28,7 @@ module SendGrid4r
         Recipients = Struct.new(:recipients)
 
         def self.create_recipient(resp)
+          return resp if resp.nil?
           custom_fields = []
           resp['custom_fields'].each do |field|
             custom_fields.push(
@@ -49,6 +50,7 @@ module SendGrid4r
         end
 
         def self.create_recipients(resp)
+          return resp if resp.nil?
           recipients = []
           resp['recipients'].each do |recipient|
             recipients.push(
@@ -64,83 +66,91 @@ module SendGrid4r
           url
         end
 
-        def post_recipient(params)
-          resp = post(@auth, SendGrid4r::REST::Contacts::Recipients.url, params)
+        def post_recipient(params, &block)
+          resp = post(
+            @auth, SendGrid4r::REST::Contacts::Recipients.url, params, &block
+          )
           SendGrid4r::REST::Contacts::Recipients.create_recipient(resp)
         end
 
-        def delete_recipients(emails)
-          delete(@auth, SendGrid4r::REST::Contacts::Recipients.url, emails)
+        def delete_recipients(emails, &block)
+          delete(
+            @auth, SendGrid4r::REST::Contacts::Recipients.url, emails, &block
+          )
         end
 
-        def get_recipients(limit = nil, offset = nil)
+        def get_recipients(limit = nil, offset = nil, &block)
           params = {}
           params['limit'] = limit unless limit.nil?
           params['offset'] = offset unless offset.nil?
-          if params.length > 0
-            resp = get(
-              @auth, SendGrid4r::REST::Contacts::Recipients.url, params
-            )
-          else
-            resp = get(
-              @auth, SendGrid4r::REST::Contacts::Recipients.url
-            )
-          end
+          resp = get(
+            @auth, SendGrid4r::REST::Contacts::Recipients.url, params, &block
+          )
           SendGrid4r::REST::Contacts::Recipients.create_recipients(resp)
         end
 
-        def get_recipients_by_id(recipient_ids)
+        def get_recipients_by_id(recipient_ids, &block)
           resp = get(
             @auth,
             "#{SendGrid4r::REST::Contacts::Recipients.url}/batch",
             nil,
-            recipient_ids
+            recipient_ids,
+            &block
           )
           SendGrid4r::REST::Contacts::Recipients.create_recipients(resp)
         end
 
-        def get_recipients_count
+        def get_recipients_count(&block)
           resp = get(
-            @auth, "#{SendGrid4r::REST::Contacts::Recipients.url}/count")
-          resp['recipient_count']
+            @auth,
+            "#{SendGrid4r::REST::Contacts::Recipients.url}/count",
+            &block
+          )
+          resp['recipient_count'] unless resp.nil?
         end
 
-        def search_recipients(params)
+        def search_recipients(params, &block)
           resp = get(
             @auth,
             "#{SendGrid4r::REST::Contacts::Recipients.url}/search",
-            params
+            params,
+            &block
           )
           SendGrid4r::REST::Contacts::Recipients.create_recipients(resp)
         end
 
-        def get_recipient(recipient_id)
+        def get_recipient(recipient_id, &block)
           resp = get(
             @auth,
-            SendGrid4r::REST::Contacts::Recipients.url(recipient_id)
+            SendGrid4r::REST::Contacts::Recipients.url(recipient_id),
+            &block
           )
           SendGrid4r::REST::Contacts::Recipients.create_recipient(resp)
         end
 
-        def delete_recipient(recipient_id)
+        def delete_recipient(recipient_id, &block)
           delete(
-            @auth, SendGrid4r::REST::Contacts::Recipients.url(recipient_id)
+            @auth,
+            SendGrid4r::REST::Contacts::Recipients.url(recipient_id),
+            &block
           )
         end
 
-        def get_lists_recipient_belong(recipient_id)
+        def get_lists_recipient_belong(recipient_id, &block)
           resp = get(
             @auth,
-            "#{SendGrid4r::REST::Contacts::Recipients.url(recipient_id)}/lists"
+            "#{SendGrid4r::REST::Contacts::Recipients.url(recipient_id)}/lists",
+            &block
           )
           SendGrid4r::REST::Contacts::Lists.create_lists(resp)
         end
 
-        def post_recipients(recipients)
+        def post_recipients(recipients, &block)
           resp = post(
             @auth,
             "#{SendGrid4r::Client::BASE_URL}/contactdb/recipients_batch",
-            recipients
+            recipients,
+            &block
           )
           SendGrid4r::REST::Contacts::Recipients.create_result(resp)
         end
@@ -154,6 +164,7 @@ module SendGrid4r
         )
 
         def self.create_result(resp)
+          return resp if resp.nil?
           error_indices = []
           resp['error_indices'].each do |index|
             error_indices.push(index)

@@ -22,7 +22,7 @@ describe 'SendGrid4r::REST::Contacts::Recipients' do
         recipients = @client.get_recipients
         expect(recipients.recipients.length >= 0).to eq(true)
         recipients.recipients.each do |recipient|
-          next if recipient.email != @email1
+          next if recipient.email != @email1 && recipient.email != @email2
           @client.delete_recipient(recipient.id)
         end
         custom_fields = @client.get_custom_fields
@@ -37,13 +37,11 @@ describe 'SendGrid4r::REST::Contacts::Recipients' do
         params['last_name'] = @last_name1
         params[@custom_field_name] = @pet1
         new_recipient = @client.post_recipient(params)
-        expect(new_recipient.created_at.is_a?(Fixnum)).to eq(true)
+        expect(new_recipient.created_at).to be_a(Fixnum)
         new_recipient.custom_fields.each do |custom_field|
           expect(
-            custom_field.is_a?(
-              SendGrid4r::REST::Contacts::CustomFields::Field
-            )
-          ).to eq(true)
+            custom_field
+          ).to be_a(SendGrid4r::REST::Contacts::CustomFields::Field)
         end
         expect(new_recipient.email).to eq(@email1)
         expect(new_recipient.first_name).to eq(nil)
@@ -52,7 +50,7 @@ describe 'SendGrid4r::REST::Contacts::Recipients' do
         expect(new_recipient.last_emailed).to eq(nil)
         expect(new_recipient.last_name).to eq(@last_name1)
         expect(new_recipient.last_opened).to eq(nil)
-        expect(new_recipient.updated_at.is_a?(Fixnum)).to eq(true)
+        expect(new_recipient.updated_at).to be_a(Fixnum)
         # post same recipients
         @client.post_recipient(params)
         # get all recipients
@@ -60,18 +58,8 @@ describe 'SendGrid4r::REST::Contacts::Recipients' do
         expect(recipients.recipients.length > 0).to eq(true)
         recipients.recipients.each do |recipient|
           expect(
-            recipient.is_a?(SendGrid4r::REST::Contacts::Recipients::Recipient)
-          ).to eq(true)
-        end
-        # get multiple recipients
-        recipient_ids = [@email1, @email2]
-        actual_recipients = @client.get_recipients_by_id(recipient_ids)
-        expect(actual_recipients.recipients.is_a?(Array)).to eq(true)
-        expect(actual_recipients.recipients.length).to eq(2)
-        actual_recipients.recipients.each do |recipient|
-          expect(
-            recipient.is_a?(SendGrid4r::REST::Contacts::Recipients::Recipient)
-          ).to eq(true)
+            recipient
+          ).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
         end
         # read a count of recipients
         actual_count = @client.get_recipients_count
@@ -84,8 +72,8 @@ describe 'SendGrid4r::REST::Contacts::Recipients' do
         # get a single recipient
         recipient = @client.get_recipient(new_recipient.id)
         expect(
-          recipient.is_a?(SendGrid4r::REST::Contacts::Recipients::Recipient)
-        ).to eq(true)
+          recipient
+        ).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
         # List the recipient lists to which the recipient belongs
         lists = @client.get_lists_recipient_belong(new_recipient.id)
         lists.lists.each do |list|
@@ -106,10 +94,20 @@ describe 'SendGrid4r::REST::Contacts::Recipients' do
         result = @client.post_recipients(params)
         expect(result.error_count).to eq(0)
         result.error_indices.each do |index|
-          expect(index.is_a?(Fixnum)).to eq(true)
+          expect(index).to be_a(Fixnum)
         end
-        expect(result.new_count).to eq(0)
-        expect(result.updated_count).to eq(2)
+        expect(result.new_count).to be_a(Fixnum)
+        expect(result.updated_count).to be_a(Fixnum)
+        # get multiple recipients
+        recipient_ids = [@email1, @email2]
+        actual_recipients = @client.get_recipients_by_id(recipient_ids)
+        expect(actual_recipients.recipients).to be_a(Array)
+        expect(actual_recipients.recipients.length).to eq(2)
+        actual_recipients.recipients.each do |recip|
+          expect(
+            recip
+          ).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
+        end
         # delete a recipient
         @client.delete_recipient(new_recipient.id)
         expect do
@@ -120,6 +118,145 @@ describe 'SendGrid4r::REST::Contacts::Recipients' do
       rescue => e
         puts e.inspect
         raise e
+      end
+    end
+
+    it 'post_recipient with block' do
+      params = {}
+      params['email'] = @email1
+      params['last_name'] = @last_name1
+      params[@custom_field_name] = @pet1
+      @client.post_recipient(params) do |resp, req, res|
+        resp =
+          SendGrid4r::REST::Contacts::Recipients.create_recipient(
+            JSON.parse(resp)
+          )
+        expect(resp).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
+        expect(req).to be_a(RestClient::Request)
+        expect(res).to be_a(Net::HTTPCreated)
+      end
+    end
+
+    it 'delete_recipient with block' do
+      params = {}
+      params['email'] = @email1
+      params['last_name'] = @last_name1
+      params[@custom_field_name] = @pet1
+      recipient = @client.post_recipient(params)
+      @client.delete_recipient(recipient.id) do |resp, req, res|
+        expect(resp).to eq('')
+        expect(req).to be_a(RestClient::Request)
+        expect(res).to be_a(Net::HTTPNoContent)
+      end
+    end
+
+    it 'get_recipients with block' do
+      @client.get_recipients do |resp, req, res|
+        resp =
+          SendGrid4r::REST::Contacts::Recipients.create_recipients(
+            JSON.parse(resp)
+          )
+        expect(resp).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipients)
+        expect(req).to be_a(RestClient::Request)
+        expect(res).to be_a(Net::HTTPOK)
+      end
+    end
+
+    it 'get_recipients_by_id with block' do
+      params = {}
+      params['email'] = @email1
+      params['last_name'] = @last_name1
+      params[@custom_field_name] = @pet1
+      recipient = @client.post_recipient(params)
+      @client.get_recipients_by_id([recipient.id]) do |resp, req, res|
+        resp =
+          SendGrid4r::REST::Contacts::Recipients.create_recipients(
+            JSON.parse(resp)
+          )
+        expect(resp).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipients)
+        expect(req).to be_a(RestClient::Request)
+        expect(res).to be_a(Net::HTTPOK)
+      end
+    end
+
+    it 'get_recipients_count with block' do
+      @client.get_recipients_count do |resp, req, res|
+        expect(JSON.parse(resp)['recipient_count']).to be_a(Fixnum)
+        expect(req).to be_a(RestClient::Request)
+        expect(res).to be_a(Net::HTTPOK)
+      end
+    end
+
+    it 'search_recipients with block' do
+      # Search recipients
+      params = {}
+      params['email'] = @email1
+      @client.search_recipients(params) do |resp, req, res|
+        resp =
+          SendGrid4r::REST::Contacts::Recipients.create_recipients(
+            JSON.parse(resp)
+          )
+        expect(resp).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipients)
+        expect(req).to be_a(RestClient::Request)
+        expect(res).to be_a(Net::HTTPOK)
+      end
+    end
+
+    it 'get_recipient with block' do
+      params = {}
+      params['email'] = @email1
+      params['last_name'] = @last_name1
+      params[@custom_field_name] = @pet1
+      recipient = @client.post_recipient(params)
+      @client.get_recipient(recipient.id) do |resp, req, res|
+        resp =
+          SendGrid4r::REST::Contacts::Recipients.create_recipient(
+            JSON.parse(resp)
+          )
+        expect(resp).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
+        expect(req).to be_a(RestClient::Request)
+        expect(res).to be_a(Net::HTTPOK)
+      end
+    end
+
+    it 'get_lists_recipient_belong with block' do
+      params = {}
+      params['email'] = @email1
+      params['last_name'] = @last_name1
+      params[@custom_field_name] = @pet1
+      recipient = @client.post_recipient(params)
+      @client.get_lists_recipient_belong(recipient.id) do |resp, req, res|
+        resp =
+          SendGrid4r::REST::Contacts::Lists.create_lists(
+            JSON.parse(resp)
+          )
+        expect(resp).to be_a(SendGrid4r::REST::Contacts::Lists::Lists)
+        expect(req).to be_a(RestClient::Request)
+        expect(res).to be_a(Net::HTTPOK)
+      end
+    end
+
+    it 'post_recipients with block' do
+      # add multiple recipients
+      recipient1 = {}
+      recipient1['email'] = @email1
+      recipient1['last_name'] = @last_name1
+      recipient1[@custom_field_name] = @pet1
+      recipient2 = {}
+      recipient2['email'] = @email2
+      recipient2['last_name'] = @last_name2
+      recipient2[@custom_field_name] = @pet2
+      params = [recipient1, recipient2]
+      @client.post_recipients(params) do |resp, req, res|
+        resp =
+          SendGrid4r::REST::Contacts::Recipients.create_result(
+            JSON.parse(resp)
+          )
+        expect(resp).to be_a(
+          SendGrid4r::REST::Contacts::Recipients::ResultAddMultiple
+        )
+        expect(req).to be_a(RestClient::Request)
+        expect(res).to be_a(Net::HTTPCreated)
       end
     end
 
@@ -189,11 +326,11 @@ describe 'SendGrid4r::REST::Contacts::Recipients' do
         '}'
       hash = JSON.parse(json)
       actual = SendGrid4r::REST::Contacts::Recipients.create_recipients(hash)
-      expect(actual.recipients.is_a?(Array)).to eq(true)
+      expect(actual.recipients).to be_a(Array)
       actual.recipients.each do |recipient|
         expect(
-          recipient.is_a?(SendGrid4r::REST::Contacts::Recipients::Recipient)
-        ).to eq(true)
+          recipient
+        ).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
       end
     end
   end

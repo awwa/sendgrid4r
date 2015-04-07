@@ -11,28 +11,27 @@ module SendGrid4r
     # SendGrid Web API v3 Request
     #
     module Request
-      # TODO: handle ratelimit headers
-      def get(auth, endpoint, params = nil, payload = nil)
-        execute(:get, auth, endpoint, params, payload)
+      def get(auth, endpoint, params = nil, payload = nil, &block)
+        execute(:get, auth, endpoint, params, payload, &block)
       end
 
-      def post(auth, endpoint, payload = nil)
-        execute(:post, auth, endpoint, nil, payload)
+      def post(auth, endpoint, payload = nil, &block)
+        execute(:post, auth, endpoint, nil, payload, &block)
       end
 
-      def patch(auth, endpoint, payload)
-        execute(:patch, auth, endpoint, nil, payload)
+      def patch(auth, endpoint, payload, &block)
+        execute(:patch, auth, endpoint, nil, payload, &block)
       end
 
-      def put(auth, endpoint, payload)
-        execute(:put, auth, endpoint, nil, payload)
+      def put(auth, endpoint, payload, &block)
+        execute(:put, auth, endpoint, nil, payload, &block)
       end
 
-      def delete(auth, endpoint, payload = nil)
-        execute(:delete, auth, endpoint, nil, payload)
+      def delete(auth, endpoint, payload = nil, &block)
+        execute(:delete, auth, endpoint, nil, payload, &block)
       end
 
-      def execute(method, auth, endpoint, params, payload)
+      def execute(method, auth, endpoint, params, payload, &block)
         args = {}
         args[:method] = method
         args[:url] = process_url_params(endpoint, params)
@@ -40,11 +39,16 @@ module SendGrid4r
         args[:password] = auth.password
         args[:headers] = { content_type: :json }
         args[:payload] = payload.to_json unless payload.nil?
-        body = RestClient::Request.execute(args)
-        if body.nil? || body.length < 2
-          body
+        if block_given?
+          RestClient::Request.execute(args, &block)
+          nil
         else
-          JSON.parse(body)
+          body = RestClient::Request.execute(args)
+          if body.nil? || body.length < 2
+            body
+          else
+            JSON.parse(body)
+          end
         end
       end
 
