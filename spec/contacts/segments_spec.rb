@@ -21,7 +21,7 @@ describe 'SendGrid4r::REST::Contacts::Segments' do
       begin
         # celan up test env
         segments = @client.get_segments
-        expect(segments.segments.length >= 0).to eq(true)
+        expect(segments.segments.length).to be >= 0
         segments.segments.each do |segment|
           next if segment.name != @name && segment.name != @edit_name
           @client.delete_segment(segment.id)
@@ -37,7 +37,7 @@ describe 'SendGrid4r::REST::Contacts::Segments' do
           name: @name, conditions: [condition]
         )
         new_segment = @client.post_segment(params)
-        expect(new_segment.id.is_a?(Fixnum)).to eq(true)
+        expect(new_segment.id).to be_a(Fixnum)
         expect(new_segment.name).to eq(@name)
         expect(new_segment.list_id).to eq(nil)
         expect(new_segment.conditions.length).to eq(1)
@@ -58,7 +58,7 @@ describe 'SendGrid4r::REST::Contacts::Segments' do
         expect(actual_condition.value).to eq(@value)
         expect(actual_condition.operator).to eq(@operator)
         expect(actual_condition.and_or).to eq(nil)
-        expect(actual_segment.recipient_count.is_a?(Fixnum)).to eq(true)
+        expect(actual_segment.recipient_count).to be_a(Fixnum)
         # update the segment
         edit_condition = @condition_factory.create(
           field: @field,
@@ -75,8 +75,8 @@ describe 'SendGrid4r::REST::Contacts::Segments' do
         recipients = @client.get_recipients_from_segment(new_segment.id)
         recipients.recipients.each do |recipient|
           expect(
-            recipient.is_a?(SendGrid4r::REST::Contacts::Recipients::Recipient)
-          ).to eq(true)
+            recipient
+          ).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
         end
         # delete the segment
         @client.delete_segment(new_segment.id)
@@ -126,15 +126,13 @@ describe 'SendGrid4r::REST::Contacts::Segments' do
       expect(actual.id).to eq(1)
       expect(actual.name).to eq('Last Name Miller')
       expect(actual.list_id).to eq(nil)
-      expect(actual.conditions.is_a?(Array)).to eq(true)
+      expect(actual.conditions).to be_a(Array)
       actual.conditions.each do |condition|
-        expect(
-          condition.is_a?(
-            SendGrid4r::REST::Contacts::Segments::Condition
-          )
-        ).to eq(true)
+        expect(condition).to be_a(
+          SendGrid4r::REST::Contacts::Segments::Condition
+        )
       end
-      expect(actual.recipient_count).to eq(1)
+      expect(actual.recipient_count).to be_a(Fixnum)
     end
 
     it 'creates segments instance' do
@@ -159,11 +157,9 @@ describe 'SendGrid4r::REST::Contacts::Segments' do
         '}'
       hash = JSON.parse(json)
       actual = SendGrid4r::REST::Contacts::Segments.create_segments(hash)
-      expect(actual.segments.is_a?(Array)).to eq(true)
+      expect(actual.segments).to be_a(Array)
       actual.segments.each do |segment|
-        expect(
-          segment.is_a?(SendGrid4r::REST::Contacts::Segments::Segment)
-        ).to eq(true)
+        expect(segment).to be_a(SendGrid4r::REST::Contacts::Segments::Segment)
       end
     end
   end

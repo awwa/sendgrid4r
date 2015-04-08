@@ -15,14 +15,14 @@ describe 'SendGrid4r::REST::Contacts::CustomFields' do
       begin
         # celan up test env
         fields = @client.get_custom_fields
-        expect(fields.custom_fields.length >= 0).to eq(true)
+        expect(fields.custom_fields.length).to be >= 0
         fields.custom_fields.each do |field|
           next if field.name != @name
           @client.delete_custom_field(field.id)
         end
         # post a custom field
         new_field = @client.post_custom_field(@name, @type)
-        expect(new_field.id.is_a?(Fixnum)).to eq(true)
+        expect(new_field.id).to be_a(Fixnum)
         expect(new_field.name).to eq(@name)
         expect(new_field.type).to eq(@type)
         # post same custom fieled
@@ -31,7 +31,7 @@ describe 'SendGrid4r::REST::Contacts::CustomFields' do
         end.to raise_error(RestClient::BadRequest)
         # get the custom fields
         fields = @client.get_custom_fields
-        expect(fields.length >= 1).to eq(true)
+        expect(fields.length).to be >= 1
         fields.custom_fields.each do |field|
           next if field.name != @name
           expect(field.id).to eq(new_field.id)
@@ -91,11 +91,9 @@ describe 'SendGrid4r::REST::Contacts::CustomFields' do
         '}'
       hash = JSON.parse(json)
       actual = SendGrid4r::REST::Contacts::CustomFields.create_fields(hash)
-      expect(actual.custom_fields.is_a?(Array)).to eq(true)
+      expect(actual.custom_fields).to be_a(Array)
       actual.custom_fields.each do |field|
-        expect(
-          field.is_a?(SendGrid4r::REST::Contacts::CustomFields::Field)
-        ).to eq(true)
+        expect(field).to be_a(SendGrid4r::REST::Contacts::CustomFields::Field)
       end
     end
   end

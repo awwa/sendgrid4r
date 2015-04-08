@@ -24,7 +24,7 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
       begin
         # celan up test env(lists)
         lists = @client.get_lists
-        expect(lists.lists.length >= 0).to eq(true)
+        expect(lists.lists.length).to be >= 0
         lists.lists.each do |list|
           @client.delete_list(list.id) if list.name == @list_name1
           @client.delete_list(list.id) if list.name == @edit_name1
@@ -32,14 +32,14 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
         end
         # celan up test env(recipients)
         recipients = @client.get_recipients
-        expect(recipients.recipients.length >= 0).to eq(true)
+        expect(recipients.recipients.length).to be >= 0
         recipients.recipients.each do |recipient|
           @client.delete_recipient(recipient.id) if recipient.email == @email1
           @client.delete_recipient(recipient.id) if recipient.email == @email2
         end
         # post a first list
         new_list = @client.post_list(@list_name1)
-        expect(new_list.id.is_a?(Fixnum)).to eq(true)
+        expect(new_list.id).to be_a(Fixnum)
         expect(new_list.name).to eq(@list_name1)
         expect(new_list.recipient_count).to eq(0)
         # post same list
@@ -48,7 +48,7 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
         end.to raise_error(RestClient::BadRequest)
         # get all list
         lists = @client.get_lists
-        expect(lists.length >= 1).to eq(true)
+        expect(lists.length).to be >= 1
         lists.lists.each do |list|
           next if list.name != @list_name1
           expect(list.id).to eq(new_list.id)
@@ -81,15 +81,15 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
         recipients = @client.get_recipients_from_list(new_list.id)
         recipients.recipients.each do |recipient|
           expect(
-            recipient.is_a?(SendGrid4r::REST::Contacts::Recipients::Recipient)
-          ).to eq(true)
+            recipient
+          ).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
         end
         # list recipients from a single list with offset & limit
         recipients = @client.get_recipients_from_list(new_list.id, 10, 0)
         recipients.recipients.each do |recipient|
           expect(
-            recipient.is_a?(SendGrid4r::REST::Contacts::Recipients::Recipient)
-          ).to eq(true)
+            recipient
+          ).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
         end
         # Add single recipient to a list
         @client.post_recipient_to_list(edit_list.id, @email1)
@@ -139,11 +139,9 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
         '}'
       hash = JSON.parse(json)
       actual = SendGrid4r::REST::Contacts::Lists.create_lists(hash)
-      expect(actual.lists.is_a?(Array)).to eq(true)
+      expect(actual.lists).to be_a(Array)
       actual.lists.each do |list|
-        expect(
-          list.is_a?(SendGrid4r::REST::Contacts::Lists::List)
-        ).to eq(true)
+        expect(list).to be_a(SendGrid4r::REST::Contacts::Lists::List)
       end
     end
   end

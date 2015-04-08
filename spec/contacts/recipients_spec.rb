@@ -20,7 +20,7 @@ describe 'SendGrid4r::REST::Contacts::Recipients' do
       begin
         # celan up test env
         recipients = @client.get_recipients
-        expect(recipients.recipients.length >= 0).to eq(true)
+        expect(recipients.recipients.length).to be >= 0
         recipients.recipients.each do |recipient|
           next if recipient.email != @email1 && recipient.email != @email2
           @client.delete_recipient(recipient.id)
@@ -55,7 +55,7 @@ describe 'SendGrid4r::REST::Contacts::Recipients' do
         @client.post_recipient(params)
         # get all recipients
         recipients = @client.get_recipients(100, 0)
-        expect(recipients.recipients.length > 0).to eq(true)
+        expect(recipients.recipients.length).to be > 0
         recipients.recipients.each do |recipient|
           expect(
             recipient
@@ -63,7 +63,7 @@ describe 'SendGrid4r::REST::Contacts::Recipients' do
         end
         # read a count of recipients
         actual_count = @client.get_recipients_count
-        expect(actual_count > 0).to eq(true)
+        expect(actual_count).to be > 0
         # Search recipients
         params = {}
         params['email'] = @email1
