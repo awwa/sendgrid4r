@@ -6,71 +6,150 @@ describe 'SendGrid4r::REST::Contacts::CustomFields' do
     Dotenv.load
     @client = SendGrid4r::Client.new(
       ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
-    @name = 'birthday'
-    @type = 'text'
+    @name1 = 'birthday'
+    @type1 = 'text'
+    @name2 = 'born_at'
+    @type2 = 'date'
   end
 
-  context 'always' do
-    it 'is normal' do
+  context 'without block call' do
+    before :all do
+      # celan up test env
+      fields = @client.get_custom_fields
+      fields.custom_fields.each do |field|
+        next if field.name != @name1 && field.name != @name2
+        @client.delete_custom_field(field.id)
+      end
+      # post a custom field
+      @new_field = @client.post_custom_field(@name1, @type1)
+    end
+
+    it 'post_custom_field' do
       begin
-        # celan up test env
-        fields = @client.get_custom_fields
-        expect(fields.custom_fields.length).to be >= 0
-        fields.custom_fields.each do |field|
-          next if field.name != @name
-          @client.delete_custom_field(field.id)
-        end
-        # post a custom field
-        new_field = @client.post_custom_field(@name, @type)
+        new_field = @client.post_custom_field(@name2, @type2)
         expect(new_field.id).to be_a(Fixnum)
-        expect(new_field.name).to eq(@name)
-        expect(new_field.type).to eq(@type)
-        # post same custom fieled
+        expect(new_field.name).to eq(@name2)
+        expect(new_field.type).to eq(@type2)
+      rescue => e
+        puts e.inspect
+        raise e
+      end
+    end
+
+    it 'post_custom_field for same key' do
+      begin
         expect do
-          @client.post_custom_field(@name, @type)
+          @client.post_custom_field(@name1, @type1)
         end.to raise_error(RestClient::BadRequest)
-        # get the custom fields
+      rescue => e
+        puts e.inspect
+        raise e
+      end
+    end
+
+    it 'get_custom_fields' do
+      begin
         fields = @client.get_custom_fields
         expect(fields.length).to be >= 1
         fields.custom_fields.each do |field|
-          next if field.name != @name
-          expect(field.id).to eq(new_field.id)
-          expect(field.name).to eq(new_field.name)
-          expect(field.type).to eq(new_field.type)
+          next if field.name != @name1
+          expect(field.id).to eq(@new_field.id)
+          expect(field.name).to eq(@new_field.name)
+          expect(field.type).to eq(@new_field.type)
         end
-        # get a single custom field
-        actual_field = @client.get_custom_field(new_field.id)
-        expect(actual_field.id).to eq(new_field.id)
-        expect(actual_field.name).to eq(new_field.name)
-        expect(actual_field.type).to eq(new_field.type)
-        # delete the custom field
-        @client.delete_custom_field(new_field.id)
+      rescue => e
+        puts e.inspect
+        raise e
+      end
+    end
+
+    it 'get_custom_field' do
+      begin
+        actual_field = @client.get_custom_field(@new_field.id)
+        expect(actual_field.id).to eq(@new_field.id)
+        expect(actual_field.name).to eq(@new_field.name)
+        expect(actual_field.type).to eq(@new_field.type)
+      rescue => e
+        puts e.inspect
+        raise e
+      end
+    end
+
+    it 'delete_custom_field' do
+      begin
+        @client.delete_custom_field(@new_field.id)
         expect do
-          @client.get_custom_field(new_field.id)
+          @client.get_custom_field(@new_field.id)
         end.to raise_error(RestClient::ResourceNotFound)
       rescue => e
         puts e.inspect
         raise e
       end
     end
+  end
 
-    it 'post_custom_field with block' do
-      begin
-        @client.post_custom_field(@name, @type) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Contacts::CustomFields.create_field(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Contacts::CustomFields::Field)
-          expect(req).to be_a(RestClient::Request)
-          #expect(res).to be_a(Net::HTTPCreated)
-        end
-      rescue => e
-        puts e.inspect
-        raise e
+  context 'with block call' do
+    before :all do
+      # celan up test env
+      fields = @client.get_custom_fields
+      fields.custom_fields.each do |field|
+        next if field.name != @name1 && field.name != @name2
+        @client.delete_custom_field(field.id)
+      end
+      # post a custom field
+      @new_field = @client.post_custom_field(@name1, @type1)
+    end
+
+    it 'post_custom_field' do
+      @client.post_custom_field(@name2, @type2) do |resp, req, res|
+        resp =
+          SendGrid4r::REST::Contacts::CustomFields.create_field(
+            JSON.parse(resp)
+          )
+        expect(resp).to be_a(SendGrid4r::REST::Contacts::CustomFields::Field)
+        expect(req).to be_a(RestClient::Request)
+        expect(res).to be_a(Net::HTTPCreated)
       end
     end
 
+    it 'post_custom_field for same key' do
+      expect do
+        @client.post_custom_field(@name1, @type1)
+      end.to raise_error(RestClient::BadRequest)
+    end
+
+    it 'get_custom_fields' do
+      @client.get_custom_fields do |resp, req, res|
+        resp =
+          SendGrid4r::REST::Contacts::CustomFields.create_fields(
+            JSON.parse(resp)
+          )
+        expect(resp).to be_a(SendGrid4r::REST::Contacts::CustomFields::Fields)
+        expect(req).to be_a(RestClient::Request)
+        expect(res).to be_a(Net::HTTPOK)
+      end
+    end
+
+    it 'get_custom_field' do
+      @client.get_custom_field(@new_field.id) do |resp, req, res|
+        resp = SendGrid4r::REST::Contacts::CustomFields.create_field(
+          JSON.parse(resp)
+        )
+        expect(resp).to be_a(SendGrid4r::REST::Contacts::CustomFields::Field)
+        expect(req).to be_a(RestClient::Request)
+        expect(res).to be_a(Net::HTTPOK)
+      end
+    end
+
+    it 'delete_custom_field' do
+      @client.delete_custom_field(@new_field.id)
+      expect do
+        @client.get_custom_field(@new_field.id)
+      end.to raise_error(RestClient::ResourceNotFound)
+    end
+  end
+
+  context 'unit test' do
     it 'creates field instance' do
       json =
         '{'\
