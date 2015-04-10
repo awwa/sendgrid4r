@@ -142,10 +142,17 @@ describe 'SendGrid4r::REST::Contacts::CustomFields' do
     end
 
     it 'delete_custom_field' do
-      @client.delete_custom_field(@new_field.id)
-      expect do
-        @client.get_custom_field(@new_field.id)
-      end.to raise_error(RestClient::ResourceNotFound)
+      @client.delete_custom_field(@new_field.id) do |resp, req, res|
+        expect(resp).to eq("")
+        expect(req).to be_a(RestClient::Request)
+        expect(res).to be_a(Net::HTTPNoContent)
+      end
+
+      @client.get_custom_field(@new_field.id) do |resp, req, res|
+        #expect(resp).to eq("")
+        expect(req).to be_a(RestClient::Request)
+        expect(res).to be_a(Net::HTTPNotFound)
+      end
     end
   end
 
