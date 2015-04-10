@@ -54,6 +54,23 @@ describe 'SendGrid4r::REST::Contacts::CustomFields' do
       end
     end
 
+    it 'post_custom_field with block' do
+      begin
+        @client.post_custom_field(@name, @type) do |resp, req, res|
+          resp =
+            SendGrid4r::REST::Contacts::CustomFields.create_field(
+              JSON.parse(resp)
+            )
+          expect(resp).to be_a(SendGrid4r::REST::Contacts::CustomFields::Field)
+          expect(req).to be_a(RestClient::Request)
+          #expect(res).to be_a(Net::HTTPCreated)
+        end
+      rescue => e
+        puts e.inspect
+        raise e
+      end
+    end
+
     it 'creates field instance' do
       json =
         '{'\

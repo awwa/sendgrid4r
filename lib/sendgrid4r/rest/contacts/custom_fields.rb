@@ -31,10 +31,12 @@ module SendGrid4r
         end
 
         def self.create_field(resp)
+          return resp if resp.nil?
           Field.new(resp['id'], resp['name'], resp['type'], resp['value'])
         end
 
         def self.create_fields(resp)
+          return resp if resp.nil?
           custom_fields = []
           resp['custom_fields'].each do |field|
             custom_fields.push(
@@ -44,33 +46,37 @@ module SendGrid4r
           Fields.new(custom_fields)
         end
 
-        def post_custom_field(name, type)
+        def post_custom_field(name, type, &block)
           params = {}
           params['name'] = name
           params['type'] = type
           resp = post(
-            @auth, SendGrid4r::REST::Contacts::CustomFields.url, params
+            @auth, SendGrid4r::REST::Contacts::CustomFields.url, params, &block
           )
           SendGrid4r::REST::Contacts::CustomFields.create_field(resp)
         end
 
-        def get_custom_fields
-          resp = get(@auth, SendGrid4r::REST::Contacts::CustomFields.url)
+        def get_custom_fields(&block)
+          resp = get(
+            @auth, SendGrid4r::REST::Contacts::CustomFields.url, &block
+          )
           SendGrid4r::REST::Contacts::CustomFields.create_fields(resp)
         end
 
-        def get_custom_field(custom_field_id)
+        def get_custom_field(custom_field_id, &block)
           resp = get(
             @auth,
-            SendGrid4r::REST::Contacts::CustomFields.url(custom_field_id)
+            SendGrid4r::REST::Contacts::CustomFields.url(custom_field_id),
+            &block
           )
           SendGrid4r::REST::Contacts::CustomFields.create_field(resp)
         end
 
-        def delete_custom_field(custom_field_id)
+        def delete_custom_field(custom_field_id, &block)
           delete(
             @auth,
-            SendGrid4r::REST::Contacts::CustomFields.url(custom_field_id)
+            SendGrid4r::REST::Contacts::CustomFields.url(custom_field_id),
+            &block
           )
         end
       end

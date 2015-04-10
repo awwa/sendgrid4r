@@ -25,6 +25,7 @@ module SendGrid4r
         Fields = Struct.new(:reserved_fields)
 
         def self.create_fields(resp)
+          return resp if resp.nil?
           reserved_fields = []
           resp['reserved_fields'].each do |field|
             reserved_fields.push(
@@ -35,12 +36,15 @@ module SendGrid4r
         end
 
         def self.create_field(resp)
+          return resp if resp.nil?
           Field.new(resp['name'], resp['type'])
         end
 
-        def get_reserved_fields
+        def get_reserved_fields(&block)
           resp = get(
-            @auth, "#{SendGrid4r::Client::BASE_URL}/contactdb/reserved_fields"
+            @auth,
+            "#{SendGrid4r::Client::BASE_URL}/contactdb/reserved_fields",
+            &block
           )
           SendGrid4r::REST::Contacts::ReservedFields.create_fields(resp)
         end
