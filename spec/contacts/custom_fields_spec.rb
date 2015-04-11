@@ -113,9 +113,11 @@ describe 'SendGrid4r::REST::Contacts::CustomFields' do
     end
 
     it 'post_custom_field for same key' do
-      expect do
-        @client.post_custom_field(@name1, @type1)
-      end.to raise_error(RestClient::BadRequest)
+      @client.post_custom_field(@name1, @type1) do |_resp, req, res|
+        # TODO: _resp
+        expect(req).to be_a(RestClient::Request)
+        expect(res).to be_a(Net::HTTPBadRequest)
+      end
     end
 
     it 'get_custom_fields' do
@@ -143,15 +145,9 @@ describe 'SendGrid4r::REST::Contacts::CustomFields' do
 
     it 'delete_custom_field' do
       @client.delete_custom_field(@new_field.id) do |resp, req, res|
-        expect(resp).to eq("")
+        expect(resp).to eq('')
         expect(req).to be_a(RestClient::Request)
         expect(res).to be_a(Net::HTTPNoContent)
-      end
-
-      @client.get_custom_field(@new_field.id) do |resp, req, res|
-        #expect(resp).to eq("")
-        expect(req).to be_a(RestClient::Request)
-        expect(res).to be_a(Net::HTTPNotFound)
       end
     end
   end
