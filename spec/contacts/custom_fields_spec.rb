@@ -12,8 +12,8 @@ describe 'SendGrid4r::REST::Contacts::CustomFields' do
     @type2 = 'date'
   end
 
-  context 'without block call' do
-    before :all do
+  def init
+    begin
       # celan up test env
       fields = @client.get_custom_fields
       fields.custom_fields.each do |field|
@@ -22,6 +22,15 @@ describe 'SendGrid4r::REST::Contacts::CustomFields' do
       end
       # post a custom field
       @new_field = @client.post_custom_field(@name1, @type1)
+    rescue => e
+      puts e.inspect
+      raise e
+    end
+  end
+
+  context 'without block call' do
+    before :all do
+      init
     end
 
     it 'post_custom_field' do
@@ -78,9 +87,6 @@ describe 'SendGrid4r::REST::Contacts::CustomFields' do
     it 'delete_custom_field' do
       begin
         @client.delete_custom_field(@new_field.id)
-        expect do
-          @client.get_custom_field(@new_field.id)
-        end.to raise_error(RestClient::ResourceNotFound)
       rescue => e
         puts e.inspect
         raise e
@@ -90,14 +96,7 @@ describe 'SendGrid4r::REST::Contacts::CustomFields' do
 
   context 'with block call' do
     before :all do
-      # celan up test env
-      fields = @client.get_custom_fields
-      fields.custom_fields.each do |field|
-        next if field.name != @name1 && field.name != @name2
-        @client.delete_custom_field(field.id)
-      end
-      # post a custom field
-      @new_field = @client.post_custom_field(@name1, @type1)
+      init
     end
 
     it 'post_custom_field' do
