@@ -40,8 +40,8 @@ describe 'SendGrid4r::REST::Contacts::ReservedFields' do
       )
   end
 
-  context 'always' do
-    it 'is normal' do
+  context 'without block call' do
+    it 'get_reserved_fields' do
       begin
         # get the reserved fields
         fields = @client.get_reserved_fields
@@ -60,7 +60,23 @@ describe 'SendGrid4r::REST::Contacts::ReservedFields' do
         raise e
       end
     end
+  end
 
+  context 'with block call' do
+    it 'get_reserved_fields' do
+      @client.get_reserved_fields do |resp, req, res|
+        resp =
+          SendGrid4r::REST::Contacts::ReservedFields.create_fields(
+            JSON.parse(resp)
+          )
+        expect(resp).to be_a(SendGrid4r::REST::Contacts::ReservedFields::Fields)
+        expect(req).to be_a(RestClient::Request)
+        expect(res).to be_a(Net::HTTPOK)
+      end
+    end
+  end
+
+  context 'unit test' do
     it 'creates field instance' do
       json =
         '{'\
