@@ -13,19 +13,17 @@ describe 'SendGrid4r::REST::Contacts::CustomFields' do
   end
 
   def init
-    begin
-      # celan up test env
-      fields = @client.get_custom_fields
-      fields.custom_fields.each do |field|
-        next if field.name != @name1 && field.name != @name2
-        @client.delete_custom_field(field.id)
-      end
-      # post a custom field
-      @new_field = @client.post_custom_field(@name1, @type1)
-    rescue => e
-      puts e.inspect
-      raise e
+    # celan up test env
+    fields = @client.get_custom_fields
+    fields.custom_fields.each do |field|
+      next if field.name != @name1 && field.name != @name2
+      @client.delete_custom_field(field.id)
     end
+    # post a custom field
+    @new_field = @client.post_custom_field(@name1, @type1)
+  rescue => e
+    puts e.inspect
+    raise e
   end
 
   context 'without block call' do

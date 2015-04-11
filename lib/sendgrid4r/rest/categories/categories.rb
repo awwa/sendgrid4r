@@ -15,7 +15,18 @@ module SendGrid4r
         Category = Struct.new(:category)
 
         def self.create_category(resp)
+          return resp if resp.nil?
           Category.new(resp['category'])
+        end
+
+        def self.create_categories(resp)
+          return resp if resp.nil?
+          categories = []
+          resp.each do |category|
+            categories.push(
+              SendGrid4r::REST::Categories::Categories.create_category(category))
+          end
+          categories
         end
 
         def get_categories(category = nil, limit = nil, offset = nil)
@@ -23,14 +34,10 @@ module SendGrid4r
           params['category'] = category unless category.nil?
           params['limit'] = limit unless limit.nil?
           params['offset'] = offset unless limit.nil?
-          resp_a = get(
-            @auth, "#{SendGrid4r::Client::BASE_URL}/categories", params)
-          categories = []
-          resp_a.each do |resp|
-            categories.push(
-              SendGrid4r::REST::Categories::Categories.create_category(resp))
-          end
-          categories
+          resp = get(
+            @auth, "#{SendGrid4r::Client::BASE_URL}/categories", params
+          )
+          SendGrid4r::REST::Categories::Categories.create_categories(resp)
         end
       end
     end
