@@ -12,23 +12,10 @@ module SendGrid4r
       module GlobalSuppressions
         include SendGrid4r::REST::Request
 
-        RecipientEmails = Struct.new(:recipient_emails)
-        RecipientEmail = Struct.new(:recipient_email)
-
         def self.url(email_address = nil)
           url = "#{SendGrid4r::Client::BASE_URL}/asm/suppressions/global"
           url = "#{url}/#{email_address}" unless email_address.nil?
           url
-        end
-
-        def self.create_recipient_emails(resp)
-          return resp if resp.nil?
-          RecipientEmails.new(resp['recipient_emails'])
-        end
-
-        def self.create_recipient_email(resp)
-          return resp if resp.nil?
-          RecipientEmail.new(resp['recipient_email'])
         end
 
         def post_global_suppressed_emails(recipient_emails, &block)
@@ -39,9 +26,7 @@ module SendGrid4r
             params,
             &block
           )
-          SendGrid4r::REST::Asm::GlobalSuppressions.create_recipient_emails(
-            resp
-          )
+          SendGrid4r::REST::Asm.create_recipient_emails(resp)
         end
 
         def get_global_suppressed_email(email_address, &block)
@@ -50,9 +35,7 @@ module SendGrid4r
             SendGrid4r::REST::Asm::GlobalSuppressions.url(email_address),
             &block
           )
-          SendGrid4r::REST::Asm::GlobalSuppressions.create_recipient_email(
-            resp
-          )
+          SendGrid4r::REST::Asm.create_recipient_email(resp)
         end
 
         def delete_global_suppressed_email(email_address, &block)

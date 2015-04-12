@@ -13,6 +13,7 @@ module SendGrid4r
         include SendGrid4r::REST::Request
 
         Suppression = Struct.new(:id, :name, :description, :suppressed)
+        Suppressions = Struct.new(:suppressions)
 
         def self.url(group_id, email_address = nil)
           url =
@@ -22,9 +23,24 @@ module SendGrid4r
           url
         end
 
+        def self.create_suppressions(resp)
+          resp if resp.nil?
+          suppressions = []
+          resp['suppressions'].each do |suppression|
+            suppressions.push(
+              SendGrid4r::REST::Asm::Suppressions.create_suppression(
+                suppression
+              )
+            )
+          end
+          Suppressions.new(suppressions)
+        end
+
         def self.create_suppression(resp)
+          resp if resp.nil?
           Suppression.new(
-            resp['id'], resp['name'], resp['description'], resp['suppressed'])
+            resp['id'], resp['name'], resp['description'], resp['suppressed']
+          )
         end
 
         def post_suppressed_emails(group_id, recipient_emails)
@@ -33,20 +49,7 @@ module SendGrid4r
             SendGrid4r::REST::Asm::Suppressions.url(group_id),
             recipient_emails: recipient_emails
           )
-          resp['recipient_emails']
-        end
-
-        def get_suppressions(email_address)
-          resp_a = get(
-            @auth,
-            "#{SendGrid4r::Client::BASE_URL}/asm/suppressions/#{email_address}")
-          suppressions = []
-          resp_a['suppressions'].each do |resp|
-            suppressions.push(
-              SendGrid4r::REST::Asm::Suppressions.create_suppression(resp)
-            )
-          end
-          suppressions
+          SendGrid4r::REST::Asm.create_recipient_emails(resp)
         end
 
         def get_suppressed_emails(group_id)
@@ -54,6 +57,13 @@ module SendGrid4r
             @auth,
             SendGrid4r::REST::Asm::Suppressions.url(group_id)
           )
+        end
+
+        def get_suppressions(email_address)
+          resp = get(
+            @auth,
+            "#{SendGrid4r::Client::BASE_URL}/asm/suppressions/#{email_address}")
+          SendGrid4r::REST::Asm::Suppressions.create_suppressions(resp)
         end
 
         def delete_suppressed_email(group_id, email_address)

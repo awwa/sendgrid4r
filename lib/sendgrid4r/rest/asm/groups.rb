@@ -15,7 +15,14 @@ module SendGrid4r
         Group = Struct.new(
           :id, :name, :description, :last_email_sent_at, :unsubscribes)
 
+        def self.url(group_id = nil)
+          url = "#{SendGrid4r::Client::BASE_URL}/asm/groups"
+          url = "#{url}/#{group_id}" unless group_id.nil?
+          url
+        end
+
         def self.create_group(resp)
+          return resp if resp.nil?
           Group.new(
             resp['id'],
             resp['name'],
@@ -25,16 +32,14 @@ module SendGrid4r
           )
         end
 
-        def post_group(name, description)
+        def post_group(name, description, &block)
           params = { name: name, description: description }
-          resp = post(
-            @auth, "#{SendGrid4r::Client::BASE_URL}/asm/groups", params
-          )
+          resp = post(@auth, SendGrid4r::REST::Asm::Groups.url, params, &block)
           SendGrid4r::REST::Asm::Groups.create_group(resp)
         end
 
-        def get_groups
-          resp_a = get(@auth, "#{SendGrid4r::Client::BASE_URL}/asm/groups")
+        def get_groups(&block)
+          resp_a = get(@auth, SendGrid4r::REST::Asm::Groups.url, &block)
           groups = []
           resp_a.each do |resp|
             groups.push(SendGrid4r::REST::Asm::Groups.create_group(resp))
@@ -42,26 +47,23 @@ module SendGrid4r
           groups
         end
 
-        def get_group(group_id)
-          resp = get(
-            @auth, "#{SendGrid4r::Client::BASE_URL}/asm/groups/#{group_id}"
-          )
+        def get_group(group_id, &block)
+          resp = get(@auth, SendGrid4r::REST::Asm::Groups.url(group_id), &block)
           SendGrid4r::REST::Asm::Groups.create_group(resp)
         end
 
-        def patch_group(group_id, group)
+        def patch_group(group_id, group, &block)
           resp = patch(
             @auth,
-            "#{SendGrid4r::Client::BASE_URL}/asm/groups/#{group_id}",
-            group.to_h
+            SendGrid4r::REST::Asm::Groups.url(group_id),
+            group.to_h,
+            &block
           )
           SendGrid4r::REST::Asm::Groups.create_group(resp)
         end
 
-        def delete_group(group_id)
-          delete(
-            @auth, "#{SendGrid4r::Client::BASE_URL}/asm/groups/#{group_id}"
-          )
+        def delete_group(group_id, &block)
+          delete(@auth, SendGrid4r::REST::Asm::Groups.url(group_id), &block)
         end
       end
     end

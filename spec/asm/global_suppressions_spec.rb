@@ -36,30 +36,45 @@ describe 'SendGrid4r::REST::Asm::GlobalSuppressions' do
     end
 
     it 'post_global_suppressed_emails' do
-      emails = @client.post_global_suppressed_emails(
-        [@email1, @email2, @email3]
-      )
-      expect(emails.recipient_emails.length).to eq(3)
-      expect(emails.recipient_emails.include? @email1).to eq(true)
-      expect(emails.recipient_emails.include? @email2).to eq(true)
-      expect(emails.recipient_emails.include? @email3).to eq(true)
+      begin
+        emails = @client.post_global_suppressed_emails(
+          [@email1, @email2, @email3]
+        )
+        expect(emails.recipient_emails.length).to eq(3)
+        expect(emails.recipient_emails.include? @email1).to eq(true)
+        expect(emails.recipient_emails.include? @email2).to eq(true)
+        expect(emails.recipient_emails.include? @email3).to eq(true)
+      rescue => e
+        puts e.inspect
+        raise e
+      end
     end
 
     it 'get_global_suppressed_email' do
-      actual_email1 = @client.get_global_suppressed_email(@email1)
-      actual_email2 = @client.get_global_suppressed_email(@email2)
-      actual_email3 = @client.get_global_suppressed_email(@email3)
-      actual_notexist = @client.get_global_suppressed_email('notexist')
-      expect(actual_email1.recipient_email).to eq(@email1)
-      expect(actual_email2.recipient_email).to eq(@email2)
-      expect(actual_email3.recipient_email).to eq(@email3)
-      expect(actual_notexist.recipient_email).to eq(nil)
+      begin
+        actual_email1 = @client.get_global_suppressed_email(@email1)
+        actual_email2 = @client.get_global_suppressed_email(@email2)
+        actual_email3 = @client.get_global_suppressed_email(@email3)
+        actual_notexist = @client.get_global_suppressed_email('notexist')
+        expect(actual_email1.recipient_email).to eq(@email1)
+        expect(actual_email2.recipient_email).to eq(@email2)
+        expect(actual_email3.recipient_email).to eq(@email3)
+        expect(actual_notexist.recipient_email).to eq(nil)
+      rescue => e
+        puts e.inspect
+        raise e
+      end
     end
 
     it 'delete_global_suppressed_email' do
-      expect(@client.delete_global_suppressed_email(@email1)).to eq('')
-      expect(@client.delete_global_suppressed_email(@email2)).to eq('')
-      expect(@client.delete_global_suppressed_email(@email3)).to eq('')
+      begin
+        expect(@client.delete_global_suppressed_email(@email1)).to eq('')
+        expect(@client.delete_global_suppressed_email(@email2)).to eq('')
+        expect(@client.delete_global_suppressed_email(@email3)).to eq('')
+      rescue => e
+        puts e.inspect
+        raise e
+      end
     end
   end
 
@@ -73,11 +88,11 @@ describe 'SendGrid4r::REST::Asm::GlobalSuppressions' do
         [@email1, @email2, @email3]
       ) do |resp, req, res|
         resp =
-          SendGrid4r::REST::Asm::GlobalSuppressions.create_recipient_emails(
+          SendGrid4r::REST::Asm.create_recipient_emails(
             JSON.parse(resp)
           )
         expect(resp).to be_a(
-          SendGrid4r::REST::Asm::GlobalSuppressions::RecipientEmails
+          SendGrid4r::REST::Asm::RecipientEmails
         )
         expect(req).to be_a(RestClient::Request)
         expect(res).to be_a(Net::HTTPCreated)
@@ -85,14 +100,13 @@ describe 'SendGrid4r::REST::Asm::GlobalSuppressions' do
     end
 
     it 'get_global_suppressed_email' do
-      puts 'get_global_suppressed_email'
       @client.get_global_suppressed_email(@email1) do |resp, req, res|
         resp =
-          SendGrid4r::REST::Asm::GlobalSuppressions.create_recipient_email(
+          SendGrid4r::REST::Asm.create_recipient_email(
             JSON.parse(resp)
           )
         expect(resp).to be_a(
-          SendGrid4r::REST::Asm::GlobalSuppressions::RecipientEmail
+          SendGrid4r::REST::Asm::RecipientEmail
         )
         expect(req).to be_a(RestClient::Request)
         expect(res).to be_a(Net::HTTPOK)
@@ -105,31 +119,6 @@ describe 'SendGrid4r::REST::Asm::GlobalSuppressions' do
         expect(req).to be_a(RestClient::Request)
         expect(res).to be_a(Net::HTTPNoContent)
       end
-    end
-  end
-
-  context 'unit test' do
-    it 'creates recipient_emails instance' do
-      json =
-        '{'\
-          '"recipient_emails": ['\
-            '"test1@example.com",'\
-            '"test2@example.com"'\
-          ']'\
-        '}'
-      hash = JSON.parse(json)
-      actual = SendGrid4r::REST::Asm::GlobalSuppressions.create_recipient_emails(hash)
-      expect(actual.recipient_emails).to be_a(Array)
-    end
-
-    it 'creates recipient_email instance' do
-      json =
-        '{'\
-          '"recipient_email": "test1@example.com"'\
-        '}'
-      hash = JSON.parse(json)
-      actual = SendGrid4r::REST::Asm::GlobalSuppressions.create_recipient_email(hash)
-      expect(actual.recipient_email).to eq('test1@example.com')
     end
   end
 end

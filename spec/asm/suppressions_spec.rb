@@ -13,52 +13,156 @@ describe 'SendGrid4r::REST::Asm::Groups::Suppressions' do
     @group_desc = 'group_desc'
   end
 
-  context 'always' do
-    it 'is normal' do
-      # celan up test env
-      grps = @client.get_groups
-      expect(grps.length >= 0).to eq(true)
-      grps.each do |grp|
-        next if grp.name != @group_name
-        emails = @client.get_suppressed_emails(grp.id)
-        emails.each do |email|
-          @client.delete_suppressed_email(grp.id, email)
+  def init
+    # celan up test env
+    grps = @client.get_groups
+    grps.each do |grp|
+      next if grp.name != @group_name
+      emails = @client.get_suppressed_emails(grp.id)
+      emails.each do |email|
+        @client.delete_suppressed_email(grp.id, email)
+      end
+      @client.delete_group(grp.id)
+    end
+    # post a group
+    @group = @client.post_group(@group_name, @group_desc)
+    # post suppressed email
+    @client.post_suppressed_emails(@group.id, [@email1])
+  rescue => e
+    puts e.inspect
+    raise e
+  end
+
+  context 'wthout block call' do
+    before :all do
+      init
+    end
+
+    it 'post_suppressed_emails' do
+      begin
+        emails = @client.post_suppressed_emails(
+          @group.id, [@email2, @email3]
+        )
+        expect(emails.recipient_emails.length).to eq(2)
+        expect(emails.recipient_emails[0]).to eq(@email2)
+        expect(emails.recipient_emails[1]).to eq(@email3)
+      rescue => e
+        puts e.inspect
+        raise e
+      end
+    end
+
+    it 'get_suppressed_emails' do
+      begin
+        emails = @client.get_suppressed_emails(@group.id)
+        expect(emails.length).to eq(3)
+        expect(emails[0]).to eq(@email1)
+      rescue => e
+        puts e.inspect
+        raise e
+      end
+    end
+
+    it 'get_suppressions' do
+      begin
+        suppressions = @client.get_suppressions(@email1)
+        expect(suppressions.suppressions).to be_a(Array)
+        suppressions.suppressions.each do |suppression|
+          next unless suppression.name == @group_name
+          expect(suppression.name).to eq(@group_name)
+          expect(suppression.description).to eq(@group_desc)
+          expect(suppression.suppressed).to eq(true)
         end
-        @client.delete_group(grp.id)
+      rescue => e
+        puts e.inspect
+        raise e
       end
-      # post a group
-      new_group = @client.post_group(@group_name, @group_desc)
-      # post recipient emails to the suppression group
-      suppressed_emails = @client.post_suppressed_emails(
-        new_group.id, [@email1, @email2, @email3])
-      expect(suppressed_emails.length).to eq(3)
-      expect(suppressed_emails[0]).to eq(@email1)
-      expect(suppressed_emails[1]).to eq(@email2)
-      expect(suppressed_emails[2]).to eq(@email3)
-      # get the suppressions
-      suppressions = @client.get_suppressions(@email1)
-      expect(suppressions.length >= 1).to eq(true)
-      suppressions.each do |suppression|
-        next unless suppression.name == @group_name
-        expect(suppression.name).to eq(@group_name)
-        expect(suppression.description).to eq(@group_desc)
-        expect(suppression.suppressed).to eq(true)
+    end
+
+    it 'delete_suppressed_email' do
+      begin
+        @client.delete_suppressed_email(@group.id, @email1)
+        @client.delete_suppressed_email(@group.id, @email2)
+        @client.delete_suppressed_email(@group.id, @email3)
+      rescue => e
+        puts e.inspect
+        raise e
       end
-      # get the recipient emails
-      actual_emails = @client.get_suppressed_emails(new_group.id)
-      expect(actual_emails.length).to eq(suppressed_emails.length)
-      expect(actual_emails[0]).to eq(suppressed_emails[0])
-      expect(actual_emails[1]).to eq(suppressed_emails[1])
-      expect(actual_emails[2]).to eq(suppressed_emails[2])
-      # delete the suppressed email
-      @client.delete_suppressed_email(new_group.id, @email1)
-      @client.delete_suppressed_email(new_group.id, @email2)
-      @client.delete_suppressed_email(new_group.id, @email3)
-      # delete the group
-      @client.delete_group(new_group.id)
-      expect do
-        @client.get_group(new_group.id)
-      end.to raise_error(RestClient::ResourceNotFound)
+    end
+  end
+
+  context 'wthout block call' do
+    before :all do
+      init
+    end
+
+    it 'post_suppressed_emails' do
+      @client.post_suppressed_emails(
+        @group.id, [@email2, @email3]
+      ) do |resp, req, res|
+        resp =
+          SendGrid4r::REST::Asm.create_recipient_emails(
+            JSON.parse(resp)
+          )
+        expect(resp).to be_a(
+          SendGrid4r::REST::Asm::RecipientEmails
+        )
+        expect(req).to be_a(RestClient::Request)
+        expect(res).to be_a(Net::HTTPCreated)
+      end
+    end
+
+    it 'get_suppressed_emails' do
+      @client.get_suppressed_emails(@group.id) do |resp, req, res|
+        expect(resp).to be_a(Array)
+        expect(req).to be_a(RestClient::Request)
+        expect(res).to be_a(Net::HTTPOK)
+      end
+    end
+
+    it 'get_suppressions' do
+      @client.get_suppressions(@email1) do |resp, req, res|
+        resp =
+          SendGrid4r::REST::Asm::Suppressions.create_suppressions(resp)
+        expect(resp).to be_a(SendGrid4r::REST::Asm::Suppressions::Suppressions)
+        expect(req).to be_a(RestClient::Request)
+        expect(res).to be_a(Net::HTTPOK)
+      end
+    end
+
+    it 'delete_suppressed_email' do
+      @client.delete_suppressed_email(@group.id, @email1) do |resp, req, res|
+        expect(resp).to eq('')
+        expect(req).to be_a(RestClient::Request)
+        expect(res).to be_a(Net::HTTPNoContent)
+      end
+    end
+  end
+
+  context 'unit test' do
+    it 'creates suppressions instance' do
+      json =
+        '{'\
+          '"suppressions": ['\
+            '{'\
+              '"id": 1,'\
+              '"name": "Weekly Newsletter",'\
+              '"description": "The weekly newsletter",'\
+              '"suppressed": false'\
+            '},'\
+            '{'\
+              '"id": 4,'\
+              '"name": "Special Offers",'\
+              '"description": "Special offers and coupons",'\
+              '"suppressed": false'\
+            '}'\
+          ']'\
+        '}'
+      hash = JSON.parse(json)
+      actual = SendGrid4r::REST::Asm::Suppressions.create_suppressions(hash)
+      expect(actual).to be_a(
+        SendGrid4r::REST::Asm::Suppressions::Suppressions
+      )
     end
   end
 end

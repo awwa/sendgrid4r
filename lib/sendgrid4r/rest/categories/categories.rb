@@ -24,7 +24,10 @@ module SendGrid4r
           categories = []
           resp.each do |category|
             categories.push(
-              SendGrid4r::REST::Categories::Categories.create_category(category))
+              SendGrid4r::REST::Categories::Categories.create_category(
+                category
+              )
+            )
           end
           categories
         end

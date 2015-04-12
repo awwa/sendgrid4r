@@ -15,35 +15,31 @@ describe 'SendGrid4r::REST::Contacts::Recipients' do
     @custom_field_name = 'pet'
   end
 
-  def init
-    begin
-      # celan up test env
-      recipients = @client.get_recipients
-      recipients.recipients.each do |recipient|
-        next if recipient.email != @email1 && recipient.email != @email2
-        @client.delete_recipient(recipient.id)
-      end
-      custom_fields = @client.get_custom_fields
-      custom_fields.custom_fields.each do |custom_field|
-        next if custom_field.name != @custom_field_name
-        @client.delete_custom_field(custom_field.id)
-      end
-      @client.post_custom_field(@custom_field_name, 'text')
-      # post a recipient
-      params = {}
-      params['email'] = @email1
-      params['last_name'] = @last_name1
-      params[@custom_field_name] = @pet1
-      @new_recipient = @client.post_recipient(params)
-    rescue => e
-      puts e.inspect
-      raise e
-    end
-  end
-
   context 'without block call' do
     before :all do
-      init
+      begin
+        # celan up test env
+        recipients = @client.get_recipients
+        recipients.recipients.each do |recipient|
+          next if recipient.email != @email1 && recipient.email != @email2
+          @client.delete_recipient(recipient.id)
+        end
+        custom_fields = @client.get_custom_fields
+        custom_fields.custom_fields.each do |custom_field|
+          next if custom_field.name != @custom_field_name
+          @client.delete_custom_field(custom_field.id)
+        end
+        @client.post_custom_field(@custom_field_name, 'text')
+        # post a recipient
+        params = {}
+        params['email'] = @email1
+        params['last_name'] = @last_name1
+        params[@custom_field_name] = @pet1
+        @new_recipient = @client.post_recipient(params)
+      rescue => e
+        puts e.inspect
+        raise e
+      end
     end
 
     it 'post_recipient' do
@@ -214,7 +210,29 @@ describe 'SendGrid4r::REST::Contacts::Recipients' do
 
   context 'with block call' do
     before :all do
-      init
+      begin
+        # celan up test env
+        recipients = @client.get_recipients
+        recipients.recipients.each do |recipient|
+          next if recipient.email != @email1 && recipient.email != @email2
+          @client.delete_recipient(recipient.id)
+        end
+        custom_fields = @client.get_custom_fields
+        custom_fields.custom_fields.each do |custom_field|
+          next if custom_field.name != @custom_field_name
+          @client.delete_custom_field(custom_field.id)
+        end
+        @client.post_custom_field(@custom_field_name, 'text')
+        # post a recipient
+        params = {}
+        params['email'] = @email1
+        params['last_name'] = @last_name1
+        params[@custom_field_name] = @pet1
+        @new_recipient = @client.post_recipient(params)
+      rescue => e
+        puts e.inspect
+        raise e
+      end
     end
 
     it 'post_recipient' do

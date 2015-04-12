@@ -17,42 +17,32 @@ describe 'SendGrid4r::REST::Contacts::Segments' do
     @segment_factory = SendGrid4r::Factory::SegmentFactory.new
   end
 
-  def init
-    begin
-      # celan up test env(segment)
-      segments = @client.get_segments
-      segments.segments.each do |segment|
-        @client.delete_segment(segment.id) if segment.name == @name1
-        @client.delete_segment(segment.id) if segment.name == @edit_name
-        @client.delete_segment(segment.id) if segment.name == @name2
-      end
-      # clean up test env(custom_fields)
-      fields = @client.get_custom_fields
-      fields.custom_fields.each do |field|
-        @client.delete_custom_field(field.id) if field.name == @field
-      end
-      # post a custom field
-      @client.post_custom_field(@field, 'text')
-      # post a segment
-      @condition = @condition_factory.create(
-        field: @field,
-        value: @value,
-        operator: @operator,
-        and_or: @and_or
-      )
-      params1 = @segment_factory.create(
-        name: @name1, conditions: [@condition]
-      )
-      @segment1 = @client.post_segment(params1)
-    rescue => e
-      puts e.inspect
-      raise e
-    end
-  end
-
   context 'without block all' do
     before :all do
-      init
+      begin
+        # celan up test env(segment)
+        @client.get_segments.segments.each do |segment|
+          @client.delete_segment(segment.id) if segment.name == @name1
+          @client.delete_segment(segment.id) if segment.name == @edit_name
+          @client.delete_segment(segment.id) if segment.name == @name2
+        end
+        # clean up test env(custom_fields)
+        @client.get_custom_fields.custom_fields.each do |field|
+          @client.delete_custom_field(field.id) if field.name == @field
+        end
+        # post a custom field and a segment
+        @client.post_custom_field(@field, 'text')
+        @condition = @condition_factory.create(
+          field: @field, value: @value, operator: @operator, and_or: @and_or
+        )
+        params1 = @segment_factory.create(
+          name: @name1, conditions: [@condition]
+        )
+        @segment1 = @client.post_segment(params1)
+      rescue => e
+        puts e.inspect
+        raise e
+      end
     end
 
     it 'post_segment' do
@@ -137,7 +127,30 @@ describe 'SendGrid4r::REST::Contacts::Segments' do
 
   context 'with block all' do
     before :all do
-      init
+      begin
+        # celan up test env(segment)
+        @client.get_segments.segments.each do |segment|
+          @client.delete_segment(segment.id) if segment.name == @name1
+          @client.delete_segment(segment.id) if segment.name == @edit_name
+          @client.delete_segment(segment.id) if segment.name == @name2
+        end
+        # clean up test env(custom_fields)
+        @client.get_custom_fields.custom_fields.each do |field|
+          @client.delete_custom_field(field.id) if field.name == @field
+        end
+        # post a custom field and a segment
+        @client.post_custom_field(@field, 'text')
+        @condition = @condition_factory.create(
+          field: @field, value: @value, operator: @operator, and_or: @and_or
+        )
+        params1 = @segment_factory.create(
+          name: @name1, conditions: [@condition]
+        )
+        @segment1 = @client.post_segment(params1)
+      rescue => e
+        puts e.inspect
+        raise e
+      end
     end
 
     it 'post_segment' do
@@ -149,9 +162,9 @@ describe 'SendGrid4r::REST::Contacts::Segments' do
           SendGrid4r::REST::Contacts::Segments.create_segment(
             JSON.parse(resp)
           )
-          expect(resp).to be_a(SendGrid4r::REST::Contacts::Segments::Segment)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPCreated)
+        expect(resp).to be_a(SendGrid4r::REST::Contacts::Segments::Segment)
+        expect(req).to be_a(RestClient::Request)
+        expect(res).to be_a(Net::HTTPCreated)
       end
     end
 

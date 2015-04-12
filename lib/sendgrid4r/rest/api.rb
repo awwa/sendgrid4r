@@ -3,6 +3,7 @@ $LOAD_PATH.unshift File.dirname(__FILE__)
 
 require 'sendgrid4r/rest/templates/templates'
 require 'sendgrid4r/rest/templates/versions'
+require 'sendgrid4r/rest/asm/asm'
 require 'sendgrid4r/rest/asm/groups'
 require 'sendgrid4r/rest/asm/suppressions'
 require 'sendgrid4r/rest/asm/global_suppressions'
@@ -31,6 +32,7 @@ module SendGrid4r
     module API
       include SendGrid4r::REST::Templates
       include SendGrid4r::REST::Templates::Versions
+      include SendGrid4r::REST::Asm
       include SendGrid4r::REST::Asm::Groups
       include SendGrid4r::REST::Asm::Suppressions
       include SendGrid4r::REST::Asm::GlobalSuppressions
