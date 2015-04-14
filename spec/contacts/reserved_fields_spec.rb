@@ -41,7 +41,7 @@ describe 'SendGrid4r::REST::Contacts::ReservedFields' do
   end
 
   context 'without block call' do
-    it 'get_reserved_fields' do
+    it '#get_reserved_fields' do
       begin
         # get the reserved fields
         fields = @client.get_reserved_fields
@@ -63,7 +63,7 @@ describe 'SendGrid4r::REST::Contacts::ReservedFields' do
   end
 
   context 'with block call' do
-    it 'get_reserved_fields' do
+    it '#get_reserved_fields' do
       @client.get_reserved_fields do |resp, req, res|
         resp =
           SendGrid4r::REST::Contacts::ReservedFields.create_fields(

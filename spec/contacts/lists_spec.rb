@@ -56,7 +56,7 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
       end
     end
 
-    it 'post_list' do
+    it '#post_list' do
       begin
         list2 = @client.post_list(@list_name2)
         expect(list2.id).to be_a(Fixnum)
@@ -69,7 +69,7 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
       end
     end
 
-    it 'post_list for same key' do
+    it '#post_list for same key' do
       begin
         expect do
           @client.post_list(@list_name1)
@@ -80,7 +80,7 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
       end
     end
 
-    it 'get_lists' do
+    it '#get_lists' do
       begin
         lists = @client.get_lists
         expect(lists.length).to be >= 1
@@ -96,7 +96,7 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
       end
     end
 
-    it 'get_list' do
+    it '#get_list' do
       begin
         actual_list = @client.get_list(@list1.id)
         expect(actual_list.id).to eq(@list1.id)
@@ -108,7 +108,7 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
       end
     end
 
-    it 'patch_list' do
+    it '#patch_list' do
       begin
         edit_list = @client.patch_list(@list1.id, @edit_name1)
         expect(edit_list.id).to eq(@list1.id)
@@ -119,7 +119,7 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
       end
     end
 
-    it 'get_recipients_from_list' do
+    it '#get_recipients_from_list' do
       begin
         recipients = @client.get_recipients_from_list(@list1.id)
         recipients.recipients.each do |recipient|
@@ -133,7 +133,7 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
       end
     end
 
-    it 'get_recipients_from_list with offset & limit' do
+    it '#get_recipients_from_list with offset & limit' do
       begin
         recipients = @client.get_recipients_from_list(@list1.id, 10, 0)
         recipients.recipients.each do |recipient|
@@ -147,7 +147,7 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
       end
     end
 
-    it 'delete_recipient_from_list' do
+    it '#delete_recipient_from_list' do
       begin
         @client.delete_recipient_from_list(@list1.id, @email1)
       rescue => e
@@ -156,7 +156,7 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
       end
     end
 
-    it 'delete_list' do
+    it '#delete_list' do
       begin
         @client.delete_list(@list1.id)
         expect do
@@ -168,7 +168,7 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
       end
     end
 
-    it 'delete_lists' do
+    it '#delete_lists' do
       begin
         list2 = @client.post_list(@list_name2)
         @client.delete_lists([@list1.id, list2.id])
@@ -216,7 +216,7 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
       end
     end
 
-    it 'post_list' do
+    it '#post_list' do
       @client.post_list(@list_name2) do |resp, req, res|
         resp =
           SendGrid4r::REST::Contacts::Lists.create_list(
@@ -228,7 +228,7 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
       end
     end
 
-    it 'post_list for same key' do
+    it '#post_list for same key' do
       @client.post_list(@list_name1) do |_resp, req, res|
         # TODO: _resp
         expect(req).to be_a(RestClient::Request)
@@ -236,7 +236,7 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
       end
     end
 
-    it 'get_lists' do
+    it '#get_lists' do
       @client.get_lists do |resp, req, res|
         resp =
           SendGrid4r::REST::Contacts::Lists.create_lists(
@@ -248,7 +248,7 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
       end
     end
 
-    it 'get_list' do
+    it '#get_list' do
       @client.get_list(@list1.id) do |resp, req, res|
         resp =
           SendGrid4r::REST::Contacts::Lists.create_list(
@@ -260,7 +260,7 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
       end
     end
 
-    it 'patch_list' do
+    it '#patch_list' do
       @client.patch_list(@list1.id, @edit_name1) do |resp, req, res|
         resp =
           SendGrid4r::REST::Contacts::Lists.create_list(
@@ -272,7 +272,7 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
       end
     end
 
-    it 'get_recipients_from_list' do
+    it '#get_recipients_from_list' do
       @client.get_recipients_from_list(@list1.id) do |resp, req, res|
         resp =
           SendGrid4r::REST::Contacts::Recipients.create_recipients(
@@ -284,7 +284,7 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
       end
     end
 
-    it 'get_recipients_from_list with offset & limit' do
+    it '#get_recipients_from_list with offset & limit' do
       @client.get_recipients_from_list(@list1.id, 10, 0) do |resp, req, res|
         resp =
           SendGrid4r::REST::Contacts::Recipients.create_recipients(
@@ -296,7 +296,7 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
       end
     end
 
-    it 'delete_recipient_from_list' do
+    it '#delete_recipient_from_list' do
       @client.delete_recipient_from_list(@list1.id, @email1) do |resp, req, res|
         expect(resp).to eq('')
         expect(req).to be_a(RestClient::Request)
@@ -304,7 +304,7 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
       end
     end
 
-    it 'delete_list' do
+    it '#delete_list' do
       @client.delete_list(@list1.id) do |resp, req, res|
         expect(resp).to eq('')
         expect(req).to be_a(RestClient::Request)
@@ -312,7 +312,7 @@ describe 'SendGrid4r::REST::Contacts::Lists' do
       end
     end
 
-    it 'delete_lists' do
+    it '#delete_lists' do
       @client.delete_lists([@list1.id]) do |resp, req, res|
         expect(resp).to eq('')
         expect(req).to be_a(RestClient::Request)

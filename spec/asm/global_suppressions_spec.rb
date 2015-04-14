@@ -35,7 +35,7 @@ describe 'SendGrid4r::REST::Asm::GlobalSuppressions' do
       init
     end
 
-    it 'post_global_suppressed_emails' do
+    it '#post_global_suppressed_emails' do
       begin
         emails = @client.post_global_suppressed_emails(
           [@email1, @email2, @email3]
@@ -50,7 +50,7 @@ describe 'SendGrid4r::REST::Asm::GlobalSuppressions' do
       end
     end
 
-    it 'get_global_suppressed_email' do
+    it '#get_global_suppressed_email' do
       begin
         actual_email1 = @client.get_global_suppressed_email(@email1)
         actual_email2 = @client.get_global_suppressed_email(@email2)
@@ -66,7 +66,7 @@ describe 'SendGrid4r::REST::Asm::GlobalSuppressions' do
       end
     end
 
-    it 'delete_global_suppressed_email' do
+    it '#delete_global_suppressed_email' do
       begin
         expect(@client.delete_global_suppressed_email(@email1)).to eq('')
         expect(@client.delete_global_suppressed_email(@email2)).to eq('')
@@ -83,7 +83,7 @@ describe 'SendGrid4r::REST::Asm::GlobalSuppressions' do
       init
     end
 
-    it 'post_global_suppressed_emails' do
+    it '#post_global_suppressed_emails' do
       @client.post_global_suppressed_emails(
         [@email1, @email2, @email3]
       ) do |resp, req, res|
@@ -99,7 +99,7 @@ describe 'SendGrid4r::REST::Asm::GlobalSuppressions' do
       end
     end
 
-    it 'get_global_suppressed_email' do
+    it '#get_global_suppressed_email' do
       @client.get_global_suppressed_email(@email1) do |resp, req, res|
         resp =
           SendGrid4r::REST::Asm.create_recipient_email(
@@ -113,7 +113,7 @@ describe 'SendGrid4r::REST::Asm::GlobalSuppressions' do
       end
     end
 
-    it 'delete_global_suppressed_email' do
+    it '#delete_global_suppressed_email' do
       @client.delete_global_suppressed_email(@email1) do |resp, req, res|
         expect(resp).to eq('')
         expect(req).to be_a(RestClient::Request)

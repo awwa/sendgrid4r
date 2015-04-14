@@ -9,7 +9,7 @@ describe 'SendGrid4r::REST::Categories' do
   end
 
   context 'without block call' do
-    it 'get_categories if no params' do
+    it '#get_categories if no params' do
       begin
         categories = @client.get_categories
         expect(categories.length).to be >= 0
@@ -22,7 +22,7 @@ describe 'SendGrid4r::REST::Categories' do
       end
     end
 
-    it 'get_categories if name was specified' do
+    it '#get_categories if name was specified' do
       begin
         categories = @client.get_categories('Newsletter')
         expect(categories.length).to eq(1)
@@ -35,7 +35,7 @@ describe 'SendGrid4r::REST::Categories' do
       end
     end
 
-    it 'get_categories if offset & limit were specified' do
+    it '#get_categories if offset & limit were specified' do
       begin
         categories = @client.get_categories(nil, 5, 2)
         expect(categories.length).to be > 0
@@ -50,7 +50,7 @@ describe 'SendGrid4r::REST::Categories' do
   end
 
   context 'with block call' do
-    it 'get_categories' do
+    it '#get_categories' do
       @client.get_categories do |resp, req, res|
         resp =
           SendGrid4r::REST::Categories::Categories.create_categories(

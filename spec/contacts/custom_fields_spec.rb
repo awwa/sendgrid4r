@@ -31,7 +31,7 @@ describe 'SendGrid4r::REST::Contacts::CustomFields' do
       init
     end
 
-    it 'post_custom_field' do
+    it '#post_custom_field' do
       begin
         new_field = @client.post_custom_field(@name2, @type2)
         expect(new_field.id).to be_a(Fixnum)
@@ -43,7 +43,7 @@ describe 'SendGrid4r::REST::Contacts::CustomFields' do
       end
     end
 
-    it 'post_custom_field for same key' do
+    it '#post_custom_field for same key' do
       begin
         expect do
           @client.post_custom_field(@name1, @type1)
@@ -54,7 +54,7 @@ describe 'SendGrid4r::REST::Contacts::CustomFields' do
       end
     end
 
-    it 'get_custom_fields' do
+    it '#get_custom_fields' do
       begin
         fields = @client.get_custom_fields
         expect(fields.length).to be >= 1
@@ -70,7 +70,7 @@ describe 'SendGrid4r::REST::Contacts::CustomFields' do
       end
     end
 
-    it 'get_custom_field' do
+    it '#get_custom_field' do
       begin
         actual_field = @client.get_custom_field(@new_field.id)
         expect(actual_field.id).to eq(@new_field.id)
@@ -82,7 +82,7 @@ describe 'SendGrid4r::REST::Contacts::CustomFields' do
       end
     end
 
-    it 'delete_custom_field' do
+    it '#delete_custom_field' do
       begin
         @client.delete_custom_field(@new_field.id)
       rescue => e
@@ -97,7 +97,7 @@ describe 'SendGrid4r::REST::Contacts::CustomFields' do
       init
     end
 
-    it 'post_custom_field' do
+    it '#post_custom_field' do
       @client.post_custom_field(@name2, @type2) do |resp, req, res|
         resp =
           SendGrid4r::REST::Contacts::CustomFields.create_field(
@@ -109,7 +109,7 @@ describe 'SendGrid4r::REST::Contacts::CustomFields' do
       end
     end
 
-    it 'post_custom_field for same key' do
+    it '#post_custom_field for same key' do
       @client.post_custom_field(@name1, @type1) do |_resp, req, res|
         # TODO: _resp
         expect(req).to be_a(RestClient::Request)
@@ -117,7 +117,7 @@ describe 'SendGrid4r::REST::Contacts::CustomFields' do
       end
     end
 
-    it 'get_custom_fields' do
+    it '#get_custom_fields' do
       @client.get_custom_fields do |resp, req, res|
         resp =
           SendGrid4r::REST::Contacts::CustomFields.create_fields(
@@ -129,7 +129,7 @@ describe 'SendGrid4r::REST::Contacts::CustomFields' do
       end
     end
 
-    it 'get_custom_field' do
+    it '#get_custom_field' do
       @client.get_custom_field(@new_field.id) do |resp, req, res|
         resp = SendGrid4r::REST::Contacts::CustomFields.create_field(
           JSON.parse(resp)
@@ -140,7 +140,7 @@ describe 'SendGrid4r::REST::Contacts::CustomFields' do
       end
     end
 
-    it 'delete_custom_field' do
+    it '#delete_custom_field' do
       @client.delete_custom_field(@new_field.id) do |resp, req, res|
         expect(resp).to eq('')
         expect(req).to be_a(RestClient::Request)

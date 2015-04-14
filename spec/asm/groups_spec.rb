@@ -32,7 +32,7 @@ describe 'SendGrid4r::REST::Asm::Groups' do
       end
     end
 
-    it 'post_group' do
+    it '#post_group' do
       begin
         group2 = @client.post_group(@group_name2, @group_desc)
         expect(@group_name2).to eq(group2.name)
@@ -43,7 +43,7 @@ describe 'SendGrid4r::REST::Asm::Groups' do
       end
     end
 
-    it 'patch_group' do
+    it '#patch_group' do
       begin
         @group1.name = @group_name_edit1
         @group1.description = @group_desc_edit
@@ -59,7 +59,7 @@ describe 'SendGrid4r::REST::Asm::Groups' do
       end
     end
 
-    it 'get_groups' do
+    it '#get_groups' do
       begin
         groups = @client.get_groups
         expect(groups).to be_a(Array)
@@ -72,7 +72,7 @@ describe 'SendGrid4r::REST::Asm::Groups' do
       end
     end
 
-    it 'get_group' do
+    it '#get_group' do
       begin
         group = @client.get_group(@group1.id)
         expect(group.id).to be_a(Fixnum)
@@ -86,7 +86,7 @@ describe 'SendGrid4r::REST::Asm::Groups' do
       end
     end
 
-    it 'delete_group' do
+    it '#delete_group' do
       begin
         @client.delete_group(@group1.id)
       rescue => e
@@ -115,7 +115,7 @@ describe 'SendGrid4r::REST::Asm::Groups' do
       end
     end
 
-    it 'post_group' do
+    it '#post_group' do
       @client.post_group(@group_name2, @group_desc) do |resp, req, res|
         resp =
           SendGrid4r::REST::Asm::Groups.create_group(
@@ -127,7 +127,7 @@ describe 'SendGrid4r::REST::Asm::Groups' do
       end
     end
 
-    it 'patch_group' do
+    it '#patch_group' do
       @client.patch_group(@group1.id, @group1) do |resp, req, res|
         resp =
           SendGrid4r::REST::Asm::Groups.create_group(
@@ -139,7 +139,7 @@ describe 'SendGrid4r::REST::Asm::Groups' do
       end
     end
 
-    it 'get_group' do
+    it '#get_group' do
       @client.get_group(@group1.id) do |resp, req, res|
         resp =
           SendGrid4r::REST::Asm::Groups.create_group(
@@ -151,7 +151,7 @@ describe 'SendGrid4r::REST::Asm::Groups' do
       end
     end
 
-    it 'delete_group' do
+    it '#delete_group' do
       @client.delete_group(@group1.id) do |resp, req, res|
         expect(resp).to eq('')
         expect(req).to be_a(RestClient::Request)

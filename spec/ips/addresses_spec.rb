@@ -6,7 +6,7 @@ describe 'SendGrid4r::REST::Ips::Addresses' do
     Dotenv.load
   end
 
-  context 'if account is free' do
+  context 'account is free' do
     before :all do
       @client = SendGrid4r::Client.new(
         ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
@@ -34,7 +34,7 @@ describe 'SendGrid4r::REST::Ips::Addresses' do
     end
   end
 
-  context 'if account is silver' do
+  context 'account is silver' do
     TEST_POOL = 'test_pool'
     before :all do
       begin

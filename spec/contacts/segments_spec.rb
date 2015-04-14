@@ -45,7 +45,7 @@ describe 'SendGrid4r::REST::Contacts::Segments' do
       end
     end
 
-    it 'post_segment' do
+    it '#post_segment' do
       begin
         params2 = @segment_factory.create(
           name: @name2, conditions: [@condition]
@@ -68,7 +68,7 @@ describe 'SendGrid4r::REST::Contacts::Segments' do
       end
     end
 
-    it 'get_segment' do
+    it '#get_segment' do
       begin
         segment = @client.get_segment(@segment1.id)
         expect(segment.id).to eq(@segment1.id)
@@ -86,7 +86,7 @@ describe 'SendGrid4r::REST::Contacts::Segments' do
       end
     end
 
-    it 'update_segment' do
+    it '#update_segment' do
       begin
         edit_params = @segment_factory.create(
           name: @edit_name1, conditions: [@condition]
@@ -99,7 +99,7 @@ describe 'SendGrid4r::REST::Contacts::Segments' do
       end
     end
 
-    it 'get_recipients_from_segment' do
+    it '#get_recipients_from_segment' do
       begin
         # list recipients from a single segment
         recipients = @client.get_recipients_from_segment(@segment1.id)
@@ -114,7 +114,7 @@ describe 'SendGrid4r::REST::Contacts::Segments' do
       end
     end
 
-    it 'delete_segment' do
+    it '#delete_segment' do
       begin
         # delete the segment
         @client.delete_segment(@segment1.id)
@@ -153,7 +153,7 @@ describe 'SendGrid4r::REST::Contacts::Segments' do
       end
     end
 
-    it 'post_segment' do
+    it '#post_segment' do
       params2 = @segment_factory.create(
         name: @name2, conditions: [@condition]
       )
@@ -168,7 +168,7 @@ describe 'SendGrid4r::REST::Contacts::Segments' do
       end
     end
 
-    it 'get_segment' do
+    it '#get_segment' do
       @client.get_segment(@segment1.id) do |resp, req, res|
         resp =
           SendGrid4r::REST::Contacts::Segments.create_segment(
@@ -180,7 +180,7 @@ describe 'SendGrid4r::REST::Contacts::Segments' do
       end
     end
 
-    it 'update_segment' do
+    it '#update_segment' do
       edit_params = @segment_factory.create(
         name: @edit_name1, conditions: [@condition]
       )
@@ -195,7 +195,7 @@ describe 'SendGrid4r::REST::Contacts::Segments' do
       end
     end
 
-    it 'get_recipients_from_segment' do
+    it '#get_recipients_from_segment' do
       @client.get_recipients_from_segment(@segment1.id) do |resp, req, res|
         resp =
           SendGrid4r::REST::Contacts::Recipients.create_recipients(
@@ -207,7 +207,7 @@ describe 'SendGrid4r::REST::Contacts::Segments' do
       end
     end
 
-    it 'delete_segment' do
+    it '#delete_segment' do
       @client.delete_segment(@segment1.id) do |resp, req, res|
         expect(resp).to eq('')
         expect(req).to be_a(RestClient::Request)
