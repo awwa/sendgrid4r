@@ -51,7 +51,7 @@ describe 'SendGrid4r::REST::Ips::Addresses' do
           ips = @client.get_ips
           expect(ips.length).to be > 0
           ip = ips[0]
-          expect(ip.class).to be(SendGrid4r::REST::Ips::Addresses::Address)
+          expect(ip).to be_a(SendGrid4r::REST::Ips::Addresses::Address)
           expect(ip.ip).to be_a(String)
           expect(ip.pools).to be_a(Array)
           expect(ip.warmup ? true : true).to eq(true)

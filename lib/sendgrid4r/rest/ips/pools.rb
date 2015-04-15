@@ -17,7 +17,17 @@ module SendGrid4r
 
         Pool = Struct.new(:pool_name, :name, :ips)
 
+        def self.create_pools(resp)
+          return resp if resp.nil?
+          pools = []
+          resp.each do |pool|
+            pools.push(SendGrid4r::REST::Ips::Pools.create_pool(pool))
+          end
+          pools
+        end
+
         def self.create_pool(resp)
+          return resp if resp.nil?
           ips = []
           Array(resp['ips']).each { |ip| ips.push(ip) }
           Pool.new(resp['pool_name'], resp['name'], ips)
@@ -31,39 +41,36 @@ module SendGrid4r
           url
         end
 
-        def post_pool(name)
+        def post_pool(name, &block)
           resp = post(
-            @auth, SendGrid4r::REST::Ips::Pools.url, name: name
+            @auth, SendGrid4r::REST::Ips::Pools.url, name: name, &block
           )
           SendGrid4r::REST::Ips::Pools.create_pool(resp)
         end
 
-        def get_pools
-          resp_a = get(@auth, "#{SendGrid4r::Client::BASE_URL}/ips/pools")
-          pools = []
-          resp_a.each do |resp|
-            pools.push(SendGrid4r::REST::Ips::Pools.create_pool(resp))
-          end
-          pools
+        def get_pools(&block)
+          resp = get(@auth, SendGrid4r::REST::Ips::Pools.url, &block)
+          SendGrid4r::REST::Ips::Pools.create_pools(resp)
         end
 
-        def get_pool(name)
+        def get_pool(name, &block)
           resp = get(
-            @auth, SendGrid4r::REST::Ips::Pools.url(name)
+            @auth, SendGrid4r::REST::Ips::Pools.url(name), &block
           )
           SendGrid4r::REST::Ips::Pools.create_pool(resp)
         end
 
-        def put_pool(name, new_name)
+        def put_pool(name, new_name, &block)
           resp = put(
             @auth,
             SendGrid4r::REST::Ips::Pools.url(name),
-            name: new_name)
+            name: new_name,
+            &block)
           SendGrid4r::REST::Ips::Pools.create_pool(resp)
         end
 
-        def delete_pool(name)
-          delete(@auth, SendGrid4r::REST::Ips::Pools.url(name))
+        def delete_pool(name, &block)
+          delete(@auth, SendGrid4r::REST::Ips::Pools.url(name), &block)
         end
       end
     end
