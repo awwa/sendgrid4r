@@ -23,7 +23,7 @@ describe 'SendGrid4r::REST::Contacts::Segments' do
         # celan up test env(segment)
         @client.get_segments.segments.each do |segment|
           @client.delete_segment(segment.id) if segment.name == @name1
-          @client.delete_segment(segment.id) if segment.name == @edit_name
+          @client.delete_segment(segment.id) if segment.name == @edit_name1
           @client.delete_segment(segment.id) if segment.name == @name2
         end
         # clean up test env(custom_fields)
@@ -86,11 +86,14 @@ describe 'SendGrid4r::REST::Contacts::Segments' do
       end
     end
 
-    it '#update_segment' do
+    it '#put_segment' do
       begin
         edit_params = @segment_factory.create(
           name: @edit_name1, conditions: [@condition]
         )
+        # TODO remove
+        # puts @client.get_segments.inspect
+        # puts "@segment1.id: #{@segment1.id}"
         edit_segment = @client.put_segment(@segment1.id, edit_params)
         expect(edit_segment.name).to eq(@edit_name1)
       rescue => e
@@ -131,7 +134,7 @@ describe 'SendGrid4r::REST::Contacts::Segments' do
         # celan up test env(segment)
         @client.get_segments.segments.each do |segment|
           @client.delete_segment(segment.id) if segment.name == @name1
-          @client.delete_segment(segment.id) if segment.name == @edit_name
+          @client.delete_segment(segment.id) if segment.name == @edit_name1
           @client.delete_segment(segment.id) if segment.name == @name2
         end
         # clean up test env(custom_fields)
@@ -180,7 +183,7 @@ describe 'SendGrid4r::REST::Contacts::Segments' do
       end
     end
 
-    it '#update_segment' do
+    it '#put_segment' do
       edit_params = @segment_factory.create(
         name: @edit_name1, conditions: [@condition]
       )
