@@ -11,42 +11,58 @@ module SendGrid4r
       #
       module Warmup
         include SendGrid4r::REST::Request
+
         WarmupIp = Struct.new(:ip, :start_date)
 
-        def self.create_warmup_ip(resp)
-          WarmupIp.new(resp['ip'], resp['start_date'])
-        end
-
-        def get_warmup_ips
+        def self.create_warmup_ips(resp)
+          return resp if resp.nil?
           ips = []
-          resp_a = get(@auth, "#{SendGrid4r::Client::BASE_URL}/ips/warmup")
-          resp_a.each do |resp|
-            ips.push(SendGrid4r::REST::Ips::Warmup.create_warmup_ip(resp))
+          resp.each do |warmup_ip|
+            ips.push(SendGrid4r::REST::Ips::Warmup.create_warmup_ip(warmup_ip))
           end
           ips
         end
 
-        def get_warmup_ip(ip_address)
+        def self.create_warmup_ip(resp)
+          return resp if resp.nil?
+          WarmupIp.new(resp['ip'], resp['start_date'])
+        end
+
+        def self.url(ip_address = nil)
+          url = "#{SendGrid4r::Client::BASE_URL}/ips/warmup"
+          url = "#{url}/#{ip_address}" unless ip_address.nil?
+          url
+        end
+
+        def get_warmup_ips(&block)
+          resp = get(@auth, SendGrid4r::REST::Ips::Warmup.url, &block)
+          SendGrid4r::REST::Ips::Warmup.create_warmup_ips(resp)
+        end
+
+        def get_warmup_ip(ip_address, &block)
           resp = get(
             @auth,
-            "#{SendGrid4r::Client::BASE_URL}/ips/warmup/#{ip_address}"
+            SendGrid4r::REST::Ips::Warmup.url(ip_address),
+            &block
           )
           SendGrid4r::REST::Ips::Warmup.create_warmup_ip(resp)
         end
 
-        def post_warmup_ip(ip_address)
+        def post_warmup_ip(ip_address, &block)
           resp = post(
             @auth,
-            "#{SendGrid4r::Client::BASE_URL}/ips/warmup",
-            ip: ip_address
+            SendGrid4r::REST::Ips::Warmup.url,
+            ip: ip_address,
+            &block
           )
           SendGrid4r::REST::Ips::Warmup.create_warmup_ip(resp)
         end
 
-        def delete_warmup_ip(ip_address)
+        def delete_warmup_ip(ip_address, &block)
           delete(
             @auth,
-            "#{SendGrid4r::Client::BASE_URL}/ips/warmup/#{ip_address}"
+            SendGrid4r::REST::Ips::Warmup.url(ip_address),
+            &block
           )
         end
       end
