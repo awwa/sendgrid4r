@@ -10,14 +10,16 @@ module SendGrid4r
       # SendGrid Web API v3 Stats - Global
       #
       module Global
-        def get_global_stats(start_date:, end_date: nil, aggregated_by: nil)
+        def get_global_stats(
+          start_date:, end_date: nil, aggregated_by: nil, &block
+        )
           params = {
             start_date: start_date,
             end_date: end_date,
             aggregated_by: aggregated_by
           }
           resp_a = get(
-            @auth, "#{SendGrid4r::Client::BASE_URL}/stats", params)
+            @auth, "#{SendGrid4r::Client::BASE_URL}/stats", params, &block)
           SendGrid4r::REST::Stats.create_top_stats(resp_a)
         end
       end

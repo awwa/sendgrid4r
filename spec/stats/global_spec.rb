@@ -8,19 +8,19 @@ describe 'SendGrid4r::REST::Stats::Global' do
       ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
   end
 
-  context 'always' do
-    describe '#get_global_stats' do
-      it 'returns global stats if specify mandatory params' do
+  context 'without block call' do
+    it '#get_global_stats with mandatory params' do
+      begin
         actual = @client.get_global_stats(start_date: '2015-01-01')
-        expect(actual.class).to be(Array)
-        expect(actual.length > 0).to be(true)
+        expect(actual).to be_a(Array)
+        expect(actual.length).to be  > 0
         actual.each do |global_stat|
-          expect(global_stat.class).to be(SendGrid4r::REST::Stats::TopStat)
+          expect(global_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
           stats = global_stat.stats
           expect(stats.length).to eq(1)
           stats.each do |stat|
-            expect(stat.class).to be(SendGrid4r::REST::Stats::Stat)
-            expect(stat.metrics.class).to be(SendGrid4r::REST::Stats::Metric)
+            expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
+            expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
             expect(stat.metrics.blocks.nil?).to be(false)
             expect(stat.metrics.bounce_drops.nil?).to be(false)
             expect(stat.metrics.bounces.nil?).to be(false)
@@ -39,25 +39,54 @@ describe 'SendGrid4r::REST::Stats::Global' do
             expect(stat.metrics.unsubscribes.nil?).to be(false)
           end
         end
+      rescue => e
+        puts e.inspect
+        raise e
       end
+    end
 
-      it 'returns global stats if specify all params' do
+    it '#get_global_stats with all params' do
+      begin
         actual = @client.get_global_stats(
           start_date: '2015-01-01',
           end_date: '2015-01-01',
           aggregated_by: SendGrid4r::REST::Stats::AggregatedBy::WEEK
         )
-        expect(actual.class).to be(Array)
+        expect(actual).to be_a(Array)
         expect(actual.length).to eq(2)
         actual.each do |global_stat|
-          expect(global_stat.class).to be(SendGrid4r::REST::Stats::TopStat)
+          expect(global_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
           stats = global_stat.stats
           expect(stats.length).to eq(1)
           stats.each do |stat|
-            expect(stat.class).to be(SendGrid4r::REST::Stats::Stat)
-            expect(stat.metrics.class).to be(SendGrid4r::REST::Stats::Metric)
+            expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
+            expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
           end
         end
+      rescue => e
+        puts e.inspect
+        raise e
+      end
+    end
+  end
+
+  context 'with block call' do
+    it '#get_global_stats with all params' do
+      @client.get_global_stats(
+        start_date: '2015-01-01',
+        end_date: '2015-01-01',
+        aggregated_by: SendGrid4r::REST::Stats::AggregatedBy::WEEK
+      ) do |resp, req, res|
+        resp =
+          SendGrid4r::REST::Stats.create_top_stats(
+            JSON.parse(resp)
+          )
+        expect(resp).to be_a(Array)
+        resp.each do |stat|
+          expect(stat).to be_a(SendGrid4r::REST::Stats::TopStat)
+        end
+        expect(req).to be_a(RestClient::Request)
+        expect(res).to be_a(Net::HTTPOK)
       end
     end
   end
