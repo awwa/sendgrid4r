@@ -11,7 +11,7 @@ module SendGrid4r
       #
       module Subuser
         def get_subusers_stats(
-            start_date:, end_date: nil, aggregated_by: nil, subusers:)
+            start_date:, end_date: nil, aggregated_by: nil, subusers:, &block)
           params = {
             start_date: start_date,
             end_date: end_date,
@@ -19,13 +19,16 @@ module SendGrid4r
             subusers: subusers
           }
           resp_a = get(
-            @auth, "#{SendGrid4r::Client::BASE_URL}/subusers/stats", params)
+            @auth,
+            "#{SendGrid4r::Client::BASE_URL}/subusers/stats",
+            params,
+            &block)
           SendGrid4r::REST::Stats.create_top_stats(resp_a)
         end
 
         def get_subusers_stats_sums(
             start_date:, end_date: nil, sort_by_metric: nil,
-            sort_by_direction: nil, limit: nil, offset: nil)
+            sort_by_direction: nil, limit: nil, offset: nil, &block)
           params = {
             start_date: start_date,
             end_date: end_date,
@@ -37,7 +40,8 @@ module SendGrid4r
           resp = get(
             @auth,
             "#{SendGrid4r::Client::BASE_URL}/subusers/stats/sums",
-            params
+            params,
+            &block
           )
           SendGrid4r::REST::Stats.create_top_stat(resp)
         end
