@@ -42,6 +42,7 @@ module SendGrid4r
       )
 
       def self.create_top_stat(resp)
+        return resp if resp.nil?
         stats = []
         resp['stats'].each do |stat|
           stats.push(SendGrid4r::REST::Stats.create_stat(stat))
@@ -50,11 +51,13 @@ module SendGrid4r
       end
 
       def self.create_stat(resp)
+        return resp if resp.nil?
         stat = SendGrid4r::REST::Stats.create_metric(resp['metrics'])
         Stat.new(stat, resp['name'], resp['type'])
       end
 
       def self.create_metric(resp)
+        return resp if resp.nil?
         Metric.new(
           resp['blocks'],
           resp['bounce_drops'],
@@ -78,6 +81,7 @@ module SendGrid4r
       end
 
       def self.create_top_stats(resp_a)
+        return resp_a if resp_a.nil?
         top_stats = []
         resp_a.each do |resp|
           top_stats.push(SendGrid4r::REST::Stats.create_top_stat(resp))
