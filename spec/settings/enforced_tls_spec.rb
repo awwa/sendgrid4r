@@ -45,7 +45,9 @@ describe 'SendGrid4r::REST::Settings::EnforcedTls' do
           SendGrid4r::REST::Settings::EnforcedTls.create_enforced_tls(
             JSON.parse(resp)
           )
-        expect(resp).to be_a(SendGrid4r::REST::Settings::EnforcedTls::EnforcedTls)
+        expect(resp).to be_a(
+          SendGrid4r::REST::Settings::EnforcedTls::EnforcedTls
+        )
         expect(req).to be_a(RestClient::Request)
         expect(res).to be_a(Net::HTTPOK)
       end
@@ -62,7 +64,9 @@ describe 'SendGrid4r::REST::Settings::EnforcedTls' do
           SendGrid4r::REST::Settings::EnforcedTls.create_enforced_tls(
             JSON.parse(resp)
           )
-        expect(resp).to be_a(SendGrid4r::REST::Settings::EnforcedTls::EnforcedTls)
+        expect(resp).to be_a(
+          SendGrid4r::REST::Settings::EnforcedTls::EnforcedTls
+        )
         expect(req).to be_a(RestClient::Request)
         expect(res).to be_a(Net::HTTPOK)
       end

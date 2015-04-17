@@ -91,9 +91,6 @@ describe 'SendGrid4r::REST::Contacts::Segments' do
         edit_params = @segment_factory.create(
           name: @edit_name1, conditions: [@condition]
         )
-        # TODO remove
-        # puts @client.get_segments.inspect
-        # puts "@segment1.id: #{@segment1.id}"
         edit_segment = @client.put_segment(@segment1.id, edit_params)
         expect(edit_segment.name).to eq(@edit_name1)
       rescue => e

@@ -59,24 +59,15 @@ module SendGrid4r
       def self.create_metric(resp)
         return resp if resp.nil?
         Metric.new(
-          resp['blocks'],
-          resp['bounce_drops'],
-          resp['bounces'],
-          resp['clicks'],
-          resp['deferred'],
-          resp['delivered'],
-          resp['drops'],
-          resp['invalid_emails'],
-          resp['opens'],
-          resp['processed'],
-          resp['requests'],
-          resp['spam_report_drops'],
-          resp['spam_reports'],
-          resp['unique_clicks'],
-          resp['unique_opens'],
-          resp['unsubscribe_drops'],
-          resp['unsubscribes'],
-          resp['received']
+          resp['blocks'],       resp['bounce_drops'],
+          resp['bounces'],      resp['clicks'],
+          resp['deferred'],     resp['delivered'],
+          resp['drops'],        resp['invalid_emails'],
+          resp['opens'],        resp['processed'],
+          resp['requests'],     resp['spam_report_drops'],
+          resp['spam_reports'], resp['unique_clicks'],
+          resp['unique_opens'], resp['unsubscribe_drops'],
+          resp['unsubscribes'], resp['received']
         )
       end
 

@@ -117,8 +117,8 @@ describe 'SendGrid4r::REST::Stats' do
       actual.each do |top_stat|
         expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
         top_stat.stats.each do |stat|
-         expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
-         expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
+          expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
+          expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
         end
       end
     end
@@ -244,8 +244,8 @@ describe 'SendGrid4r::REST::Stats' do
       actual = SendGrid4r::REST::Stats.create_top_stat(hash)
       expect(actual).to be_a(SendGrid4r::REST::Stats::TopStat)
       actual.stats.each do |stat|
-       expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
-       expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
+        expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
+        expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
       end
     end
   end
