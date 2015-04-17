@@ -34,7 +34,7 @@ module SendGrid4r
         return resp if resp.nil?
         vers = []
         resp['versions'].each do |ver|
-          vers.push(SendGrid4r::REST::Templates.create_version(ver))
+          vers.push(SendGrid4r::REST::Templates::Versions.create_version(ver))
         end
         Template.new(resp['id'], resp['name'], vers)
       end

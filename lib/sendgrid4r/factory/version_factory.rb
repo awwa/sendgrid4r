@@ -10,7 +10,7 @@ module SendGrid4r
       def create(
         name:, subject: '<%subject%>',
         html_content: '<%body%>', plain_content: '<%body%>', active: 1)
-        SendGrid4r::REST::Templates::Version.new(
+        SendGrid4r::REST::Templates::Versions::Version.new(
           nil,
           nil,
           nil,

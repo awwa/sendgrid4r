@@ -9,28 +9,29 @@ module SendGrid4r
     # SendGrid Web API v3 Template Engine - Templates
     #
     module Templates
-      Version = Struct.new(
-        :id, :user_id, :template_id, :active, :name, :html_content,
-        :plain_content, :subject, :updated_at)
-
-      def self.create_version(resp)
-        Version.new(
-          resp['id'],
-          resp['user_id'],
-          resp['template_id'],
-          resp['active'],
-          resp['name'],
-          resp['html_content'],
-          resp['plain_content'],
-          resp['subject'],
-          resp['updated_at'])
-      end
-
       #
       # SendGrid Web API v3 Template Engine - Versions
       #
       module Versions
         include SendGrid4r::REST::Request
+
+        Version = Struct.new(
+          :id, :user_id, :template_id, :active, :name, :html_content,
+          :plain_content, :subject, :updated_at)
+
+        def self.create_version(resp)
+          return resp if resp.nil?
+          Version.new(
+            resp['id'],
+            resp['user_id'],
+            resp['template_id'],
+            resp['active'],
+            resp['name'],
+            resp['html_content'],
+            resp['plain_content'],
+            resp['subject'],
+            resp['updated_at'])
+        end
 
         def self.url(temp_id, ver_id = nil)
           url = "#{SendGrid4r::Client::BASE_URL}/templates/#{temp_id}/versions"
@@ -38,44 +39,46 @@ module SendGrid4r
           url
         end
 
-        def post_version(temp_id, version)
+        def post_version(temp_id, version, &block)
           resp = post(
             @auth,
             "#{SendGrid4r::REST::Templates::Versions.url(temp_id)}",
-            remove_uneditable_keys(version.to_h)
+            remove_uneditable_keys(version.to_h),
+            &block
           )
-          SendGrid4r::REST::Templates.create_version(resp)
+          SendGrid4r::REST::Templates::Versions.create_version(resp)
         end
 
-        def activate_version(temp_id, ver_id)
+        def activate_version(temp_id, ver_id, &block)
           url = SendGrid4r::REST::Templates::Versions.url(temp_id, ver_id)
-          resp = post(
-            @auth,
-            "#{url}/activate"
-          )
-          SendGrid4r::REST::Templates.create_version(resp)
+          resp = post(@auth, "#{url}/activate", &block)
+          SendGrid4r::REST::Templates::Versions.create_version(resp)
         end
 
-        def get_version(temp_id, ver_id)
+        def get_version(temp_id, ver_id, &block)
           resp = get(
             @auth,
-            "#{SendGrid4r::REST::Templates::Versions.url(temp_id, ver_id)}")
-          SendGrid4r::REST::Templates.create_version(resp)
+            "#{SendGrid4r::REST::Templates::Versions.url(temp_id, ver_id)}",
+            &block
+          )
+          SendGrid4r::REST::Templates::Versions.create_version(resp)
         end
 
-        def patch_version(temp_id, ver_id, version)
+        def patch_version(temp_id, ver_id, version, &block)
           resp = patch(
             @auth,
             "#{SendGrid4r::REST::Templates::Versions.url(temp_id, ver_id)}",
-            remove_uneditable_keys(version.to_h)
+            remove_uneditable_keys(version.to_h),
+            &block
           )
-          SendGrid4r::REST::Templates.create_version(resp)
+          SendGrid4r::REST::Templates::Versions.create_version(resp)
         end
 
-        def delete_version(temp_id, ver_id)
+        def delete_version(temp_id, ver_id, &block)
           delete(
             @auth,
-            "#{SendGrid4r::REST::Templates::Versions.url(temp_id, ver_id)}"
+            "#{SendGrid4r::REST::Templates::Versions.url(temp_id, ver_id)}",
+            &block
           )
         end
 
