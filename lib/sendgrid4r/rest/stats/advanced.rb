@@ -60,7 +60,7 @@ module SendGrid4r
           SendGrid4r::REST::Stats.create_top_stats(resp_a)
         end
 
-        def get_esp_stats(
+        def get_mailbox_providers_stats(
             start_date:, end_date: nil, aggregated_by: nil, esps: nil)
           params = {
             start_date: start_date,
@@ -69,7 +69,7 @@ module SendGrid4r
             esps: esps
           }
           resp_a = get(
-            @auth, "#{SendGrid4r::Client::BASE_URL}/esp/stats", params)
+            @auth, "#{SendGrid4r::Client::BASE_URL}/mailbox_providers/stats", params)
           SendGrid4r::REST::Stats.create_top_stats(resp_a)
         end
 

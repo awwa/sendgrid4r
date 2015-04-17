@@ -11,8 +11,8 @@ describe 'SendGrid4r::REST::Stats::Advanced' do
   end
 
   context 'without block call' do
-    it '#get_geo_stats' do
-      it 'returns geo stats if specify mandatory params' do
+    it '#get_geo_stats with mandatory params' do
+      begin
         actual = @client.get_geo_stats(start_date: '2015-01-01')
         expect(actual.class).to be(Array)
         expect(actual.length).to be >= 0
@@ -29,8 +29,14 @@ describe 'SendGrid4r::REST::Stats::Advanced' do
             expect(stat.metrics.unique_opens.nil?).to be(false)
           end
         end
+      rescue => e
+        puts e.inspect
+        raise e
       end
-      it 'returns geo stats if specify all params' do
+    end
+
+    it '#get_geo_stats with all params' do
+      begin
         actual = @client.get_geo_stats(
           start_date: '2015-01-01',
           end_date: '2015-01-02',
@@ -48,10 +54,14 @@ describe 'SendGrid4r::REST::Stats::Advanced' do
             expect(stat.metrics.class).to be(SendGrid4r::REST::Stats::Metric)
           end
         end
+      rescue => e
+        puts e.inspect
+        raise e
       end
     end
-    describe '#get_devices_stats' do
-      it 'returns devices stats if specify mandatory params' do
+
+    it '#get_devices_stats with mandatory params' do
+      begin
         actual = @client.get_devices_stats(start_date: '2015-01-01')
         expect(actual.class).to be(Array)
         expect(actual.length).to be >= 0
@@ -66,8 +76,14 @@ describe 'SendGrid4r::REST::Stats::Advanced' do
             expect(stat.metrics.unique_opens.nil?).to be(false)
           end
         end
+      rescue => e
+        puts e.inspect
+        raise e
       end
-      it 'returns devices stats if specify all params' do
+    end
+
+    it '#get_devices_stats with all params' do
+      begin
         actual = @client.get_devices_stats(
           start_date: '2015-01-01',
           end_date: '2015-01-02',
@@ -84,10 +100,14 @@ describe 'SendGrid4r::REST::Stats::Advanced' do
             expect(stat.metrics.class).to be(SendGrid4r::REST::Stats::Metric)
           end
         end
+      rescue => e
+        puts e.inspect
+        raise e
       end
     end
-    describe '#get_clients_stats' do
-      it 'returns clients stats if specify mandatory params' do
+
+    it '#get_clients_stats with mandatory params' do
+      begin
         actual = @client.get_clients_stats(start_date: '2015-01-01')
         expect(actual.class).to be(Array)
         expect(actual.length).to be >= 0
@@ -102,8 +122,14 @@ describe 'SendGrid4r::REST::Stats::Advanced' do
             expect(stat.metrics.unique_opens.nil?).to be(false)
           end
         end
+      rescue => e
+        puts e.inspect
+        raise e
       end
-      it 'returns clients stats if specify all params' do
+    end
+
+    it '#get_clients_stats with all params' do
+      begin
         actual = @client.get_clients_stats(
           start_date: '2015-01-01',
           end_date: '2015-01-02',
@@ -120,10 +146,14 @@ describe 'SendGrid4r::REST::Stats::Advanced' do
             expect(stat.metrics.class).to be(SendGrid4r::REST::Stats::Metric)
           end
         end
+      rescue => e
+        puts e.inspect
+        raise e
       end
     end
-    describe '#get_clients_type_stats' do
-      it 'returns clients type stats if specify mandatory params' do
+
+    it '#get_clients_type_stats with mandatory params' do
+      begin
         actual = @client.get_clients_type_stats(
           start_date: '2015-01-01', client_type: 'webmail'
         )
@@ -140,8 +170,14 @@ describe 'SendGrid4r::REST::Stats::Advanced' do
             expect(stat.metrics.unique_opens.nil?).to be(false)
           end
         end
+      rescue => e
+        puts e.inspect
+        raise e
       end
-      it 'returns clients type stats if specify all params' do
+    end
+
+    it '#get_clients_stats with all params' do
+      begin
         actual = @client.get_clients_type_stats(
           start_date: '2015-01-01',
           end_date: '2015-01-02',
@@ -159,11 +195,15 @@ describe 'SendGrid4r::REST::Stats::Advanced' do
             expect(stat.metrics.class).to be(SendGrid4r::REST::Stats::Metric)
           end
         end
+      rescue => e
+        puts e.inspect
+        raise e
       end
     end
-    describe '#get_esp_stats' do
-      it 'returns esp stats if specify mandatory params' do
-        actual = @client.get_esp_stats(start_date: '2015-01-01')
+
+    it '#get_mailbox_providers_stats with mandatory params' do
+      begin
+        actual = @client.get_mailbox_providers_stats(start_date: '2015-01-01')
         expect(actual.class).to be(Array)
         expect(actual.length).to be >= 0
         actual.each do |global_stat|
@@ -185,9 +225,15 @@ describe 'SendGrid4r::REST::Stats::Advanced' do
             expect(stat.metrics.unique_opens.nil?).to be(false)
           end
         end
+      rescue => e
+        puts e.inspect
+        raise e
       end
-      it 'returns esp stats if specify all params' do
-        actual = @client.get_esp_stats(
+    end
+
+    it '#get_mailbox_providers_stats with all params' do
+      begin
+        actual = @client.get_mailbox_providers_stats(
           start_date: '2015-01-01',
           end_date: '2015-01-02',
           aggregated_by: SendGrid4r::REST::Stats::AggregatedBy::WEEK,
@@ -203,10 +249,14 @@ describe 'SendGrid4r::REST::Stats::Advanced' do
             expect(stat.metrics.class).to be(SendGrid4r::REST::Stats::Metric)
           end
         end
+      rescue => e
+        puts e.inspect
+        raise e
       end
     end
-    describe '#get_browsers_stats' do
-      it 'returns browsers stats if specify mandatory params' do
+
+    it '#get_browsers_stats with mandatory params' do
+      begin
         actual = @client.get_browsers_stats(start_date: '2015-01-01')
         expect(actual.class).to be(Array)
         expect(actual.length).to be >= 0
@@ -221,8 +271,14 @@ describe 'SendGrid4r::REST::Stats::Advanced' do
             expect(stat.metrics.unique_clicks.nil?).to be(false)
           end
         end
+      rescue => e
+        puts e.inspect
+        raise e
       end
-      it 'returns browsers stats if specify all params' do
+    end
+
+    it '#get_browsers_stats with all params' do
+      begin
         actual = @client.get_browsers_stats(
           start_date: '2015-01-01',
           end_date: '2015-01-02',
@@ -239,6 +295,9 @@ describe 'SendGrid4r::REST::Stats::Advanced' do
             expect(stat.metrics.class).to be(SendGrid4r::REST::Stats::Metric)
           end
         end
+      rescue => e
+        puts e.inspect
+        raise e
       end
     end
   end

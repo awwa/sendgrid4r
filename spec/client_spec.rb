@@ -84,7 +84,7 @@ describe 'SendGrid4r::Client' do
         expect(@client.respond_to?('get_devices_stats')).to eq(true)
         expect(@client.respond_to?('get_clients_stats')).to eq(true)
         expect(@client.respond_to?('get_clients_type_stats')).to eq(true)
-        expect(@client.respond_to?('get_esp_stats')).to eq(true)
+        expect(@client.respond_to?('get_mailbox_providers_stats')).to eq(true)
         expect(@client.respond_to?('get_browsers_stats')).to eq(true)
         expect(@client.respond_to?('get_parse_stats')).to eq(true)
         # Contacts
