@@ -11,7 +11,12 @@ module SendGrid4r
       #
       module Advanced
         def get_geo_stats(
-            start_date:, end_date: nil, aggregated_by: nil, country: nil)
+            start_date:,
+            end_date: nil,
+            aggregated_by: nil,
+            country: nil,
+            &block
+          )
           params = {
             start_date: start_date,
             end_date: end_date,
@@ -19,34 +24,57 @@ module SendGrid4r
             country: country
           }
           resp_a = get(
-            @auth, "#{SendGrid4r::Client::BASE_URL}/geo/stats", params)
+            @auth, "#{SendGrid4r::Client::BASE_URL}/geo/stats", params, &block)
           SendGrid4r::REST::Stats.create_top_stats(resp_a)
         end
 
-        def get_devices_stats(start_date:, end_date: nil, aggregated_by: nil)
+        def get_devices_stats(
+            start_date:,
+            end_date: nil,
+            aggregated_by: nil,
+            &block
+          )
           params = {
             start_date: start_date,
             end_date: end_date,
             aggregated_by: aggregated_by
           }
           resp_a = get(
-            @auth, "#{SendGrid4r::Client::BASE_URL}/devices/stats", params)
+            @auth,
+            "#{SendGrid4r::Client::BASE_URL}/devices/stats",
+            params,
+            &block
+          )
           SendGrid4r::REST::Stats.create_top_stats(resp_a)
         end
 
-        def get_clients_stats(start_date:, end_date: nil, aggregated_by: nil)
+        def get_clients_stats(
+            start_date:,
+            end_date: nil,
+            aggregated_by: nil,
+            &block
+          )
           params = {
             start_date: start_date,
             end_date: end_date,
             aggregated_by: aggregated_by
           }
           resp_a = get(
-            @auth, "#{SendGrid4r::Client::BASE_URL}/clients/stats", params)
+            @auth,
+            "#{SendGrid4r::Client::BASE_URL}/clients/stats",
+            params,
+            &block
+          )
           SendGrid4r::REST::Stats.create_top_stats(resp_a)
         end
 
         def get_clients_type_stats(
-            start_date:, end_date: nil, aggregated_by: nil, client_type:)
+            start_date:,
+            end_date: nil,
+            aggregated_by: nil,
+            client_type:,
+            &block
+          )
           params = {
             start_date: start_date,
             end_date: end_date,
@@ -56,12 +84,19 @@ module SendGrid4r
           resp_a = get(
             @auth,
             "#{SendGrid4r::Client::BASE_URL}/clients/#{client_type}/stats",
-            params)
+            params,
+            &block
+          )
           SendGrid4r::REST::Stats.create_top_stats(resp_a)
         end
 
         def get_mailbox_providers_stats(
-            start_date:, end_date: nil, aggregated_by: nil, esps: nil)
+            start_date:,
+            end_date: nil,
+            aggregated_by: nil,
+            esps: nil,
+            &block
+          )
           params = {
             start_date: start_date,
             end_date: end_date,
@@ -69,12 +104,21 @@ module SendGrid4r
             esps: esps
           }
           resp_a = get(
-            @auth, "#{SendGrid4r::Client::BASE_URL}/mailbox_providers/stats", params)
+            @auth,
+            "#{SendGrid4r::Client::BASE_URL}/mailbox_providers/stats",
+            params,
+            &block
+          )
           SendGrid4r::REST::Stats.create_top_stats(resp_a)
         end
 
         def get_browsers_stats(
-            start_date:, end_date: nil, aggregated_by: nil, browsers: nil)
+            start_date:,
+            end_date: nil,
+            aggregated_by: nil,
+            browsers: nil,
+            &block
+          )
           params = {
             start_date: start_date,
             end_date: end_date,
@@ -82,7 +126,11 @@ module SendGrid4r
             browsers: browsers
           }
           resp_a = get(
-            @auth, "#{SendGrid4r::Client::BASE_URL}/browsers/stats", params)
+            @auth,
+            "#{SendGrid4r::Client::BASE_URL}/browsers/stats",
+            params,
+            &block
+          )
           SendGrid4r::REST::Stats.create_top_stats(resp_a)
         end
       end
