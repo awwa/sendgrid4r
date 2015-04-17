@@ -23,9 +23,9 @@ module SendGrid4r
             aggregated_by: aggregated_by,
             country: country
           }
-          resp_a = get(
+          resp = get(
             @auth, "#{SendGrid4r::Client::BASE_URL}/geo/stats", params, &block)
-          SendGrid4r::REST::Stats.create_top_stats(resp_a)
+          SendGrid4r::REST::Stats.create_top_stats(resp)
         end
 
         def get_devices_stats(
@@ -39,13 +39,13 @@ module SendGrid4r
             end_date: end_date,
             aggregated_by: aggregated_by
           }
-          resp_a = get(
+          resp = get(
             @auth,
             "#{SendGrid4r::Client::BASE_URL}/devices/stats",
             params,
             &block
           )
-          SendGrid4r::REST::Stats.create_top_stats(resp_a)
+          SendGrid4r::REST::Stats.create_top_stats(resp)
         end
 
         def get_clients_stats(
@@ -59,13 +59,13 @@ module SendGrid4r
             end_date: end_date,
             aggregated_by: aggregated_by
           }
-          resp_a = get(
+          resp = get(
             @auth,
             "#{SendGrid4r::Client::BASE_URL}/clients/stats",
             params,
             &block
           )
-          SendGrid4r::REST::Stats.create_top_stats(resp_a)
+          SendGrid4r::REST::Stats.create_top_stats(resp)
         end
 
         def get_clients_type_stats(
@@ -81,13 +81,13 @@ module SendGrid4r
             aggregated_by: aggregated_by,
             client_type: client_type
           }
-          resp_a = get(
+          resp = get(
             @auth,
             "#{SendGrid4r::Client::BASE_URL}/clients/#{client_type}/stats",
             params,
             &block
           )
-          SendGrid4r::REST::Stats.create_top_stats(resp_a)
+          SendGrid4r::REST::Stats.create_top_stats(resp)
         end
 
         def get_mailbox_providers_stats(
@@ -103,13 +103,13 @@ module SendGrid4r
             aggregated_by: aggregated_by,
             esps: esps
           }
-          resp_a = get(
+          resp = get(
             @auth,
             "#{SendGrid4r::Client::BASE_URL}/mailbox_providers/stats",
             params,
             &block
           )
-          SendGrid4r::REST::Stats.create_top_stats(resp_a)
+          SendGrid4r::REST::Stats.create_top_stats(resp)
         end
 
         def get_browsers_stats(
@@ -125,13 +125,13 @@ module SendGrid4r
             aggregated_by: aggregated_by,
             browsers: browsers
           }
-          resp_a = get(
+          resp = get(
             @auth,
             "#{SendGrid4r::Client::BASE_URL}/browsers/stats",
             params,
             &block
           )
-          SendGrid4r::REST::Stats.create_top_stats(resp_a)
+          SendGrid4r::REST::Stats.create_top_stats(resp)
         end
       end
     end

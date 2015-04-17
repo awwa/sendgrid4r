@@ -18,13 +18,13 @@ module SendGrid4r
             aggregated_by: aggregated_by,
             categories: categories
           }
-          resp_a = get(
+          resp = get(
             @auth,
             "#{SendGrid4r::Client::BASE_URL}/categories/stats",
             params,
             &block
           )
-          SendGrid4r::REST::Stats.create_top_stats(resp_a)
+          SendGrid4r::REST::Stats.create_top_stats(resp)
         end
 
         def get_categories_stats_sums(

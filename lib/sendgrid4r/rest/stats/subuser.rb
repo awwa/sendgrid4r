@@ -18,12 +18,12 @@ module SendGrid4r
             aggregated_by: aggregated_by,
             subusers: subusers
           }
-          resp_a = get(
+          resp = get(
             @auth,
             "#{SendGrid4r::Client::BASE_URL}/subusers/stats",
             params,
             &block)
-          SendGrid4r::REST::Stats.create_top_stats(resp_a)
+          SendGrid4r::REST::Stats.create_top_stats(resp)
         end
 
         def get_subusers_stats_sums(

@@ -17,7 +17,7 @@ describe 'SendGrid4r::REST::Templates::Versions' do
       begin
         # celan up test env
         tmps = @client.get_templates
-        tmps.each do |tmp|
+        tmps.templates.each do |tmp|
           next if tmp.name != @template_edit
           tmp.versions.each do |ver|
             @client.delete_version(tmp.id, ver.id)

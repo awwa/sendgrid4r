@@ -12,6 +12,7 @@ module SendGrid4r
     module Templates
       include SendGrid4r::REST::Request
 
+      Templates = Struct.new(:templates)
       Template = Struct.new(:id, :name, :versions)
 
       def self.url(temp_id = nil)
@@ -20,7 +21,17 @@ module SendGrid4r
         url
       end
 
+      def self.create_templates(resp)
+        return resp if resp.nil?
+        tmps = []
+        resp['templates'].each do |template|
+          tmps.push(SendGrid4r::REST::Templates.create_template(template))
+        end
+        Templates.new(tmps)
+      end
+
       def self.create_template(resp)
+        return resp if resp.nil?
         vers = []
         resp['versions'].each do |ver|
           vers.push(SendGrid4r::REST::Templates.create_version(ver))
@@ -28,33 +39,29 @@ module SendGrid4r
         Template.new(resp['id'], resp['name'], vers)
       end
 
-      def post_template(name)
-        resp = post(@auth, SendGrid4r::REST::Templates.url, 'name' => name)
+      def post_template(name, &block)
+        resp = post(@auth, SendGrid4r::REST::Templates.url, name: name, &block)
         SendGrid4r::REST::Templates.create_template(resp)
       end
 
-      def get_templates
-        resp_a = get(@auth, SendGrid4r::REST::Templates.url)
-        tmps = []
-        resp_a['templates'].each do |resp|
-          tmps.push(SendGrid4r::REST::Templates.create_template(resp))
-        end
-        tmps
+      def get_templates(&block)
+        resp = get(@auth, SendGrid4r::REST::Templates.url, &block)
+        SendGrid4r::REST::Templates.create_templates(resp)
       end
 
-      def get_template(temp_id)
-        resp = get(@auth, SendGrid4r::REST::Templates.url(temp_id))
+      def get_template(temp_id, &block)
+        resp = get(@auth, SendGrid4r::REST::Templates.url(temp_id), &block)
         SendGrid4r::REST::Templates.create_template(resp)
       end
 
-      def patch_template(temp_id, name)
+      def patch_template(temp_id, name, &block)
         resp = patch(
-          @auth, SendGrid4r::REST::Templates.url(temp_id), 'name' => name)
+          @auth, SendGrid4r::REST::Templates.url(temp_id), name: name, &block)
         SendGrid4r::REST::Templates.create_template(resp)
       end
 
-      def delete_template(temp_id)
-        delete(@auth, SendGrid4r::REST::Templates.url(temp_id))
+      def delete_template(temp_id, &block)
+        delete(@auth, SendGrid4r::REST::Templates.url(temp_id), &block)
       end
     end
   end
