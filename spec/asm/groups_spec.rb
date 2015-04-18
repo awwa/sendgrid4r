@@ -2,36 +2,34 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Asm::Groups do
-  before :all do
-    Dotenv.load
-    @client = SendGrid4r::Client.new(
-      ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
-    @group_name1 = 'group_test1'
-    @group_name2 = 'group_test2'
-    @group_name_edit1 = 'group_edit1'
-    @group_desc = 'group_desc'
-    @group_desc_edit = 'group_desc_edit'
+  before do
+    begin
+      Dotenv.load
+      @client = SendGrid4r::Client.new(
+        ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
+      @group_name1 = 'group_test1'
+      @group_name2 = 'group_test2'
+      @group_name_edit1 = 'group_edit1'
+      @group_desc = 'group_desc'
+      @group_desc_edit = 'group_desc_edit'
+
+      # celan up test env
+      grps = @client.get_groups
+      expect(grps.length >= 0).to eq(true)
+      grps.each do |grp|
+        @client.delete_group(grp.id) if grp.name == @group_name1
+        @client.delete_group(grp.id) if grp.name == @group_edit1
+        @client.delete_group(grp.id) if grp.name == @group_name2
+      end
+      # post a group
+      @group1 = @client.post_group(@group_name1, @group_desc)
+    rescue => e
+      puts e.inspect
+      raise e
+    end
   end
 
   context 'without block call' do
-    before :all do
-      begin
-        # celan up test env
-        grps = @client.get_groups
-        expect(grps.length >= 0).to eq(true)
-        grps.each do |grp|
-          @client.delete_group(grp.id) if grp.name == @group_name1
-          @client.delete_group(grp.id) if grp.name == @group_edit1
-          @client.delete_group(grp.id) if grp.name == @group_name2
-        end
-        # post a group
-        @group1 = @client.post_group(@group_name1, @group_desc)
-      rescue => e
-        puts e.inspect
-        raise e
-      end
-    end
-
     it '#post_group' do
       begin
         group2 = @client.post_group(@group_name2, @group_desc)
@@ -76,8 +74,8 @@ describe SendGrid4r::REST::Asm::Groups do
       begin
         group = @client.get_group(@group1.id)
         expect(group.id).to be_a(Fixnum)
-        expect(group.name).to eq(@group_name_edit1)
-        expect(group.description).to eq(@group_desc_edit)
+        expect(group.name).to eq(@group_name1)
+        expect(group.description).to eq(@group_desc)
         expect(group.last_email_sent_at).to eq(nil)
         expect(group.unsubscribes).to eq(0)
       rescue => e
@@ -97,24 +95,6 @@ describe SendGrid4r::REST::Asm::Groups do
   end
 
   context 'with block call' do
-    before :all do
-      begin
-        # celan up test env
-        grps = @client.get_groups
-        expect(grps.length >= 0).to eq(true)
-        grps.each do |grp|
-          @client.delete_group(grp.id) if grp.name == @group_name1
-          @client.delete_group(grp.id) if grp.name == @group_edit1
-          @client.delete_group(grp.id) if grp.name == @group_name2
-        end
-        # post a group
-        @group1 = @client.post_group(@group_name1, @group_desc)
-      rescue => e
-        puts e.inspect
-        raise e
-      end
-    end
-
     it '#post_group' do
       @client.post_group(@group_name2, @group_desc) do |resp, req, res|
         resp =

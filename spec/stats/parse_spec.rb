@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Stats::Parse do
-  before :all do
+  before do
     Dotenv.load
     @client = SendGrid4r::Client.new(
       ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
@@ -11,6 +11,7 @@ describe SendGrid4r::REST::Stats::Parse do
   context 'always' do
     describe '#get_parse_stats' do
       it 'returns parse stats if specify mandatory params' do
+        pending 'waiting sendgrid documentation update'
         actual = @client.get_parse_stats(start_date: '2015-01-01')
         expect(actual.class).to be(Array)
         expect(actual.length > 0).to be(true)
@@ -27,6 +28,7 @@ describe SendGrid4r::REST::Stats::Parse do
         end
       end
       it 'returns parse stats if specify all params' do
+        pending 'waiting sendgrid documentation update'
         actual = @client.get_parse_stats(
           start_date: '2015-01-01',
           end_date: '2015-01-02',

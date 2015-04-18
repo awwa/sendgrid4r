@@ -2,34 +2,32 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Templates do
-  before :all do
-    Dotenv.load
-    @client = SendGrid4r::Client.new(
-      ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD']
-    )
-    @template_name1 = 'template_test1'
-    @template_name2 = 'template_test2'
-    @template_edit1 = 'template_edit1'
+  before do
+    begin
+      Dotenv.load
+      @client = SendGrid4r::Client.new(
+        ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD']
+      )
+      @template_name1 = 'template_test1'
+      @template_name2 = 'template_test2'
+      @template_edit1 = 'template_edit1'
+
+      # celan up test env
+      tmps = @client.get_templates
+      tmps.templates.each do |tmp|
+        @client.delete_template(tmp.id) if tmp.name == @template_name1
+        @client.delete_template(tmp.id) if tmp.name == @template_name2
+        @client.delete_template(tmp.id) if tmp.name == @template_edit1
+      end
+      # post a template
+      @template1 = @client.post_template(@template_name1)
+    rescue => e
+      puts e.inspect
+      raise e
+    end
   end
 
   context 'without block call' do
-    before :all do
-      begin
-        # celan up test env
-        tmps = @client.get_templates
-        tmps.templates.each do |tmp|
-          @client.delete_template(tmp.id) if tmp.name == @template_name1
-          @client.delete_template(tmp.id) if tmp.name == @template_name2
-          @client.delete_template(tmp.id) if tmp.name == @template_edit1
-        end
-        # post a template
-        @template1 = @client.post_template(@template_name1)
-      rescue => e
-        puts e.inspect
-        raise e
-      end
-    end
-
     it '#post_template' do
       begin
         new_template = @client.post_template(@template_name2)
@@ -103,23 +101,6 @@ describe SendGrid4r::REST::Templates do
   end
 
   context 'with block call' do
-    before :all do
-      begin
-        # celan up test env
-        tmps = @client.get_templates
-        tmps.templates.each do |tmp|
-          @client.delete_template(tmp.id) if tmp.name == @template_name1
-          @client.delete_template(tmp.id) if tmp.name == @template_name2
-          @client.delete_template(tmp.id) if tmp.name == @template_edit1
-        end
-        # post a template
-        @template1 = @client.post_template(@template_name1)
-      rescue => e
-        puts e.inspect
-        raise e
-      end
-    end
-
     it '#post_template' do
       @client.post_template(@template_name2) do |resp, req, res|
         resp =

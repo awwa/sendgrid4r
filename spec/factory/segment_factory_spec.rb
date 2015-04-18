@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::Factory::SegmentFactory do
-  before :all do
+  before do
     Dotenv.load
     @segment_factory = SendGrid4r::Factory::SegmentFactory.new
     @condition_factory = SendGrid4r::Factory::ConditionFactory.new

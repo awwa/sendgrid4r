@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Stats::Subuser do
-  before :all do
+  before do
     Dotenv.load
     @client = SendGrid4r::Client.new(
       ENV['SILVER_SENDGRID_USERNAME'], ENV['SILVER_SENDGRID_PASSWORD'])

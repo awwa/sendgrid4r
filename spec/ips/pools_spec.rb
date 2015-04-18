@@ -2,34 +2,32 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Ips::Pools do
-  before :all do
-    Dotenv.load
-    @client = SendGrid4r::Client.new(
-      ENV['SILVER_SENDGRID_USERNAME'], ENV['SILVER_SENDGRID_PASSWORD'])
-    @pool_name1 = 'pool_test1'
-    @pool_name2 = 'pool_test2'
-    @pool_edit1 = 'pool_edit1'
+  before do
+    begin
+      Dotenv.load
+      @client = SendGrid4r::Client.new(
+        ENV['SILVER_SENDGRID_USERNAME'], ENV['SILVER_SENDGRID_PASSWORD'])
+      @pool_name1 = 'pool_test1'
+      @pool_name2 = 'pool_test2'
+      @pool_edit1 = 'pool_edit1'
+
+      # clean up test env
+      pools = @client.get_pools
+      pools.each do |pool|
+        @client.delete_pool(pool.name) if pool.name == @pool_name1
+        @client.delete_pool(pool.name) if pool.name == @pool_name2
+        @client.delete_pool(pool.name) if pool.name == @pool_edit1
+      end
+      # post a pool
+      @client.post_pool(@pool_name1)
+    rescue => e
+      puts e.inspect
+      raise e
+    end
   end
 
   context 'account is silver' do
     context 'without block call' do
-      before :all do
-        begin
-          # clean up test env
-          pools = @client.get_pools
-          pools.each do |pool|
-            @client.delete_pool(pool.name) if pool.name == @pool_name1
-            @client.delete_pool(pool.name) if pool.name == @pool_name2
-            @client.delete_pool(pool.name) if pool.name == @pool_edit1
-          end
-          # post a pool
-          @client.post_pool(@pool_name1)
-        rescue => e
-          puts e.inspect
-          raise e
-        end
-      end
-
       it '#post_pool' do
         begin
           new_pool = @client.post_pool(@pool_name2)
@@ -78,7 +76,7 @@ describe SendGrid4r::REST::Ips::Pools do
 
       it '#delete_pool' do
         begin
-          @client.delete_pool(@pool_edit1)
+          @client.delete_pool(@pool_name1)
         rescue => e
           puts e.inspect
           raise e
@@ -87,23 +85,6 @@ describe SendGrid4r::REST::Ips::Pools do
     end
 
     context 'with block call' do
-      before :all do
-        begin
-          # clean up test env
-          pools = @client.get_pools
-          pools.each do |pool|
-            @client.delete_pool(pool.name) if pool.name == @pool_name1
-            @client.delete_pool(pool.name) if pool.name == @pool_name2
-            @client.delete_pool(pool.name) if pool.name == @pool_edit1
-          end
-          # post a pool
-          @client.post_pool(@pool_name1)
-        rescue => e
-          puts e.inspect
-          raise e
-        end
-      end
-
       it '#post_pool' do
         @client.post_pool(@pool_name2) do |resp, req, res|
           resp =
@@ -153,7 +134,7 @@ describe SendGrid4r::REST::Ips::Pools do
       end
 
       it '#delete_pool' do
-        @client.delete_pool(@pool_edit1) do |resp, req, res|
+        @client.delete_pool(@pool_name1) do |resp, req, res|
           expect(resp).to eq('')
           expect(req).to be_a(RestClient::Request)
           expect(res).to be_a(Net::HTTPNoContent)

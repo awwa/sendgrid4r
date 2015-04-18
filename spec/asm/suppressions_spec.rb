@@ -2,42 +2,38 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Asm::Suppressions do
-  before :all do
-    Dotenv.load
-    @client = SendGrid4r::Client.new(
-      ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
-    @email1 = 'test1@test.com'
-    @email2 = 'test2@test.com'
-    @email3 = 'test3@test.com'
-    @group_name = 'suppressions_test'
-    @group_desc = 'group_desc'
-  end
+  before do
+    begin
+      Dotenv.load
+      @client = SendGrid4r::Client.new(
+        ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
+      @email1 = 'test1@test.com'
+      @email2 = 'test2@test.com'
+      @email3 = 'test3@test.com'
+      @group_name = 'suppressions_test'
+      @group_desc = 'group_desc'
 
-  def init
-    # celan up test env
-    grps = @client.get_groups
-    grps.each do |grp|
-      next if grp.name != @group_name
-      emails = @client.get_suppressed_emails(grp.id)
-      emails.each do |email|
-        @client.delete_suppressed_email(grp.id, email)
+      # celan up test env
+      grps = @client.get_groups
+      grps.each do |grp|
+        next if grp.name != @group_name
+        emails = @client.get_suppressed_emails(grp.id)
+        emails.each do |email|
+          @client.delete_suppressed_email(grp.id, email)
+        end
+        @client.delete_group(grp.id)
       end
-      @client.delete_group(grp.id)
+      # post a group
+      @group = @client.post_group(@group_name, @group_desc)
+      # post suppressed email
+      @client.post_suppressed_emails(@group.id, [@email1])
+    rescue => e
+      puts e.inspect
+      raise e
     end
-    # post a group
-    @group = @client.post_group(@group_name, @group_desc)
-    # post suppressed email
-    @client.post_suppressed_emails(@group.id, [@email1])
-  rescue => e
-    puts e.inspect
-    raise e
   end
 
   context 'wthout block call' do
-    before :all do
-      init
-    end
-
     it '#post_suppressed_emails' do
       begin
         emails = @client.post_suppressed_emails(
@@ -55,7 +51,7 @@ describe SendGrid4r::REST::Asm::Suppressions do
     it '#get_suppressed_emails' do
       begin
         emails = @client.get_suppressed_emails(@group.id)
-        expect(emails.length).to eq(3)
+        expect(emails.length).to eq(1)
         expect(emails[0]).to eq(@email1)
       rescue => e
         puts e.inspect
@@ -92,10 +88,6 @@ describe SendGrid4r::REST::Asm::Suppressions do
   end
 
   context 'wthout block call' do
-    before :all do
-      init
-    end
-
     it '#post_suppressed_emails' do
       @client.post_suppressed_emails(
         @group.id, [@email2, @email3]

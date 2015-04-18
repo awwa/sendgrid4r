@@ -2,60 +2,60 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Contacts::Lists do
-  before :all do
-    Dotenv.load
-    @client = SendGrid4r::Client.new(
-      ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
-    @list_name1 = 'test_list1'
-    @edit_name1 = 'test_list1_edit'
-    @list_name2 = 'test_list2'
-    @email1 = 'jones@example.com'
-    @email2 = 'miller@example.com'
-    @last_name1 = 'Jones'
-    @last_name2 = 'Miller'
-    @pet1 = 'Fluffy'
-    @pet2 = 'FrouFrou'
-    @custom_field_name = 'pet'
-    @recipients = [@email1, @email2]
+  before do
+    begin
+      Dotenv.load
+      @client = SendGrid4r::Client.new(
+        ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
+      @list_name1 = 'test_list1'
+      @edit_name1 = 'test_list1_edit'
+      @list_name2 = 'test_list2'
+      @email1 = 'jones@example.com'
+      @email2 = 'miller@example.com'
+      @last_name1 = 'Jones'
+      @last_name2 = 'Miller'
+      @pet1 = 'Fluffy'
+      @pet2 = 'FrouFrou'
+      @custom_field_name = 'pet'
+      @recipients = [@email1, @email2]
+
+      # celan up test env(lists)
+      lists = @client.get_lists
+      lists.lists.each do |list|
+        @client.delete_list(list.id) if list.name == @list_name1
+        @client.delete_list(list.id) if list.name == @edit_name1
+        @client.delete_list(list.id) if list.name == @list_name2
+      end
+      # celan up test env(recipients)
+      recipients = @client.get_recipients
+      recipients.recipients.each do |recipient|
+        @client.delete_recipient(recipient.id) if recipient.email == @email1
+        @client.delete_recipient(recipient.id) if recipient.email == @email2
+      end
+      # post a first list
+      @list1 = @client.post_list(@list_name1)
+      # add multiple recipients
+      recipient1 = {}
+      recipient1['email'] = @email1
+      recipient1['last_name'] = @last_name1
+      recipient1[@custom_field_name] = @pet1
+      recipient1 = @client.post_recipient(recipient1)
+      @client.post_recipient_to_list(@list1.id, recipient1.id)
+      recipient2 = {}
+      recipient2['email'] = @email2
+      recipient2['last_name'] = @last_name2
+      recipient2[@custom_field_name] = @pet2
+      recipient2 = @client.post_recipient(recipient2)
+      @client.post_recipient_to_list(@list1.id, recipient2.id)
+      # # Add multiple recipients to a single list
+      # @client.post_recipients_to_list(@list1.id, @recipients)
+    rescue => e
+      puts e.inspect
+      raise e
+    end
   end
 
   context 'without block call' do
-    before :all do
-      begin
-        # celan up test env(lists)
-        lists = @client.get_lists
-        lists.lists.each do |list|
-          @client.delete_list(list.id) if list.name == @list_name1
-          @client.delete_list(list.id) if list.name == @edit_name1
-          @client.delete_list(list.id) if list.name == @list_name2
-        end
-        # celan up test env(recipients)
-        recipients = @client.get_recipients
-        recipients.recipients.each do |recipient|
-          @client.delete_recipient(recipient.id) if recipient.email == @email1
-          @client.delete_recipient(recipient.id) if recipient.email == @email2
-        end
-        # post a first list
-        @list1 = @client.post_list(@list_name1)
-        # add multiple recipients
-        recipient1 = {}
-        recipient1['email'] = @email1
-        recipient1['last_name'] = @last_name1
-        recipient1[@custom_field_name] = @pet1
-        @client.post_recipient(recipient1)
-        recipient2 = {}
-        recipient2['email'] = @email2
-        recipient2['last_name'] = @last_name2
-        recipient2[@custom_field_name] = @pet2
-        @client.post_recipient(recipient2)
-        # Add multiple recipients to a single list
-        @client.post_recipients_to_list(@list1.id, @recipients)
-      rescue => e
-        puts e.inspect
-        raise e
-      end
-    end
-
     it '#post_list' do
       begin
         list2 = @client.post_list(@list_name2)
@@ -88,7 +88,7 @@ describe SendGrid4r::REST::Contacts::Lists do
           next if list.name != @list_name1
           expect(list.id).to eq(@list1.id)
           expect(list.name).to eq(@list1.name)
-          expect(list.recipient_count).to eq(2)
+          expect(list.recipient_count).to be_a(Fixnum)
         end
       rescue => e
         puts e.inspect
@@ -101,7 +101,7 @@ describe SendGrid4r::REST::Contacts::Lists do
         actual_list = @client.get_list(@list1.id)
         expect(actual_list.id).to eq(@list1.id)
         expect(actual_list.name).to eq(@list1.name)
-        expect(actual_list.recipient_count).to eq(2)
+        expect(actual_list.recipient_count).to be_a(Fixnum)
       rescue => e
         puts e.inspect
         raise e
@@ -180,42 +180,6 @@ describe SendGrid4r::REST::Contacts::Lists do
   end
 
   context 'with block call' do
-    before :all do
-      begin
-        # celan up test env(lists)
-        lists = @client.get_lists
-        lists.lists.each do |list|
-          @client.delete_list(list.id) if list.name == @list_name1
-          @client.delete_list(list.id) if list.name == @edit_name1
-          @client.delete_list(list.id) if list.name == @list_name2
-        end
-        # celan up test env(recipients)
-        recipients = @client.get_recipients
-        recipients.recipients.each do |recipient|
-          @client.delete_recipient(recipient.id) if recipient.email == @email1
-          @client.delete_recipient(recipient.id) if recipient.email == @email2
-        end
-        # post a first list
-        @list1 = @client.post_list(@list_name1)
-        # add multiple recipients
-        recipient1 = {}
-        recipient1['email'] = @email1
-        recipient1['last_name'] = @last_name1
-        recipient1[@custom_field_name] = @pet1
-        @client.post_recipient(recipient1)
-        recipient2 = {}
-        recipient2['email'] = @email2
-        recipient2['last_name'] = @last_name2
-        recipient2[@custom_field_name] = @pet2
-        @client.post_recipient(recipient2)
-        # Add multiple recipients to a single list
-        @client.post_recipients_to_list(@list1.id, @recipients)
-      rescue => e
-        puts e.inspect
-        raise e
-      end
-    end
-
     it '#post_list' do
       @client.post_list(@list_name2) do |resp, req, res|
         resp =

@@ -2,40 +2,38 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Templates::Versions do
-  before :all do
-    Dotenv.load
-    @client = SendGrid4r::Client.new(
-      ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD']
-    )
-    @template_name = 'version_test'
-    @version1_name = 'version_name1'
-    @version2_name = 'version_name2'
-    @factory = SendGrid4r::Factory::VersionFactory.new
+  before do
+    begin
+      Dotenv.load
+      @client = SendGrid4r::Client.new(
+        ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD']
+      )
+      @template_name = 'version_test'
+      @version1_name = 'version_name1'
+      @version2_name = 'version_name2'
+      @factory = SendGrid4r::Factory::VersionFactory.new
+
+      # celan up test env
+      tmps = @client.get_templates
+      tmps.templates.each do |tmp|
+        next if tmp.name != @template_name
+        tmp.versions.each do |ver|
+          @client.delete_version(tmp.id, ver.id)
+        end
+        @client.delete_template(tmp.id)
+      end
+      # post a template
+      @template = @client.post_template(@template_name)
+      # post a version
+      ver1 = @factory.create(name: @version1_name)
+      @version1 = @client.post_version(@template.id, ver1)
+    rescue => e
+      puts e.inspect
+      raise e
+    end
   end
 
   context 'without block call' do
-    before :all do
-      begin
-        # celan up test env
-        tmps = @client.get_templates
-        tmps.templates.each do |tmp|
-          next if tmp.name != @template_name
-          tmp.versions.each do |ver|
-            @client.delete_version(tmp.id, ver.id)
-          end
-          @client.delete_template(tmp.id)
-        end
-        # post a template
-        @template = @client.post_template(@template_name)
-        # post a version
-        ver1 = @factory.create(name: @version1_name)
-        @version1 = @client.post_version(@template.id, ver1)
-      rescue => e
-        puts e.inspect
-        raise e
-      end
-    end
-
     it '#post_version' do
       begin
         ver2 = @factory.create(name: @version2_name)
@@ -98,28 +96,6 @@ describe SendGrid4r::REST::Templates::Versions do
   end
 
   context 'with block call' do
-    before :all do
-      begin
-        # celan up test env
-        tmps = @client.get_templates
-        tmps.templates.each do |tmp|
-          next if tmp.name != @template_name
-          tmp.versions.each do |ver|
-            @client.delete_version(tmp.id, ver.id)
-          end
-          @client.delete_template(tmp.id)
-        end
-        # post a template
-        @template = @client.post_template(@template_name)
-        # post a version
-        ver1 = @factory.create(name: @version1_name)
-        @version1 = @client.post_version(@template.id, ver1)
-      rescue => e
-        puts e.inspect
-        raise e
-      end
-    end
-
     it '#post_version' do
       @factory.create(name: @version2_name) do |resp, req, res|
         resp =

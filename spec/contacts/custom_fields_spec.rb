@@ -2,35 +2,31 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Contacts::CustomFields do
-  before :all do
-    Dotenv.load
-    @client = SendGrid4r::Client.new(
-      ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
-    @name1 = 'birthday'
-    @type1 = 'text'
-    @name2 = 'born_at'
-    @type2 = 'date'
-  end
+  before do
+    begin
+      Dotenv.load
+      @client = SendGrid4r::Client.new(
+        ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
+      @name1 = 'birthday'
+      @type1 = 'text'
+      @name2 = 'born_at'
+      @type2 = 'date'
 
-  def init
-    # celan up test env
-    fields = @client.get_custom_fields
-    fields.custom_fields.each do |field|
-      next if field.name != @name1 && field.name != @name2
-      @client.delete_custom_field(field.id)
+      # celan up test env
+      fields = @client.get_custom_fields
+      fields.custom_fields.each do |field|
+        next if field.name != @name1 && field.name != @name2
+        @client.delete_custom_field(field.id)
+      end
+      # post a custom field
+      @new_field = @client.post_custom_field(@name1, @type1)
+    rescue => e
+      puts e.inspect
+      raise e
     end
-    # post a custom field
-    @new_field = @client.post_custom_field(@name1, @type1)
-  rescue => e
-    puts e.inspect
-    raise e
   end
 
   context 'without block call' do
-    before :all do
-      init
-    end
-
     it '#post_custom_field' do
       begin
         new_field = @client.post_custom_field(@name2, @type2)
@@ -93,10 +89,6 @@ describe SendGrid4r::REST::Contacts::CustomFields do
   end
 
   context 'with block call' do
-    before :all do
-      init
-    end
-
     it '#post_custom_field' do
       @client.post_custom_field(@name2, @type2) do |resp, req, res|
         resp =

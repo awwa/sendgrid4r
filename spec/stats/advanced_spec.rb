@@ -2,12 +2,10 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Stats::Advanced do
-  before :all do
+  before do
     Dotenv.load
-    # @client = SendGrid4r::Client.new(
-    #   ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
     @client = SendGrid4r::Client.new(
-      ENV['SILVER_SENDGRID_USERNAME'], ENV['SILVER_SENDGRID_PASSWORD'])
+      ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
   end
 
   context 'without block call' do

@@ -2,29 +2,29 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Ips::Warmup do
-  before :all do
+  before do
     Dotenv.load
     @client = SendGrid4r::Client.new(
       ENV['SILVER_SENDGRID_USERNAME'], ENV['SILVER_SENDGRID_PASSWORD'])
   end
 
   context 'account is silver' do
-    context 'without block call' do
-      before :all do
-        begin
-          # celan up test env
-          warmup_ips = @client.get_warmup_ips
-          if warmup_ips.length > 0
-            warmup_ips.each do |warmup_ip|
-              @client.delete_warmup_ip(warmup_ip.ip)
-            end
+    before do
+      begin
+        # celan up test env
+        warmup_ips = @client.get_warmup_ips
+        if warmup_ips.length > 0
+          warmup_ips.each do |warmup_ip|
+            @client.delete_warmup_ip(warmup_ip.ip)
           end
-        rescue => e
-          puts e.inspect
-          raise e
         end
+      rescue => e
+        puts e.inspect
+        raise e
       end
+    end
 
+    context 'without block call' do
       it 'warmup_ip spec' do
         begin
           # get warmup ip
@@ -50,21 +50,6 @@ describe SendGrid4r::REST::Ips::Warmup do
     end
 
     context 'with block call' do
-      before :all do
-        begin
-          # celan up test env
-          warmup_ips = @client.get_warmup_ips
-          if warmup_ips.length > 0
-            warmup_ips.each do |warmup_ip|
-              @client.delete_warmup_ip(warmup_ip.ip)
-            end
-          end
-        rescue => e
-          puts e.inspect
-          raise e
-        end
-      end
-
       it 'warmup_ip spec' do
         # get warmup ip
         @client.get_warmup_ips do |resp, req, res|

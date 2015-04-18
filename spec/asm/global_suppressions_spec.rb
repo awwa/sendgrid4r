@@ -2,39 +2,34 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Asm::GlobalSuppressions do
-  before :all do
-    Dotenv.load
-    @client = SendGrid4r::Client.new(
-      ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
-    @email1 = 'test1@test.com'
-    @email2 = 'test2@test.com'
-    @email3 = 'test3@test.com'
-  end
+  before do
+    begin
+      Dotenv.load
+      @client = SendGrid4r::Client.new(
+        ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
+      @email1 = 'test1@test.com'
+      @email2 = 'test2@test.com'
+      @email3 = 'test3@test.com'
 
-  def init
-    # celan up test env
-    actual_email1 = @client.get_global_suppressed_email(@email1)
-    actual_email2 = @client.get_global_suppressed_email(@email2)
-    actual_email3 = @client.get_global_suppressed_email(@email3)
-    @client.delete_global_suppressed_email(
-      @email1
-    ) if actual_email1 == @email1
-    @client.delete_global_suppressed_email(
-      @email2
-    ) if actual_email2 == @email2
-    @client.delete_global_suppressed_email(
-      @email3
-    ) if actual_email3 == @email3
-  rescue => e
-    puts e.inspect
-    raise e
+      actual_email1 = @client.get_global_suppressed_email(@email1)
+      actual_email2 = @client.get_global_suppressed_email(@email2)
+      actual_email3 = @client.get_global_suppressed_email(@email3)
+      @client.delete_global_suppressed_email(
+        @email1
+      ) if actual_email1 == @email1
+      @client.delete_global_suppressed_email(
+        @email2
+      ) if actual_email2 == @email2
+      @client.delete_global_suppressed_email(
+        @email3
+      ) if actual_email3 == @email3
+    rescue => e
+      puts e.inspect
+      raise e
+    end
   end
 
   context 'without block call' do
-    before :all do
-      init
-    end
-
     it '#post_global_suppressed_emails' do
       begin
         emails = @client.post_global_suppressed_emails(
@@ -79,10 +74,6 @@ describe SendGrid4r::REST::Asm::GlobalSuppressions do
   end
 
   context 'with block call' do
-    before :all do
-      init
-    end
-
     it '#post_global_suppressed_emails' do
       @client.post_global_suppressed_emails(
         [@email1, @email2, @email3]

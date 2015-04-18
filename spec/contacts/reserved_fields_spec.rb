@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Contacts::ReservedFields do
-  before :all do
+  before do
     Dotenv.load
     @client = SendGrid4r::Client.new(
       ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])

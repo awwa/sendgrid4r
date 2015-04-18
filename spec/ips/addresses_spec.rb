@@ -2,16 +2,13 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Ips::Addresses do
-  before :all do
+  before do
     Dotenv.load
+    @client = SendGrid4r::Client.new(
+      ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
   end
 
   context 'account is free' do
-    before :all do
-      @client = SendGrid4r::Client.new(
-        ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
-    end
-
     describe '#get_ip' do
       it 'raise error' do
         begin
@@ -29,23 +26,23 @@ describe SendGrid4r::REST::Ips::Addresses do
   context 'account is silver' do
     TEST_POOL = 'test_pool'
 
-    context 'without block call' do
-      before :all do
-        begin
-          @client = SendGrid4r::Client.new(
-            ENV['SILVER_SENDGRID_USERNAME'], ENV['SILVER_SENDGRID_PASSWORD'])
-          # refresh the pool
-          pools = @client.get_pools
-          pools.each do |pool|
-            @client.delete_pool(TEST_POOL) if pool.name == TEST_POOL
-          end
-          @client.post_pool(TEST_POOL)
-        rescue => e
-          puts e.inspect
-          raise e
+    before do
+      begin
+        @client = SendGrid4r::Client.new(
+          ENV['SILVER_SENDGRID_USERNAME'], ENV['SILVER_SENDGRID_PASSWORD'])
+        # refresh the pool
+        pools = @client.get_pools
+        pools.each do |pool|
+          @client.delete_pool(TEST_POOL) if pool.name == TEST_POOL
         end
+        @client.post_pool(TEST_POOL)
+      rescue => e
+        puts e.inspect
+        raise e
       end
+    end
 
+    context 'without block call' do
       it '#get_ips' do
         begin
           ips = @client.get_ips
@@ -100,22 +97,6 @@ describe SendGrid4r::REST::Ips::Addresses do
     end
 
     context 'with block call' do
-      before :all do
-        begin
-          @client = SendGrid4r::Client.new(
-            ENV['SILVER_SENDGRID_USERNAME'], ENV['SILVER_SENDGRID_PASSWORD'])
-          # refresh the pool
-          pools = @client.get_pools
-          pools.each do |pool|
-            @client.delete_pool(TEST_POOL) if pool.name == TEST_POOL
-          end
-          @client.post_pool(TEST_POOL)
-        rescue => e
-          puts e.inspect
-          raise e
-        end
-      end
-
       it '#get_ips' do
         @client.get_ips do |resp, req, res|
           resp =
