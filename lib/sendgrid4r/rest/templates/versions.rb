@@ -42,7 +42,7 @@ module SendGrid4r
         def post_version(temp_id, version, &block)
           resp = post(
             @auth,
-            "#{SendGrid4r::REST::Templates::Versions.url(temp_id)}",
+            SendGrid4r::REST::Templates::Versions.url(temp_id),
             remove_uneditable_keys(version.to_h),
             &block
           )
@@ -58,7 +58,7 @@ module SendGrid4r
         def get_version(temp_id, ver_id, &block)
           resp = get(
             @auth,
-            "#{SendGrid4r::REST::Templates::Versions.url(temp_id, ver_id)}",
+            SendGrid4r::REST::Templates::Versions.url(temp_id, ver_id),
             &block
           )
           SendGrid4r::REST::Templates::Versions.create_version(resp)
@@ -67,7 +67,7 @@ module SendGrid4r
         def patch_version(temp_id, ver_id, version, &block)
           resp = patch(
             @auth,
-            "#{SendGrid4r::REST::Templates::Versions.url(temp_id, ver_id)}",
+            SendGrid4r::REST::Templates::Versions.url(temp_id, ver_id),
             remove_uneditable_keys(version.to_h),
             &block
           )
@@ -77,7 +77,7 @@ module SendGrid4r
         def delete_version(temp_id, ver_id, &block)
           delete(
             @auth,
-            "#{SendGrid4r::REST::Templates::Versions.url(temp_id, ver_id)}",
+            SendGrid4r::REST::Templates::Versions.url(temp_id, ver_id),
             &block
           )
         end

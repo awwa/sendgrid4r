@@ -17,7 +17,7 @@ describe 'SendGrid4r::REST::Contacts::Segments' do
     @segment_factory = SendGrid4r::Factory::SegmentFactory.new
   end
 
-  context 'without block all' do
+  context 'without block call' do
     before :all do
       begin
         # celan up test env(segment)
