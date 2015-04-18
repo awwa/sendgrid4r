@@ -36,7 +36,7 @@ module SendGrid4r
             )
           end
           Recipient.new(
-            resp['created_at'],
+            Time.at(resp['created_at']),
             custom_fields,
             resp['email'],
             resp['first_name'],
@@ -45,7 +45,7 @@ module SendGrid4r
             resp['last_emailed'],
             resp['last_name'],
             resp['last_opend'],
-            resp['updated_at']
+            Time.at(resp['updated_at'])
           )
         end
 

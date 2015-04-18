@@ -49,7 +49,7 @@ describe 'SendGrid4r::REST::Contacts::Recipients' do
         params['last_name'] = @last_name2
         params[@custom_field_name] = @pet2
         new_recipient = @client.post_recipient(params)
-        expect(new_recipient.created_at).to be_a(Fixnum)
+        expect(new_recipient.created_at).to be_a(Time)
         new_recipient.custom_fields.each do |custom_field|
           expect(
             custom_field
@@ -62,7 +62,7 @@ describe 'SendGrid4r::REST::Contacts::Recipients' do
         expect(new_recipient.last_emailed).to eq(nil)
         expect(new_recipient.last_name).to eq(@last_name2)
         expect(new_recipient.last_opened).to eq(nil)
-        expect(new_recipient.updated_at).to be_a(Fixnum)
+        expect(new_recipient.updated_at).to be_a(Time)
       rescue => e
         puts e.inspect
         raise e
@@ -397,7 +397,7 @@ describe 'SendGrid4r::REST::Contacts::Recipients' do
         '}'
       hash = JSON.parse(json)
       actual = SendGrid4r::REST::Contacts::Recipients.create_recipient(hash)
-      expect(actual.created_at).to eq(1422313607)
+      expect(actual.created_at).to eq(Time.at(1422313607))
       expect(actual.email).to eq('jones@example.com')
       expect(actual.first_name).to eq(nil)
       expect(actual.id).to eq('jones@example.com')
@@ -405,7 +405,7 @@ describe 'SendGrid4r::REST::Contacts::Recipients' do
       expect(actual.last_emailed).to eq(nil)
       expect(actual.last_name).to eq('Jones')
       expect(actual.last_opened).to eq(nil)
-      expect(actual.updated_at).to eq(1422313790)
+      expect(actual.updated_at).to eq(Time.at(1422313790))
       custom_field = actual.custom_fields[0]
       expect(custom_field.id).to eq(23)
       expect(custom_field.name).to eq('pet')
