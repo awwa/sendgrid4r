@@ -32,13 +32,13 @@ module SendGrid4r
           categories
         end
 
-        def get_categories(category = nil, limit = nil, offset = nil)
+        def get_categories(category = nil, limit = nil, offset = nil, &block)
           params = {}
           params['category'] = category unless category.nil?
           params['limit'] = limit unless limit.nil?
           params['offset'] = offset unless limit.nil?
           resp = get(
-            @auth, "#{SendGrid4r::Client::BASE_URL}/categories", params
+            @auth, "#{SendGrid4r::Client::BASE_URL}/categories", params, &block
           )
           SendGrid4r::REST::Categories::Categories.create_categories(resp)
         end
