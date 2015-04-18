@@ -1,7 +1,7 @@
 # encoding: utf-8
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe 'SendGrid4r::Client' do
+describe SendGrid4r::Client do
   before :all do
     Dotenv.load
   end

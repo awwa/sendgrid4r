@@ -1,7 +1,7 @@
 # encoding: utf-8
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe 'SendGrid4r::REST::Contacts::Lists' do
+describe SendGrid4r::REST::Contacts::Lists do
   before :all do
     Dotenv.load
     @client = SendGrid4r::Client.new(

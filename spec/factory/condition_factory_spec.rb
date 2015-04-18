@@ -1,7 +1,7 @@
 # encoding: utf-8
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe 'SendGrid4r::Factory::ConditionFactory' do
+describe SendGrid4r::Factory::ConditionFactory do
   before :all do
     Dotenv.load
     @factory = SendGrid4r::Factory::ConditionFactory.new

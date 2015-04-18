@@ -1,7 +1,7 @@
 # encoding: utf-8
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe 'SendGrid4r::REST::Settings::EnforcedTls' do
+describe SendGrid4r::REST::Settings::EnforcedTls do
   before :all do
     Dotenv.load
     @client = SendGrid4r::Client.new(
