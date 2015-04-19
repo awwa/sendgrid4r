@@ -194,6 +194,13 @@ describe SendGrid4r::REST::Ips::Addresses do
         hash = JSON.parse(json)
         actual = SendGrid4r::REST::Ips::Addresses.create_address(hash)
         expect(actual).to be_a(SendGrid4r::REST::Ips::Addresses::Address)
+        expect(actual.ip).to eq('000.00.00.0')
+        expect(actual.pools).to be_a(Array)
+        actual.pools.each do |pool|
+          expect(pool).to eq('test1')
+        end
+        expect(actual.start_date).to eq(Time.at(1409616000))
+        expect(actual.warmup).to eq(true)
       end
     end
   end

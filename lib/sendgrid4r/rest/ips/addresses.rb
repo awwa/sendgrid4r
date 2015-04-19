@@ -33,7 +33,7 @@ module SendGrid4r
             resp['ip'],
             resp['pools'],
             resp['warmup'],
-            resp['start_date'],
+            resp['start_date'].nil? ? nil : Time.at(resp['start_date']),
             resp['subusers'],
             resp['rdns'],
             resp['pool_name']

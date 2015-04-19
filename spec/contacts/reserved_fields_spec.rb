@@ -137,6 +137,7 @@ describe SendGrid4r::REST::Contacts::ReservedFields do
         '}'
       hash = JSON.parse(json)
       actual = SendGrid4r::REST::Contacts::ReservedFields.create_fields(hash)
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::ReservedFields::Fields)
       expect(actual.reserved_fields).to be_a(Array)
       actual.reserved_fields.each do |field|
         expect(field).to be_a(SendGrid4r::REST::Contacts::ReservedFields::Field)

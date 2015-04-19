@@ -87,6 +87,7 @@ describe SendGrid4r::REST::Categories do
         expect(category).to be_a(
           SendGrid4r::REST::Categories::Categories::Category
         )
+        expect(category.category).to be_a(String)
       end
     end
   end

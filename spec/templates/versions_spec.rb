@@ -178,6 +178,7 @@ describe SendGrid4r::REST::Templates::Versions do
         '}'
       hash = JSON.parse(json)
       actual = SendGrid4r::REST::Templates::Versions.create_version(hash)
+      expect(actual).to be_a(SendGrid4r::REST::Templates::Versions::Version)
       expect(actual.id).to eq('8aefe0ee-f12b-4575-b5b7-c97e21cb36f3')
       expect(actual.template_id).to eq('ddb96bbc-9b92-425e-8979-99464621b543')
       expect(actual.active).to eq(1)

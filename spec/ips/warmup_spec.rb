@@ -110,6 +110,8 @@ describe SendGrid4r::REST::Ips::Warmup do
       expect(actual).to be_a(Array)
       actual.each do |warmup_ip|
         expect(warmup_ip).to be_a(SendGrid4r::REST::Ips::Warmup::WarmupIp)
+        expect(warmup_ip.ip).to eq('0.0.0.0')
+        expect(warmup_ip.start_date).to eq(Time.at(1409616000))
       end
     end
   end

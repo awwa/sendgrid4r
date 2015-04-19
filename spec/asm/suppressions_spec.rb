@@ -159,6 +159,31 @@ describe SendGrid4r::REST::Asm::Suppressions do
       expect(actual).to be_a(
         SendGrid4r::REST::Asm::Suppressions::Suppressions
       )
+      expect(actual.suppressions).to be_a(Array)
+      actual.suppressions.each do |suppression|
+        expect(suppression).to be_a(
+          SendGrid4r::REST::Asm::Suppressions::Suppression
+        )
+      end
+    end
+
+    it 'creates suppression instance' do
+      json =
+        '{'\
+          '"id": 4,'\
+          '"name": "Special Offers",'\
+          '"description": "Special offers and coupons",'\
+          '"suppressed": false'\
+        '}'
+      hash = JSON.parse(json)
+      actual = SendGrid4r::REST::Asm::Suppressions.create_suppression(hash)
+      expect(actual).to be_a(
+        SendGrid4r::REST::Asm::Suppressions::Suppression
+      )
+      expect(actual.id).to eq(4)
+      expect(actual.name).to eq('Special Offers')
+      expect(actual.description).to eq('Special offers and coupons')
+      expect(actual.suppressed).to eq(false)
     end
   end
 end

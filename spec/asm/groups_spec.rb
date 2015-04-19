@@ -16,7 +16,6 @@ describe SendGrid4r::REST::Asm::Groups do
 
         # celan up test env
         grps = @client.get_groups
-        expect(grps.length >= 0).to eq(true)
         grps.each do |grp|
           @client.delete_group(grp.id) if grp.name == @group_name1
           @client.delete_group(grp.id) if grp.name == @group_edit1
@@ -157,6 +156,11 @@ describe SendGrid4r::REST::Asm::Groups do
       expect(actual).to be_a(
         SendGrid4r::REST::Asm::Groups::Group
       )
+      expect(actual.id).to eq(100)
+      expect(actual.name).to eq('Newsletters')
+      expect(actual.description).to eq('Our monthly newsletter.')
+      expect(actual.last_email_sent_at).to eq('2014-09-04 01:34:43')
+      expect(actual.unsubscribes).to eq(400)
     end
   end
 end

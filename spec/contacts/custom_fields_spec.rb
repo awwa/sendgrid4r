@@ -153,6 +153,7 @@ describe SendGrid4r::REST::Contacts::CustomFields do
         '}'
       hash = JSON.parse(json)
       actual = SendGrid4r::REST::Contacts::CustomFields.create_field(hash)
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::CustomFields::Field)
       expect(actual.id).to eq(1)
       expect(actual.name).to eq('pet')
       expect(actual.type).to eq('text')
@@ -181,6 +182,7 @@ describe SendGrid4r::REST::Contacts::CustomFields do
         '}'
       hash = JSON.parse(json)
       actual = SendGrid4r::REST::Contacts::CustomFields.create_fields(hash)
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::CustomFields::Fields)
       expect(actual.custom_fields).to be_a(Array)
       actual.custom_fields.each do |field|
         expect(field).to be_a(SendGrid4r::REST::Contacts::CustomFields::Field)

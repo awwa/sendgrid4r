@@ -25,7 +25,10 @@ module SendGrid4r
 
         def self.create_warmup_ip(resp)
           return resp if resp.nil?
-          WarmupIp.new(resp['ip'], resp['start_date'])
+          WarmupIp.new(
+            resp['ip'],
+            resp['start_date'].nil? ? nil : Time.at(resp['start_date'])
+          )
         end
 
         def self.url(ip_address = nil)

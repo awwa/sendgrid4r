@@ -303,6 +303,7 @@ describe SendGrid4r::REST::Contacts::Lists do
         '}'
       hash = JSON.parse(json)
       actual = SendGrid4r::REST::Contacts::Lists.create_list(hash)
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Lists::List)
       expect(actual.id).to eq(1)
       expect(actual.name).to eq('listname')
       expect(actual.recipient_count).to eq(0)

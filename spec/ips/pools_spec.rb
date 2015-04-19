@@ -150,6 +150,7 @@ describe SendGrid4r::REST::Ips::Pools do
         hash = JSON.parse(json)
         actual = SendGrid4r::REST::Ips::Pools.create_pool(hash)
         expect(actual).to be_a(SendGrid4r::REST::Ips::Pools::Pool)
+        expect(actual.name).to eq('marketing')
       end
 
       it 'creates pool instance with ips' do
@@ -161,6 +162,11 @@ describe SendGrid4r::REST::Ips::Pools do
         hash = JSON.parse(json)
         actual = SendGrid4r::REST::Ips::Pools.create_pool(hash)
         expect(actual).to be_a(SendGrid4r::REST::Ips::Pools::Pool)
+        expect(actual.ips).to be_a(Array)
+        actual.ips.each do |ip|
+          expect(ip).to eq('167.89.21.3')
+        end
+        expect(actual.name).to eq('new_test5')
       end
 
       it 'creates pool instances' do

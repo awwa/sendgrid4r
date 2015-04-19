@@ -204,6 +204,7 @@ describe SendGrid4r::REST::Contacts::Segments do
         '}'
       hash = JSON.parse(json)
       actual = SendGrid4r::REST::Contacts::Segments.create_condition(hash)
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Segments::Condition)
       expect(actual.field).to eq('last_name')
       expect(actual.value).to eq('Miller')
       expect(actual.operator).to eq('eq')
@@ -228,6 +229,7 @@ describe SendGrid4r::REST::Contacts::Segments do
         '}'
       hash = JSON.parse(json)
       actual = SendGrid4r::REST::Contacts::Segments.create_segment(hash)
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Segments::Segment)
       expect(actual.id).to eq(1)
       expect(actual.name).to eq('Last Name Miller')
       expect(actual.list_id).to eq(nil)
@@ -262,6 +264,7 @@ describe SendGrid4r::REST::Contacts::Segments do
         '}'
       hash = JSON.parse(json)
       actual = SendGrid4r::REST::Contacts::Segments.create_segments(hash)
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Segments::Segments)
       expect(actual.segments).to be_a(Array)
       actual.segments.each do |segment|
         expect(segment).to be_a(SendGrid4r::REST::Contacts::Segments::Segment)

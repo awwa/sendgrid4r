@@ -172,6 +172,7 @@ describe SendGrid4r::REST::Templates do
         '}'
       hash = JSON.parse(json)
       actual = SendGrid4r::REST::Templates.create_template(hash)
+      expect(actual).to be_a(SendGrid4r::REST::Templates::Template)
       expect(actual.id).to eq('733ba07f-ead1-41fc-933a-3976baa23716')
       expect(actual.name).to eq('example_name')
       expect(actual.versions).to be_a(Array)
@@ -202,6 +203,7 @@ describe SendGrid4r::REST::Templates do
         '}'
       hash = JSON.parse(json)
       actual = SendGrid4r::REST::Templates.create_templates(hash)
+      expect(actual).to be_a(SendGrid4r::REST::Templates::Templates)
       expect(actual.templates).to be_a(Array)
       actual.templates.each do |template|
         expect(template.id).to eq('e8ac01d5-a07a-4a71-b14c-4721136fe6aa')

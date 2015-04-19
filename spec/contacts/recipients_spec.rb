@@ -381,6 +381,7 @@ describe SendGrid4r::REST::Contacts::Recipients do
         '}'
       hash = JSON.parse(json)
       actual = SendGrid4r::REST::Contacts::Recipients.create_recipient(hash)
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
       expect(actual.created_at).to eq(Time.at(1422313607))
       expect(actual.email).to eq('jones@example.com')
       expect(actual.first_name).to eq(nil)
