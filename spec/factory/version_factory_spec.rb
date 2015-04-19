@@ -2,12 +2,12 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::Factory::VersionFactory do
-  before do
-    Dotenv.load
-    @factory = SendGrid4r::Factory::VersionFactory.new
-  end
+  describe 'unit test' do
+    before do
+      Dotenv.load
+      @factory = SendGrid4r::Factory::VersionFactory.new
+    end
 
-  context 'always' do
     it 'is simple case' do
       version = @factory.create(name: 'version_name')
       expect(version.name).to eq('version_name')

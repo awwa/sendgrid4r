@@ -2,13 +2,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Stats do
-  before do
-    Dotenv.load
-    @client = SendGrid4r::Client.new(
-      ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
-  end
-
-  context 'unit test' do
+  describe 'unit test' do
     it 'creates top_stats instance' do
       json =
         '['\

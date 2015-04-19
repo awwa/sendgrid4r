@@ -2,18 +2,18 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::Factory::ConditionFactory do
-  before do
-    Dotenv.load
-    @factory = SendGrid4r::Factory::ConditionFactory.new
-    @expect = {}
-    @expect[:field] = 'last_name'
-    @expect[:value] = 'Miller'
-    @expect[:operator] = 'eq'
-    @expect[:and_or] = ''
-  end
+  describe 'unit test' do
+    before do
+      Dotenv.load
+      @factory = SendGrid4r::Factory::ConditionFactory.new
+      @expect = {}
+      @expect[:field] = 'last_name'
+      @expect[:value] = 'Miller'
+      @expect[:operator] = 'eq'
+      @expect[:and_or] = ''
+    end
 
-  context 'always' do
-    it 'is full case' do
+    it 'specify all params' do
       condition = @factory.create(
         field: 'last_name',
         value: 'Miller',
