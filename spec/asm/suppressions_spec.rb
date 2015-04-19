@@ -117,7 +117,9 @@ describe SendGrid4r::REST::Asm::Suppressions do
         @client.get_suppressions(@email1) do |resp, req, res|
           resp =
             SendGrid4r::REST::Asm::Suppressions.create_suppressions(resp)
-          expect(resp).to be_a(SendGrid4r::REST::Asm::Suppressions::Suppressions)
+          expect(resp).to be_a(
+            SendGrid4r::REST::Asm::Suppressions::Suppressions
+          )
           expect(req).to be_a(RestClient::Request)
           expect(res).to be_a(Net::HTTPOK)
         end

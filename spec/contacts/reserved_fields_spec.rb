@@ -70,7 +70,9 @@ describe SendGrid4r::REST::Contacts::ReservedFields do
             SendGrid4r::REST::Contacts::ReservedFields.create_fields(
               JSON.parse(resp)
             )
-          expect(resp).to be_a(SendGrid4r::REST::Contacts::ReservedFields::Fields)
+          expect(resp).to be_a(
+            SendGrid4r::REST::Contacts::ReservedFields::Fields
+          )
           expect(req).to be_a(RestClient::Request)
           expect(res).to be_a(Net::HTTPOK)
         end

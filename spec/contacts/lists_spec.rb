@@ -243,7 +243,9 @@ describe SendGrid4r::REST::Contacts::Lists do
             SendGrid4r::REST::Contacts::Recipients.create_recipients(
               JSON.parse(resp)
             )
-          expect(resp).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipients)
+          expect(resp).to be_a(
+            SendGrid4r::REST::Contacts::Recipients::Recipients
+          )
           expect(req).to be_a(RestClient::Request)
           expect(res).to be_a(Net::HTTPOK)
         end
@@ -255,14 +257,18 @@ describe SendGrid4r::REST::Contacts::Lists do
             SendGrid4r::REST::Contacts::Recipients.create_recipients(
               JSON.parse(resp)
             )
-          expect(resp).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipients)
+          expect(resp).to be_a(
+            SendGrid4r::REST::Contacts::Recipients::Recipients
+          )
           expect(req).to be_a(RestClient::Request)
           expect(res).to be_a(Net::HTTPOK)
         end
       end
 
       it '#delete_recipient_from_list' do
-        @client.delete_recipient_from_list(@list1.id, @email1) do |resp, req, res|
+        @client.delete_recipient_from_list(
+          @list1.id, @email1
+        ) do |resp, req, res|
           expect(resp).to eq('')
           expect(req).to be_a(RestClient::Request)
           expect(res).to be_a(Net::HTTPNoContent)

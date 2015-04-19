@@ -218,7 +218,9 @@ describe SendGrid4r::REST::Contacts::Recipients do
             SendGrid4r::REST::Contacts::Recipients.create_recipient(
               JSON.parse(resp)
             )
-          expect(resp).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
+          expect(resp).to be_a(
+            SendGrid4r::REST::Contacts::Recipients::Recipient
+          )
           expect(req).to be_a(RestClient::Request)
           expect(res).to be_a(Net::HTTPCreated)
         end
@@ -243,7 +245,9 @@ describe SendGrid4r::REST::Contacts::Recipients do
             SendGrid4r::REST::Contacts::Recipients.create_recipients(
               JSON.parse(resp)
             )
-          expect(resp).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipients)
+          expect(resp).to be_a(
+            SendGrid4r::REST::Contacts::Recipients::Recipients
+          )
           expect(req).to be_a(RestClient::Request)
           expect(res).to be_a(Net::HTTPOK)
         end
@@ -260,7 +264,9 @@ describe SendGrid4r::REST::Contacts::Recipients do
             SendGrid4r::REST::Contacts::Recipients.create_recipients(
               JSON.parse(resp)
             )
-          expect(resp).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipients)
+          expect(resp).to be_a(
+            SendGrid4r::REST::Contacts::Recipients::Recipients
+          )
           expect(req).to be_a(RestClient::Request)
           expect(res).to be_a(Net::HTTPOK)
         end
@@ -282,7 +288,9 @@ describe SendGrid4r::REST::Contacts::Recipients do
             SendGrid4r::REST::Contacts::Recipients.create_recipients(
               JSON.parse(resp)
             )
-          expect(resp).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipients)
+          expect(resp).to be_a(
+            SendGrid4r::REST::Contacts::Recipients::Recipients
+          )
           expect(req).to be_a(RestClient::Request)
           expect(res).to be_a(Net::HTTPOK)
         end
@@ -299,7 +307,9 @@ describe SendGrid4r::REST::Contacts::Recipients do
             SendGrid4r::REST::Contacts::Recipients.create_recipient(
               JSON.parse(resp)
             )
-          expect(resp).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
+          expect(resp).to be_a(
+            SendGrid4r::REST::Contacts::Recipients::Recipient
+          )
           expect(req).to be_a(RestClient::Request)
           expect(res).to be_a(Net::HTTPOK)
         end

@@ -20,6 +20,6 @@ AbcSize:
 RegexpLiteral:
   MaxSlashes: 0
 
-# # 数値の区切りをなくす
-# NumericLiterals:
-#   MinDigits: 20
+# Change numeric literals
+NumericLiterals:
+  MinDigits: 20

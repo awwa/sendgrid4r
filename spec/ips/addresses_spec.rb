@@ -14,7 +14,9 @@ describe SendGrid4r::REST::Ips::Addresses do
         it 'raise error' do
           begin
             expect do
-              @client.get_ip('10.10.10.10').to raise_error(RestClient::Forbidden)
+              @client.get_ip('10.10.10.10').to raise_error(
+                RestClient::Forbidden
+              )
             end
           rescue => e
             puts e.inspect

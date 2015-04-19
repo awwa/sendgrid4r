@@ -127,7 +127,9 @@ describe SendGrid4r::REST::Templates do
       end
 
       it '#patch_template' do
-        @client.patch_template(@template1.id, @template_edit1) do |resp, req, res|
+        @client.patch_template(
+          @template1.id, @template_edit1
+        ) do |resp, req, res|
           resp =
             SendGrid4r::REST::Templates.create_template(
               JSON.parse(resp)
