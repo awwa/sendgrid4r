@@ -11,7 +11,6 @@ describe SendGrid4r::REST::Stats::Parse do
 
     context 'without block call' do
       it '#get_parse_stats with mandatory params' do
-        pending 'waiting sendgrid documentation update'
         actual = @client.get_parse_stats(start_date: '2015-01-01')
         expect(actual.class).to be(Array)
         expect(actual.length > 0).to be(true)
@@ -29,7 +28,6 @@ describe SendGrid4r::REST::Stats::Parse do
       end
 
       it '#get_parse_stats with all params' do
-        pending 'waiting sendgrid documentation update'
         actual = @client.get_parse_stats(
           start_date: '2015-01-01',
           end_date: '2015-01-02',

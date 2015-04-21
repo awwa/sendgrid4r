@@ -17,7 +17,10 @@ module SendGrid4r
             aggregated_by: aggregated_by
           }
           resp = get(
-            @auth, "#{SendGrid4r::Client::BASE_URL}/parse/stats", params)
+            @auth,
+            "#{SendGrid4r::Client::BASE_URL}/user/webhooks/parse/stats",
+            params
+          )
           SendGrid4r::REST::Stats.create_top_stats(resp)
         end
       end
