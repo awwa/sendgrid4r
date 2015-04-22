@@ -67,6 +67,20 @@ describe SendGrid4r::REST::Contacts::Segments do
         end
       end
 
+      it '#get_segments' do
+        begin
+          segments = @client.get_segments
+          segments.segments.each do |segment|
+            expect(
+              segment
+            ).to be_a(SendGrid4r::REST::Contacts::Segments::Segment)
+          end
+        rescue => e
+          puts e.inspect
+          raise e
+        end
+      end
+
       it '#get_segment' do
         begin
           segment = @client.get_segment(@segment1.id)
@@ -138,6 +152,18 @@ describe SendGrid4r::REST::Contacts::Segments do
           expect(resp).to be_a(SendGrid4r::REST::Contacts::Segments::Segment)
           expect(req).to be_a(RestClient::Request)
           expect(res).to be_a(Net::HTTPCreated)
+        end
+      end
+
+      it '#get_segments' do
+        @client.get_segments do |resp, req, res|
+          resp =
+            SendGrid4r::REST::Contacts::Segments.create_segments(
+              JSON.parse(resp)
+            )
+          expect(resp).to be_a(SendGrid4r::REST::Contacts::Segments::Segments)
+          expect(req).to be_a(RestClient::Request)
+          expect(res).to be_a(Net::HTTPOK)
         end
       end
 

@@ -178,6 +178,29 @@ describe SendGrid4r::REST::Contacts::Lists do
           raise e
         end
       end
+
+      it '#post_recipients_to_list' do
+        begin
+          @client.post_recipients_to_list(@list1.id, @recipients)
+        rescue => e
+          puts e.inspect
+          raise e
+        end
+      end
+
+      it '#post_recipient_to_list' do
+        begin
+          recipient1 = {}
+          recipient1['email'] = @email1
+          recipient1['last_name'] = @last_name1
+          recipient1[@custom_field_name] = @pet1
+          recipient1 = @client.post_recipient(recipient1)
+          @client.post_recipient_to_list(@list1.id, recipient1.id)
+        rescue => e
+          puts e.inspect
+          raise e
+        end
+      end
     end
 
     context 'with block call' do
@@ -288,6 +311,31 @@ describe SendGrid4r::REST::Contacts::Lists do
           expect(resp).to eq('')
           expect(req).to be_a(RestClient::Request)
           expect(res).to be_a(Net::HTTPNoContent)
+        end
+      end
+
+      it '#post_recipients_to_list' do
+        @client.post_recipients_to_list(
+          @list1.id, @recipients
+        ) do |resp, req, res|
+          expect(resp).to eq('')
+          expect(req).to be_a(RestClient::Request)
+          expect(res).to be_a(Net::HTTPCreated)
+        end
+      end
+
+      it '#post_recipient_to_list' do
+        recipient1 = {}
+        recipient1['email'] = @email1
+        recipient1['last_name'] = @last_name1
+        recipient1[@custom_field_name] = @pet1
+        recipient1 = @client.post_recipient(recipient1)
+        @client.post_recipient_to_list(
+          @list1.id, recipient1.id
+        ) do |resp, req, res|
+          expect(resp).to eq('')
+          expect(req).to be_a(RestClient::Request)
+          expect(res).to be_a(Net::HTTPCreated)
         end
       end
     end

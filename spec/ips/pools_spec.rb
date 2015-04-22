@@ -32,7 +32,7 @@ describe SendGrid4r::REST::Ips::Pools do
         it '#post_pool' do
           begin
             new_pool = @client.post_pool(@pool_name2)
-            expect(@pool_name2).to eq(new_pool.name)
+            expect(new_pool.name).to eq(@pool_name2)
           rescue => e
             puts e.inspect
             raise e
@@ -68,7 +68,7 @@ describe SendGrid4r::REST::Ips::Pools do
         it '#put_pool' do
           begin
             edit_pool = @client.put_pool(@pool_name1, @pool_edit1)
-            expect(@pool_edit1).to eq(edit_pool.name)
+            expect(edit_pool.name).to eq(@pool_edit1)
           rescue => e
             puts e.inspect
             raise e
