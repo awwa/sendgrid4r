@@ -18,7 +18,7 @@ describe SendGrid4r::REST::Asm::Groups do
         grps = @client.get_groups
         grps.each do |grp|
           @client.delete_group(grp.id) if grp.name == @group_name1
-          @client.delete_group(grp.id) if grp.name == @group_edit1
+          @client.delete_group(grp.id) if grp.name == @group_name_edit1
           @client.delete_group(grp.id) if grp.name == @group_name2
         end
         # post a group
