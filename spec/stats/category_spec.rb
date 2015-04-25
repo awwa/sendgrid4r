@@ -12,17 +12,15 @@ describe SendGrid4r::REST::Stats::Category do
     context 'without block call' do
       it '#get_categories_stats with mandatory params' do
         begin
-          actual = @client.get_categories_stats(
+          top_stats = @client.get_categories_stats(
             start_date: '2015-01-01',
             categories: 'yui'
           )
-          expect(actual).to be_a(Array)
-          expect(actual.length).to be > 0
-          actual.each do |global_stat|
-            expect(global_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
-            stats = global_stat.stats
-            expect(stats.length).to eq(1)
-            stats.each do |stat|
+          expect(top_stats).to be_a(Array)
+          top_stats.each do |top_stat|
+            expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
+            expect(top_stat.stats.length).to eq(1)
+            top_stat.stats.each do |stat|
               expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
               expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
               expect(stat.metrics.blocks.nil?).to be(false)
@@ -41,6 +39,8 @@ describe SendGrid4r::REST::Stats::Category do
               expect(stat.metrics.unique_opens.nil?).to be(false)
               expect(stat.metrics.unsubscribe_drops.nil?).to be(false)
               expect(stat.metrics.unsubscribes.nil?).to be(false)
+              expect(stat.name).to be_a(String)
+              expect(stat.type).to eq('category')
             end
           end
         rescue => e
@@ -51,19 +51,17 @@ describe SendGrid4r::REST::Stats::Category do
 
       it '#get_category_stats with all params' do
         begin
-          actual = @client.get_categories_stats(
+          top_stats = @client.get_categories_stats(
             start_date: '2015-01-01',
             end_date: '2015-01-02',
             aggregated_by: SendGrid4r::REST::Stats::AggregatedBy::WEEK,
             categories: 'yui'
           )
-          expect(actual).to be_a(Array)
-          expect(actual.length).to be > 0
-          actual.each do |global_stat|
-            expect(global_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
-            stats = global_stat.stats
-            expect(stats.length).to eq(1)
-            stats.each do |stat|
+          expect(top_stats).to be_a(Array)
+          top_stats.each do |top_stat|
+            expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
+            expect(top_stat.stats.length).to eq(1)
+            top_stat.stats.each do |stat|
               expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
               expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
             end
@@ -76,11 +74,11 @@ describe SendGrid4r::REST::Stats::Category do
 
       it '#get_categories_stats_sums with mandatory params' do
         begin
-          actual = @client.get_categories_stats_sums(start_date: '2015-01-01')
-          expect(actual).to be_a(SendGrid4r::REST::Stats::TopStat)
-          stats = actual.stats
-          expect(stats.length).to be > 0
-          stats.each do |stat|
+          top_stat =
+            @client.get_categories_stats_sums(start_date: '2015-01-01')
+          expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
+          expect(top_stat.date).to eq('2015-01-01')
+          top_stat.stats.each do |stat|
             expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
             expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
             expect(stat.metrics.blocks.nil?).to be(false)
@@ -99,6 +97,8 @@ describe SendGrid4r::REST::Stats::Category do
             expect(stat.metrics.unique_opens.nil?).to be(false)
             expect(stat.metrics.unsubscribe_drops.nil?).to be(false)
             expect(stat.metrics.unsubscribes.nil?).to be(false)
+            expect(stat.name).to be_a(String)
+            expect(stat.type).to eq('category')
           end
         rescue => e
           puts e.inspect
@@ -108,7 +108,7 @@ describe SendGrid4r::REST::Stats::Category do
 
       it '#get_categories_stats_sums with all params' do
         begin
-          actual = @client.get_categories_stats_sums(
+          top_stat = @client.get_categories_stats_sums(
             start_date: '2015-01-01',
             end_date: '2015-01-02',
             sort_by_metric: 'opens',
@@ -116,10 +116,9 @@ describe SendGrid4r::REST::Stats::Category do
             limit: 5,
             offset: 0
           )
-          expect(actual).to be_a(SendGrid4r::REST::Stats::TopStat)
-          stats = actual.stats
-          expect(stats.length).to eq(0)
-          stats.each do |stat|
+          expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
+          expect(top_stat.stats.length).to eq(0)
+          top_stat.stats.each do |stat|
             expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
             expect(stat.metrics_a).to be(SendGrid4r::REST::Stats::Metric)
           end

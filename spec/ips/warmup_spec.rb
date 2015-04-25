@@ -52,7 +52,7 @@ describe SendGrid4r::REST::Ips::Warmup do
 
       context 'with block call' do
         it 'warmup_ip spec' do
-          # get warmup ip
+          # get warmup ips
           @client.get_warmup_ips do |resp, req, res|
             resp =
               SendGrid4r::REST::Ips::Warmup.create_warmup_ips(
@@ -76,6 +76,7 @@ describe SendGrid4r::REST::Ips::Warmup do
             expect(req).to be_a(RestClient::Request)
             expect(res).to be_a(Net::HTTPCreated)
           end
+          # get warmup ip
           @client.get_warmup_ip(warmup_ip.ip) do |resp, req, res|
             resp =
               SendGrid4r::REST::Ips::Warmup.create_warmup_ip(

@@ -98,7 +98,8 @@ describe SendGrid4r::REST::Templates::Versions do
 
     context 'with block call' do
       it '#post_version' do
-        @factory.create(name: @version2_name) do |resp, req, res|
+        ver2 = @factory.create(name: @version2_name)
+        @client.post_version(@template.id, ver2) do |resp, req, res|
           resp =
             SendGrid4r::REST::Templates::Versions.create_version(
               JSON.parse(resp)

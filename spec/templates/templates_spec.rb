@@ -32,6 +32,7 @@ describe SendGrid4r::REST::Templates do
       it '#post_template' do
         begin
           new_template = @client.post_template(@template_name2)
+          expect(new_template.id).to be_a(String)
           expect(new_template.name).to eq(@template_name2)
           expect(new_template.versions).to be_a(Array)
         rescue => e
@@ -126,10 +127,8 @@ describe SendGrid4r::REST::Templates do
         end
       end
 
-      it '#patch_template' do
-        @client.patch_template(
-          @template1.id, @template_edit1
-        ) do |resp, req, res|
+      it '#get_template' do
+        @client.get_template(@template1.id) do |resp, req, res|
           resp =
             SendGrid4r::REST::Templates.create_template(
               JSON.parse(resp)
@@ -140,8 +139,10 @@ describe SendGrid4r::REST::Templates do
         end
       end
 
-      it '#get_template' do
-        @client.get_template(@template1.id) do |resp, req, res|
+      it '#patch_template' do
+        @client.patch_template(
+          @template1.id, @template_edit1
+        ) do |resp, req, res|
           resp =
             SendGrid4r::REST::Templates.create_template(
               JSON.parse(resp)

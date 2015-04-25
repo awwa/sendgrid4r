@@ -12,14 +12,11 @@ describe SendGrid4r::REST::Stats::Global do
     context 'without block call' do
       it '#get_global_stats with mandatory params' do
         begin
-          actual = @client.get_global_stats(start_date: '2015-01-01')
-          expect(actual).to be_a(Array)
-          expect(actual.length).to be  > 0
-          actual.each do |global_stat|
-            expect(global_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
-            stats = global_stat.stats
-            expect(stats.length).to eq(1)
-            stats.each do |stat|
+          top_stats = @client.get_global_stats(start_date: '2015-01-01')
+          expect(top_stats).to be_a(Array)
+          top_stats.each do |top_stat|
+            expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
+            top_stat.stats.each do |stat|
               expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
               expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
               expect(stat.metrics.blocks.nil?).to be(false)
@@ -48,17 +45,15 @@ describe SendGrid4r::REST::Stats::Global do
 
       it '#get_global_stats with all params' do
         begin
-          actual = @client.get_global_stats(
+          top_stats = @client.get_global_stats(
             start_date: '2015-01-01',
             end_date: '2015-01-01',
             aggregated_by: SendGrid4r::REST::Stats::AggregatedBy::WEEK
           )
-          expect(actual).to be_a(Array)
-          expect(actual.length).to eq(2)
-          actual.each do |global_stat|
-            expect(global_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
-            stats = global_stat.stats
-            expect(stats.length).to eq(1)
+          expect(top_stats).to be_a(Array)
+          top_stats.each do |top_stat|
+            expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
+            stats = top_stat.stats
             stats.each do |stat|
               expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
               expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)

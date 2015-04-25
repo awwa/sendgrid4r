@@ -21,6 +21,15 @@ module SendGrid4r
           url
         end
 
+        def self.create_groups(resp)
+          return resp if resp.nil?
+          groups = []
+          resp.each do |group|
+            groups.push(SendGrid4r::REST::Asm::Groups.create_group(group))
+          end
+          groups
+        end
+
         def self.create_group(resp)
           return resp if resp.nil?
           Group.new(
@@ -39,12 +48,8 @@ module SendGrid4r
         end
 
         def get_groups(&block)
-          resp_a = get(@auth, SendGrid4r::REST::Asm::Groups.url, &block)
-          groups = []
-          resp_a.each do |resp|
-            groups.push(SendGrid4r::REST::Asm::Groups.create_group(resp))
-          end
-          groups
+          resp = get(@auth, SendGrid4r::REST::Asm::Groups.url, &block)
+          SendGrid4r::REST::Asm::Groups.create_groups(resp)
         end
 
         def get_group(group_id, &block)

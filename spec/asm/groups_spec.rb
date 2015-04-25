@@ -119,6 +119,21 @@ describe SendGrid4r::REST::Asm::Groups do
         end
       end
 
+      it '#get_groups' do
+        @client.get_groups do |resp, req, res|
+          resp =
+            SendGrid4r::REST::Asm::Groups.create_groups(
+              JSON.parse(resp)
+            )
+          expect(resp).to be_a(Array)
+          resp.each do |group|
+            expect(group).to be_a(SendGrid4r::REST::Asm::Groups::Group)
+          end
+          expect(req).to be_a(RestClient::Request)
+          expect(res).to be_a(Net::HTTPOK)
+        end
+      end
+
       it '#get_group' do
         @client.get_group(@group1.id) do |resp, req, res|
           resp =

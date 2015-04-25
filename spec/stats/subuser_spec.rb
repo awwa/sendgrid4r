@@ -13,19 +13,16 @@ describe SendGrid4r::REST::Stats::Subuser do
     context 'without block call' do
       it '#get_subusers_stats with mandatory params' do
         begin
-          actual = @client.get_subusers_stats(
+          top_stats = @client.get_subusers_stats(
             start_date: '2015-01-01',
             subusers: @subuser
           )
-          expect(actual.class).to be(Array)
-          expect(actual.length > 0).to be(true)
-          actual.each do |global_stat|
-            expect(global_stat.class).to be(SendGrid4r::REST::Stats::TopStat)
-            stats = global_stat.stats
-            expect(stats.length).to eq(1)
-            stats.each do |stat|
-              expect(stat.class).to be(SendGrid4r::REST::Stats::Stat)
-              expect(stat.metrics.class).to be(SendGrid4r::REST::Stats::Metric)
+          expect(top_stats).to be_a(Array)
+          top_stats.each do |global_stat|
+            expect(global_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
+            global_stat.stats.each do |stat|
+              expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
+              expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
               expect(stat.metrics.blocks.nil?).to be(false)
               expect(stat.metrics.bounce_drops.nil?).to be(false)
               expect(stat.metrics.bounces.nil?).to be(false)
@@ -52,21 +49,18 @@ describe SendGrid4r::REST::Stats::Subuser do
 
       it '#get_subusers_stats with all params' do
         begin
-          actual = @client.get_subusers_stats(
+          top_stats = @client.get_subusers_stats(
             start_date: '2015-01-01',
             end_date: '2015-01-02',
             aggregated_by: SendGrid4r::REST::Stats::AggregatedBy::WEEK,
             subusers: @subuser
           )
-          expect(actual.class).to be(Array)
-          expect(actual.length > 0).to be(true)
-          actual.each do |global_stat|
-            expect(global_stat.class).to be(SendGrid4r::REST::Stats::TopStat)
-            stats = global_stat.stats
-            expect(stats.length).to eq(1)
-            stats.each do |stat|
-              expect(stat.class).to be(SendGrid4r::REST::Stats::Stat)
-              expect(stat.metrics.class).to be(SendGrid4r::REST::Stats::Metric)
+          expect(top_stats.class).to be(Array)
+          top_stats.each do |global_stat|
+            expect(global_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
+            global_stat.stats.each do |stat|
+              expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
+              expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
             end
           end
         rescue => e
@@ -77,13 +71,11 @@ describe SendGrid4r::REST::Stats::Subuser do
 
       it '#get_subusers_stats_sums with mandatory params' do
         begin
-          actual = @client.get_subusers_stats_sums(start_date: '2015-01-01')
-          expect(actual.class).to be(SendGrid4r::REST::Stats::TopStat)
-          stats = actual.stats
-          expect(stats.length > 1).to eq(true)
-          stats.each do |stat|
-            expect(stat.class).to be(SendGrid4r::REST::Stats::Stat)
-            expect(stat.metrics.class).to be(SendGrid4r::REST::Stats::Metric)
+          top_stat = @client.get_subusers_stats_sums(start_date: '2015-01-01')
+          expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
+          top_stat.stats.each do |stat|
+            expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
+            expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
           end
         rescue => e
           puts e.inspect
@@ -93,7 +85,7 @@ describe SendGrid4r::REST::Stats::Subuser do
 
       it '#get_subusers_stats_sums with all params' do
         begin
-          actual = @client.get_subusers_stats_sums(
+          top_stat = @client.get_subusers_stats_sums(
             start_date: '2015-01-01',
             end_date: '2015-01-02',
             sort_by_metric: 'opens',
@@ -101,12 +93,10 @@ describe SendGrid4r::REST::Stats::Subuser do
             limit: 5,
             offset: 0
           )
-          expect(actual.class).to be(SendGrid4r::REST::Stats::TopStat)
-          stats = actual.stats
-          expect(stats.length).to eq(0)
-          stats.each do |stat|
-            expect(stat.class).to be(SendGrid4r::REST::Stats::Stat)
-            expect(stat.metrics.class).to be(SendGrid4r::REST::Stats::Metric)
+          expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
+          top_stat.stats.each do |stat|
+            expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
+            expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
           end
         rescue => e
           puts e.inspect

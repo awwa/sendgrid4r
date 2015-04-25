@@ -239,6 +239,14 @@ describe SendGrid4r::REST::Contacts::Recipients do
         end
       end
 
+      it '#delete_recipients' do
+        @client.delete_recipients([@email1, @email2]) do |resp, req, res|
+          expect(resp).to eq('')
+          expect(req).to be_a(RestClient::Request)
+          expect(res).to be_a(Net::HTTPNoContent)
+        end
+      end
+
       it '#get_recipients' do
         @client.get_recipients do |resp, req, res|
           resp =
