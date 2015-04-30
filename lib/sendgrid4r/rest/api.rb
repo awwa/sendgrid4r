@@ -23,6 +23,7 @@ require 'sendgrid4r/rest/contacts/lists'
 require 'sendgrid4r/rest/contacts/recipients'
 require 'sendgrid4r/rest/contacts/reserved_fields'
 require 'sendgrid4r/rest/contacts/segments'
+require 'sendgrid4r/rest/api_keys/api_keys'
 
 module SendGrid4r
   module REST
@@ -51,6 +52,7 @@ module SendGrid4r
       include SendGrid4r::REST::Contacts::Recipients
       include SendGrid4r::REST::Contacts::ReservedFields
       include SendGrid4r::REST::Contacts::Segments
+      include SendGrid4r::REST::ApiKeys
     end
   end
 end
