@@ -19,6 +19,11 @@ describe SendGrid4r::Client do
 
     describe 'methods' do
       it 'available' do
+        # Api Keys
+        expect(@client.respond_to?('get_api_keys')).to eq(true)
+        expect(@client.respond_to?('post_api_key')).to eq(true)
+        expect(@client.respond_to?('delete_api_key')).to eq(true)
+        expect(@client.respond_to?('patch_api_key')).to eq(true)
         # Advanced Suppression Manager
         # groups
         expect(@client.respond_to?('get_groups')).to eq(true)
