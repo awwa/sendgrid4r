@@ -7,7 +7,8 @@ describe SendGrid4r::REST::Contacts::Recipients do
       begin
         Dotenv.load
         @client = SendGrid4r::Client.new(
-          ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
+          username: ENV['SENDGRID_USERNAME'],
+          password: ENV['SENDGRID_PASSWORD'])
         @email1 = 'jones@example.com'
         @email2 = 'miller@example.com'
         @last_name1 = 'Jones'

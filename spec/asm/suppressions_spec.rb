@@ -7,7 +7,8 @@ describe SendGrid4r::REST::Asm::Suppressions do
       begin
         Dotenv.load
         @client = SendGrid4r::Client.new(
-          ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
+          username: ENV['SENDGRID_USERNAME'],
+          password: ENV['SENDGRID_PASSWORD'])
         @email1 = 'test1@test.com'
         @email2 = 'test2@test.com'
         @email3 = 'test3@test.com'

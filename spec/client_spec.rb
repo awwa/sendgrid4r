@@ -8,7 +8,9 @@ describe SendGrid4r::Client do
 
   context 'always' do
     before :all do
-      @client = SendGrid4r::Client.new('username', 'password')
+      @client = SendGrid4r::Client.new(
+        username: 'username',
+        password: 'password')
     end
 
     describe '#initialize' do

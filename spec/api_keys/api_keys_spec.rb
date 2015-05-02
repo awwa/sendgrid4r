@@ -6,8 +6,7 @@ describe SendGrid4r::REST::ApiKeys do
     before do
       begin
         Dotenv.load
-        @client = SendGrid4r::Client.new(
-          ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
+        @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
         @name1 = 'api_key_name1'
         @name2 = 'api_key_name2'
         @name1e = 'api_key_name1_edit'

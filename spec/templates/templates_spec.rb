@@ -7,8 +7,8 @@ describe SendGrid4r::REST::Templates do
       begin
         Dotenv.load
         @client = SendGrid4r::Client.new(
-          ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD']
-        )
+          username: ENV['SENDGRID_USERNAME'],
+          password: ENV['SENDGRID_PASSWORD'])
         @template_name1 = 'template_test1'
         @template_name2 = 'template_test2'
         @template_edit1 = 'template_edit1'

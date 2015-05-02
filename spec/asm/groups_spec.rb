@@ -7,7 +7,8 @@ describe SendGrid4r::REST::Asm::Groups do
       begin
         Dotenv.load
         @client = SendGrid4r::Client.new(
-          ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
+          username: ENV['SENDGRID_USERNAME'],
+          password: ENV['SENDGRID_PASSWORD'])
         @group_name1 = 'group_test1'
         @group_name2 = 'group_test2'
         @group_name_edit1 = 'group_edit1'

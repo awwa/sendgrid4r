@@ -7,7 +7,8 @@ describe SendGrid4r::REST::Contacts::CustomFields do
       begin
         Dotenv.load
         @client = SendGrid4r::Client.new(
-          ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
+          username: ENV['SENDGRID_USERNAME'],
+          password: ENV['SENDGRID_PASSWORD'])
         @name1 = 'birthday'
         @type1 = 'text'
         @name2 = 'born_at'

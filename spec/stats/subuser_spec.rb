@@ -6,7 +6,8 @@ describe SendGrid4r::REST::Stats::Subuser do
     before do
       Dotenv.load
       @client = SendGrid4r::Client.new(
-        ENV['SILVER_SENDGRID_USERNAME'], ENV['SILVER_SENDGRID_PASSWORD'])
+        username: ENV['SILVER_SENDGRID_USERNAME'],
+        password: ENV['SILVER_SENDGRID_PASSWORD'])
       @subuser = ENV['SILVER_SUBUSER']
     end
 
