@@ -45,6 +45,8 @@ describe SendGrid4r::REST::ApiKeys do
           expect(api_key2).to be_a(SendGrid4r::REST::ApiKeys::ApiKey)
           expect(api_key2.name).to eq(@name2)
           expect(api_key2.api_key_id).to be_a(String)
+          expect(api_key2.api_key).to be_a(String)
+          expect(api_key2.scope_set_id).to be_a(String)
         rescue => e
           puts e.inspect
           raise e

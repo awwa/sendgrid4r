@@ -12,7 +12,7 @@ module SendGrid4r
       include SendGrid4r::REST::Request
 
       ApiKeys = Struct.new(:result)
-      ApiKey = Struct.new(:name, :api_key_id)
+      ApiKey = Struct.new(:name, :api_key_id, :api_key, :scope_set_id)
 
       def self.url(api_key = nil)
         url = "#{SendGrid4r::Client::BASE_URL}/api_keys"
@@ -31,7 +31,12 @@ module SendGrid4r
 
       def self.create_api_key(resp)
         return resp if resp.nil?
-        ApiKey.new(resp['name'], resp['api_key_id'])
+        ApiKey.new(
+          resp['name'],
+          resp['api_key_id'],
+          resp['api_key'],
+          resp['scope_set_id']
+        )
       end
 
       def get_api_keys(&block)
