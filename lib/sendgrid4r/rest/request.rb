@@ -32,24 +32,34 @@ module SendGrid4r
       end
 
       def execute(method, auth, endpoint, params, payload, &block)
+        args = create_args(method, auth, endpoint, params, payload)
+        if block_given?
+          RestClient::Request.execute(args, &block)
+          return nil
+        end
+        body = RestClient::Request.execute(args)
+        if body.nil? || body.length < 2
+          body
+        else
+          JSON.parse(body)
+        end
+      end
+
+      def create_args(method, auth, endpoint, params, payload)
         args = {}
         args[:method] = method
         args[:url] = process_url_params(endpoint, params)
-        args[:user] = auth.username
-        args[:password] = auth.password
-        args[:headers] = { content_type: :json }
-        args[:payload] = payload.to_json unless payload.nil?
-        if block_given?
-          RestClient::Request.execute(args, &block)
-          nil
+        headers = {}
+        headers[:content_type] = :json
+        if !auth.api_key.nil?
+          headers[:authorization] = "Bearer #{auth.api_key}"
         else
-          body = RestClient::Request.execute(args)
-          if body.nil? || body.length < 2
-            body
-          else
-            JSON.parse(body)
-          end
+          args[:user] = auth.username
+          args[:password] = auth.password
         end
+        args[:headers] = headers
+        args[:payload] = payload.to_json unless payload.nil?
+        args
       end
 
       def process_url_params(endpoint, params)

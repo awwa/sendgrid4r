@@ -6,7 +6,8 @@ describe SendGrid4r::REST::Stats::Advanced do
     before do
       Dotenv.load
       @client = SendGrid4r::Client.new(
-        ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
+        username: ENV['SENDGRID_USERNAME'],
+        password: ENV['SENDGRID_PASSWORD'])
     end
 
     context 'without block call' do

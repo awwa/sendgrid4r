@@ -7,7 +7,8 @@ describe SendGrid4r::REST::Contacts::Lists do
       begin
         Dotenv.load
         @client = SendGrid4r::Client.new(
-          ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
+          username: ENV['SENDGRID_USERNAME'],
+          password: ENV['SENDGRID_PASSWORD'])
         @list_name1 = 'test_list1'
         @edit_name1 = 'test_list1_edit'
         @list_name2 = 'test_list2'

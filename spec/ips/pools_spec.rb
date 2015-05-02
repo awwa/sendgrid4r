@@ -7,7 +7,9 @@ describe SendGrid4r::REST::Ips::Pools do
       begin
         Dotenv.load
         @client = SendGrid4r::Client.new(
-          ENV['SILVER_SENDGRID_USERNAME'], ENV['SILVER_SENDGRID_PASSWORD'])
+          username: ENV['SILVER_SENDGRID_USERNAME'],
+          password: ENV['SILVER_SENDGRID_PASSWORD'])
+
         @pool_name1 = 'pool_test1'
         @pool_name2 = 'pool_test2'
         @pool_edit1 = 'pool_edit1'

@@ -7,7 +7,8 @@ describe SendGrid4r::REST::Contacts::Segments do
       begin
         Dotenv.load
         @client = SendGrid4r::Client.new(
-          ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
+          username: ENV['SENDGRID_USERNAME'],
+          password: ENV['SENDGRID_PASSWORD'])
         @name1 = 'test_segment1'
         @name2 = 'test_segment2'
         @edit_name1 = 'test_segment_edit'

@@ -6,7 +6,8 @@ describe SendGrid4r::REST::Contacts::ReservedFields do
     before do
       Dotenv.load
       @client = SendGrid4r::Client.new(
-        ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
+        username: ENV['SENDGRID_USERNAME'],
+        password: ENV['SENDGRID_PASSWORD'])
       @first_name =
         SendGrid4r::REST::Contacts::ReservedFields::Field.new(
           'first_name', 'text'

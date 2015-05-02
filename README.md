@@ -1,5 +1,7 @@
 # Sendgrid4r
 
+**This gem is BETA yet. The interfaces will be changed often.**
+
 This gem allows you to quickly and easily access to SendGrid Web API v3 for Ruby.
 See [api reference](https://sendgrid.com/docs/API_Reference/Web_API_v3/index.html) for more detail
 

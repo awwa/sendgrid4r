@@ -6,7 +6,8 @@ describe SendGrid4r::REST::Ips::Addresses do
     before do
       Dotenv.load
       @client = SendGrid4r::Client.new(
-        ENV['SENDGRID_USERNAME'], ENV['SENDGRID_PASSWORD'])
+        username: ENV['SENDGRID_USERNAME'],
+        password: ENV['SENDGRID_PASSWORD'])
     end
 
     context 'account is free' do
@@ -32,7 +33,8 @@ describe SendGrid4r::REST::Ips::Addresses do
       before do
         begin
           @client = SendGrid4r::Client.new(
-            ENV['SILVER_SENDGRID_USERNAME'], ENV['SILVER_SENDGRID_PASSWORD'])
+            username: ENV['SILVER_SENDGRID_USERNAME'],
+            password: ENV['SILVER_SENDGRID_PASSWORD'])
           # refresh the pool
           pools = @client.get_pools
           pools.each do |pool|

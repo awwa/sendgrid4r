@@ -16,8 +16,10 @@ module SendGrid4r
 
     BASE_URL = 'https://api.sendgrid.com/v3'
 
-    def initialize(username, password)
-      @auth = Auth.new(username, password)
+    def initialize(
+      username: username, password: password, api_key: api_key = nil
+    )
+      @auth = Auth.new(username: username, password: password, api_key: api_key)
     end
   end
 end
