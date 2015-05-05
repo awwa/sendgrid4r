@@ -9,30 +9,6 @@ See [api reference](https://sendgrid.com/docs/API_Reference/Web_API_v3/index.htm
 
 # [Documentation](https://github.com/awwa/sendgrid4r/wiki)
 
-# Test
-
-## Unit Test
-The Unit test do not access SendGrid API.
-```
-rspec --tag ut
-```
-
-## Integration Test
-You need to copy .env.example file to .env. Then edit the .env file.
-```
-cp .env.example .env
-vi .env
-```
-Integration test access SendGrid API and parse the response.
-```
-rspec --tag it
-```
-
-## All Test
-```
-rspec
-```
-
 # Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/sendgrid4r/fork )
