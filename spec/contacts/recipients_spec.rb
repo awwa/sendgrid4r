@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Contacts::Recipients do
-  describe 'integration test' do
+  describe 'integration test', :it do
     before do
       begin
         Dotenv.load
@@ -366,9 +366,13 @@ describe SendGrid4r::REST::Contacts::Recipients do
     end
   end
 
-  describe 'unit test' do
-    it 'creates recipient instance' do
-      json =
+  describe 'unit test', :ut do
+    let(:client) do
+      SendGrid4r::Client.new(api_key: '')
+    end
+
+    let(:recipient) do
+      JSON.parse(
         '{'\
           '"created_at": 1422313607,'\
           '"email": "jones@example.com",'\
@@ -388,27 +392,11 @@ describe SendGrid4r::REST::Contacts::Recipients do
             '}'\
           ']'\
         '}'
-      hash = JSON.parse(json)
-      actual = SendGrid4r::REST::Contacts::Recipients.create_recipient(hash)
-      expect(actual).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
-      expect(actual.created_at).to eq(Time.at(1422313607))
-      expect(actual.email).to eq('jones@example.com')
-      expect(actual.first_name).to eq(nil)
-      expect(actual.id).to eq('jones@example.com')
-      expect(actual.last_clicked).to eq(nil)
-      expect(actual.last_emailed).to eq(nil)
-      expect(actual.last_name).to eq('Jones')
-      expect(actual.last_opened).to eq(nil)
-      expect(actual.updated_at).to eq(Time.at(1422313790))
-      custom_field = actual.custom_fields[0]
-      expect(custom_field.id).to eq(23)
-      expect(custom_field.name).to eq('pet')
-      expect(custom_field.value).to eq('Fluffy')
-      expect(custom_field.type).to eq('text')
+      )
     end
 
-    it 'creates recipients instance' do
-      json =
+    let(:recipients) do
+      JSON.parse(
         '{'\
           '"recipients": ['\
             '{'\
@@ -432,8 +420,128 @@ describe SendGrid4r::REST::Contacts::Recipients do
             '}'\
           ']'\
         '}'
-      hash = JSON.parse(json)
-      actual = SendGrid4r::REST::Contacts::Recipients.create_recipients(hash)
+      )
+    end
+
+    let(:recipient_count) do
+      JSON.parse(
+        '{'\
+          '"recipient_count": 2'\
+        '}'
+      )
+    end
+
+    let(:lists) do
+      JSON.parse(
+        '{'\
+          '"lists": ['\
+            '{'\
+              '"id": 1,'\
+              '"name": "the jones",'\
+              '"recipient_count": 1'\
+            '}'\
+          ']'\
+        '}'
+      )
+    end
+
+    let(:result) do
+      JSON.parse(
+        '{'\
+          '"error_count": 0,'\
+          '"error_indices": ['\
+          '],'\
+          '"new_count": 2,'\
+          '"persisted_recipients": ['\
+            '"jones@example.com",'\
+            '"miller@example.com"'\
+          '],'\
+          '"updated_count": 0'\
+        '}'
+      )
+    end
+
+    it '#post_recipient' do
+      allow(client).to receive(:execute).and_return(recipient)
+      actual = client.post_recipient({})
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
+    end
+
+    it '#get_recipients' do
+      allow(client).to receive(:execute).and_return(recipients)
+      actual = client.get_recipients(0, 0)
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipients)
+    end
+
+    it '#get_recipient_count' do
+      allow(client).to receive(:execute).and_return(recipient_count)
+      actual = client.get_recipients_count
+      expect(actual).to be_a(Fixnum)
+    end
+
+    it '#search_recipients' do
+      allow(client).to receive(:execute).and_return(recipients)
+      actual = client.search_recipients({})
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipients)
+    end
+
+    it '#get_recipient' do
+      allow(client).to receive(:execute).and_return(recipient)
+      actual = client.get_recipient(0)
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
+    end
+
+    it '#get_lists_recipient_belong' do
+      allow(client).to receive(:execute).and_return(lists)
+      actual = client.get_lists_recipient_belong(0)
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Lists::Lists)
+    end
+
+    it '#post_recipients' do
+      allow(client).to receive(:execute).and_return(result)
+      actual = client.post_recipients([{}, {}])
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Recipients::ResultAddMultiple)
+    end
+
+    it '#get_recipients_by_id' do
+      allow(client).to receive(:execute).and_return(recipients)
+      actual = client.get_recipients_by_id(['', ''])
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipients)
+    end
+
+    it '#delete_recipient' do
+      allow(client).to receive(:execute).and_return('')
+      actual = client.delete_recipient(0)
+      expect(actual).to eq('')
+    end
+
+    it '#delete_recipients' do
+      allow(client).to receive(:execute).and_return('')
+      actual = client.delete_recipients(['', ''])
+      expect(actual).to eq('')
+    end
+
+    it 'creates recipient instance' do
+      actual = SendGrid4r::REST::Contacts::Recipients.create_recipient(recipient)
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
+      expect(actual.created_at).to eq(Time.at(1422313607))
+      expect(actual.email).to eq('jones@example.com')
+      expect(actual.first_name).to eq(nil)
+      expect(actual.id).to eq('jones@example.com')
+      expect(actual.last_clicked).to eq(nil)
+      expect(actual.last_emailed).to eq(nil)
+      expect(actual.last_name).to eq('Jones')
+      expect(actual.last_opened).to eq(nil)
+      expect(actual.updated_at).to eq(Time.at(1422313790))
+      custom_field = actual.custom_fields[0]
+      expect(custom_field.id).to eq(23)
+      expect(custom_field.name).to eq('pet')
+      expect(custom_field.value).to eq('Fluffy')
+      expect(custom_field.type).to eq('text')
+    end
+
+    it 'creates recipients instance' do
+      actual = SendGrid4r::REST::Contacts::Recipients.create_recipients(recipients)
       expect(actual.recipients).to be_a(Array)
       actual.recipients.each do |recipient|
         expect(

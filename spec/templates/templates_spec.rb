@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Templates do
-  describe 'integration test' do
+  describe 'integration test', :it do
     before do
       begin
         Dotenv.load
@@ -163,24 +163,23 @@ describe SendGrid4r::REST::Templates do
     end
   end
 
-  describe 'unit test' do
-    it 'creates template instance' do
-      json =
+  describe 'unit test', :ut do
+    let(:client) do
+      SendGrid4r::Client.new(api_key: '')
+    end
+
+    let(:template) do
+      JSON.parse(
         '{'\
           '"id": "733ba07f-ead1-41fc-933a-3976baa23716",'\
           '"name": "example_name",'\
           '"versions": []'\
         '}'
-      hash = JSON.parse(json)
-      actual = SendGrid4r::REST::Templates.create_template(hash)
-      expect(actual).to be_a(SendGrid4r::REST::Templates::Template)
-      expect(actual.id).to eq('733ba07f-ead1-41fc-933a-3976baa23716')
-      expect(actual.name).to eq('example_name')
-      expect(actual.versions).to be_a(Array)
+      )
     end
 
-    it 'creates templates instance' do
-      json =
+    let(:templates) do
+      JSON.parse(
         '{'\
           '"templates": ['\
             '{'\
@@ -202,8 +201,49 @@ describe SendGrid4r::REST::Templates do
             '}'\
           ']'\
         '}'
-      hash = JSON.parse(json)
-      actual = SendGrid4r::REST::Templates.create_templates(hash)
+      )
+    end
+
+    it '#post_template' do
+      allow(client).to receive(:execute).and_return(template)
+      actual = client.post_template('')
+      expect(actual).to be_a(SendGrid4r::REST::Templates::Template)
+    end
+
+    it '#get_templates' do
+      allow(client).to receive(:execute).and_return(templates)
+      actual = client.get_templates
+      expect(actual).to be_a(SendGrid4r::REST::Templates::Templates)
+    end
+
+    it '#patch_template' do
+      allow(client).to receive(:execute).and_return(template)
+      actual = client.patch_template('', '')
+      expect(actual).to be_a(SendGrid4r::REST::Templates::Template)
+    end
+
+    it '#get_template' do
+      allow(client).to receive(:execute).and_return(template)
+      actual = client.get_template('')
+      expect(actual).to be_a(SendGrid4r::REST::Templates::Template)
+    end
+
+    it '#delete_template' do
+      allow(client).to receive(:execute).and_return('')
+      actual = client.delete_template('')
+      expect(actual).to eq('')
+    end
+
+    it 'creates template instance' do
+      actual = SendGrid4r::REST::Templates.create_template(template)
+      expect(actual).to be_a(SendGrid4r::REST::Templates::Template)
+      expect(actual.id).to eq('733ba07f-ead1-41fc-933a-3976baa23716')
+      expect(actual.name).to eq('example_name')
+      expect(actual.versions).to be_a(Array)
+    end
+
+    it 'creates templates instance' do
+      actual = SendGrid4r::REST::Templates.create_templates(templates)
       expect(actual).to be_a(SendGrid4r::REST::Templates::Templates)
       expect(actual.templates).to be_a(Array)
       actual.templates.each do |template|

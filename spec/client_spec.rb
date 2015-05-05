@@ -6,8 +6,8 @@ describe SendGrid4r::Client do
     Dotenv.load
   end
 
-  context 'always' do
-    before :all do
+  describe 'unit test', :ut do
+    before do
       @client = SendGrid4r::Client.new(
         username: 'username',
         password: 'password')

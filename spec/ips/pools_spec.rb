@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Ips::Pools do
-  describe 'integration test' do
+  describe 'integration test', :it do
     before do
       begin
         Dotenv.load
@@ -145,54 +145,89 @@ describe SendGrid4r::REST::Ips::Pools do
         end
       end
     end
+  end
 
-    describe 'unit test' do
-      it 'creates pool instance' do
-        json = '{"name":"marketing"}'
-        hash = JSON.parse(json)
-        actual = SendGrid4r::REST::Ips::Pools.create_pool(hash)
-        expect(actual).to be_a(SendGrid4r::REST::Ips::Pools::Pool)
-        expect(actual.name).to eq('marketing')
-      end
+  describe 'unit test', :ut do
+    let(:client) do
+      SendGrid4r::Client.new(api_key: '')
+    end
 
-      it 'creates pool instance with ips' do
-        json =
+    let(:pool) do
+      JSON.parse(
+        '{'\
+          '"ips":["167.89.21.3"],'\
+          '"name":"new_test5"'\
+        '}'
+      )
+    end
+
+    let(:pools) do
+      JSON.parse(
+        '['\
           '{'\
-            '"ips":["167.89.21.3"],'\
-            '"name":"new_test5"'\
-          '}'
-        hash = JSON.parse(json)
-        actual = SendGrid4r::REST::Ips::Pools.create_pool(hash)
-        expect(actual).to be_a(SendGrid4r::REST::Ips::Pools::Pool)
-        expect(actual.ips).to be_a(Array)
-        actual.ips.each do |ip|
-          expect(ip).to eq('167.89.21.3')
-        end
-        expect(actual.name).to eq('new_test5')
-      end
+            '"name": "test1"'\
+          '},'\
+          '{'\
+            '"name": "test2"'\
+          '},'\
+          '{'\
+            '"name": "test3"'\
+          '},'\
+          '{'\
+            '"name": "new_test3"'\
+          '}'\
+        ']'
+      )
+    end
 
-      it 'creates pool instances' do
-        json =
-          '['\
-            '{'\
-              '"name": "test1"'\
-            '},'\
-            '{'\
-              '"name": "test2"'\
-            '},'\
-            '{'\
-              '"name": "test3"'\
-            '},'\
-            '{'\
-              '"name": "new_test3"'\
-            '}'\
-          ']'
-        hash = JSON.parse(json)
-        actual = SendGrid4r::REST::Ips::Pools.create_pools(hash)
-        expect(actual).to be_a(Array)
-        actual.each do |pool|
-          expect(pool).to be_a(SendGrid4r::REST::Ips::Pools::Pool)
-        end
+    it '#post_pool' do
+      allow(client).to receive(:execute).and_return(pool)
+      actual = client.post_pool('')
+      expect(actual).to be_a(SendGrid4r::REST::Ips::Pools::Pool)
+    end
+
+    it '#get_pools' do
+      allow(client).to receive(:execute).and_return(pools)
+      actual = client.get_pools
+      expect(actual).to be_a(Array)
+      actual.each do |pool|
+        expect(pool).to be_a(SendGrid4r::REST::Ips::Pools::Pool)
+      end
+    end
+
+    it '#get_pool' do
+      allow(client).to receive(:execute).and_return(pool)
+      actual = client.get_pool('')
+      expect(actual).to be_a(SendGrid4r::REST::Ips::Pools::Pool)
+    end
+
+    it '#put_pool' do
+      allow(client).to receive(:execute).and_return(pool)
+      actual = client.put_pool('', '')
+      expect(actual).to be_a(SendGrid4r::REST::Ips::Pools::Pool)
+    end
+
+    it '#delete_pool' do
+      allow(client).to receive(:execute).and_return('')
+      actual = client.delete_pool('')
+      expect(actual).to eq('')
+    end
+
+    it 'creates pool instance with ips' do
+      actual = SendGrid4r::REST::Ips::Pools.create_pool(pool)
+      expect(actual).to be_a(SendGrid4r::REST::Ips::Pools::Pool)
+      expect(actual.ips).to be_a(Array)
+      actual.ips.each do |ip|
+        expect(ip).to eq('167.89.21.3')
+      end
+      expect(actual.name).to eq('new_test5')
+    end
+
+    it 'creates pools instances' do
+      actual = SendGrid4r::REST::Ips::Pools.create_pools(pools)
+      expect(actual).to be_a(Array)
+      actual.each do |pool|
+        expect(pool).to be_a(SendGrid4r::REST::Ips::Pools::Pool)
       end
     end
   end

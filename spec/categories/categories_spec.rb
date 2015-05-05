@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Categories do
-  describe 'integration test' do
+  describe 'integration test', :it do
     before do
       Dotenv.load
       @client = SendGrid4r::Client.new(
@@ -71,9 +71,13 @@ describe SendGrid4r::REST::Categories do
     end
   end
 
-  describe 'unit test' do
-    it 'creates categories instance' do
-      json =
+  describe 'unit test', :ut do
+    let(:client) do
+      SendGrid4r::Client.new(api_key: '')
+    end
+
+    let(:categories) do
+      JSON.parse(
         '['\
           '{"category": "cat1"},'\
           '{"category": "cat2"},'\
@@ -81,8 +85,22 @@ describe SendGrid4r::REST::Categories do
           '{"category": "cat4"},'\
           '{"category": "cat5"}'\
         ']'
-      hash = JSON.parse(json)
-      actual = SendGrid4r::REST::Categories::Categories.create_categories(hash)
+      )
+    end
+
+    it '#get_categories' do
+      allow(client).to receive(:execute).and_return(categories)
+      actual = client.get_categories
+      expect(actual).to be_a(Array)
+      actual.each do |category|
+        expect(category).to be_a(
+          SendGrid4r::REST::Categories::Categories::Category
+        )
+      end
+    end
+
+    it 'creates categories instance' do
+      actual = SendGrid4r::REST::Categories::Categories.create_categories(categories)
       expect(actual).to be_a(Array)
       actual.each do |category|
         expect(category).to be_a(

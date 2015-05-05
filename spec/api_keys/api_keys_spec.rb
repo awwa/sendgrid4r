@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::ApiKeys do
-  describe 'integration test' do
+  describe 'integration test', :it do
     before do
       begin
         Dotenv.load
@@ -115,22 +115,13 @@ describe SendGrid4r::REST::ApiKeys do
     end
   end
 
-  describe 'unit test' do
-    it 'creates api_key instance' do
-      json =
-        '{'\
-          '"api_key_id": "qfTQ6KG0QBiwWdJ0-pCLCA",'\
-          '"name": "A New Hope"'\
-        '}'
-      hash = JSON.parse(json)
-      actual = SendGrid4r::REST::ApiKeys.create_api_key(hash)
-      expect(actual).to be_a(SendGrid4r::REST::ApiKeys::ApiKey)
-      expect(actual.api_key_id).to eq('qfTQ6KG0QBiwWdJ0-pCLCA')
-      expect(actual.name).to eq('A New Hope')
+  describe 'unit test', :ut do
+    let(:client) do
+      SendGrid4r::Client.new(api_key: '')
     end
 
-    it 'creates api_keys instance' do
-      json =
+    let(:api_keys) do
+      JSON.parse(
         '{'\
           '"result": ['\
             '{'\
@@ -139,8 +130,51 @@ describe SendGrid4r::REST::ApiKeys do
             '}'\
           ']'\
         '}'
-      hash = JSON.parse(json)
-      actual = SendGrid4r::REST::ApiKeys.create_api_keys(hash)
+      )
+    end
+
+    let(:api_key) do
+      JSON.parse(
+        '{'\
+          '"api_key_id": "qfTQ6KG0QBiwWdJ0-pCLCA",'\
+          '"name": "A New Hope"'\
+        '}'
+      )
+    end
+
+    it '#get_api_keys' do
+      allow(client).to receive(:execute).and_return(api_keys)
+      actual = client.get_api_keys
+      expect(actual).to be_a(SendGrid4r::REST::ApiKeys::ApiKeys)
+    end
+
+    it '#post_api_key' do
+      allow(client).to receive(:execute).and_return(api_key)
+      actual = client.post_api_key('')
+      expect(actual).to be_a(SendGrid4r::REST::ApiKeys::ApiKey)
+    end
+
+    it '#delete_api_key' do
+      allow(client).to receive(:execute).and_return('')
+      actual = client.delete_api_key('')
+      expect(actual).to eq('')
+    end
+
+    it '#patch_api_key' do
+      allow(client).to receive(:execute).and_return(api_key)
+      actual = client.patch_api_key('', '')
+      expect(actual).to be_a(SendGrid4r::REST::ApiKeys::ApiKey)
+    end
+
+    it 'creates api_key instance' do
+      actual = SendGrid4r::REST::ApiKeys.create_api_key(api_key)
+      expect(actual).to be_a(SendGrid4r::REST::ApiKeys::ApiKey)
+      expect(actual.api_key_id).to eq('qfTQ6KG0QBiwWdJ0-pCLCA')
+      expect(actual.name).to eq('A New Hope')
+    end
+
+    it 'creates api_keys instance' do
+      actual = SendGrid4r::REST::ApiKeys.create_api_keys(api_keys)
       expect(actual).to be_a(SendGrid4r::REST::ApiKeys::ApiKeys)
       expect(actual.result).to be_a(Array)
       actual.result.each do |api_key|

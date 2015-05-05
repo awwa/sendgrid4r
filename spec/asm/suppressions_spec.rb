@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Asm::Suppressions do
-  describe 'integration test' do
+  describe 'integration test', :it do
     before do
       begin
         Dotenv.load
@@ -136,9 +136,49 @@ describe SendGrid4r::REST::Asm::Suppressions do
     end
   end
 
-  describe 'unit test' do
-    it 'creates suppressions instance' do
-      json =
+  describe 'unit test', :ut do
+    let(:client) do
+      SendGrid4r::Client.new(api_key: '')
+    end
+
+    let(:recipient_emails) do
+      JSON.parse(
+        '{'\
+          '"recipient_emails": ['\
+            '"test1@example.com",'\
+            '"test2@example.com"'\
+          ']'\
+        '}'
+      )
+    end
+
+    let(:recipient_email) do
+      JSON.parse(
+        '{'\
+          '"recipient_email": "test1@example.com"'\
+        '}'
+      )
+    end
+
+    let(:emails) do
+      JSON.parse(
+        '["test1@example.com","test2@example.com"]'
+      )
+    end
+
+    let(:suppression) do
+      JSON.parse(
+        '{'\
+          '"id": 4,'\
+          '"name": "Special Offers",'\
+          '"description": "Special offers and coupons",'\
+          '"suppressed": false'\
+        '}'
+      )
+    end
+
+    let(:suppressions) do
+      JSON.parse(
         '{'\
           '"suppressions": ['\
             '{'\
@@ -155,8 +195,55 @@ describe SendGrid4r::REST::Asm::Suppressions do
             '}'\
           ']'\
         '}'
-      hash = JSON.parse(json)
-      actual = SendGrid4r::REST::Asm::Suppressions.create_suppressions(hash)
+      )
+    end
+
+    it '#post_suppressed_emails' do
+      allow(client).to receive(:execute).and_return(recipient_emails)
+      actual = client.post_suppressed_emails(0, ['', ''])
+      expect(actual).to be_a(SendGrid4r::REST::Asm::RecipientEmails)
+    end
+
+    it '#get_suppressed_emails' do
+      allow(client).to receive(:execute).and_return(emails)
+      actual = client.get_suppressed_emails(0)
+      expect(actual).to be_a(Array)
+    end
+
+    it '#get_suppressions' do
+      allow(client).to receive(:execute).and_return(suppressions)
+      actual = client.get_suppressions('')
+      expect(actual.suppressions).to be_a(Array)
+      actual.suppressions.each do |suppression|
+        expect(suppression).to be_a(
+          SendGrid4r::REST::Asm::Suppressions::Suppression
+        )
+      end
+    end
+
+    it '#delete_suppressed_email' do
+      allow(client).to receive(:execute).and_return('')
+      actual = client.delete_suppressed_email(0, '')
+      expect(actual).to eq('')
+    end
+
+    it 'creates suppression instance' do
+      actual = SendGrid4r::REST::Asm::Suppressions.create_suppression(
+        suppression
+      )
+      expect(actual).to be_a(
+        SendGrid4r::REST::Asm::Suppressions::Suppression
+      )
+      expect(actual.id).to eq(4)
+      expect(actual.name).to eq('Special Offers')
+      expect(actual.description).to eq('Special offers and coupons')
+      expect(actual.suppressed).to eq(false)
+    end
+
+    it 'creates suppressions instance' do
+      actual = SendGrid4r::REST::Asm::Suppressions.create_suppressions(
+        suppressions
+      )
       expect(actual).to be_a(
         SendGrid4r::REST::Asm::Suppressions::Suppressions
       )
@@ -166,25 +253,6 @@ describe SendGrid4r::REST::Asm::Suppressions do
           SendGrid4r::REST::Asm::Suppressions::Suppression
         )
       end
-    end
-
-    it 'creates suppression instance' do
-      json =
-        '{'\
-          '"id": 4,'\
-          '"name": "Special Offers",'\
-          '"description": "Special offers and coupons",'\
-          '"suppressed": false'\
-        '}'
-      hash = JSON.parse(json)
-      actual = SendGrid4r::REST::Asm::Suppressions.create_suppression(hash)
-      expect(actual).to be_a(
-        SendGrid4r::REST::Asm::Suppressions::Suppression
-      )
-      expect(actual.id).to eq(4)
-      expect(actual.name).to eq('Special Offers')
-      expect(actual.description).to eq('Special offers and coupons')
-      expect(actual.suppressed).to eq(false)
     end
   end
 end

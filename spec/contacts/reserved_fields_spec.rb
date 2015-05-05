@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Contacts::ReservedFields do
-  describe 'integration test' do
+  describe 'integration test', :it do
     before do
       Dotenv.load
       @client = SendGrid4r::Client.new(
@@ -81,21 +81,22 @@ describe SendGrid4r::REST::Contacts::ReservedFields do
     end
   end
 
-  describe 'unit test' do
-    it 'creates field instance' do
-      json =
+  describe 'unit test', :ut do
+    let(:client) do
+      SendGrid4r::Client.new(api_key: '')
+    end
+
+    let(:field) do
+      JSON.parse(
         '{'\
           '"name": "first_name",'\
           '"type": "text"'\
         '}'
-      hash = JSON.parse(json)
-      actual = SendGrid4r::REST::Contacts::CustomFields.create_field(hash)
-      expect(actual.name).to eq('first_name')
-      expect(actual.type).to eq('text')
+      )
     end
 
-    it 'creates fields instance' do
-      json =
+    let(:fields) do
+      JSON.parse(
         '{'\
           '"reserved_fields": ['\
             '{'\
@@ -136,8 +137,23 @@ describe SendGrid4r::REST::Contacts::ReservedFields do
             '}'\
           ']'\
         '}'
-      hash = JSON.parse(json)
-      actual = SendGrid4r::REST::Contacts::ReservedFields.create_fields(hash)
+      )
+    end
+
+    it '#get_reserved_fields' do
+      allow(client).to receive(:execute).and_return(fields)
+      actual = client.get_reserved_fields
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::ReservedFields::Fields)
+    end
+
+    it 'creates field instance' do
+      actual = SendGrid4r::REST::Contacts::CustomFields.create_field(field)
+      expect(actual.name).to eq('first_name')
+      expect(actual.type).to eq('text')
+    end
+
+    it 'creates fields instance' do
+      actual = SendGrid4r::REST::Contacts::ReservedFields.create_fields(fields)
       expect(actual).to be_a(SendGrid4r::REST::Contacts::ReservedFields::Fields)
       expect(actual.reserved_fields).to be_a(Array)
       actual.reserved_fields.each do |field|

@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Contacts::CustomFields do
-  describe 'integration test' do
+  describe 'integration test', :it do
     before do
       begin
         Dotenv.load
@@ -144,24 +144,23 @@ describe SendGrid4r::REST::Contacts::CustomFields do
     end
   end
 
-  describe 'unit test' do
-    it 'creates field instance' do
-      json =
+  describe 'unit test', :ut do
+    let(:client) do
+      SendGrid4r::Client.new(api_key: '')
+    end
+
+    let(:field) do
+      JSON.parse(
         '{'\
           '"id": 1,'\
           '"name": "pet",'\
           '"type": "text"'\
         '}'
-      hash = JSON.parse(json)
-      actual = SendGrid4r::REST::Contacts::CustomFields.create_field(hash)
-      expect(actual).to be_a(SendGrid4r::REST::Contacts::CustomFields::Field)
-      expect(actual.id).to eq(1)
-      expect(actual.name).to eq('pet')
-      expect(actual.type).to eq('text')
+      )
     end
 
-    it 'creates fields instance' do
-      json =
+    let(:fields) do
+      JSON.parse(
         '{'\
           '"custom_fields": ['\
             '{'\
@@ -181,8 +180,43 @@ describe SendGrid4r::REST::Contacts::CustomFields do
             '}'\
           ']'\
         '}'
-      hash = JSON.parse(json)
-      actual = SendGrid4r::REST::Contacts::CustomFields.create_fields(hash)
+      )
+    end
+
+    it '#post_custom_field' do
+      allow(client).to receive(:execute).and_return(field)
+      actual = client.post_custom_field('', '')
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::CustomFields::Field)
+    end
+
+    it '#get_custom_fields' do
+      allow(client).to receive(:execute).and_return(fields)
+      actual = client.get_custom_fields
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::CustomFields::Fields)
+    end
+
+    it '#get_custom_field' do
+      allow(client).to receive(:execute).and_return(field)
+      actual = client.get_custom_field(0)
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::CustomFields::Field)
+    end
+
+    it '#delete_custom_field' do
+      allow(client).to receive(:execute).and_return('')
+      actual = client.delete_custom_field(0)
+      expect(actual).to eq('')
+    end
+
+    it 'creates field instance' do
+      actual = SendGrid4r::REST::Contacts::CustomFields.create_field(field)
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::CustomFields::Field)
+      expect(actual.id).to eq(1)
+      expect(actual.name).to eq('pet')
+      expect(actual.type).to eq('text')
+    end
+
+    it 'creates fields instance' do
+      actual = SendGrid4r::REST::Contacts::CustomFields.create_fields(fields)
       expect(actual).to be_a(SendGrid4r::REST::Contacts::CustomFields::Fields)
       expect(actual.custom_fields).to be_a(Array)
       actual.custom_fields.each do |field|
