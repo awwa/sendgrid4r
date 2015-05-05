@@ -500,7 +500,9 @@ describe SendGrid4r::REST::Contacts::Recipients do
     it '#post_recipients' do
       allow(client).to receive(:execute).and_return(result)
       actual = client.post_recipients([{}, {}])
-      expect(actual).to be_a(SendGrid4r::REST::Contacts::Recipients::ResultAddMultiple)
+      expect(actual).to be_a(
+        SendGrid4r::REST::Contacts::Recipients::ResultAddMultiple
+      )
     end
 
     it '#get_recipients_by_id' do
@@ -522,7 +524,9 @@ describe SendGrid4r::REST::Contacts::Recipients do
     end
 
     it 'creates recipient instance' do
-      actual = SendGrid4r::REST::Contacts::Recipients.create_recipient(recipient)
+      actual = SendGrid4r::REST::Contacts::Recipients.create_recipient(
+        recipient
+      )
       expect(actual).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
       expect(actual.created_at).to eq(Time.at(1422313607))
       expect(actual.email).to eq('jones@example.com')
@@ -541,7 +545,9 @@ describe SendGrid4r::REST::Contacts::Recipients do
     end
 
     it 'creates recipients instance' do
-      actual = SendGrid4r::REST::Contacts::Recipients.create_recipients(recipients)
+      actual = SendGrid4r::REST::Contacts::Recipients.create_recipients(
+        recipients
+      )
       expect(actual.recipients).to be_a(Array)
       actual.recipients.each do |recipient|
         expect(

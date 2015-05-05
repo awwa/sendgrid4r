@@ -107,7 +107,9 @@ describe SendGrid4r::REST::Settings::EnforcedTls do
     end
 
     it 'creates enforced_tls instance' do
-      actual = SendGrid4r::REST::Settings::EnforcedTls.create_enforced_tls(enforced_tls)
+      actual = SendGrid4r::REST::Settings::EnforcedTls.create_enforced_tls(
+        enforced_tls
+      )
       expect(actual.require_tls).to eq(true)
       expect(actual.require_valid_cert).to eq(false)
     end

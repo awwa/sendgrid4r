@@ -100,7 +100,9 @@ describe SendGrid4r::REST::Categories do
     end
 
     it 'creates categories instance' do
-      actual = SendGrid4r::REST::Categories::Categories.create_categories(categories)
+      actual = SendGrid4r::REST::Categories::Categories.create_categories(
+        categories
+      )
       expect(actual).to be_a(Array)
       actual.each do |category|
         expect(category).to be_a(
