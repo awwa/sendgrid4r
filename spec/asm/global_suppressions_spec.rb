@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Asm::GlobalSuppressions do
-  describe 'integration test' do
+  describe 'integration test', :it do
     before do
       begin
         Dotenv.load
@@ -113,6 +113,49 @@ describe SendGrid4r::REST::Asm::GlobalSuppressions do
           expect(res).to be_a(Net::HTTPNoContent)
         end
       end
+    end
+  end
+
+  describe 'unit test', :ut do
+    let(:client) do
+      SendGrid4r::Client.new(api_key: '')
+    end
+
+    let(:recipient_emails) do
+      JSON.parse(
+        '{'\
+          '"recipient_emails": ['\
+            '"test1@example.com",'\
+            '"test2@example.com"'\
+          ']'\
+        '}'
+      )
+    end
+
+    let(:recipient_email) do
+      JSON.parse(
+        '{'\
+          '"recipient_email": "test1@example.com"'\
+        '}'
+      )
+    end
+
+    it '#post_global_suppressed_emails' do
+      allow(client).to receive(:execute).and_return(recipient_emails)
+      emails = client.post_global_suppressed_emails([])
+      expect(emails).to be_a(SendGrid4r::REST::Asm::RecipientEmails)
+    end
+
+    it '#get_global_suppressed_email' do
+      allow(client).to receive(:execute).and_return(recipient_email)
+      actual = client.get_global_suppressed_email('')
+      expect(actual).to be_a(SendGrid4r::REST::Asm::RecipientEmail)
+    end
+
+    it '#delete_global_suppressed_email' do
+      allow(client).to receive(:execute).and_return('')
+      actual = client.delete_global_suppressed_email('')
+      expect(actual).to eq('')
     end
   end
 end

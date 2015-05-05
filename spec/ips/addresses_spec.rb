@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Ips::Addresses do
-  describe 'integration test' do
+  describe 'integration test', :it do
     before do
       Dotenv.load
       @client = SendGrid4r::Client.new(
@@ -159,9 +159,26 @@ describe SendGrid4r::REST::Ips::Addresses do
       end
     end
 
-    describe 'unit test' do
-      it 'creates addresses instance' do
-        json =
+    describe 'unit test', :ut do
+      let(:client) do
+        SendGrid4r::Client.new(api_key: '')
+      end
+
+      let(:address) do
+        JSON.parse(
+          '{'\
+            '"ip": "000.00.00.0",'\
+            '"pools": ['\
+              '"test1"'\
+            '],'\
+            '"start_date": 1409616000,'\
+            '"warmup": true'\
+          '}'
+        )
+      end
+
+      let(:addresses) do
+        JSON.parse(
           '['\
             '{'\
               '"ip":"000.00.00.0",'\
@@ -173,8 +190,41 @@ describe SendGrid4r::REST::Ips::Addresses do
               '"pools": ["pool1", "pool2"]'\
             '}'\
           ']'
-        hash = JSON.parse(json)
-        actual = SendGrid4r::REST::Ips::Addresses.create_addresses(hash)
+        )
+      end
+
+      it '#get_ips' do
+        allow(client).to receive(:execute).and_return(addresses)
+        actual = client.get_ips
+        expect(actual).to be_a(Array)
+        actual.each do |address|
+          expect(address).to be_a(SendGrid4r::REST::Ips::Addresses::Address)
+        end
+      end
+
+      it '#get_ips_assigned' do
+        allow(client).to receive(:execute).and_return(addresses)
+        actual = client.get_ips_assigned
+        expect(actual).to be_a(Array)
+        actual.each do |address|
+          expect(address).to be_a(SendGrid4r::REST::Ips::Addresses::Address)
+        end
+      end
+
+      it '#get_ip' do
+        allow(client).to receive(:execute).and_return(address)
+        actual = client.get_ip('')
+        expect(actual).to be_a(SendGrid4r::REST::Ips::Addresses::Address)
+      end
+
+      it '#post_ip_to_pool' do
+        allow(client).to receive(:execute).and_return(address)
+        actual = client.post_ip_to_pool('', '')
+        expect(actual).to be_a(SendGrid4r::REST::Ips::Addresses::Address)
+      end
+
+      it 'creates addresses instance' do
+        actual = SendGrid4r::REST::Ips::Addresses.create_addresses(addresses)
         expect(actual).to be_a(Array)
         actual.each do |address|
           expect(
@@ -184,17 +234,7 @@ describe SendGrid4r::REST::Ips::Addresses do
       end
 
       it 'creates address instance' do
-        json =
-          '{'\
-            '"ip": "000.00.00.0",'\
-            '"pools": ['\
-              '"test1"'\
-            '],'\
-            '"start_date": 1409616000,'\
-            '"warmup": true'\
-          '}'
-        hash = JSON.parse(json)
-        actual = SendGrid4r::REST::Ips::Addresses.create_address(hash)
+        actual = SendGrid4r::REST::Ips::Addresses.create_address(address)
         expect(actual).to be_a(SendGrid4r::REST::Ips::Addresses::Address)
         expect(actual.ip).to eq('000.00.00.0')
         expect(actual.pools).to be_a(Array)

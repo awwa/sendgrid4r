@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Contacts::Segments do
-  describe 'integration test' do
+  describe 'integration test', :it do
     before do
       begin
         Dotenv.load
@@ -220,26 +220,24 @@ describe SendGrid4r::REST::Contacts::Segments do
     end
   end
 
-  describe 'unit test' do
-    it 'creates condition instance' do
-      json =
+  describe 'unit test', :ut do
+    let(:client) do
+      SendGrid4r::Client.new(api_key: '')
+    end
+
+    let(:condition) do
+      JSON.parse(
         '{'\
           '"field": "last_name",'\
           '"value": "Miller",'\
           '"operator": "eq",'\
           '"and_or": ""'\
         '}'
-      hash = JSON.parse(json)
-      actual = SendGrid4r::REST::Contacts::Segments.create_condition(hash)
-      expect(actual).to be_a(SendGrid4r::REST::Contacts::Segments::Condition)
-      expect(actual.field).to eq('last_name')
-      expect(actual.value).to eq('Miller')
-      expect(actual.operator).to eq('eq')
-      expect(actual.and_or).to eq('')
+      )
     end
 
-    it 'creates segment instance' do
-      json =
+    let(:segment) do
+      JSON.parse(
         '{'\
           '"id": 1,'\
           '"name": "Last Name Miller",'\
@@ -254,23 +252,11 @@ describe SendGrid4r::REST::Contacts::Segments do
           '],'\
           '"recipient_count": 1'\
         '}'
-      hash = JSON.parse(json)
-      actual = SendGrid4r::REST::Contacts::Segments.create_segment(hash)
-      expect(actual).to be_a(SendGrid4r::REST::Contacts::Segments::Segment)
-      expect(actual.id).to eq(1)
-      expect(actual.name).to eq('Last Name Miller')
-      expect(actual.list_id).to eq(nil)
-      expect(actual.conditions).to be_a(Array)
-      actual.conditions.each do |condition|
-        expect(condition).to be_a(
-          SendGrid4r::REST::Contacts::Segments::Condition
-        )
-      end
-      expect(actual.recipient_count).to be_a(Fixnum)
+      )
     end
 
-    it 'creates segments instance' do
-      json =
+    let(:segments) do
+      JSON.parse(
         '{'\
           '"segments": ['\
             '{'\
@@ -289,8 +275,99 @@ describe SendGrid4r::REST::Contacts::Segments do
             '}'\
           ']'\
         '}'
-      hash = JSON.parse(json)
-      actual = SendGrid4r::REST::Contacts::Segments.create_segments(hash)
+      )
+    end
+
+    let(:recipients) do
+      JSON.parse(
+        '{'\
+          '"recipients": ['\
+            '{'\
+              '"created_at": 1422313607,'\
+              '"email": "jones@example.com",'\
+              '"first_name": null,'\
+              '"id": "jones@example.com",'\
+              '"last_clicked": null,'\
+              '"last_emailed": null,'\
+              '"last_name": "Jones",'\
+              '"last_opened": null,'\
+              '"updated_at": 1422313790,'\
+              '"custom_fields": ['\
+                '{'\
+                  '"id": 23,'\
+                  '"name": "pet",'\
+                  '"value": "Fluffy",'\
+                  '"type": "text"'\
+                '}'\
+              ']'\
+            '}'\
+          ']'\
+        '}'
+      )
+    end
+
+    it '#post_segment' do
+      allow(client).to receive(:execute).and_return(segment)
+      actual = client.post_segment(nil)
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Segments::Segment)
+    end
+
+    it '#get_segments' do
+      allow(client).to receive(:execute).and_return(segments)
+      actual = client.get_segments
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Segments::Segments)
+    end
+
+    it '#get_segment' do
+      allow(client).to receive(:execute).and_return(segment)
+      actual = client.get_segment(0)
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Segments::Segment)
+    end
+
+    it '#put_segment' do
+      allow(client).to receive(:execute).and_return(segment)
+      actual = client.put_segment(0, nil)
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Segments::Segment)
+    end
+
+    it '#get_recipients_from_segment' do
+      allow(client).to receive(:execute).and_return(recipients)
+      actual = client.get_recipients_from_segment(0)
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipients)
+    end
+
+    it '#delete_segment' do
+      allow(client).to receive(:execute).and_return('')
+      actual = client.delete_segment(0)
+      expect(actual).to eq('')
+    end
+
+    it 'creates condition instance' do
+      actual = SendGrid4r::REST::Contacts::Segments.create_condition(condition)
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Segments::Condition)
+      expect(actual.field).to eq('last_name')
+      expect(actual.value).to eq('Miller')
+      expect(actual.operator).to eq('eq')
+      expect(actual.and_or).to eq('')
+    end
+
+    it 'creates segment instance' do
+      actual = SendGrid4r::REST::Contacts::Segments.create_segment(segment)
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Segments::Segment)
+      expect(actual.id).to eq(1)
+      expect(actual.name).to eq('Last Name Miller')
+      expect(actual.list_id).to eq(nil)
+      expect(actual.conditions).to be_a(Array)
+      actual.conditions.each do |condition|
+        expect(condition).to be_a(
+          SendGrid4r::REST::Contacts::Segments::Condition
+        )
+      end
+      expect(actual.recipient_count).to be_a(Fixnum)
+    end
+
+    it 'creates segments instance' do
+      actual = SendGrid4r::REST::Contacts::Segments.create_segments(segments)
       expect(actual).to be_a(SendGrid4r::REST::Contacts::Segments::Segments)
       expect(actual.segments).to be_a(Array)
       actual.segments.each do |segment|

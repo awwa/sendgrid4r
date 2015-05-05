@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Ips::Warmup do
-  describe 'integration test' do
+  describe 'integration test', :it do
     before do
       Dotenv.load
       @client = SendGrid4r::Client.new(
@@ -98,17 +98,60 @@ describe SendGrid4r::REST::Ips::Warmup do
     end
   end
 
-  describe 'unit test' do
-    it 'creates warmup_ip instance' do
-      json =
+  describe 'unit test', :ut do
+    let(:client) do
+      SendGrid4r::Client.new(api_key: '')
+    end
+
+    let(:warmup_ip) do
+      JSON.parse(
+        '{'\
+          '"ip":"0.0.0.0",'\
+          '"start_date":1409616000'\
+        '}'
+      )
+    end
+
+    let(:warmup_ips) do
+      JSON.parse(
         '['\
           '{'\
             '"ip": "0.0.0.0",'\
             '"start_date": 1409616000'\
           '}'\
         ']'
-      hash = JSON.parse(json)
-      actual = SendGrid4r::REST::Ips::Warmup.create_warmup_ips(hash)
+      )
+    end
+
+    it '#get_warmup_ips' do
+      allow(client).to receive(:execute).and_return(warmup_ips)
+      actual = client.get_warmup_ips
+      expect(actual).to be_a(Array)
+      actual.each do |warmup_ip|
+        expect(warmup_ip).to be_a(SendGrid4r::REST::Ips::Warmup::WarmupIp)
+      end
+    end
+
+    it '#get_warmup_ip' do
+      allow(client).to receive(:execute).and_return(warmup_ip)
+      actual = client.get_warmup_ip('')
+      expect(actual).to be_a(SendGrid4r::REST::Ips::Warmup::WarmupIp)
+    end
+
+    it '#post_warmup_ip' do
+      allow(client).to receive(:execute).and_return(warmup_ip)
+      actual = client.post_warmup_ip('')
+      expect(actual).to be_a(SendGrid4r::REST::Ips::Warmup::WarmupIp)
+    end
+
+    it '#delete_warmup_ip' do
+      allow(client).to receive(:execute).and_return('')
+      actual = client.delete_warmup_ip('')
+      expect(actual).to eq('')
+    end
+
+    it 'creates warmup_ips instance' do
+      actual = SendGrid4r::REST::Ips::Warmup.create_warmup_ips(warmup_ips)
       expect(actual).to be_a(Array)
       actual.each do |warmup_ip|
         expect(warmup_ip).to be_a(SendGrid4r::REST::Ips::Warmup::WarmupIp)

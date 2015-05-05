@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Templates::Versions do
-  describe 'integration test' do
+  describe 'integration test', :it do
     before do
       begin
         Dotenv.load
@@ -164,9 +164,13 @@ describe SendGrid4r::REST::Templates::Versions do
     end
   end
 
-  describe 'unit test' do
-    it 'creates version instance' do
-      json =
+  describe 'unit test', :ut do
+    let(:client) do
+      SendGrid4r::Client.new(api_key: '')
+    end
+
+    let(:version) do
+      JSON.parse(
         '{'\
           '"id": "8aefe0ee-f12b-4575-b5b7-c97e21cb36f3",'\
           '"template_id": "ddb96bbc-9b92-425e-8979-99464621b543",'\
@@ -177,8 +181,41 @@ describe SendGrid4r::REST::Templates::Versions do
           '"subject": "<%subject%>",'\
           '"updated_at": "2014-03-19 18:56:33"'\
         '}'
-      hash = JSON.parse(json)
-      actual = SendGrid4r::REST::Templates::Versions.create_version(hash)
+      )
+    end
+
+    it '#post_version' do
+      allow(client).to receive(:execute).and_return(version)
+      actual = client.post_version('', nil)
+      expect(actual).to be_a(SendGrid4r::REST::Templates::Versions::Version)
+    end
+
+    it '#activate_version' do
+      allow(client).to receive(:execute).and_return(version)
+      actual = client.activate_version('', '')
+      expect(actual).to be_a(SendGrid4r::REST::Templates::Versions::Version)
+    end
+
+    it '#get_version' do
+      allow(client).to receive(:execute).and_return(version)
+      actual = client.get_version('', '')
+      expect(actual).to be_a(SendGrid4r::REST::Templates::Versions::Version)
+    end
+
+    it '#patch_version' do
+      allow(client).to receive(:execute).and_return(version)
+      actual = client.patch_version('', '', nil)
+      expect(actual).to be_a(SendGrid4r::REST::Templates::Versions::Version)
+    end
+
+    it '#delete_version' do
+      allow(client).to receive(:execute).and_return('')
+      actual = client.delete_version('', '')
+      expect(actual).to eq('')
+    end
+
+    it 'creates version instance' do
+      actual = SendGrid4r::REST::Templates::Versions.create_version(version)
       expect(actual).to be_a(SendGrid4r::REST::Templates::Versions::Version)
       expect(actual.id).to eq('8aefe0ee-f12b-4575-b5b7-c97e21cb36f3')
       expect(actual.template_id).to eq('ddb96bbc-9b92-425e-8979-99464621b543')

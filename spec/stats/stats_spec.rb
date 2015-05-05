@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Stats do
-  describe 'unit test' do
+  describe 'unit test', :ut do
     it 'creates top_stats instance' do
       json =
         '['\

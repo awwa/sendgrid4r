@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SendGrid4r::REST::Contacts::Lists do
-  describe 'integration test' do
+  describe 'integration test', :it do
     before do
       begin
         Dotenv.load
@@ -342,24 +342,23 @@ describe SendGrid4r::REST::Contacts::Lists do
     end
   end
 
-  describe 'unit test' do
-    it 'creates list instance' do
-      json =
+  describe 'unit test', :ut do
+    let(:client) do
+      SendGrid4r::Client.new(api_key: '')
+    end
+
+    let(:list) do
+      JSON.parse(
         '{'\
           '"id": 1,'\
           '"name": "listname",'\
           '"recipient_count": 0'\
         '}'
-      hash = JSON.parse(json)
-      actual = SendGrid4r::REST::Contacts::Lists.create_list(hash)
-      expect(actual).to be_a(SendGrid4r::REST::Contacts::Lists::List)
-      expect(actual.id).to eq(1)
-      expect(actual.name).to eq('listname')
-      expect(actual.recipient_count).to eq(0)
+      )
     end
 
-    it 'creates lists instance' do
-      json =
+    let(:lists) do
+      JSON.parse(
         '{'\
           '"lists": ['\
             '{'\
@@ -369,8 +368,131 @@ describe SendGrid4r::REST::Contacts::Lists do
             '}'\
           ']'\
         '}'
-      hash = JSON.parse(json)
-      actual = SendGrid4r::REST::Contacts::Lists.create_lists(hash)
+      )
+    end
+
+    let(:recipient) do
+      JSON.parse(
+        '{'\
+          '"created_at": 1422313607,'\
+          '"email": "jones@example.com",'\
+          '"first_name": null,'\
+          '"id": "jones@example.com",'\
+          '"last_clicked": null,'\
+          '"last_emailed": null,'\
+          '"last_name": "Jones",'\
+          '"last_opened": null,'\
+          '"updated_at": 1422313790,'\
+          '"custom_fields": ['\
+            '{'\
+              '"id": 23,'\
+              '"name": "pet",'\
+              '"value": "Fluffy",'\
+              '"type": "text"'\
+            '}'\
+          ']'\
+        '}'
+      )
+    end
+
+    let(:recipients) do
+      JSON.parse(
+        '{'\
+          '"recipients": ['\
+            '{'\
+              '"created_at": 1422313607,'\
+              '"email": "jones@example.com",'\
+              '"first_name": null,'\
+              '"id": "jones@example.com",'\
+              '"last_clicked": null,'\
+              '"last_emailed": null,'\
+              '"last_name": "Jones",'\
+              '"last_opened": null,'\
+              '"updated_at": 1422313790,'\
+              '"custom_fields": ['\
+                '{'\
+                  '"id": 23,'\
+                  '"name": "pet",'\
+                  '"value": "Fluffy",'\
+                  '"type": "text"'\
+                '}'\
+              ']'\
+            '}'\
+          ']'\
+        '}'
+      )
+    end
+
+    it '#post_list' do
+      allow(client).to receive(:execute).and_return(list)
+      actual = client.post_list('')
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Lists::List)
+    end
+
+    it '#get_lists' do
+      allow(client).to receive(:execute).and_return(lists)
+      actual = client.get_lists
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Lists::Lists)
+    end
+
+    it '#get_list' do
+      allow(client).to receive(:execute).and_return(list)
+      actual = client.get_list(0)
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Lists::List)
+    end
+
+    it '#patch_list' do
+      allow(client).to receive(:execute).and_return(list)
+      actual = client.patch_list(0, '')
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Lists::List)
+    end
+
+    it '#get_recipients_from_list' do
+      allow(client).to receive(:execute).and_return(recipients)
+      actual = client.get_recipients_from_list(0)
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipients)
+    end
+
+    it '#delete_recipient_from_list' do
+      allow(client).to receive(:execute).and_return('')
+      actual = client.delete_recipient_from_list(0, '')
+      expect(actual).to eq('')
+    end
+
+    it '#delete_list' do
+      allow(client).to receive(:execute).and_return('')
+      actual = client.delete_list(0)
+      expect(actual).to eq('')
+    end
+
+    it '#delete_lists' do
+      allow(client).to receive(:execute).and_return('')
+      actual = client.delete_lists([0, 1])
+      expect(actual).to eq('')
+    end
+
+    it '#post_recipients_to_list' do
+      allow(client).to receive(:execute).and_return('')
+      actual = client.post_recipients_to_list(0, ['', ''])
+      expect(actual).to eq('')
+    end
+
+    it '#post_recipient_to_list' do
+      allow(client).to receive(:execute).and_return('')
+      actual = client.post_recipient_to_list(0, 0)
+      expect(actual).to eq('')
+    end
+
+    it 'creates list instance' do
+      actual = SendGrid4r::REST::Contacts::Lists.create_list(list)
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Lists::List)
+      expect(actual.id).to eq(1)
+      expect(actual.name).to eq('listname')
+      expect(actual.recipient_count).to eq(0)
+    end
+
+    it 'creates lists instance' do
+      actual = SendGrid4r::REST::Contacts::Lists.create_lists(lists)
       expect(actual.lists).to be_a(Array)
       actual.lists.each do |list|
         expect(list).to be_a(SendGrid4r::REST::Contacts::Lists::List)
