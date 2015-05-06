@@ -10,6 +10,8 @@ module SendGrid4r
       # SendGrid Web API v3 Stats - Category
       #
       module Category
+        include SendGrid4r::REST::Request
+
         def get_categories_stats(
             start_date:, end_date: nil, aggregated_by: nil, categories:, &block)
           params = {
@@ -18,12 +20,7 @@ module SendGrid4r
             aggregated_by: aggregated_by,
             categories: categories
           }
-          resp = get(
-            @auth,
-            "#{SendGrid4r::Client::BASE_URL}/categories/stats",
-            params,
-            &block
-          )
+          resp = get(@auth, "#{BASE_URL}/categories/stats", params, &block)
           SendGrid4r::REST::Stats.create_top_stats(resp)
         end
 
@@ -38,11 +35,7 @@ module SendGrid4r
             limit: limit,
             offset: offset
           }
-          resp = get(
-            @auth,
-            "#{SendGrid4r::Client::BASE_URL}/categories/stats/sums",
-            params,
-            &block)
+          resp = get(@auth, "#{BASE_URL}/categories/stats/sums", params, &block)
           SendGrid4r::REST::Stats.create_top_stat(resp)
         end
       end

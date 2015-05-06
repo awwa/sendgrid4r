@@ -19,25 +19,18 @@ module SendGrid4r
         end
 
         def self.url
-          "#{SendGrid4r::Client::BASE_URL}/user/settings/enforced_tls"
+          "#{BASE_URL}/user/settings/enforced_tls"
         end
 
         def get_enforced_tls(&block)
-          resp = get(
-            @auth,
-            SendGrid4r::REST::Settings::EnforcedTls.url,
-            &block
-          )
+          endpoint = SendGrid4r::REST::Settings::EnforcedTls.url
+          resp = get(@auth, endpoint, &block)
           SendGrid4r::REST::Settings::EnforcedTls.create_enforced_tls(resp)
         end
 
         def patch_enforced_tls(params, &block)
-          resp = patch(
-            @auth,
-            SendGrid4r::REST::Settings::EnforcedTls.url,
-            params.to_h,
-            &block
-          )
+          endpoint = SendGrid4r::REST::Settings::EnforcedTls.url
+          resp = patch(@auth, endpoint, params.to_h, &block)
           SendGrid4r::REST::Settings::EnforcedTls.create_enforced_tls(resp)
         end
       end

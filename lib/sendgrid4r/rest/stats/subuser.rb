@@ -10,6 +10,8 @@ module SendGrid4r
       # SendGrid Web API v3 Stats - Subuser
       #
       module Subuser
+        include SendGrid4r::REST::Request
+
         def get_subusers_stats(
             start_date:, end_date: nil, aggregated_by: nil, subusers:, &block)
           params = {
@@ -18,11 +20,7 @@ module SendGrid4r
             aggregated_by: aggregated_by,
             subusers: subusers
           }
-          resp = get(
-            @auth,
-            "#{SendGrid4r::Client::BASE_URL}/subusers/stats",
-            params,
-            &block)
+          resp = get(@auth, "#{BASE_URL}/subusers/stats", params, &block)
           SendGrid4r::REST::Stats.create_top_stats(resp)
         end
 
@@ -37,12 +35,7 @@ module SendGrid4r
             limit: limit,
             offset: offset
           }
-          resp = get(
-            @auth,
-            "#{SendGrid4r::Client::BASE_URL}/subusers/stats/sums",
-            params,
-            &block
-          )
+          resp = get(@auth, "#{BASE_URL}/subusers/stats/sums", params, &block)
           SendGrid4r::REST::Stats.create_top_stat(resp)
         end
       end

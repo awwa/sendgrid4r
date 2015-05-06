@@ -41,11 +41,7 @@ module SendGrid4r
         end
 
         def get_reserved_fields(&block)
-          resp = get(
-            @auth,
-            "#{SendGrid4r::Client::BASE_URL}/contactdb/reserved_fields",
-            &block
-          )
+          resp = get(@auth, "#{BASE_URL}/contactdb/reserved_fields", &block)
           SendGrid4r::REST::Contacts::ReservedFields.create_fields(resp)
         end
       end

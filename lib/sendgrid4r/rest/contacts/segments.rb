@@ -21,7 +21,7 @@ module SendGrid4r
         Segments = Struct.new(:segments)
 
         def self.url(segment_id = nil)
-          url = "#{SendGrid4r::Client::BASE_URL}/contactdb/segments"
+          url = "#{BASE_URL}/contactdb/segments"
           url = "#{url}/#{segment_id}" unless segment_id.nil?
           url
         end
@@ -62,9 +62,8 @@ module SendGrid4r
         end
 
         def post_segment(params, &block)
-          resp = post(
-            @auth, SendGrid4r::REST::Contacts::Segments.url, params.to_h, &block
-          )
+          endpoint = SendGrid4r::REST::Contacts::Segments.url
+          resp = post(@auth, endpoint, params.to_h, &block)
           SendGrid4r::REST::Contacts::Segments.create_segment(resp)
         end
 
@@ -74,26 +73,20 @@ module SendGrid4r
         end
 
         def get_segment(segment_id, &block)
-          resp = get(
-            @auth, SendGrid4r::REST::Contacts::Segments.url(segment_id), &block
-          )
+          endpoint = SendGrid4r::REST::Contacts::Segments.url(segment_id)
+          resp = get(@auth, endpoint, &block)
           SendGrid4r::REST::Contacts::Segments.create_segment(resp)
         end
 
         def put_segment(segment_id, params, &block)
-          resp = put(
-            @auth,
-            SendGrid4r::REST::Contacts::Segments.url(segment_id),
-            params,
-            &block
-          )
+          endpoint = SendGrid4r::REST::Contacts::Segments.url(segment_id)
+          resp = put(@auth, endpoint, params, &block)
           SendGrid4r::REST::Contacts::Segments.create_segment(resp)
         end
 
         def delete_segment(segment_id, &block)
-          delete(
-            @auth, SendGrid4r::REST::Contacts::Segments.url(segment_id), &block
-          )
+          endpoint = SendGrid4r::REST::Contacts::Segments.url(segment_id)
+          delete(@auth, endpoint, &block)
         end
 
         def get_recipients_from_segment(

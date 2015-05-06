@@ -14,8 +14,6 @@ module SendGrid4r
   class Client
     include SendGrid4r::REST::API
 
-    BASE_URL = 'https://api.sendgrid.com/v3'
-
     def initialize(
       username: username, password: password, api_key: api_key = nil
     )
