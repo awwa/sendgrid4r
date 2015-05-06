@@ -15,7 +15,7 @@ module SendGrid4r
       ApiKey = Struct.new(:name, :api_key_id, :api_key, :scope_set_id)
 
       def self.url(api_key = nil)
-        url = "#{SendGrid4r::Client::BASE_URL}/api_keys"
+        url = "#{BASE_URL}/api_keys"
         url = "#{url}/#{api_key}" unless api_key.nil?
         url
       end
@@ -47,9 +47,7 @@ module SendGrid4r
       def post_api_key(name, &block)
         params = {}
         params['name'] = name
-        resp = post(
-          @auth, SendGrid4r::REST::ApiKeys.url, params, &block
-        )
+        resp = post(@auth, SendGrid4r::REST::ApiKeys.url, params, &block)
         SendGrid4r::REST::ApiKeys.create_api_key(resp)
       end
 
@@ -60,12 +58,8 @@ module SendGrid4r
       def patch_api_key(api_key, name, &block)
         params = {}
         params['name'] = name
-        resp = patch(
-          @auth,
-          SendGrid4r::REST::ApiKeys.url(api_key),
-          params,
-          &block
-        )
+        endpoint = SendGrid4r::REST::ApiKeys.url(api_key)
+        resp = patch(@auth, endpoint, params, &block)
         SendGrid4r::REST::ApiKeys.create_api_key(resp)
       end
     end

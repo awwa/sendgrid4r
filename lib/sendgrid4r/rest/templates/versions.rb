@@ -34,15 +34,16 @@ module SendGrid4r
         end
 
         def self.url(temp_id, ver_id = nil)
-          url = "#{SendGrid4r::Client::BASE_URL}/templates/#{temp_id}/versions"
+          url = "#{BASE_URL}/templates/#{temp_id}/versions"
           url = "#{url}/#{ver_id}" unless ver_id.nil?
           url
         end
 
         def post_version(temp_id, version, &block)
+          endpoint = SendGrid4r::REST::Templates::Versions.url(temp_id)
           resp = post(
             @auth,
-            SendGrid4r::REST::Templates::Versions.url(temp_id),
+            endpoint,
             remove_uneditable_keys(version.to_h),
             &block
           )

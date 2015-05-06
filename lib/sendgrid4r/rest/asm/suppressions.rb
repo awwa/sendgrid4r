@@ -16,9 +16,7 @@ module SendGrid4r
         Suppressions = Struct.new(:suppressions)
 
         def self.url(group_id, email_address = nil)
-          url =
-            "#{SendGrid4r::Client::BASE_URL}"\
-            "/asm/groups/#{group_id}/suppressions"
+          url = "#{BASE_URL}/asm/groups/#{group_id}/suppressions"
           url = "#{url}/#{email_address}" unless email_address.nil?
           url
         end
@@ -43,6 +41,7 @@ module SendGrid4r
           )
         end
 
+        # TODO: Add block call
         def post_suppressed_emails(group_id, recipient_emails)
           resp = post(
             @auth,
@@ -53,16 +52,11 @@ module SendGrid4r
         end
 
         def get_suppressed_emails(group_id)
-          get(
-            @auth,
-            SendGrid4r::REST::Asm::Suppressions.url(group_id)
-          )
+          get(@auth, SendGrid4r::REST::Asm::Suppressions.url(group_id))
         end
 
         def get_suppressions(email_address)
-          resp = get(
-            @auth,
-            "#{SendGrid4r::Client::BASE_URL}/asm/suppressions/#{email_address}")
+          resp = get(@auth, "#{BASE_URL}/asm/suppressions/#{email_address}")
           SendGrid4r::REST::Asm::Suppressions.create_suppressions(resp)
         end
 

@@ -16,7 +16,7 @@ module SendGrid4r
       Template = Struct.new(:id, :name, :versions)
 
       def self.url(temp_id = nil)
-        url = "#{SendGrid4r::Client::BASE_URL}/templates"
+        url = "#{BASE_URL}/templates"
         url = "#{url}/#{temp_id}" unless temp_id.nil?
         url
       end

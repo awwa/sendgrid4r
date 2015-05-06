@@ -16,7 +16,7 @@ module SendGrid4r
           :id, :name, :description, :last_email_sent_at, :unsubscribes)
 
         def self.url(group_id = nil)
-          url = "#{SendGrid4r::Client::BASE_URL}/asm/groups"
+          url = "#{BASE_URL}/asm/groups"
           url = "#{url}/#{group_id}" unless group_id.nil?
           url
         end
@@ -58,12 +58,8 @@ module SendGrid4r
         end
 
         def patch_group(group_id, group, &block)
-          resp = patch(
-            @auth,
-            SendGrid4r::REST::Asm::Groups.url(group_id),
-            group.to_h,
-            &block
-          )
+          endpoint = SendGrid4r::REST::Asm::Groups.url(group_id)
+          resp = patch(@auth, endpoint, group.to_h, &block)
           SendGrid4r::REST::Asm::Groups.create_group(resp)
         end
 

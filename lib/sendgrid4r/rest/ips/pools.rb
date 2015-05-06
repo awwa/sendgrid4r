@@ -34,7 +34,7 @@ module SendGrid4r
         end
 
         def self.url(name = nil, ips = nil, ip = nil)
-          url = "#{SendGrid4r::Client::BASE_URL}/ips/pools"
+          url = "#{BASE_URL}/ips/pools"
           url = "#{url}/#{name}" unless name.nil?
           url = "#{url}/#{ips}" unless ips.nil?
           url = "#{url}/#{ip}" unless ip.nil?
@@ -42,9 +42,8 @@ module SendGrid4r
         end
 
         def post_pool(name, &block)
-          resp = post(
-            @auth, SendGrid4r::REST::Ips::Pools.url, name: name, &block
-          )
+          endpoint = SendGrid4r::REST::Ips::Pools.url
+          resp = post(@auth, endpoint, name: name, &block)
           SendGrid4r::REST::Ips::Pools.create_pool(resp)
         end
 
@@ -54,18 +53,14 @@ module SendGrid4r
         end
 
         def get_pool(name, &block)
-          resp = get(
-            @auth, SendGrid4r::REST::Ips::Pools.url(name), &block
-          )
+          endpoint = SendGrid4r::REST::Ips::Pools.url(name)
+          resp = get(@auth, endpoint, &block)
           SendGrid4r::REST::Ips::Pools.create_pool(resp)
         end
 
         def put_pool(name, new_name, &block)
-          resp = put(
-            @auth,
-            SendGrid4r::REST::Ips::Pools.url(name),
-            name: new_name,
-            &block)
+          endpoint = SendGrid4r::REST::Ips::Pools.url(name)
+          resp = put(@auth, endpoint, name: new_name, &block)
           SendGrid4r::REST::Ips::Pools.create_pool(resp)
         end
 

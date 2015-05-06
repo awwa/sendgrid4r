@@ -25,7 +25,7 @@ module SendGrid4r
         Fields = Struct.new(:custom_fields)
 
         def self.url(custom_field_id = nil)
-          url = "#{SendGrid4r::Client::BASE_URL}/contactdb/custom_fields"
+          url = "#{BASE_URL}/contactdb/custom_fields"
           url = "#{url}/#{custom_field_id}" unless custom_field_id.nil?
           url
         end

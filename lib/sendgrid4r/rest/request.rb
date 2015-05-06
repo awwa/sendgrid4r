@@ -11,6 +11,8 @@ module SendGrid4r
     # SendGrid Web API v3 Request
     #
     module Request
+      BASE_URL = 'https://api.sendgrid.com/v3'
+
       def get(auth, endpoint, params = nil, payload = nil, &block)
         execute(:get, auth, endpoint, params, payload, &block)
       end

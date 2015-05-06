@@ -41,18 +41,14 @@ module SendGrid4r
         end
 
         def self.url(ip = nil)
-          url = "#{SendGrid4r::Client::BASE_URL}/ips"
+          url = "#{BASE_URL}/ips"
           url = "#{url}/#{ip}" unless ip.nil?
           url
         end
 
         def post_ip_to_pool(pool_name, ip, &block)
-          resp = post(
-            @auth,
-            SendGrid4r::REST::Ips::Pools.url(pool_name, 'ips'),
-            ip: ip,
-            &block
-          )
+          endpoint = SendGrid4r::REST::Ips::Pools.url(pool_name, 'ips')
+          resp = post(@auth, endpoint, ip: ip, &block)
           SendGrid4r::REST::Ips::Addresses.create_address(resp)
         end
 
@@ -62,25 +58,20 @@ module SendGrid4r
         end
 
         def get_ips_assigned(&block)
-          resp = get(
-            @auth, SendGrid4r::REST::Ips::Addresses.url('assigned'), &block
-          )
+          endpoint = SendGrid4r::REST::Ips::Addresses.url('assigned')
+          resp = get(@auth, endpoint, &block)
           SendGrid4r::REST::Ips::Addresses.create_addresses(resp)
         end
 
         def get_ip(ip, &block)
-          resp = get(
-            @auth, SendGrid4r::REST::Ips::Addresses.url(ip), &block
-          )
+          endpoint = SendGrid4r::REST::Ips::Addresses.url(ip)
+          resp = get(@auth, endpoint, &block)
           SendGrid4r::REST::Ips::Addresses.create_address(resp)
         end
 
         def delete_ip_from_pool(pool_name, ip, &block)
-          delete(
-            @auth,
-            SendGrid4r::REST::Ips::Pools.url(pool_name, 'ips', ip),
-            &block
-          )
+          endpoint = SendGrid4r::REST::Ips::Pools.url(pool_name, 'ips', ip)
+          delete(@auth, endpoint, &block)
         end
       end
     end

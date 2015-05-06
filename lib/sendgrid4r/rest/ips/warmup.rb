@@ -32,7 +32,7 @@ module SendGrid4r
         end
 
         def self.url(ip_address = nil)
-          url = "#{SendGrid4r::Client::BASE_URL}/ips/warmup"
+          url = "#{BASE_URL}/ips/warmup"
           url = "#{url}/#{ip_address}" unless ip_address.nil?
           url
         end
@@ -43,30 +43,20 @@ module SendGrid4r
         end
 
         def get_warmup_ip(ip_address, &block)
-          resp = get(
-            @auth,
-            SendGrid4r::REST::Ips::Warmup.url(ip_address),
-            &block
-          )
+          endpoint = SendGrid4r::REST::Ips::Warmup.url(ip_address)
+          resp = get(@auth, endpoint, &block)
           SendGrid4r::REST::Ips::Warmup.create_warmup_ip(resp)
         end
 
         def post_warmup_ip(ip_address, &block)
-          resp = post(
-            @auth,
-            SendGrid4r::REST::Ips::Warmup.url,
-            ip: ip_address,
-            &block
-          )
+          endpoint = SendGrid4r::REST::Ips::Warmup.url
+          resp = post(@auth, endpoint, ip: ip_address, &block)
           SendGrid4r::REST::Ips::Warmup.create_warmup_ip(resp)
         end
 
         def delete_warmup_ip(ip_address, &block)
-          delete(
-            @auth,
-            SendGrid4r::REST::Ips::Warmup.url(ip_address),
-            &block
-          )
+          endpoint = SendGrid4r::REST::Ips::Warmup.url(ip_address)
+          delete(@auth, endpoint, &block)
         end
       end
     end
