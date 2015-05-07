@@ -89,7 +89,7 @@ describe SendGrid4r::REST::Asm::Suppressions do
       end
     end
 
-    context 'wthout block call' do
+    context 'with block call' do
       it '#post_suppressed_emails' do
         @client.post_suppressed_emails(
           @group.id, [@email2, @email3]
@@ -108,7 +108,12 @@ describe SendGrid4r::REST::Asm::Suppressions do
 
       it '#get_suppressed_emails' do
         @client.get_suppressed_emails(@group.id) do |resp, req, res|
+          resp =
+            SendGrid4r::REST::Asm::Suppressions.create_emails(JSON.parse(resp))
           expect(resp).to be_a(Array)
+          resp.each do |email|
+            expect(email).to be_a(String)
+          end
           expect(req).to be_a(RestClient::Request)
           expect(res).to be_a(Net::HTTPOK)
         end
@@ -117,7 +122,9 @@ describe SendGrid4r::REST::Asm::Suppressions do
       it '#get_suppressions' do
         @client.get_suppressions(@email1) do |resp, req, res|
           resp =
-            SendGrid4r::REST::Asm::Suppressions.create_suppressions(resp)
+            SendGrid4r::REST::Asm::Suppressions.create_suppressions(
+              JSON.parse(resp)
+            )
           expect(resp).to be_a(
             SendGrid4r::REST::Asm::Suppressions::Suppressions
           )
