@@ -5,6 +5,7 @@ describe SendGrid4r::REST::Contacts::Lists do
   describe 'integration test', :it do
     before do
       begin
+        pending 'waiting sendgrid documentation update'
         Dotenv.load
         @client = SendGrid4r::Client.new(
           username: ENV['SENDGRID_USERNAME'],
