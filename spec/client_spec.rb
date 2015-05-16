@@ -21,6 +21,11 @@ describe SendGrid4r::Client do
 
     describe 'methods' do
       it 'available' do
+        # Subusers
+        expect(@client.respond_to?('get_subusers')).to eq(true)
+        expect(@client.respond_to?('post_subuser')).to eq(true)
+        expect(@client.respond_to?('get_subuser_reputation')).to eq(true)
+        expect(@client.respond_to?('put_subuser_assigned_ips')).to eq(true)
         # Api Keys
         expect(@client.respond_to?('get_api_keys')).to eq(true)
         expect(@client.respond_to?('post_api_key')).to eq(true)
@@ -136,7 +141,7 @@ describe SendGrid4r::Client do
 
     describe 'VERSION' do
       it 'returns VERSION value' do
-        expect(SendGrid4r::VERSION).to eq('0.3.1')
+        expect(SendGrid4r::VERSION).to eq('0.4.0')
       end
     end
   end
