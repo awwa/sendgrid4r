@@ -14,7 +14,15 @@ describe SendGrid4r::Client do
     end
 
     describe '#initialize' do
-      it 'create instance' do
+      it 'create instance with username and password' do
+        @client = SendGrid4r::Client.new(
+          username: 'username',
+          password: 'password')
+        expect(@client.class).to eq(SendGrid4r::Client)
+      end
+
+      it 'create instance with apikey' do
+        @client = SendGrid4r::Client.new(api_key: 'api_key')
         expect(@client.class).to eq(SendGrid4r::Client)
       end
     end
