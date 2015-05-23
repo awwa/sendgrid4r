@@ -69,10 +69,14 @@ module SendGrid4r
           endpoint
         else
           query_string = params.collect do |k, v|
-            "#{k}=#{CGI.escape(v.to_s)}"
+            "#{k}=#{CGI.escape(process_array_params(v))}"
           end.join('&')
           endpoint + "?#{query_string}"
         end
+      end
+
+      def process_array_params(v)
+        v.is_a?(Array) ? v.join(',') : v.to_s
       end
     end
   end
