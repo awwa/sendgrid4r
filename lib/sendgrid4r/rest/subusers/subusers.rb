@@ -11,7 +11,9 @@ module SendGrid4r
     module Subusers
       include SendGrid4r::REST::Request
 
-      Subuser = Struct.new(:id, :username, :email, :password, :ips, :reputation)
+      Subuser = Struct.new(
+        :id, :username, :email, :password, :ips, :reputation, :disabled
+      )
       Ips = Struct.new(:ips)
 
       def self.url(subuser_name = nil)
@@ -37,7 +39,8 @@ module SendGrid4r
           resp['email'],
           resp['password'],
           resp['ips'],
-          resp['reputation']
+          resp['reputation'],
+          resp['disabled']
         )
       end
 

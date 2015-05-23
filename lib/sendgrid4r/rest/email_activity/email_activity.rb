@@ -11,6 +11,24 @@ module SendGrid4r
     module EmailActivity
       include SendGrid4r::REST::Request
 
+      #
+      # SendGrid Web API v3 Stats - AggregatedBy
+      #
+      module Event
+        BOUNCES = 'bounces'
+        CLICKS = 'clicks'
+        DEFERRED = 'deferred'
+        DELIVERED = 'delivered'
+        DROPS = 'drops'
+        GROUP_UNSUBSCRIBE = 'group_unsubscribe'
+        GROUP_RESUBSCRIBE = 'group_resubscribe'
+        OPENS = 'opens'
+        PROCESSED = 'processed'
+        PARSEAPI = 'parseapi'
+        SPAM_REPORTS = 'spam_reports'
+        UNSUBSCRIBE = 'unsubscribes'
+      end
+
       Activity = Struct.new(
         :email, :event, :created, :category, :smtp_id, :asm_group_id,
         :msg_id, :ip, :url, :reason

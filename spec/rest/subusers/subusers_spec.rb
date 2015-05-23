@@ -11,6 +11,7 @@ describe SendGrid4r::REST::Subusers do
           password: ENV['SILVER_SENDGRID_PASSWORD'])
         @username1 = ENV['SUBUSER1']
         @username2 = ENV['SILVER_SUBUSER']
+        @username3 = ENV['SILVER_SUBUSER2']
         @email1 = ENV['SUBMAIL1']
         @password1  = ENV['SUBPASS1']
 
@@ -58,7 +59,10 @@ describe SendGrid4r::REST::Subusers do
 
       it '#get_subuser_reputation' do
         begin
-          subusers = @client.get_subuser_reputation(usernames: [@username2])
+          params = []
+          params.push(@username2)
+          params.push(@username3)
+          subusers = @client.get_subuser_reputation(usernames: params)
           expect(subusers).to be_a(Array)
           subusers.each do |subuser|
             expect(subuser).to be_a(SendGrid4r::REST::Subusers::Subuser)
@@ -169,7 +173,8 @@ describe SendGrid4r::REST::Subusers do
           '"ips": ['\
             '"1.1.1.1",'\
             '"2.2.2.2"'\
-          ']'\
+          '],'\
+          '"disabled": false'\
         '}'
       )
     end
@@ -235,6 +240,7 @@ describe SendGrid4r::REST::Subusers do
       actual.ips do |ip|
         expect(ip).to be_a(String)
       end
+      expect(actual.disabled).to eq(false)
     end
   end
 end
