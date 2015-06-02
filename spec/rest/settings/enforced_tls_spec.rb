@@ -30,7 +30,7 @@ describe SendGrid4r::REST::Settings::EnforcedTls do
           # patch both value
           actual.require_tls = false
           actual.require_valid_cert = false
-          edit = @client.patch_enforced_tls(actual)
+          edit = @client.patch_enforced_tls(params: actual)
           expect(actual.require_tls).to eq(edit.require_tls)
           expect(actual.require_valid_cert).to eq(edit.require_valid_cert)
         rescue => e
@@ -61,7 +61,7 @@ describe SendGrid4r::REST::Settings::EnforcedTls do
         # patch both value
         actual.require_tls = false
         actual.require_valid_cert = false
-        @client.patch_enforced_tls(actual) do |resp, req, res|
+        @client.patch_enforced_tls(params: actual) do |resp, req, res|
           resp =
             SendGrid4r::REST::Settings::EnforcedTls.create_enforced_tls(
               JSON.parse(resp)
@@ -100,7 +100,7 @@ describe SendGrid4r::REST::Settings::EnforcedTls do
 
     it '#patch_enforced_tls' do
       allow(client).to receive(:execute).and_return(enforced_tls)
-      actual = client.patch_enforced_tls(nil)
+      actual = client.patch_enforced_tls(params: nil)
       expect(actual).to be_a(
         SendGrid4r::REST::Settings::EnforcedTls::EnforcedTls
       )
