@@ -28,7 +28,7 @@ module SendGrid4r
           SendGrid4r::REST::Settings::EnforcedTls.create_enforced_tls(resp)
         end
 
-        def patch_enforced_tls(params, &block)
+        def patch_enforced_tls(params:, &block)
           endpoint = SendGrid4r::REST::Settings::EnforcedTls.url
           resp = patch(@auth, endpoint, params.to_h, &block)
           SendGrid4r::REST::Settings::EnforcedTls.create_enforced_tls(resp)

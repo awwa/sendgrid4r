@@ -45,7 +45,7 @@ describe SendGrid4r::REST::EmailActivity do
           activities = @client.get_email_activities(
             events: [SendGrid4r::Client::Event::DROPS]
           )
-          expect(activities.length).to be > 0
+          expect(activities.length).to be >= 0
           activities.each do |activity|
             expect(activity).to be_a(SendGrid4r::REST::EmailActivity::Activity)
             expect(activity.event).to eq('drop')
@@ -74,7 +74,7 @@ describe SendGrid4r::REST::EmailActivity do
           events.push(SendGrid4r::Client::Event::SPAM_REPORTS)
           events.push(SendGrid4r::Client::Event::UNSUBSCRIBE)
           activities = @client.get_email_activities(events: events)
-          expect(activities.length).to be > 0
+          expect(activities.length).to be >= 0
           activities.each do |activity|
             expect(activity).to be_a(SendGrid4r::REST::EmailActivity::Activity)
           end

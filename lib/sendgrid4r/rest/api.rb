@@ -7,7 +7,11 @@ require 'sendgrid4r/rest/asm/asm'
 require 'sendgrid4r/rest/asm/groups'
 require 'sendgrid4r/rest/asm/suppressions'
 require 'sendgrid4r/rest/asm/global_suppressions'
+require 'sendgrid4r/rest/settings/settings'
 require 'sendgrid4r/rest/settings/enforced_tls'
+require 'sendgrid4r/rest/settings/mail'
+require 'sendgrid4r/rest/settings/partner'
+require 'sendgrid4r/rest/settings/tracking'
 require 'sendgrid4r/rest/ips/addresses'
 require 'sendgrid4r/rest/ips/pools'
 require 'sendgrid4r/rest/ips/warmup'
@@ -39,7 +43,11 @@ module SendGrid4r
       include SendGrid4r::REST::Asm::Groups
       include SendGrid4r::REST::Asm::Suppressions
       include SendGrid4r::REST::Asm::GlobalSuppressions
+      include SendGrid4r::REST::Settings
       include SendGrid4r::REST::Settings::EnforcedTls
+      include SendGrid4r::REST::Settings::Mail
+      include SendGrid4r::REST::Settings::Partner
+      include SendGrid4r::REST::Settings::Tracking
       include SendGrid4r::REST::Ips::Addresses
       include SendGrid4r::REST::Ips::Warmup
       include SendGrid4r::REST::Ips::Pools
