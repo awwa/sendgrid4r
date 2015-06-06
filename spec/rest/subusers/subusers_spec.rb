@@ -6,11 +6,9 @@ describe SendGrid4r::REST::Subusers do
     before do
       begin
         Dotenv.load
-        @client = SendGrid4r::Client.new(
-          username: ENV['SILVER_SENDGRID_USERNAME'],
-          password: ENV['SILVER_SENDGRID_PASSWORD'])
+        @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
         @username1 = ENV['SUBUSER1']
-        @username2 = ENV['SILVER_SUBUSER']
+        @username2 = ENV['SILVER_SUBUSER1']
         @username3 = ENV['SILVER_SUBUSER2']
         @email1 = ENV['SUBMAIL1']
         @password1  = ENV['SUBPASS1']

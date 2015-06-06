@@ -30,9 +30,7 @@ describe SendGrid4r::REST::Ips::Addresses do
 
       before do
         begin
-          @client = SendGrid4r::Client.new(
-            username: ENV['SILVER_SENDGRID_USERNAME'],
-            password: ENV['SILVER_SENDGRID_PASSWORD'])
+          @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
           # refresh the pool
           pools = @client.get_pools
           pools.each do |pool|

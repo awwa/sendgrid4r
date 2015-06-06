@@ -5,10 +5,8 @@ describe SendGrid4r::REST::Stats::Subuser do
   describe 'integration test', :it do
     before do
       Dotenv.load
-      @client = SendGrid4r::Client.new(
-        username: ENV['SILVER_SENDGRID_USERNAME'],
-        password: ENV['SILVER_SENDGRID_PASSWORD'])
-      @subuser = ENV['SILVER_SUBUSER']
+      @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
+      @subuser = ENV['SILVER_SUBUSER1']
     end
 
     context 'without block call' do

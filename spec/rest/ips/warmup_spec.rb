@@ -5,9 +5,7 @@ describe SendGrid4r::REST::Ips::Warmup do
   describe 'integration test', :it do
     before do
       Dotenv.load
-      @client = SendGrid4r::Client.new(
-        username: ENV['SILVER_SENDGRID_USERNAME'],
-        password: ENV['SILVER_SENDGRID_PASSWORD'])
+      @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
     end
 
     context 'account is silver' do
