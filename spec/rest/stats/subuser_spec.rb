@@ -6,7 +6,7 @@ describe SendGrid4r::REST::Stats::Subuser do
     before do
       Dotenv.load
       @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
-      @subuser = ENV['SILVER_SUBUSER1']
+      @subuser = ENV['SUBUSER2']
     end
 
     context 'without block call' do

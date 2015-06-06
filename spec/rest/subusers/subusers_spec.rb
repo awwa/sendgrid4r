@@ -8,10 +8,10 @@ describe SendGrid4r::REST::Subusers do
         Dotenv.load
         @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
         @username1 = ENV['SUBUSER1']
-        @username2 = ENV['SILVER_SUBUSER1']
-        @username3 = ENV['SILVER_SUBUSER2']
-        @email1 = ENV['SUBMAIL1']
-        @password1  = ENV['SUBPASS1']
+        @username2 = ENV['SUBUSER2']
+        @username3 = ENV['SUBUSER3']
+        @email1 = ENV['MAIL']
+        @password1  = ENV['PASS']
 
         @ip = @client.get_ips[0].ip
         # celan up test env
@@ -58,8 +58,8 @@ describe SendGrid4r::REST::Subusers do
       it '#get_subuser_reputation' do
         begin
           params = []
+          params.push(@username1)
           params.push(@username2)
-          params.push(@username3)
           subusers = @client.get_subuser_reputation(usernames: params)
           expect(subusers).to be_a(Array)
           subusers.each do |subuser|
