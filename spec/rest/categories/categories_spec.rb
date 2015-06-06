@@ -26,7 +26,7 @@ describe SendGrid4r::REST::Categories do
 
       it '#get_categories if name was specified' do
         begin
-          categories = @client.get_categories('Newsletter')
+          categories = @client.get_categories(category: 'Newsletter')
           expect(categories.length).to eq(1)
           categories.each do |category|
             expect(category.category).to eq('Newsletter')
@@ -39,7 +39,9 @@ describe SendGrid4r::REST::Categories do
 
       it '#get_categories if offset & limit were specified' do
         begin
-          categories = @client.get_categories(nil, 5, 2)
+          categories = @client.get_categories(
+            category: nil, limit: 5, offset: 2
+          )
           expect(categories.length).to be > 0
           categories.each do |category|
             expect(category.category).to be_a(String)

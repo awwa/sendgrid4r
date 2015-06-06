@@ -61,7 +61,7 @@ module SendGrid4r
           Segments.new(segments)
         end
 
-        def post_segment(params, &block)
+        def post_segment(params:, &block)
           endpoint = SendGrid4r::REST::Contacts::Segments.url
           resp = post(@auth, endpoint, params.to_h, &block)
           SendGrid4r::REST::Contacts::Segments.create_segment(resp)
@@ -72,25 +72,25 @@ module SendGrid4r
           SendGrid4r::REST::Contacts::Segments.create_segments(resp)
         end
 
-        def get_segment(segment_id, &block)
+        def get_segment(segment_id:, &block)
           endpoint = SendGrid4r::REST::Contacts::Segments.url(segment_id)
           resp = get(@auth, endpoint, &block)
           SendGrid4r::REST::Contacts::Segments.create_segment(resp)
         end
 
-        def put_segment(segment_id, params, &block)
+        def put_segment(segment_id:, params:, &block)
           endpoint = SendGrid4r::REST::Contacts::Segments.url(segment_id)
           resp = put(@auth, endpoint, params, &block)
           SendGrid4r::REST::Contacts::Segments.create_segment(resp)
         end
 
-        def delete_segment(segment_id, &block)
+        def delete_segment(segment_id:, &block)
           endpoint = SendGrid4r::REST::Contacts::Segments.url(segment_id)
           delete(@auth, endpoint, &block)
         end
 
         def get_recipients_from_segment(
-          segment_id, limit = nil, offset = nil, &block
+          segment_id:, limit: nil, offset: nil, &block
         )
           params = {}
           params['limit'] = limit unless limit.nil?

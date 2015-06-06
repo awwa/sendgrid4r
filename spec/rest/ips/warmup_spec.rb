@@ -17,7 +17,7 @@ describe SendGrid4r::REST::Ips::Warmup do
           warmup_ips = @client.get_warmup_ips
           if warmup_ips.length > 0
             warmup_ips.each do |warmup_ip|
-              @client.delete_warmup_ip(warmup_ip.ip)
+              @client.delete_warmup_ip(ip: warmup_ip.ip)
             end
           end
         rescue => e
@@ -35,14 +35,14 @@ describe SendGrid4r::REST::Ips::Warmup do
             # post warmup ip
             ips = @client.get_ips
             expect(ips.length).to be > 0
-            warmup_ip = @client.post_warmup_ip(ips[0].ip)
+            warmup_ip = @client.post_warmup_ip(ip: ips[0].ip)
             expect(warmup_ip.ip).to eq(ips[0].ip)
-            warmup_ip = @client.get_warmup_ip(warmup_ip.ip)
+            warmup_ip = @client.get_warmup_ip(ip: warmup_ip.ip)
             expect(warmup_ip.ip).to eq(ips[0].ip)
             # delete the warmup ip
-            @client.delete_warmup_ip(warmup_ip.ip)
+            @client.delete_warmup_ip(ip: warmup_ip.ip)
             expect do
-              @client.get_warmup_ip(warmup_ip.ip)
+              @client.get_warmup_ip(ip: warmup_ip.ip)
             end.to raise_error(RestClient::ResourceNotFound)
           rescue => ex
             puts ex.inspect
@@ -67,7 +67,7 @@ describe SendGrid4r::REST::Ips::Warmup do
           warmup_ip = nil
           ips = @client.get_ips
           expect(ips.length).to be > 0
-          @client.post_warmup_ip(ips[0].ip) do |resp, req, res|
+          @client.post_warmup_ip(ip: ips[0].ip) do |resp, req, res|
             resp =
               SendGrid4r::REST::Ips::Warmup.create_warmup_ip(
                 JSON.parse(resp)
@@ -78,7 +78,7 @@ describe SendGrid4r::REST::Ips::Warmup do
             expect(res).to be_a(Net::HTTPCreated)
           end
           # get warmup ip
-          @client.get_warmup_ip(warmup_ip.ip) do |resp, req, res|
+          @client.get_warmup_ip(ip: warmup_ip.ip) do |resp, req, res|
             resp =
               SendGrid4r::REST::Ips::Warmup.create_warmup_ip(
                 JSON.parse(resp)
@@ -88,7 +88,7 @@ describe SendGrid4r::REST::Ips::Warmup do
             expect(res).to be_a(Net::HTTPOK)
           end
           # delete the warmup ip
-          @client.delete_warmup_ip(warmup_ip.ip) do |resp, req, res|
+          @client.delete_warmup_ip(ip: warmup_ip.ip) do |resp, req, res|
             expect(resp).to eq('')
             expect(req).to be_a(RestClient::Request)
             expect(res).to be_a(Net::HTTPNoContent)
@@ -134,19 +134,19 @@ describe SendGrid4r::REST::Ips::Warmup do
 
     it '#get_warmup_ip' do
       allow(client).to receive(:execute).and_return(warmup_ip)
-      actual = client.get_warmup_ip('')
+      actual = client.get_warmup_ip(ip: '')
       expect(actual).to be_a(SendGrid4r::REST::Ips::Warmup::WarmupIp)
     end
 
     it '#post_warmup_ip' do
       allow(client).to receive(:execute).and_return(warmup_ip)
-      actual = client.post_warmup_ip('')
+      actual = client.post_warmup_ip(ip: '')
       expect(actual).to be_a(SendGrid4r::REST::Ips::Warmup::WarmupIp)
     end
 
     it '#delete_warmup_ip' do
       allow(client).to receive(:execute).and_return('')
-      actual = client.delete_warmup_ip('')
+      actual = client.delete_warmup_ip(ip: '')
       expect(actual).to eq('')
     end
 

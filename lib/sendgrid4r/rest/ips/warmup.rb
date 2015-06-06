@@ -42,20 +42,20 @@ module SendGrid4r
           SendGrid4r::REST::Ips::Warmup.create_warmup_ips(resp)
         end
 
-        def get_warmup_ip(ip_address, &block)
-          endpoint = SendGrid4r::REST::Ips::Warmup.url(ip_address)
+        def get_warmup_ip(ip:, &block)
+          endpoint = SendGrid4r::REST::Ips::Warmup.url(ip)
           resp = get(@auth, endpoint, &block)
           SendGrid4r::REST::Ips::Warmup.create_warmup_ip(resp)
         end
 
-        def post_warmup_ip(ip_address, &block)
+        def post_warmup_ip(ip:, &block)
           endpoint = SendGrid4r::REST::Ips::Warmup.url
-          resp = post(@auth, endpoint, ip: ip_address, &block)
+          resp = post(@auth, endpoint, ip: ip, &block)
           SendGrid4r::REST::Ips::Warmup.create_warmup_ip(resp)
         end
 
-        def delete_warmup_ip(ip_address, &block)
-          endpoint = SendGrid4r::REST::Ips::Warmup.url(ip_address)
+        def delete_warmup_ip(ip:, &block)
+          endpoint = SendGrid4r::REST::Ips::Warmup.url(ip)
           delete(@auth, endpoint, &block)
         end
       end

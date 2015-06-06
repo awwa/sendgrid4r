@@ -50,7 +50,7 @@ module SendGrid4r
           emails
         end
 
-        def post_suppressed_emails(group_id, recipient_emails, &block)
+        def post_suppressed_emails(group_id:, recipient_emails:, &block)
           resp = post(
             @auth,
             SendGrid4r::REST::Asm::Suppressions.url(group_id),
@@ -60,19 +60,19 @@ module SendGrid4r
           SendGrid4r::REST::Asm.create_recipient_emails(resp)
         end
 
-        def get_suppressed_emails(group_id, &block)
+        def get_suppressed_emails(group_id:, &block)
           endpoint = SendGrid4r::REST::Asm::Suppressions.url(group_id)
           resp = get(@auth, endpoint, &block)
           SendGrid4r::REST::Asm::Suppressions.create_emails(resp)
         end
 
-        def get_suppressions(email_address, &block)
+        def get_suppressions(email_address:, &block)
           endpoint = "#{BASE_URL}/asm/suppressions/#{email_address}"
           resp = get(@auth, endpoint, &block)
           SendGrid4r::REST::Asm::Suppressions.create_suppressions(resp)
         end
 
-        def delete_suppressed_email(group_id, email_address, &block)
+        def delete_suppressed_email(group_id:, email_address:, &block)
           delete(
             @auth,
             SendGrid4r::REST::Asm::Suppressions.url(group_id, email_address),

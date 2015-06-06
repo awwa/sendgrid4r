@@ -15,7 +15,7 @@ describe SendGrid4r::REST::Ips::Addresses do
         it 'raise error' do
           begin
             expect do
-              @client.get_ip('10.10.10.10').to raise_error(
+              @client.get_ip(ip: '10.10.10.10').to raise_error(
                 RestClient::Forbidden
               )
             end
@@ -38,9 +38,9 @@ describe SendGrid4r::REST::Ips::Addresses do
           # refresh the pool
           pools = @client.get_pools
           pools.each do |pool|
-            @client.delete_pool(TEST_POOL) if pool.name == TEST_POOL
+            @client.delete_pool(name: TEST_POOL) if pool.name == TEST_POOL
           end
-          @client.post_pool(TEST_POOL)
+          @client.post_pool(name: TEST_POOL)
         rescue => e
           puts e.inspect
           raise e
@@ -78,7 +78,7 @@ describe SendGrid4r::REST::Ips::Addresses do
           begin
             ips = @client.get_ips_assigned
             expect(
-              @client.get_ip(ips[0].ip)
+              @client.get_ip(ip: ips[0].ip)
             ).to be_a(SendGrid4r::REST::Ips::Addresses::Address)
           rescue => e
             puts e.inspect
@@ -89,11 +89,13 @@ describe SendGrid4r::REST::Ips::Addresses do
         it '#post_ip_to_pool' do
           begin
             ips = @client.get_ips_assigned
-            actual = @client.post_ip_to_pool(TEST_POOL, ips[0].ip)
+            actual = @client.post_ip_to_pool(
+              pool_name: TEST_POOL, ip: ips[0].ip
+            )
             expect(actual.ip).to eq(ips[0].ip)
             expect(actual.pools).to include(TEST_POOL)
             expect(actual.pools).to be_a(Array)
-            @client.delete_ip_from_pool(TEST_POOL, ips[0].ip)
+            @client.delete_ip_from_pool(pool_name: TEST_POOL, ip: ips[0].ip)
           rescue => e
             puts e.inspect
             raise e
@@ -128,7 +130,7 @@ describe SendGrid4r::REST::Ips::Addresses do
 
         it '#get_ip' do
           ips = @client.get_ips_assigned
-          @client.get_ip(ips[0].ip) do |resp, req, res|
+          @client.get_ip(ip: ips[0].ip) do |resp, req, res|
             resp =
               SendGrid4r::REST::Ips::Addresses.create_address(
                 JSON.parse(resp)
@@ -141,7 +143,9 @@ describe SendGrid4r::REST::Ips::Addresses do
 
         it '#post_ip_to_pool' do
           ips = @client.get_ips_assigned
-          @client.post_ip_to_pool(TEST_POOL, ips[0].ip) do |resp, req, res|
+          @client.post_ip_to_pool(
+            pool_name: TEST_POOL, ip: ips[0].ip
+          ) do |resp, req, res|
             resp =
               SendGrid4r::REST::Ips::Addresses.create_address(
                 JSON.parse(resp)
@@ -150,7 +154,9 @@ describe SendGrid4r::REST::Ips::Addresses do
             expect(req).to be_a(RestClient::Request)
             expect(res).to be_a(Net::HTTPCreated)
           end
-          @client.delete_ip_from_pool(TEST_POOL, ips[0].ip) do |resp, req, res|
+          @client.delete_ip_from_pool(
+            pool_name: TEST_POOL, ip: ips[0].ip
+          ) do |resp, req, res|
             expect(resp).to eq('')
             expect(req).to be_a(RestClient::Request)
             expect(res).to be_a(Net::HTTPNoContent)
@@ -213,13 +219,13 @@ describe SendGrid4r::REST::Ips::Addresses do
 
       it '#get_ip' do
         allow(client).to receive(:execute).and_return(address)
-        actual = client.get_ip('')
+        actual = client.get_ip(ip: '')
         expect(actual).to be_a(SendGrid4r::REST::Ips::Addresses::Address)
       end
 
       it '#post_ip_to_pool' do
         allow(client).to receive(:execute).and_return(address)
-        actual = client.post_ip_to_pool('', '')
+        actual = client.post_ip_to_pool(pool_name: '', ip: '')
         expect(actual).to be_a(SendGrid4r::REST::Ips::Addresses::Address)
       end
 

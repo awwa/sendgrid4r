@@ -44,21 +44,21 @@ module SendGrid4r
         SendGrid4r::REST::ApiKeys.create_api_keys(resp)
       end
 
-      def post_api_key(name, &block)
+      def post_api_key(name:, &block)
         params = {}
         params['name'] = name
         resp = post(@auth, SendGrid4r::REST::ApiKeys.url, params, &block)
         SendGrid4r::REST::ApiKeys.create_api_key(resp)
       end
 
-      def delete_api_key(api_key, &block)
-        delete(@auth, SendGrid4r::REST::ApiKeys.url(api_key), &block)
+      def delete_api_key(api_key_id:, &block)
+        delete(@auth, SendGrid4r::REST::ApiKeys.url(api_key_id), &block)
       end
 
-      def patch_api_key(api_key, name, &block)
+      def patch_api_key(api_key_id:, name:, &block)
         params = {}
         params['name'] = name
-        endpoint = SendGrid4r::REST::ApiKeys.url(api_key)
+        endpoint = SendGrid4r::REST::ApiKeys.url(api_key_id)
         resp = patch(@auth, endpoint, params, &block)
         SendGrid4r::REST::ApiKeys.create_api_key(resp)
       end

@@ -46,7 +46,7 @@ module SendGrid4r
           url
         end
 
-        def post_ip_to_pool(pool_name, ip, &block)
+        def post_ip_to_pool(pool_name:, ip:, &block)
           endpoint = SendGrid4r::REST::Ips::Pools.url(pool_name, 'ips')
           resp = post(@auth, endpoint, ip: ip, &block)
           SendGrid4r::REST::Ips::Addresses.create_address(resp)
@@ -63,13 +63,13 @@ module SendGrid4r
           SendGrid4r::REST::Ips::Addresses.create_addresses(resp)
         end
 
-        def get_ip(ip, &block)
+        def get_ip(ip:, &block)
           endpoint = SendGrid4r::REST::Ips::Addresses.url(ip)
           resp = get(@auth, endpoint, &block)
           SendGrid4r::REST::Ips::Addresses.create_address(resp)
         end
 
-        def delete_ip_from_pool(pool_name, ip, &block)
+        def delete_ip_from_pool(pool_name:, ip:, &block)
           endpoint = SendGrid4r::REST::Ips::Pools.url(pool_name, 'ips', ip)
           delete(@auth, endpoint, &block)
         end

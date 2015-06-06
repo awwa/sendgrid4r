@@ -32,7 +32,7 @@ module SendGrid4r
           categories
         end
 
-        def get_categories(category = nil, limit = nil, offset = nil, &block)
+        def get_categories(category: nil, limit: nil, offset: nil, &block)
           params = {}
           params['category'] = category unless category.nil?
           params['limit'] = limit unless limit.nil?

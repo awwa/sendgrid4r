@@ -41,7 +41,7 @@ module SendGrid4r
           url
         end
 
-        def post_pool(name, &block)
+        def post_pool(name:, &block)
           endpoint = SendGrid4r::REST::Ips::Pools.url
           resp = post(@auth, endpoint, name: name, &block)
           SendGrid4r::REST::Ips::Pools.create_pool(resp)
@@ -52,19 +52,19 @@ module SendGrid4r
           SendGrid4r::REST::Ips::Pools.create_pools(resp)
         end
 
-        def get_pool(name, &block)
+        def get_pool(name:, &block)
           endpoint = SendGrid4r::REST::Ips::Pools.url(name)
           resp = get(@auth, endpoint, &block)
           SendGrid4r::REST::Ips::Pools.create_pool(resp)
         end
 
-        def put_pool(name, new_name, &block)
+        def put_pool(name:, new_name:, &block)
           endpoint = SendGrid4r::REST::Ips::Pools.url(name)
           resp = put(@auth, endpoint, name: new_name, &block)
           SendGrid4r::REST::Ips::Pools.create_pool(resp)
         end
 
-        def delete_pool(name, &block)
+        def delete_pool(name:, &block)
           delete(@auth, SendGrid4r::REST::Ips::Pools.url(name), &block)
         end
       end

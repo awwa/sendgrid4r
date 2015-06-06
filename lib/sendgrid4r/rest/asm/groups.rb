@@ -41,7 +41,7 @@ module SendGrid4r
           )
         end
 
-        def post_group(name, description, &block)
+        def post_group(name:, description:, &block)
           params = { name: name, description: description }
           resp = post(@auth, SendGrid4r::REST::Asm::Groups.url, params, &block)
           SendGrid4r::REST::Asm::Groups.create_group(resp)
@@ -52,18 +52,18 @@ module SendGrid4r
           SendGrid4r::REST::Asm::Groups.create_groups(resp)
         end
 
-        def get_group(group_id, &block)
+        def get_group(group_id:, &block)
           resp = get(@auth, SendGrid4r::REST::Asm::Groups.url(group_id), &block)
           SendGrid4r::REST::Asm::Groups.create_group(resp)
         end
 
-        def patch_group(group_id, group, &block)
+        def patch_group(group_id:, group:, &block)
           endpoint = SendGrid4r::REST::Asm::Groups.url(group_id)
           resp = patch(@auth, endpoint, group.to_h, &block)
           SendGrid4r::REST::Asm::Groups.create_group(resp)
         end
 
-        def delete_group(group_id, &block)
+        def delete_group(group_id:, &block)
           delete(@auth, SendGrid4r::REST::Asm::Groups.url(group_id), &block)
         end
       end

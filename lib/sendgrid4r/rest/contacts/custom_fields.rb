@@ -46,7 +46,7 @@ module SendGrid4r
           Fields.new(custom_fields)
         end
 
-        def post_custom_field(name, type, &block)
+        def post_custom_field(name:, type:, &block)
           params = {}
           params['name'] = name
           params['type'] = type
@@ -63,7 +63,7 @@ module SendGrid4r
           SendGrid4r::REST::Contacts::CustomFields.create_fields(resp)
         end
 
-        def get_custom_field(custom_field_id, &block)
+        def get_custom_field(custom_field_id:, &block)
           resp = get(
             @auth,
             SendGrid4r::REST::Contacts::CustomFields.url(custom_field_id),
@@ -72,7 +72,7 @@ module SendGrid4r
           SendGrid4r::REST::Contacts::CustomFields.create_field(resp)
         end
 
-        def delete_custom_field(custom_field_id, &block)
+        def delete_custom_field(custom_field_id:, &block)
           delete(
             @auth,
             SendGrid4r::REST::Contacts::CustomFields.url(custom_field_id),

@@ -79,6 +79,58 @@ describe SendGrid4r::Client do
         # enforced_tls
         expect(@client.respond_to?('get_enforced_tls')).to eq(true)
         expect(@client.respond_to?('patch_enforced_tls')).to eq(true)
+        # mail
+        expect(@client.respond_to?('get_mail_settings')).to eq(true)
+        expect(
+          @client.respond_to?('get_settings_address_whitelist')
+        ).to eq(true)
+        expect(
+          @client.respond_to?('patch_settings_address_whitelist')
+        ).to eq(true)
+        expect(@client.respond_to?('get_settings_bcc')).to eq(true)
+        expect(@client.respond_to?('patch_settings_bcc')).to eq(true)
+        expect(@client.respond_to?('get_settings_bounce_purge')).to eq(true)
+        expect(@client.respond_to?('patch_settings_bounce_purge')).to eq(true)
+        expect(
+          @client.respond_to?('get_settings_event_notification')
+        ).to eq(true)
+        expect(
+          @client.respond_to?('patch_settings_event_notification')
+        ).to eq(true)
+        expect(
+          @client.respond_to?('test_settings_event_notification')
+        ).to eq(true)
+        expect(@client.respond_to?('get_settings_footer')).to eq(true)
+        expect(@client.respond_to?('patch_settings_footer')).to eq(true)
+        expect(@client.respond_to?('get_settings_forward_bounce')).to eq(true)
+        expect(@client.respond_to?('patch_settings_forward_bounce')).to eq(true)
+        expect(@client.respond_to?('get_settings_forward_spam')).to eq(true)
+        expect(@client.respond_to?('patch_settings_forward_spam')).to eq(true)
+        expect(@client.respond_to?('get_settings_template')).to eq(true)
+        expect(@client.respond_to?('patch_settings_template')).to eq(true)
+        expect(@client.respond_to?('get_settings_plain_content')).to eq(true)
+        expect(@client.respond_to?('patch_settings_plain_content')).to eq(true)
+
+        # partner
+        expect(@client.respond_to?('get_partner_settings')).to eq(true)
+        expect(@client.respond_to?('get_settings_new_relic')).to eq(true)
+        expect(@client.respond_to?('patch_settings_new_relic')).to eq(true)
+        expect(@client.respond_to?('get_settings_sendwithus')).to eq(true)
+        expect(@client.respond_to?('patch_settings_sendwithus')).to eq(true)
+
+        # tracking
+        expect(@client.respond_to?('get_tracking_settings')).to eq(true)
+        expect(@client.respond_to?('get_settings_click')).to eq(true)
+        expect(@client.respond_to?('patch_settings_click')).to eq(true)
+        expect(@client.respond_to?('get_settings_google_analytics')).to eq(true)
+        expect(
+          @client.respond_to?('patch_settings_google_analytics')
+        ).to eq(true)
+        expect(@client.respond_to?('get_settings_open')).to eq(true)
+        expect(@client.respond_to?('patch_settings_open')).to eq(true)
+        expect(@client.respond_to?('get_settings_subscription')).to eq(true)
+        expect(@client.respond_to?('patch_settings_subscription')).to eq(true)
+
         # Template Engine
         # templates
         expect(@client.respond_to?('get_templates')).to eq(true)

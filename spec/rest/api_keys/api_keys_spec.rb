@@ -14,13 +14,19 @@ describe SendGrid4r::REST::ApiKeys do
         # celan up test env(lists)
         api_keys = @client.get_api_keys
         api_keys.result.each do |api_key|
-          @client.delete_api_key(api_key.api_key_id) if api_key.name == @name1
-          @client.delete_api_key(api_key.api_key_id) if api_key.name == @name2
-          @client.delete_api_key(api_key.api_key_id) if api_key.name == @name1e
+          @client.delete_api_key(
+            api_key_id: api_key.api_key_id
+          ) if api_key.name == @name1
+          @client.delete_api_key(
+            api_key_id: api_key.api_key_id
+          ) if api_key.name == @name2
+          @client.delete_api_key(
+            api_key_id: api_key.api_key_id
+          ) if api_key.name == @name1e
         end
 
         # post api_key
-        @api_key1 = @client.post_api_key(@name1)
+        @api_key1 = @client.post_api_key(name: @name1)
       rescue => e
         puts e.inspect
         raise e
@@ -41,7 +47,7 @@ describe SendGrid4r::REST::ApiKeys do
 
       it '#post_api_key' do
         begin
-          api_key2 = @client.post_api_key(@name2)
+          api_key2 = @client.post_api_key(name: @name2)
           expect(api_key2).to be_a(SendGrid4r::REST::ApiKeys::ApiKey)
           expect(api_key2.name).to eq(@name2)
           expect(api_key2.api_key_id).to be_a(String)
@@ -55,7 +61,7 @@ describe SendGrid4r::REST::ApiKeys do
 
       it '#delete_api_key' do
         begin
-          @client.delete_api_key(@api_key1.api_key_id)
+          @client.delete_api_key(api_key_id: @api_key1.api_key_id)
         rescue => e
           puts e.inspect
           raise e
@@ -64,7 +70,9 @@ describe SendGrid4r::REST::ApiKeys do
 
       it '#patch_api_key' do
         begin
-          edit_api_key = @client.patch_api_key(@api_key1.api_key_id, @name1e)
+          edit_api_key = @client.patch_api_key(
+            api_key_id: @api_key1.api_key_id, name: @name1e
+          )
           expect(edit_api_key.api_key_id).to eq(@api_key1.api_key_id)
           expect(edit_api_key.name).to eq(@name1e)
         rescue => e
@@ -86,7 +94,7 @@ describe SendGrid4r::REST::ApiKeys do
       end
 
       it '#post_api_key' do
-        @client.post_api_key(@name2) do |resp, req, res|
+        @client.post_api_key(name: @name2) do |resp, req, res|
           resp =
             SendGrid4r::REST::ApiKeys.create_api_key(JSON.parse(resp))
           expect(resp).to be_a(SendGrid4r::REST::ApiKeys::ApiKey)
@@ -96,7 +104,9 @@ describe SendGrid4r::REST::ApiKeys do
       end
 
       it '#delete_api_key' do
-        @client.delete_api_key(@api_key1.api_key_id) do |resp, req, res|
+        @client.delete_api_key(
+          api_key_id: @api_key1.api_key_id
+        ) do |resp, req, res|
           expect(resp).to eq('')
           expect(req).to be_a(RestClient::Request)
           expect(res).to be_a(Net::HTTPNoContent)
@@ -104,7 +114,9 @@ describe SendGrid4r::REST::ApiKeys do
       end
 
       it '#patch_api_key' do
-        @client.patch_api_key(@api_key1.api_key_id, @name1e) do |resp, req, res|
+        @client.patch_api_key(
+          api_key_id: @api_key1.api_key_id, name: @name1e
+        ) do |resp, req, res|
           resp =
             SendGrid4r::REST::ApiKeys.create_api_key(JSON.parse(resp))
           expect(resp).to be_a(SendGrid4r::REST::ApiKeys::ApiKey)
@@ -150,19 +162,19 @@ describe SendGrid4r::REST::ApiKeys do
 
     it '#post_api_key' do
       allow(client).to receive(:execute).and_return(api_key)
-      actual = client.post_api_key('')
+      actual = client.post_api_key(name: '')
       expect(actual).to be_a(SendGrid4r::REST::ApiKeys::ApiKey)
     end
 
     it '#delete_api_key' do
       allow(client).to receive(:execute).and_return('')
-      actual = client.delete_api_key('')
+      actual = client.delete_api_key(api_key_id: '')
       expect(actual).to eq('')
     end
 
     it '#patch_api_key' do
       allow(client).to receive(:execute).and_return(api_key)
-      actual = client.patch_api_key('', '')
+      actual = client.patch_api_key(api_key_id: '', name: '')
       expect(actual).to be_a(SendGrid4r::REST::ApiKeys::ApiKey)
     end
 
