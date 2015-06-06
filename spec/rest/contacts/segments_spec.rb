@@ -6,9 +6,7 @@ describe SendGrid4r::REST::Contacts::Segments do
     before do
       begin
         Dotenv.load
-        @client = SendGrid4r::Client.new(
-          username: ENV['SENDGRID_USERNAME'],
-          password: ENV['SENDGRID_PASSWORD'])
+        @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
         @name1 = 'test_segment1'
         @name2 = 'test_segment2'
         @edit_name1 = 'test_segment_edit'

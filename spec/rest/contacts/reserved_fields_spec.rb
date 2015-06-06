@@ -5,9 +5,7 @@ describe SendGrid4r::REST::Contacts::ReservedFields do
   describe 'integration test', :it do
     before do
       Dotenv.load
-      @client = SendGrid4r::Client.new(
-        username: ENV['SENDGRID_USERNAME'],
-        password: ENV['SENDGRID_PASSWORD'])
+      @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
       @first_name =
         SendGrid4r::REST::Contacts::ReservedFields::Field.new(
           'first_name', 'text'

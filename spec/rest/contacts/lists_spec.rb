@@ -7,9 +7,7 @@ describe SendGrid4r::REST::Contacts::Lists do
       begin
         pending 'waiting sendgrid documentation update'
         Dotenv.load
-        @client = SendGrid4r::Client.new(
-          username: ENV['SENDGRID_USERNAME'],
-          password: ENV['SENDGRID_PASSWORD'])
+        @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
         @list_name1 = 'test_list1'
         @edit_name1 = 'test_list1_edit'
         @list_name2 = 'test_list2'

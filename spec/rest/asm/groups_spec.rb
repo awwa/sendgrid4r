@@ -6,9 +6,7 @@ describe SendGrid4r::REST::Asm::Groups do
     before do
       begin
         Dotenv.load
-        @client = SendGrid4r::Client.new(
-          username: ENV['SENDGRID_USERNAME'],
-          password: ENV['SENDGRID_PASSWORD'])
+        @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
         @group_name1 = 'group_test1'
         @group_name2 = 'group_test2'
         @group_name_edit1 = 'group_edit1'

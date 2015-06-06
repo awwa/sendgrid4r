@@ -6,9 +6,7 @@ describe SendGrid4r::REST::Asm::GlobalSuppressions do
     before do
       begin
         Dotenv.load
-        @client = SendGrid4r::Client.new(
-          username: ENV['SENDGRID_USERNAME'],
-          password: ENV['SENDGRID_PASSWORD'])
+        @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
         @email1 = 'test1@test.com'
         @email2 = 'test2@test.com'
         @email3 = 'test3@test.com'

@@ -6,9 +6,7 @@ describe SendGrid4r::REST::Contacts::CustomFields do
     before do
       begin
         Dotenv.load
-        @client = SendGrid4r::Client.new(
-          username: ENV['SENDGRID_USERNAME'],
-          password: ENV['SENDGRID_PASSWORD'])
+        @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
         @name1 = 'birthday'
         @type1 = 'text'
         @name2 = 'born_at'

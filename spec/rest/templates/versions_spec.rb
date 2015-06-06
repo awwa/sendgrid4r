@@ -6,9 +6,7 @@ describe SendGrid4r::REST::Templates::Versions do
     before do
       begin
         Dotenv.load
-        @client = SendGrid4r::Client.new(
-          username: ENV['SENDGRID_USERNAME'],
-          password: ENV['SENDGRID_PASSWORD'])
+        @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
         @template_name = 'version_test'
         @version1_name = 'version_name1'
         @version2_name = 'version_name2'

@@ -6,9 +6,7 @@ describe SendGrid4r::REST::Templates do
     before do
       begin
         Dotenv.load
-        @client = SendGrid4r::Client.new(
-          username: ENV['SENDGRID_USERNAME'],
-          password: ENV['SENDGRID_PASSWORD'])
+        @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
         @template_name1 = 'template_test1'
         @template_name2 = 'template_test2'
         @template_edit1 = 'template_edit1'
