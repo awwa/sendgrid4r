@@ -31,7 +31,7 @@ describe SendGrid4r::REST::Asm::Suppressions do
         @client.post_suppressed_emails(
           group_id: @group.id, recipient_emails: [@email1]
         )
-      rescue => e
+      rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
         raise e
       end
@@ -46,7 +46,7 @@ describe SendGrid4r::REST::Asm::Suppressions do
           expect(emails.recipient_emails.length).to eq(2)
           expect(emails.recipient_emails[0]).to eq(@email2)
           expect(emails.recipient_emails[1]).to eq(@email3)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -57,7 +57,7 @@ describe SendGrid4r::REST::Asm::Suppressions do
           emails = @client.get_suppressed_emails(group_id: @group.id)
           expect(emails.length).to eq(1)
           expect(emails[0]).to eq(@email1)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -73,7 +73,7 @@ describe SendGrid4r::REST::Asm::Suppressions do
             expect(suppression.description).to eq(@group_desc)
             expect(suppression.suppressed).to eq(true)
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -90,64 +90,9 @@ describe SendGrid4r::REST::Asm::Suppressions do
           @client.delete_suppressed_email(
             group_id: @group.id, email_address: @email3
           )
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
-        end
-      end
-    end
-
-    context 'with block call' do
-      it '#post_suppressed_emails' do
-        @client.post_suppressed_emails(
-          group_id: @group.id, recipient_emails: [@email2, @email3]
-        ) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Asm.create_recipient_emails(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(
-            SendGrid4r::REST::Asm::RecipientEmails
-          )
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPCreated)
-        end
-      end
-
-      it '#get_suppressed_emails' do
-        @client.get_suppressed_emails(group_id: @group.id) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Asm::Suppressions.create_emails(JSON.parse(resp))
-          expect(resp).to be_a(Array)
-          resp.each do |email|
-            expect(email).to be_a(String)
-          end
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#get_suppressions' do
-        @client.get_suppressions(email_address: @email1) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Asm::Suppressions.create_suppressions(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(
-            SendGrid4r::REST::Asm::Suppressions::Suppressions
-          )
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#delete_suppressed_email' do
-        @client.delete_suppressed_email(
-          group_id: @group.id, email_address: @email1
-        ) do |resp, req, res|
-          expect(resp).to eq('')
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPNoContent)
         end
       end
     end

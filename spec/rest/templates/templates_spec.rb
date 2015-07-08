@@ -20,7 +20,7 @@ describe SendGrid4r::REST::Templates do
         end
         # post a template
         @template1 = @client.post_template(@template_name1)
-      rescue => e
+      rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
         raise e
       end
@@ -33,7 +33,7 @@ describe SendGrid4r::REST::Templates do
           expect(new_template.id).to be_a(String)
           expect(new_template.name).to eq(@template_name2)
           expect(new_template.versions).to be_a(Array)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -54,7 +54,7 @@ describe SendGrid4r::REST::Templates do
               expect(ver.updated_at).to be_a(String)
             end
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -73,7 +73,7 @@ describe SendGrid4r::REST::Templates do
             expect(ver.name).to be_a(String)
             expect(ver.updated_at).to be_a(String)
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -84,7 +84,7 @@ describe SendGrid4r::REST::Templates do
           tmp = @client.get_template(@template1.id)
           expect(tmp.id).to eq(@template1.id)
           expect(tmp.versions).to eq(@template1.versions)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -93,69 +93,9 @@ describe SendGrid4r::REST::Templates do
       it '#delete_template' do
         begin
           @client.delete_template(@template1.id)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
-        end
-      end
-    end
-
-    context 'with block call' do
-      it '#post_template' do
-        @client.post_template(@template_name2) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Templates.create_template(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Templates::Template)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPCreated)
-        end
-      end
-
-      it '#get_templates' do
-        @client.get_templates do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Templates.create_templates(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Templates::Templates)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#get_template' do
-        @client.get_template(@template1.id) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Templates.create_template(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Templates::Template)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#patch_template' do
-        @client.patch_template(
-          @template1.id, @template_edit1
-        ) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Templates.create_template(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Templates::Template)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#delete_template' do
-        @client.delete_template(@template1.id) do |resp, req, res|
-          expect(resp).to eq('')
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPNoContent)
         end
       end
     end

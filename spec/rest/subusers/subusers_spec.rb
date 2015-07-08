@@ -15,7 +15,7 @@ describe SendGrid4r::REST::Subusers do
 
         @ip = @client.get_ips[0].ip
         # celan up test env
-      rescue => e
+      rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
         raise e
       end
@@ -29,7 +29,7 @@ describe SendGrid4r::REST::Subusers do
           subusers.each do |subuser|
             expect(subuser).to be_a(SendGrid4r::REST::Subusers::Subuser)
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -49,7 +49,7 @@ describe SendGrid4r::REST::Subusers do
           expect(subuser2.email).to eq(@email2)
           expect(subuser2.password).to eq(@password2)
           expect(subuser2.ips).to be_a(Array)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -65,7 +65,7 @@ describe SendGrid4r::REST::Subusers do
           subusers.each do |subuser|
             expect(subuser).to be_a(SendGrid4r::REST::Subusers::Subuser)
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -79,62 +79,9 @@ describe SendGrid4r::REST::Subusers do
           subuser.ips.each do |ip|
             expect(ip).to be_a(String)
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
-        end
-      end
-    end
-
-    context 'with block call' do
-      it '#get_subusers' do
-        @client.get_subusers(limit: 100, offset: 0) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Subusers.create_subusers(JSON.parse(resp))
-          expect(resp).to be_a(Array)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#post_subuser' do
-        pending 'got RestClient::Forbidden:'
-        @client.post_subuser(
-          username: @username2,
-          email: @email2,
-          password: @password2,
-          ips: [@ip]
-        ) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Subusers.create_subuser(JSON.parse(resp))
-          expect(resp).to be_a(SendGrid4r::REST::Subusers::Subuser)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPCreated)
-        end
-      end
-
-      it '#get_subuser_reputation' do
-        @client.get_subuser_reputation(
-          usernames: [@username2]
-        ) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Subusers.create_subusers(JSON.parse(resp))
-          expect(resp).to be_a(Array)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#put_subuser_assigned_ips' do
-        pending 'Invalid JSON'
-        @client.put_subuser_assigned_ips(
-          username: @username2
-        ) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Subusers.create_subuser(JSON.parse(resp))
-          expect(resp).to be_a(SendGrid4r::REST::Subusers::Subuser)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
         end
       end
     end

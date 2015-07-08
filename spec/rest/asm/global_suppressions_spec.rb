@@ -32,7 +32,7 @@ describe SendGrid4r::REST::Asm::GlobalSuppressions do
         @client.post_global_suppressed_emails(
           recipient_emails: [@email1]
         )
-      rescue => e
+      rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
         raise e
       end
@@ -47,7 +47,7 @@ describe SendGrid4r::REST::Asm::GlobalSuppressions do
           expect(emails.recipient_emails.length).to eq(2)
           expect(emails.recipient_emails.include? @email2).to eq(true)
           expect(emails.recipient_emails.include? @email3).to eq(true)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -63,7 +63,7 @@ describe SendGrid4r::REST::Asm::GlobalSuppressions do
           )
           expect(actual_email1.recipient_email).to eq(@email1)
           expect(actual_notexist.recipient_email).to eq(nil)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -80,53 +80,9 @@ describe SendGrid4r::REST::Asm::GlobalSuppressions do
           expect(
             @client.delete_global_suppressed_email(email_address: @email3)
           ).to eq('')
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
-        end
-      end
-    end
-
-    context 'with block call' do
-      it '#post_global_suppressed_emails' do
-        @client.post_global_suppressed_emails(
-          recipient_emails: [@email1, @email2, @email3]
-        ) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Asm.create_recipient_emails(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(
-            SendGrid4r::REST::Asm::RecipientEmails
-          )
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPCreated)
-        end
-      end
-
-      it '#get_global_suppressed_email' do
-        @client.get_global_suppressed_email(
-          email_address: @email1
-        ) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Asm.create_recipient_email(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(
-            SendGrid4r::REST::Asm::RecipientEmail
-          )
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#delete_global_suppressed_email' do
-        @client.delete_global_suppressed_email(
-          email_address: @email1
-        ) do |resp, req, res|
-          expect(resp).to eq('')
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPNoContent)
         end
       end
     end

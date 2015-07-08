@@ -20,7 +20,7 @@ describe SendGrid4r::REST::Ips::Pools do
         end
         # post a pool
         @client.post_pool(name: @pool_name1)
-      rescue => e
+      rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
         raise e
       end
@@ -32,7 +32,7 @@ describe SendGrid4r::REST::Ips::Pools do
           begin
             new_pool = @client.post_pool(name: @pool_name2)
             expect(new_pool.name).to eq(@pool_name2)
-          rescue => e
+          rescue RestClient::ExceptionWithResponse => e
             puts e.inspect
             raise e
           end
@@ -46,7 +46,7 @@ describe SendGrid4r::REST::Ips::Pools do
               expect(pool).to be_a(SendGrid4r::REST::Ips::Pools::Pool)
               expect(pool.name).to be_a(String)
             end
-          rescue => e
+          rescue RestClient::ExceptionWithResponse => e
             puts e.inspect
             raise e
           end
@@ -58,7 +58,7 @@ describe SendGrid4r::REST::Ips::Pools do
             expect(pool).to be_a(SendGrid4r::REST::Ips::Pools::Pool)
             expect(pool.pool_name).to eq(@pool_name1)
             expect(pool.ips).to be_a(Array)
-          rescue => e
+          rescue RestClient::ExceptionWithResponse => e
             puts e.inspect
             raise e
           end
@@ -70,7 +70,7 @@ describe SendGrid4r::REST::Ips::Pools do
               name: @pool_name1, new_name: @pool_edit1
             )
             expect(edit_pool.name).to eq(@pool_edit1)
-          rescue => e
+          rescue RestClient::ExceptionWithResponse => e
             puts e.inspect
             raise e
           end
@@ -79,69 +79,9 @@ describe SendGrid4r::REST::Ips::Pools do
         it '#delete_pool' do
           begin
             @client.delete_pool(name: @pool_name1)
-          rescue => e
+          rescue RestClient::ExceptionWithResponse => e
             puts e.inspect
             raise e
-          end
-        end
-      end
-
-      context 'with block call' do
-        it '#post_pool' do
-          @client.post_pool(name: @pool_name2) do |resp, req, res|
-            resp =
-              SendGrid4r::REST::Ips::Pools.create_pool(
-                JSON.parse(resp)
-              )
-            expect(resp).to be_a(SendGrid4r::REST::Ips::Pools::Pool)
-            expect(req).to be_a(RestClient::Request)
-            expect(res).to be_a(Net::HTTPCreated)
-          end
-        end
-
-        it '#get_pools' do
-          @client.get_pools do |resp, req, res|
-            resp =
-              SendGrid4r::REST::Ips::Pools.create_pools(
-                JSON.parse(resp)
-              )
-            expect(resp).to be_a(Array)
-            expect(req).to be_a(RestClient::Request)
-            expect(res).to be_a(Net::HTTPOK)
-          end
-        end
-
-        it '#get_pool' do
-          @client.get_pool(name: @pool_name1) do |resp, req, res|
-            resp =
-              SendGrid4r::REST::Ips::Pools.create_pool(
-                JSON.parse(resp)
-              )
-            expect(resp).to be_a(SendGrid4r::REST::Ips::Pools::Pool)
-            expect(req).to be_a(RestClient::Request)
-            expect(res).to be_a(Net::HTTPOK)
-          end
-        end
-
-        it '#put_pool' do
-          @client.put_pool(
-            name: @pool_name1, new_name: @pool_edit1
-          ) do |resp, req, res|
-            resp =
-              SendGrid4r::REST::Ips::Pools.create_pool(
-                JSON.parse(resp)
-              )
-            expect(resp).to be_a(SendGrid4r::REST::Ips::Pools::Pool)
-            expect(req).to be_a(RestClient::Request)
-            expect(res).to be_a(Net::HTTPOK)
-          end
-        end
-
-        it '#delete_pool' do
-          @client.delete_pool(name: @pool_name1) do |resp, req, res|
-            expect(resp).to eq('')
-            expect(req).to be_a(RestClient::Request)
-            expect(res).to be_a(Net::HTTPNoContent)
           end
         end
       end

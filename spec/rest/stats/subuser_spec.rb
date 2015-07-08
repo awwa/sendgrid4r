@@ -40,7 +40,7 @@ describe SendGrid4r::REST::Stats::Subuser do
               expect(stat.metrics.unsubscribes.nil?).to be(false)
             end
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -62,7 +62,7 @@ describe SendGrid4r::REST::Stats::Subuser do
               expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
             end
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -76,7 +76,7 @@ describe SendGrid4r::REST::Stats::Subuser do
             expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
             expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -97,50 +97,9 @@ describe SendGrid4r::REST::Stats::Subuser do
             expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
             expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
-        end
-      end
-    end
-
-    context 'with block call' do
-      it '#get_subusers_stats with all params' do
-        @client.get_subusers_stats(
-          start_date: '2015-01-01',
-          end_date: '2015-01-02',
-          aggregated_by: SendGrid4r::REST::Stats::AggregatedBy::WEEK,
-          subusers: @subuser
-        ) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Stats.create_top_stats(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(Array)
-          resp.each do |stat|
-            expect(stat).to be_a(SendGrid4r::REST::Stats::TopStat)
-          end
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#get_subusers_stats_sums with all params' do
-        @client.get_subusers_stats_sums(
-          start_date: '2015-01-01',
-          end_date: '2015-01-02',
-          sort_by_metric: 'opens',
-          sort_by_direction: 'desc',
-          limit: 5,
-          offset: 0
-        ) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Stats.create_top_stat(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Stats::TopStat)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
         end
       end
     end

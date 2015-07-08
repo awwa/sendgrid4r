@@ -15,7 +15,7 @@ describe SendGrid4r::REST::Settings::EnforcedTls do
           expect(
             actual
           ).to be_a(SendGrid4r::REST::Settings::EnforcedTls::EnforcedTls)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -31,44 +31,9 @@ describe SendGrid4r::REST::Settings::EnforcedTls do
           edit = @client.patch_enforced_tls(params: actual)
           expect(actual.require_tls).to eq(edit.require_tls)
           expect(actual.require_valid_cert).to eq(edit.require_valid_cert)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
-        end
-      end
-    end
-
-    context 'with block call' do
-      it '#get_enforced_tls' do
-        @client.get_enforced_tls do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::EnforcedTls.create_enforced_tls(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(
-            SendGrid4r::REST::Settings::EnforcedTls::EnforcedTls
-          )
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#patch_enforced_tls' do
-        # get original enforced_tls settings
-        actual = @client.get_enforced_tls
-        # patch both value
-        actual.require_tls = false
-        actual.require_valid_cert = false
-        @client.patch_enforced_tls(params: actual) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::EnforcedTls.create_enforced_tls(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(
-            SendGrid4r::REST::Settings::EnforcedTls::EnforcedTls
-          )
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
         end
       end
     end

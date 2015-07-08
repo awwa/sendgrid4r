@@ -15,7 +15,7 @@ describe SendGrid4r::REST::Settings::Tracking do
           expect(
             actual
           ).to be_a(SendGrid4r::REST::Settings::Results)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -27,7 +27,7 @@ describe SendGrid4r::REST::Settings::Tracking do
           expect(actual).to be_a(
             SendGrid4r::REST::Settings::Tracking::Click
           )
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -41,7 +41,7 @@ describe SendGrid4r::REST::Settings::Tracking do
           actual.enabled = false
           edit = @client.patch_settings_click(params: actual)
           expect(edit.enabled).to eq(false)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -53,7 +53,7 @@ describe SendGrid4r::REST::Settings::Tracking do
           expect(actual).to be_a(
             SendGrid4r::REST::Settings::Tracking::GoogleAnalytics
           )
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -77,7 +77,7 @@ describe SendGrid4r::REST::Settings::Tracking do
           expect(edit.utm_term).to eq('c')
           expect(edit.utm_content).to eq('d')
           expect(edit.utm_campaign).to eq('e')
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -89,7 +89,7 @@ describe SendGrid4r::REST::Settings::Tracking do
           expect(actual).to be_a(
             SendGrid4r::REST::Settings::Tracking::Open
           )
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -103,7 +103,7 @@ describe SendGrid4r::REST::Settings::Tracking do
           actual.enabled = false
           edit = @client.patch_settings_open(params: actual)
           expect(edit.enabled).to eq(false)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -115,7 +115,7 @@ describe SendGrid4r::REST::Settings::Tracking do
           expect(actual).to be_a(
             SendGrid4r::REST::Settings::Tracking::Subscription
           )
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -129,144 +129,9 @@ describe SendGrid4r::REST::Settings::Tracking do
           actual.enabled = false
           edit = @client.patch_settings_subscription(params: actual)
           expect(edit.enabled).to eq(false)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
-        end
-      end
-    end
-
-    context 'with block call' do
-      it '#get_tracking_settings' do
-        @client.get_tracking_settings do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings.create_results(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Settings::Results)
-          resp.result.each do |result|
-            expect(result).to be_a(SendGrid4r::REST::Settings::Result)
-          end
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#get_settings_click' do
-        @client.get_settings_click do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Tracking.create_click(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(
-            SendGrid4r::REST::Settings::Tracking::Click
-          )
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#patch_settings_click' do
-        params = @client.get_settings_click
-        @client.patch_settings_click(params: params) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Tracking.create_click(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(
-            SendGrid4r::REST::Settings::Tracking::Click
-          )
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#get_settings_google_analytics' do
-        @client.get_settings_google_analytics do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Tracking.create_google_analytics(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(
-            SendGrid4r::REST::Settings::Tracking::GoogleAnalytics
-          )
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#patch_settings_google_analytics' do
-        params = @client.get_settings_google_analytics
-        @client.patch_settings_google_analytics(
-          params: params
-        ) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Tracking.create_google_analytics(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(
-            SendGrid4r::REST::Settings::Tracking::GoogleAnalytics
-          )
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#get_settings_open' do
-        @client.get_settings_open do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Tracking.create_open(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(
-            SendGrid4r::REST::Settings::Tracking::Open
-          )
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#patch_settings_open' do
-        params = @client.get_settings_open
-        @client.patch_settings_open(params: params) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Tracking.create_open(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(
-            SendGrid4r::REST::Settings::Tracking::Open
-          )
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#get_settings_subscription' do
-        @client.get_settings_subscription do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Tracking.create_subscription(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(
-            SendGrid4r::REST::Settings::Tracking::Subscription
-          )
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#patch_settings_subscription' do
-        params = @client.get_settings_subscription
-        @client.patch_settings_subscription(params: params) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Tracking.create_subscription(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(
-            SendGrid4r::REST::Settings::Tracking::Subscription
-          )
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
         end
       end
     end

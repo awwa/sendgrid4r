@@ -44,7 +44,7 @@ describe SendGrid4r::REST::Contacts::Segments do
           name: @name1, conditions: [@condition]
         )
         @segment1 = @client.post_segment(params: params1)
-      rescue => e
+      rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
         raise e
       end
@@ -68,7 +68,7 @@ describe SendGrid4r::REST::Contacts::Segments do
           expect(condition.operator).to eq(@operator)
           expect(condition.and_or).to eq(nil)
           expect(segment.recipient_count).to eq(0)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -82,7 +82,7 @@ describe SendGrid4r::REST::Contacts::Segments do
               segment
             ).to be_a(SendGrid4r::REST::Contacts::Segments::Segment)
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -100,7 +100,7 @@ describe SendGrid4r::REST::Contacts::Segments do
           expect(condition.operator).to eq(@operator)
           expect(condition.and_or).to eq(nil)
           expect(segment.recipient_count).to be_a(Fixnum)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -116,7 +116,7 @@ describe SendGrid4r::REST::Contacts::Segments do
             segment_id: @segment1.id, params: edit_params
           )
           expect(edit_segment.name).to eq(@edit_name1)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -133,7 +133,7 @@ describe SendGrid4r::REST::Contacts::Segments do
               recipient
             ).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -143,7 +143,7 @@ describe SendGrid4r::REST::Contacts::Segments do
         begin
           # delete the segment
           @client.delete_segment(segment_id: @segment1.id)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end

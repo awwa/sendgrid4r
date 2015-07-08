@@ -42,7 +42,7 @@ describe SendGrid4r::REST::Stats::Category do
               expect(stat.type).to eq('category')
             end
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -65,7 +65,7 @@ describe SendGrid4r::REST::Stats::Category do
               expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
             end
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -99,7 +99,7 @@ describe SendGrid4r::REST::Stats::Category do
             expect(stat.name).to be_a(String)
             expect(stat.type).to eq('category')
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -121,50 +121,9 @@ describe SendGrid4r::REST::Stats::Category do
             expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
             expect(stat.metrics_a).to be(SendGrid4r::REST::Stats::Metric)
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
-        end
-      end
-    end
-
-    context 'with block call' do
-      it '#get_category_stats with all params' do
-        @client.get_categories_stats(
-          start_date: '2015-01-01',
-          end_date: '2015-01-02',
-          aggregated_by: SendGrid4r::REST::Stats::AggregatedBy::WEEK,
-          categories: 'yui'
-        ) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Stats.create_top_stats(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(Array)
-          resp.each do |stat|
-            expect(stat).to be_a(SendGrid4r::REST::Stats::TopStat)
-          end
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#get_categories_stats_sums with all params' do
-        @client.get_categories_stats_sums(
-          start_date: '2015-01-01',
-          end_date: '2015-01-02',
-          sort_by_metric: 'opens',
-          sort_by_direction: 'desc',
-          limit: 5,
-          offset: 0
-        ) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Stats.create_top_stat(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Stats::TopStat)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
         end
       end
     end

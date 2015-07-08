@@ -7,7 +7,7 @@ describe SendGrid4r::REST::EmailActivity do
       begin
         Dotenv.load
         @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
-      rescue => e
+      rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
         raise e
       end
@@ -20,7 +20,7 @@ describe SendGrid4r::REST::EmailActivity do
           activities.each do |activity|
             expect(activity).to be_a(SendGrid4r::REST::EmailActivity::Activity)
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -32,7 +32,7 @@ describe SendGrid4r::REST::EmailActivity do
           activities.each do |activity|
             expect(activity).to be_a(SendGrid4r::REST::EmailActivity::Activity)
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -48,7 +48,7 @@ describe SendGrid4r::REST::EmailActivity do
             expect(activity).to be_a(SendGrid4r::REST::EmailActivity::Activity)
             expect(activity.event).to eq('drop')
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -76,7 +76,7 @@ describe SendGrid4r::REST::EmailActivity do
           activities.each do |activity|
             expect(activity).to be_a(SendGrid4r::REST::EmailActivity::Activity)
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -94,21 +94,9 @@ describe SendGrid4r::REST::EmailActivity do
             expect(activity).to be_a(SendGrid4r::REST::EmailActivity::Activity)
             puts activity.inspect
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
-        end
-      end
-    end
-
-    context 'with block call' do
-      it '#get_email_activities' do
-        @client.get_api_keys do |resp, req, res|
-          resp =
-            SendGrid4r::REST::ApiKeys.create_api_keys(JSON.parse(resp))
-          expect(resp).to be_a(SendGrid4r::REST::ApiKeys::ApiKeys)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
         end
       end
     end

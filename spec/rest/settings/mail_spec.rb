@@ -15,7 +15,7 @@ describe SendGrid4r::REST::Settings::Mail do
           expect(
             actual
           ).to be_a(SendGrid4r::REST::Settings::Results)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -27,7 +27,7 @@ describe SendGrid4r::REST::Settings::Mail do
           expect(actual).to be_a(
             SendGrid4r::REST::Settings::Mail::AddressWhitelist
           )
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -44,7 +44,7 @@ describe SendGrid4r::REST::Settings::Mail do
           expect(edit.enabled).to eq(false)
           expect(edit.list[0]).to eq('test@white.list.com')
           expect(edit.list[1]).to eq('white.list.com')
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -54,7 +54,7 @@ describe SendGrid4r::REST::Settings::Mail do
         begin
           actual = @client.get_settings_bcc
           expect(actual).to be_a(SendGrid4r::REST::Settings::Mail::Bcc)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -70,7 +70,7 @@ describe SendGrid4r::REST::Settings::Mail do
           edit = @client.patch_settings_bcc(params: actual)
           expect(edit.enabled).to eq(false)
           expect(edit.email).to eq('test@bcc.com')
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -80,7 +80,7 @@ describe SendGrid4r::REST::Settings::Mail do
         begin
           actual = @client.get_settings_bounce_purge
           expect(actual).to be_a(SendGrid4r::REST::Settings::Mail::BouncePurge)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -98,7 +98,7 @@ describe SendGrid4r::REST::Settings::Mail do
           expect(edit.enabled).to eq(false)
           # expect(actual.hard_bounces).to eq(123)
           # expect(actual.soft_bounces).to eq(321)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -110,7 +110,7 @@ describe SendGrid4r::REST::Settings::Mail do
           expect(actual).to be_a(
             SendGrid4r::REST::Settings::Mail::EventNotification
           )
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -148,7 +148,7 @@ describe SendGrid4r::REST::Settings::Mail do
           expect(edit.open).to eq(true)
           expect(edit.click).to eq(true)
           expect(edit.dropped).to eq(true)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -157,7 +157,7 @@ describe SendGrid4r::REST::Settings::Mail do
       it '#test_settings_event_notification' do
         begin
           @client.test_settings_event_notification(url: ENV['EVENT_URL'])
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -167,7 +167,7 @@ describe SendGrid4r::REST::Settings::Mail do
         begin
           actual = @client.get_settings_footer
           expect(actual).to be_a(SendGrid4r::REST::Settings::Mail::Footer)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -185,7 +185,7 @@ describe SendGrid4r::REST::Settings::Mail do
           expect(edit.enabled).to eq(false)
           expect(edit.html_content).to eq('abc...')
           expect(edit.plain_content).to eq('xyz...')
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -197,7 +197,7 @@ describe SendGrid4r::REST::Settings::Mail do
           expect(actual).to be_a(
             SendGrid4r::REST::Settings::Mail::ForwardBounce
           )
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -213,7 +213,7 @@ describe SendGrid4r::REST::Settings::Mail do
           edit = @client.patch_settings_forward_bounce(params: actual)
           expect(edit.enabled).to eq(false)
           expect(edit.email).to eq(ENV['MAIL'])
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -225,7 +225,7 @@ describe SendGrid4r::REST::Settings::Mail do
           expect(actual).to be_a(
             SendGrid4r::REST::Settings::Mail::ForwardSpam
           )
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -241,7 +241,7 @@ describe SendGrid4r::REST::Settings::Mail do
           edit = @client.patch_settings_forward_spam(params: actual)
           expect(edit.enabled).to eq(false)
           expect(edit.email).to eq(ENV['MAIL'])
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -251,7 +251,7 @@ describe SendGrid4r::REST::Settings::Mail do
         begin
           actual = @client.get_settings_template
           expect(actual).to be_a(SendGrid4r::REST::Settings::Mail::Template)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -267,7 +267,7 @@ describe SendGrid4r::REST::Settings::Mail do
           edit = @client.patch_settings_template(params: actual)
           expect(edit.enabled).to eq(false)
           expect(edit.html_content).to eq('...<% body %>')
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -277,7 +277,7 @@ describe SendGrid4r::REST::Settings::Mail do
         begin
           actual = @client.get_settings_plain_content
           expect(actual).to be_a(SendGrid4r::REST::Settings::Mail::PlainContent)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -291,280 +291,9 @@ describe SendGrid4r::REST::Settings::Mail do
           actual.enabled = false
           edit = @client.patch_settings_plain_content(params: actual)
           expect(edit.enabled).to eq(false)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
-        end
-      end
-    end
-
-    context 'with block call' do
-      it '#get_mail_settings' do
-        @client.get_mail_settings do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings.create_results(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Settings::Results)
-          resp.result.each do |result|
-            expect(result).to be_a(SendGrid4r::REST::Settings::Result)
-          end
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#get_settings_address_whitelist' do
-        @client.get_settings_address_whitelist do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Mail.create_address_whitelist(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(
-            SendGrid4r::REST::Settings::Mail::AddressWhitelist
-          )
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#patch_settings_address_whitelist' do
-        params = @client.get_settings_address_whitelist
-        @client.patch_settings_address_whitelist(
-          params: params
-        ) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Mail.create_address_whitelist(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(
-            SendGrid4r::REST::Settings::Mail::AddressWhitelist
-          )
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#get_settings_bcc' do
-        @client.get_settings_bcc do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Mail.create_bcc(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Settings::Mail::Bcc)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#patch_settings_bcc' do
-        params = @client.get_settings_bcc
-        @client.patch_settings_bcc(params: params) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Mail.create_bcc(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Settings::Mail::Bcc)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#get_settings_bounce_purge' do
-        @client.get_settings_bounce_purge do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Mail.create_bounce_purge(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Settings::Mail::BouncePurge)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#patch_settings_bounce_purge' do
-        params = @client.get_settings_bounce_purge
-        @client.patch_settings_bounce_purge(params: params) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Mail.create_bounce_purge(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Settings::Mail::BouncePurge)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#get_settings_event_notification' do
-        @client.get_settings_event_notification do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Mail.create_event_notification(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(
-            SendGrid4r::REST::Settings::Mail::EventNotification
-          )
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#patch_settings_event_notification' do
-        params = @client.get_settings_event_notification
-        @client.patch_settings_event_notification(
-          params: params
-        ) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Mail.create_event_notification(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(
-            SendGrid4r::REST::Settings::Mail::EventNotification
-          )
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#test_settings_event_notification' do
-        begin
-          @client.test_settings_event_notification(
-            url: ENV['EVENT_URL']
-          ) do |resp, req, res|
-            expect(resp).to eq('')
-            expect(req).to be_a(RestClient::Request)
-            expect(res).to be_a(Net::HTTPNoContent)
-          end
-        rescue => e
-          puts e.inspect
-          raise e
-        end
-      end
-
-      it '#get_settings_footer' do
-        @client.get_settings_footer do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Mail.create_footer(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Settings::Mail::Footer)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#patch_settings_footer' do
-        params = @client.get_settings_footer
-        @client.patch_settings_footer(params: params) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Mail.create_footer(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Settings::Mail::Footer)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#get_settings_forward_bounce' do
-        @client.get_settings_forward_bounce do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Mail.create_forward_bounce(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Settings::Mail::ForwardBounce)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#patch_settings_forward_bounce' do
-        params = @client.get_settings_forward_bounce
-        @client.patch_settings_forward_bounce(
-          params: params
-        ) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Mail.create_forward_bounce(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Settings::Mail::ForwardBounce)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#get_settings_forward_spam' do
-        @client.get_settings_forward_spam do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Mail.create_forward_spam(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Settings::Mail::ForwardSpam)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#patch_settings_forward_spam' do
-        params = @client.get_settings_forward_spam
-        @client.patch_settings_forward_spam(params: params) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Mail.create_forward_spam(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Settings::Mail::ForwardSpam)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#get_settings_template' do
-        @client.get_settings_template do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Mail.create_template(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Settings::Mail::Template)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#patch_settings_template' do
-        params = @client.get_settings_template
-        @client.patch_settings_template(params: params) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Mail.create_template(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Settings::Mail::Template)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#get_settings_plain_content' do
-        @client.get_settings_template do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Mail.create_plain_content(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Settings::Mail::PlainContent)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#patch_settings_plain_content' do
-        params = @client.get_settings_plain_content
-        @client.patch_settings_plain_content(params: params) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Mail.create_plain_content(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Settings::Mail::PlainContent)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
         end
       end
     end

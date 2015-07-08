@@ -16,7 +16,7 @@ describe SendGrid4r::REST::Categories do
           categories.each do |category|
             expect(category.category).to be_a(String)
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -29,7 +29,7 @@ describe SendGrid4r::REST::Categories do
           categories.each do |category|
             expect(category.category).to eq('Newsletter')
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -44,28 +44,9 @@ describe SendGrid4r::REST::Categories do
           categories.each do |category|
             expect(category.category).to be_a(String)
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
-        end
-      end
-    end
-
-    context 'with block call' do
-      it '#get_categories' do
-        @client.get_categories do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Categories::Categories.create_categories(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(Array)
-          resp.each do |category|
-            expect(category).to be_a(
-              SendGrid4r::REST::Categories::Categories::Category
-            )
-          end
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
         end
       end
     end

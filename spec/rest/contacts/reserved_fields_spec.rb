@@ -55,25 +55,9 @@ describe SendGrid4r::REST::Contacts::ReservedFields do
           expect(set.include?(@last_emailed)).to eq(true)
           expect(set.include?(@last_clicked)).to eq(true)
           expect(set.include?(@last_opened)).to eq(true)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
-        end
-      end
-    end
-
-    context 'with block call' do
-      it '#get_reserved_fields' do
-        @client.get_reserved_fields do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Contacts::ReservedFields.create_fields(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(
-            SendGrid4r::REST::Contacts::ReservedFields::Fields
-          )
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
         end
       end
     end

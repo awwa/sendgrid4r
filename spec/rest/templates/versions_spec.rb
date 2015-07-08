@@ -26,7 +26,7 @@ describe SendGrid4r::REST::Templates::Versions do
         # post a version
         ver1 = @factory.create(name: @version1_name)
         @version1 = @client.post_version(@template.id, ver1)
-      rescue => e
+      rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
         raise e
       end
@@ -38,7 +38,7 @@ describe SendGrid4r::REST::Templates::Versions do
           ver2 = @factory.create(name: @version2_name)
           version2 = @client.post_version(@template.id, ver2)
           expect(version2.name).to eq(@version2_name)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -48,7 +48,7 @@ describe SendGrid4r::REST::Templates::Versions do
         begin
           actual = @client.activate_version(@template.id, @version1.id)
           expect(actual.active).to eq(1)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -63,7 +63,7 @@ describe SendGrid4r::REST::Templates::Versions do
           expect(actual.html_content).to eq(@version1.html_content)
           expect(actual.plain_content).to eq(@version1.plain_content)
           expect(actual.subject).to eq(@version1.subject)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -78,7 +78,7 @@ describe SendGrid4r::REST::Templates::Versions do
           edit_ver1.plain_content = 'edit<%body%>edit'
           edit_ver1.active = 0
           @client.patch_version(@template.id, @version1.id, edit_ver1)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -87,7 +87,7 @@ describe SendGrid4r::REST::Templates::Versions do
       it '#delete_version' do
         begin
           @client.delete_version(@template.id, @version1.id)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end

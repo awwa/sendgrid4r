@@ -18,7 +18,7 @@ describe SendGrid4r::REST::Ips::Warmup do
               @client.delete_warmup_ip(ip: warmup_ip.ip)
             end
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -42,54 +42,9 @@ describe SendGrid4r::REST::Ips::Warmup do
             expect do
               @client.get_warmup_ip(ip: warmup_ip.ip)
             end.to raise_error(RestClient::ResourceNotFound)
-          rescue => ex
+          rescue RestClient::ExceptionWithResponse => ex
             puts ex.inspect
             raise ex
-          end
-        end
-      end
-
-      context 'with block call' do
-        it 'warmup_ip spec' do
-          # get warmup ips
-          @client.get_warmup_ips do |resp, req, res|
-            resp =
-              SendGrid4r::REST::Ips::Warmup.create_warmup_ips(
-                JSON.parse(resp)
-              )
-            expect(resp).to be_a(Array)
-            expect(req).to be_a(RestClient::Request)
-            expect(res).to be_a(Net::HTTPOK)
-          end
-          # post warmup ip
-          warmup_ip = nil
-          ips = @client.get_ips
-          expect(ips.length).to be > 0
-          @client.post_warmup_ip(ip: ips[0].ip) do |resp, req, res|
-            resp =
-              SendGrid4r::REST::Ips::Warmup.create_warmup_ip(
-                JSON.parse(resp)
-              )
-            warmup_ip = resp
-            expect(resp).to be_a(SendGrid4r::REST::Ips::Warmup::WarmupIp)
-            expect(req).to be_a(RestClient::Request)
-            expect(res).to be_a(Net::HTTPCreated)
-          end
-          # get warmup ip
-          @client.get_warmup_ip(ip: warmup_ip.ip) do |resp, req, res|
-            resp =
-              SendGrid4r::REST::Ips::Warmup.create_warmup_ip(
-                JSON.parse(resp)
-              )
-            expect(resp).to be_a(SendGrid4r::REST::Ips::Warmup::WarmupIp)
-            expect(req).to be_a(RestClient::Request)
-            expect(res).to be_a(Net::HTTPOK)
-          end
-          # delete the warmup ip
-          @client.delete_warmup_ip(ip: warmup_ip.ip) do |resp, req, res|
-            expect(resp).to eq('')
-            expect(req).to be_a(RestClient::Request)
-            expect(res).to be_a(Net::HTTPNoContent)
           end
         end
       end
