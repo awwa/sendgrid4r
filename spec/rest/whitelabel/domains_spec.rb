@@ -15,23 +15,23 @@ describe SendGrid4r::REST::Whitelabel::Domains do
         @subuser2 = ENV['SUBUSER2']
 
         # celan up test env(lists)
-        domains = @client.get_domains
+        domains = @client.get_wl_domains
         domains.each do |domain|
-          @client.delete_domain(
+          @client.delete_wl_domain(
             id: domain.id
           ) if "#{domain.subdomain}.#{domain.domain}" == "#{@subdomain_name}1.#{@domain_name}"
-          @client.delete_domain(
+          @client.delete_wl_domain(
             id: domain.id
           ) if "#{domain.subdomain}.#{domain.domain}" == "#{@subdomain_name}2.#{@domain_name}"
         end
 
         # post domain
-        @domain1 = @client.post_domain(
+        @domain1 = @client.post_wl_domain(
           domain: @domain_name, subdomain: @subdomain_name + '1',
           username: @username, ips: nil,
           automatic_security: true, custom_spf: false, default: false
         )
-        @domain2 = @client.post_domain(
+        @domain2 = @client.post_wl_domain(
           domain: @domain_name, subdomain: @subdomain_name + '2',
           username: @username, ips: nil,
           automatic_security: false, custom_spf: true, default: false
@@ -45,7 +45,7 @@ describe SendGrid4r::REST::Whitelabel::Domains do
     context 'without block call' do
       it '#get_domains' do
         begin
-          domains = @client.get_domains
+          domains = @client.get_wl_domains
           expect(domains).to be_a(Array)
           domains.each do |domain|
             expect(domain).to be_a(
@@ -114,7 +114,7 @@ describe SendGrid4r::REST::Whitelabel::Domains do
 
       it '#get_domain' do
         begin
-          domain1 = @client.get_domain(id: @domain1.id)
+          domain1 = @client.get_wl_domain(id: @domain1.id)
           expect(domain1).to be_a(SendGrid4r::REST::Whitelabel::Domains::Domain)
           expect(domain1.domain).to eq(@domain_name)
           expect(domain1.subdomain).to eq(@subdomain_name + '1')
@@ -138,7 +138,7 @@ describe SendGrid4r::REST::Whitelabel::Domains do
           expect(domain1.dns.dkim2).to be_a(
             SendGrid4r::REST::Whitelabel::Domains::Record
           )
-          domain2 = @client.get_domain(id: @domain2.id)
+          domain2 = @client.get_wl_domain(id: @domain2.id)
           expect(domain2).to be_a(SendGrid4r::REST::Whitelabel::Domains::Domain)
           expect(domain2.domain).to eq(@domain_name)
           expect(domain2.subdomain).to eq(@subdomain_name + '2')
@@ -170,7 +170,7 @@ describe SendGrid4r::REST::Whitelabel::Domains do
 
       it '#patch_domain' do
         begin
-          domain1 = @client.patch_domain(
+          domain1 = @client.patch_wl_domain(
             id: @domain1.id, custom_spf: true, default: nil
           )
           expect(domain1).to be_a(SendGrid4r::REST::Whitelabel::Domains::Domain)
@@ -190,7 +190,7 @@ describe SendGrid4r::REST::Whitelabel::Domains do
 
       it '#delete_domain' do
         begin
-          @client.delete_domain(id: @domain1.id)
+          @client.delete_wl_domain(id: @domain1.id)
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
@@ -199,7 +199,7 @@ describe SendGrid4r::REST::Whitelabel::Domains do
 
       it '#get_default_domain' do
         begin
-          domain2 = @client.get_default_domain
+          domain2 = @client.get_default_wl_domain
           expect(domain2).to be_a(SendGrid4r::REST::Whitelabel::Domains::Domain)
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
@@ -209,7 +209,7 @@ describe SendGrid4r::REST::Whitelabel::Domains do
 
       it '#add_ip_to_domain' do
         begin
-          domain2 = @client.add_ip_to_domain(id: @domain2.id, ip: @ip)
+          domain2 = @client.add_ip_to_wl_domain(id: @domain2.id, ip: @ip)
           expect(domain2.ips).to eq([@ip])
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
@@ -219,8 +219,8 @@ describe SendGrid4r::REST::Whitelabel::Domains do
 
       it '#remove_ip_from_domain' do
         begin
-          @client.add_ip_to_domain(id: @domain2.id, ip: @ip)
-          domain2 = @client.remove_ip_from_domain(
+          @client.add_ip_to_wl_domain(id: @domain2.id, ip: @ip)
+          domain2 = @client.remove_ip_from_wl_domain(
             id: @domain2.id, ip: @ip
           )
           expect(domain2.ips).to eq(nil)
@@ -232,7 +232,7 @@ describe SendGrid4r::REST::Whitelabel::Domains do
 
       it '#validate_domain' do
         begin
-          result1 = @client.validate_domain(id: @domain1.id)
+          result1 = @client.validate_wl_domain(id: @domain1.id)
           expect(result1).to be_a(
             SendGrid4r::REST::Whitelabel::Domains::Result
           )
@@ -249,7 +249,7 @@ describe SendGrid4r::REST::Whitelabel::Domains do
           expect(result1.validation_results.spf.valid).to be(
             false
           )
-          result2 = @client.validate_domain(id: @domain2.id)
+          result2 = @client.validate_wl_domain(id: @domain2.id)
           expect(result2).to be_a(
             SendGrid4r::REST::Whitelabel::Domains::Result
           )
@@ -432,55 +432,55 @@ describe SendGrid4r::REST::Whitelabel::Domains do
 
     it '#get_domains' do
       allow(client).to receive(:execute).and_return(domains)
-      actual = client.get_domains
+      actual = client.get_wl_domains
       expect(actual).to be_a(Array)
     end
 
     it '#post_domain' do
       allow(client).to receive(:execute).and_return(domain)
-      actual = client.post_domain(domain: '', subdomain: '')
+      actual = client.post_wl_domain(domain: '', subdomain: '')
       expect(actual).to be_a(SendGrid4r::REST::Whitelabel::Domains::Domain)
     end
 
     it '#get_domain' do
       allow(client).to receive(:execute).and_return(domain)
-      actual = client.get_domain(id: '')
+      actual = client.get_wl_domain(id: '')
       expect(actual).to be_a(SendGrid4r::REST::Whitelabel::Domains::Domain)
     end
 
     it '#patch_domain' do
       allow(client).to receive(:execute).and_return(domain)
-      actual = client.patch_domain(id: '', domain: '', subdomain: '')
+      actual = client.patch_wl_domain(id: '', domain: '', subdomain: '')
       expect(actual).to be_a(SendGrid4r::REST::Whitelabel::Domains::Domain)
     end
 
     it '#delete_domain' do
       allow(client).to receive(:execute).and_return('')
-      actual = client.delete_domain(id: '')
+      actual = client.delete_wl_domain(id: '')
       expect(actual).to eq('')
     end
 
     it '#get_default_domain' do
       allow(client).to receive(:execute).and_return(domain)
-      actual = client.get_default_domain(domain: '')
+      actual = client.get_default_wl_domain(domain: '')
       expect(actual).to be_a(SendGrid4r::REST::Whitelabel::Domains::Domain)
     end
 
     it '#add_ip_to_domain' do
       allow(client).to receive(:execute).and_return(domain)
-      actual = client.add_ip_to_domain(id: '', ip: '')
+      actual = client.add_ip_to_wl_domain(id: '', ip: '')
       expect(actual).to be_a(SendGrid4r::REST::Whitelabel::Domains::Domain)
     end
 
     it '#remove_ip_from_domain' do
       allow(client).to receive(:execute).and_return(domain)
-      actual = client.remove_ip_from_domain(id: '', ip: '')
+      actual = client.remove_ip_from_wl_domain(id: '', ip: '')
       expect(actual).to be_a(SendGrid4r::REST::Whitelabel::Domains::Domain)
     end
 
     it '#validate_domain' do
       allow(client).to receive(:execute).and_return(result)
-      actual = client.validate_domain(id: '')
+      actual = client.validate_wl_domain(id: '')
       expect(actual).to be_a(SendGrid4r::REST::Whitelabel::Domains::Result)
     end
 

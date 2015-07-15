@@ -153,7 +153,7 @@ module SendGrid4r
           ValidationResult.new(resp['valid'], resp['reason'])
         end
 
-        def get_domains(
+        def get_wl_domains(
           limit: nil, offset: nil, exclude_subusers: nil, username: nil,
           domain: nil, &block
         )
@@ -170,7 +170,7 @@ module SendGrid4r
           SendGrid4r::REST::Whitelabel::Domains.create_domains(resp)
         end
 
-        def post_domain(
+        def post_wl_domain(
           domain:, subdomain:, username: nil, ips: nil, automatic_security: nil,
           custom_spf: nil, default: nil, &block
         )
@@ -189,13 +189,13 @@ module SendGrid4r
           SendGrid4r::REST::Whitelabel::Domains.create_domain(resp)
         end
 
-        def get_domain(id:, &block)
+        def get_wl_domain(id:, &block)
           endpoint = SendGrid4r::REST::Whitelabel::Domains.url(id)
           resp = get(@auth, endpoint, nil, &block)
           SendGrid4r::REST::Whitelabel::Domains.create_domain(resp)
         end
 
-        def patch_domain(
+        def patch_wl_domain(
           id:, domain: nil, subdomain: nil, username: nil, ips: nil,
           automatic_security: nil, custom_spf: nil, default: nil, &block
         )
@@ -214,12 +214,12 @@ module SendGrid4r
           SendGrid4r::REST::Whitelabel::Domains.create_domain(resp)
         end
 
-        def delete_domain(id:, &block)
+        def delete_wl_domain(id:, &block)
           endpoint = SendGrid4r::REST::Whitelabel::Domains.url(id)
           delete(@auth, endpoint, &block)
         end
 
-        def get_default_domain(domain: nil, &block)
+        def get_default_wl_domain(domain: nil, &block)
           params = {}
           params['domain'] = domain unless domain.nil?
           endpoint = SendGrid4r::REST::Whitelabel::Domains.url
@@ -228,7 +228,7 @@ module SendGrid4r
           SendGrid4r::REST::Whitelabel::Domains.create_domain(resp)
         end
 
-        def add_ip_to_domain(id:, ip:, &block)
+        def add_ip_to_wl_domain(id:, ip:, &block)
           endpoint = SendGrid4r::REST::Whitelabel::Domains.url(id)
           endpoint = "#{endpoint}/ips"
           params = {}
@@ -237,13 +237,13 @@ module SendGrid4r
           SendGrid4r::REST::Whitelabel::Domains.create_domain(resp)
         end
 
-        def remove_ip_from_domain(id:, ip:, &block)
+        def remove_ip_from_wl_domain(id:, ip:, &block)
           endpoint = SendGrid4r::REST::Whitelabel::Domains.url(id, ip)
           resp = delete(@auth, endpoint, &block)
           SendGrid4r::REST::Whitelabel::Domains.create_domain(resp)
         end
 
-        def validate_domain(id:, &block)
+        def validate_wl_domain(id:, &block)
           endpoint = SendGrid4r::REST::Whitelabel::Domains.url(id)
           endpoint = "#{endpoint}/validate"
           resp = post(@auth, endpoint, &block)
