@@ -74,7 +74,7 @@ module SendGrid4r
 
         def delete_recipients(emails:, &block)
           endpoint = SendGrid4r::REST::Contacts::Recipients.url
-          delete(@auth, endpoint, emails, &block)
+          delete(@auth, endpoint, nil, emails, &block)
         end
 
         def get_recipients(limit: nil, offset: nil, &block)

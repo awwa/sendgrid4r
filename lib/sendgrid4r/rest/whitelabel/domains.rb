@@ -250,31 +250,31 @@ module SendGrid4r
           SendGrid4r::REST::Whitelabel::Domains.create_result(resp)
         end
 
-        # def get_associated_domain(username:, &block)
-        #   endpoint = SendGrid4r::REST::Whitelabel::Domains.url
-        #   endpoint = "#{endpoint}/subuser"
-        #   params = {}
-        #   params['username'] = username
-        #   resp = get(@auth, endpoint, params, &block)
-        #   SendGrid4r::REST::Whitelabel::Domains.create_domain(resp)
-        # end
-        #
-        # def disassociate_domain(id:, username:, &block)
-        #   endpoint = SendGrid4r::REST::Whitelabel::Domains.url
-        #   endpoint = "#{endpoint}/subuser"
-        #   params = {}
-        #   params['username'] = username
-        #   delete(@auth, endpoint, params, &block)
-        # end
-        #
-        # def associate_domain(id:, username:, &block)
-        #   endpoint = SendGrid4r::REST::Whitelabel::Domains.url(id)
-        #   endpoint = "#{endpoint}/subuser"
-        #   params = {}
-        #   params['username'] = username
-        #   resp = post(@auth, endpoint, params, &block)
-        #   SendGrid4r::REST::Whitelabel::Domains.create_domain(resp)
-        # end
+        def get_associated_wl_domain(username:, &block)
+          endpoint = SendGrid4r::REST::Whitelabel::Domains.url
+          endpoint = "#{endpoint}/subuser"
+          params = {}
+          params['username'] = username
+          resp = get(@auth, endpoint, params, &block)
+          SendGrid4r::REST::Whitelabel::Domains.create_domain(resp)
+        end
+
+        def disassociate_wl_domain(username:, &block)
+          endpoint = SendGrid4r::REST::Whitelabel::Domains.url
+          endpoint = "#{endpoint}/subuser"
+          params = {}
+          params['username'] = username
+          delete(@auth, endpoint, params, &block)
+        end
+
+        def associate_wl_domain(id:, username:, &block)
+          endpoint = SendGrid4r::REST::Whitelabel::Domains.url(id)
+          endpoint = "#{endpoint}/subuser"
+          params = {}
+          params['username'] = username
+          resp = post(@auth, endpoint, params, &block)
+          SendGrid4r::REST::Whitelabel::Domains.create_domain(resp)
+        end
       end
     end
   end

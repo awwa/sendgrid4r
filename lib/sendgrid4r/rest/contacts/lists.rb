@@ -106,7 +106,7 @@ module SendGrid4r
 
         def delete_lists(list_ids:, &block)
           endpoint = "#{BASE_URL}/contactdb/lists_batch"
-          delete(@auth, endpoint, list_ids, &block)
+          delete(@auth, endpoint, nil, list_ids, &block)
         end
       end
     end

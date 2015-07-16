@@ -271,35 +271,35 @@ describe SendGrid4r::REST::Whitelabel::Domains do
           raise e
         end
       end
-      # -------------------
-      # it '#get_associated_domain' do
-      #   begin
-      #     domain1 = @client.get_associated_domain(username: @subuser1)
-      #     expect(domain1).to be_a(SendGrid4r::REST::Whitelabel::Domains::Domain)
-      #   rescue RestClient::ExceptionWithResponse => e
-      #     puts e.inspect
-      #     raise e
-      #   end
-      # end
-      #
-      # it '#associate_domain' do
-      #   begin
-      #     @client.associate_domain(id: @domain2.id, username: @subuser1)
-      #   rescue RestClient::ExceptionWithResponse => e
-      #     puts e.inspect
-      #     raise e
-      #   end
-      # end
-      #
-      # it '#disassociate_domain' do
-      #   begin
-      #     @client.disassociate_domain(id: @domain2.id, username: @subuser1)
-      #   rescue RestClient::ExceptionWithResponse => e
-      #     puts e.inspect
-      #     raise e
-      #   end
-      # end
-      # -------------------
+
+      it '#get_associated_wl_domain' do
+        begin
+          domain1 = @client.get_associated_wl_domain(username: @subuser1)
+          expect(domain1).to be_a(SendGrid4r::REST::Whitelabel::Domains::Domain)
+        rescue RestClient::ExceptionWithResponse => e
+          puts e.inspect
+          raise e
+        end
+      end
+
+      it '#associate_wl_domain' do
+        begin
+          @client.associate_wl_domain(id: @domain2.id, username: @subuser1)
+        rescue RestClient::ExceptionWithResponse => e
+          puts e.inspect
+          raise e
+        end
+      end
+
+      it '#disassociate_wl_domain' do
+        begin
+          @client.associate_wl_domain(id: @domain2.id, username: @subuser1)
+          @client.disassociate_wl_domain(username: @subuser1)
+        rescue RestClient::ExceptionWithResponse => e
+          puts e.inspect
+          raise e
+        end
+      end
     end
   end
 
@@ -484,23 +484,23 @@ describe SendGrid4r::REST::Whitelabel::Domains do
       expect(actual).to be_a(SendGrid4r::REST::Whitelabel::Domains::Result)
     end
 
-    # it '#get_associated_domain' do
-    #   allow(client).to receive(:execute).and_return(domain)
-    #   actual = client.get_associated_domain(username: '')
-    #   expect(actual).to be_a(SendGrid4r::REST::Whitelabel::Domains::Domain)
-    # end
-    #
-    # it '#disassociate_domain' do
-    #   allow(client).to receive(:execute).and_return('')
-    #   actual = client.disassociate_domain(username: '')
-    #   expect(actual).to eq('')
-    # end
-    #
-    # it '#associate_domain' do
-    #   allow(client).to receive(:execute).and_return('')
-    #   actual = client.associate_domain(id: '', username: '')
-    #   expect(actual).to be_a(SendGrid4r::REST::Whitelabel::Domains::Domain)
-    # end
+    it '#get_associated_wl_domain' do
+      allow(client).to receive(:execute).and_return(domain)
+      actual = client.get_associated_wl_domain(username: '')
+      expect(actual).to be_a(SendGrid4r::REST::Whitelabel::Domains::Domain)
+    end
+
+    it '#disassociate_wl_domain' do
+      allow(client).to receive(:execute).and_return('')
+      actual = client.disassociate_wl_domain(username: '')
+      expect(actual).to eq('')
+    end
+
+    it '#associate_wl_domain' do
+      allow(client).to receive(:execute).and_return(domain)
+      actual = client.associate_wl_domain(id: '', username: '')
+      expect(actual).to be_a(SendGrid4r::REST::Whitelabel::Domains::Domain)
+    end
 
     it 'creates domain instance' do
       actual = SendGrid4r::REST::Whitelabel::Domains.create_domain(domain)
