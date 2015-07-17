@@ -15,6 +15,17 @@ describe SendGrid4r::REST::Subusers do
 
         @ip = @client.get_ips[0].ip
         # celan up test env
+        begin
+          @client.delete_subuser(username: @username3)
+        rescue
+        end
+
+        @subuser3 = @client.post_subuser(
+          username: @username3,
+          email: @email1,
+          password: @password1,
+          ips: [@ip]
+        )
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
         raise e
@@ -37,18 +48,78 @@ describe SendGrid4r::REST::Subusers do
 
       it '#post_subuser' do
         begin
-          pending 'got RestClient::Forbidden:'
-          subuser2 = @client.post_subuser(
-            username: @username2,
-            email: @email2,
-            password: @password2,
-            ips: [@ip]
+          expect(@subuser3).to be_a(SendGrid4r::REST::Subusers::Subuser)
+          expect(@subuser3.username).to eq(@username3)
+          expect(@subuser3.email).to eq(@email1)
+        rescue RestClient::ExceptionWithResponse => e
+          puts e.inspect
+          raise e
+        end
+      end
+
+      it '#patch_subuser' do
+        begin
+          @client.patch_subuser(username: @username3, disabled: true)
+        rescue RestClient::ExceptionWithResponse => e
+          puts e.inspect
+          raise e
+        end
+      end
+
+      it '#delete_subuser' do
+        begin
+          @client.delete_subuser(username: @username3)
+        rescue RestClient::ExceptionWithResponse => e
+          puts e.inspect
+          raise e
+        end
+      end
+
+      it '#get_subuser_monitor' do
+        begin
+          monitor = @client.get_subuser_monitor(
+            username: @username3, email: @email1, frequency: 10
           )
-          expect(subuser2).to be_a(SendGrid4r::REST::Subusers::Subuser)
-          expect(subuser2.username).to eq(@username2)
-          expect(subuser2.email).to eq(@email2)
-          expect(subuser2.password).to eq(@password2)
-          expect(subuser2.ips).to be_a(Array)
+          expect(monitor).to be_a(SendGrid4r::REST::Subusers::Monitor)
+        rescue RestClient::ExceptionWithResponse => e
+          puts e.inspect
+          raise e
+        end
+      end
+
+      it '#post_subuser_monitor' do
+        begin
+          monitor = @client.post_subuser_monitor(
+            username: @username3, email: @email1, frequency: 10
+          )
+          expect(monitor).to be_a(SendGrid4r::REST::Subusers::Monitor)
+        rescue RestClient::ExceptionWithResponse => e
+          puts e.inspect
+          raise e
+        end
+      end
+
+      it '#put_subuser_monitor' do
+        begin
+          @client.post_subuser_monitor(
+            username: @username3, email: @email1, frequency: 10
+          )
+          monitor = @client.put_subuser_monitor(
+            username: @username3, email: @email1, frequency: 10
+          )
+          expect(monitor).to be_a(SendGrid4r::REST::Subusers::Monitor)
+        rescue RestClient::ExceptionWithResponse => e
+          puts e.inspect
+          raise e
+        end
+      end
+
+      it '#delete_subuser_monitor' do
+        begin
+          @client.post_subuser_monitor(
+            username: @username3, email: @email1, frequency: 10
+          )
+          @client.delete_subuser_monitor(username: @username3)
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
@@ -73,8 +144,9 @@ describe SendGrid4r::REST::Subusers do
 
       it '#put_subuser_assigned_ips' do
         begin
-          pending 'Invalid JSON'
-          subuser = @client.put_subuser_assigned_ips(username: @username2)
+          subuser = @client.put_subuser_assigned_ips(
+            username: @username2, ips: [@ip]
+          )
           expect(subuser.ips).to be_a(Array)
           subuser.ips.each do |ip|
             expect(ip).to be_a(String)
@@ -135,6 +207,15 @@ describe SendGrid4r::REST::Subusers do
       )
     end
 
+    let(:monitor) do
+      JSON.parse(
+        '{'\
+          '"email": "test@example.com",'\
+          '"frequency": 500'\
+        '}'
+      )
+    end
+
     it '#get_subusers' do
       allow(client).to receive(:execute).and_return(subusers)
       actual = client.get_subusers(limit: 0, offset: 0, username: 'aaa')
@@ -152,6 +233,42 @@ describe SendGrid4r::REST::Subusers do
       expect(actual).to be_a(SendGrid4r::REST::Subusers::Subuser)
     end
 
+    it '#patch_subuser' do
+      allow(client).to receive(:execute).and_return(subuser)
+      actual = client.patch_subuser(username: '', disabled: true)
+      expect(actual).to be_a(SendGrid4r::REST::Subusers::Subuser)
+    end
+
+    it '#delete_subuser' do
+      allow(client).to receive(:execute).and_return('')
+      actual = client.delete_subuser(username: '')
+      expect(actual).to eq('')
+    end
+
+    it '#get_subuser_monitor' do
+      allow(client).to receive(:execute).and_return(monitor)
+      actual = client.get_subuser_monitor(username: '', email: '', frequency: 1)
+      expect(actual).to be_a(SendGrid4r::REST::Subusers::Monitor)
+    end
+
+    it '#post_subuser_monitor' do
+      allow(client).to receive(:execute).and_return(monitor)
+      actual = client.post_subuser_monitor(username: '', email: '', frequency: 1)
+      expect(actual).to be_a(SendGrid4r::REST::Subusers::Monitor)
+    end
+
+    it '#put_subuser_monitor' do
+      allow(client).to receive(:execute).and_return(monitor)
+      actual = client.put_subuser_monitor(username: '', email: '', frequency: 1)
+      expect(actual).to be_a(SendGrid4r::REST::Subusers::Monitor)
+    end
+
+    it '#delete_subuser_monitor' do
+      allow(client).to receive(:execute).and_return('')
+      actual = client.delete_subuser_monitor(username: '')
+      expect(actual).to eq('')
+    end
+
     it '#get_subuser_reputation' do
       allow(client).to receive(:execute).and_return(subusers)
       actual = client.get_subuser_reputation(usernames: [])
@@ -162,9 +279,8 @@ describe SendGrid4r::REST::Subusers do
     end
 
     it '#put_subuser_assigned_ips' do
-      pending 'waiting for sendgrid documentation update'
       allow(client).to receive(:execute).and_return(subuser)
-      actual = client.put_subuser_assigned_ips('', [])
+      actual = client.put_subuser_assigned_ips(username: '', ips: [])
       expect(actual).to be_a(SendGrid4r::REST::Subusers::Subuser)
     end
 
@@ -186,6 +302,13 @@ describe SendGrid4r::REST::Subusers do
         expect(ip).to be_a(String)
       end
       expect(actual.disabled).to eq(false)
+    end
+
+    it 'creates monitor instance' do
+      actual = SendGrid4r::REST::Subusers.create_monitor(monitor)
+      expect(actual).to be_a(SendGrid4r::REST::Subusers::Monitor)
+      expect(actual.email).to eq('test@example.com')
+      expect(actual.frequency).to eq(500)
     end
   end
 end
