@@ -17,7 +17,8 @@ describe SendGrid4r::REST::Subusers do
         # celan up test env
         begin
           @client.delete_subuser(username: @username3)
-        rescue
+        rescue => e
+          puts e.inspect
         end
 
         @subuser3 = @client.post_subuser(
@@ -247,19 +248,25 @@ describe SendGrid4r::REST::Subusers do
 
     it '#get_subuser_monitor' do
       allow(client).to receive(:execute).and_return(monitor)
-      actual = client.get_subuser_monitor(username: '', email: '', frequency: 1)
+      actual = client.get_subuser_monitor(
+        username: '', email: '', frequency: 1
+      )
       expect(actual).to be_a(SendGrid4r::REST::Subusers::Monitor)
     end
 
     it '#post_subuser_monitor' do
       allow(client).to receive(:execute).and_return(monitor)
-      actual = client.post_subuser_monitor(username: '', email: '', frequency: 1)
+      actual = client.post_subuser_monitor(
+        username: '', email: '', frequency: 1
+      )
       expect(actual).to be_a(SendGrid4r::REST::Subusers::Monitor)
     end
 
     it '#put_subuser_monitor' do
       allow(client).to receive(:execute).and_return(monitor)
-      actual = client.put_subuser_monitor(username: '', email: '', frequency: 1)
+      actual = client.put_subuser_monitor(
+        username: '', email: '', frequency: 1
+      )
       expect(actual).to be_a(SendGrid4r::REST::Subusers::Monitor)
     end
 

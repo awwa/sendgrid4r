@@ -15,9 +15,9 @@ module SendGrid4r
       module Domains
         include SendGrid4r::REST::Request
 
-        Domain = Struct.new(:id, :domain, :subdomain, :username,
-          :user_id, :ips, :custom_spf, :default, :legacy,
-          :automatic_security, :valid, :dns
+        Domain = Struct.new(
+          :id, :domain, :subdomain, :username, :user_id, :ips, :custom_spf,
+          :default, :legacy, :automatic_security, :valid, :dns
         )
         Dns = Struct.new(
           # automatic_security:true
@@ -67,29 +67,21 @@ module SendGrid4r
           return resp if resp.nil?
           Dns.new(
             SendGrid4r::REST::Whitelabel::Domains.create_record(
-              resp['mail_cname']
-            ),
+              resp['mail_cname']),
             SendGrid4r::REST::Whitelabel::Domains.create_record(
-              resp['spf']
-            ),
+              resp['spf']),
             SendGrid4r::REST::Whitelabel::Domains.create_record(
-              resp['dkim1']
-            ),
+              resp['dkim1']),
             SendGrid4r::REST::Whitelabel::Domains.create_record(
-              resp['dkim2']
-            ),
+              resp['dkim2']),
             SendGrid4r::REST::Whitelabel::Domains.create_record(
-              resp['mail_server']
-            ),
+              resp['mail_server']),
             SendGrid4r::REST::Whitelabel::Domains.create_record(
-              resp['subdomain_spf']
-            ),
+              resp['subdomain_spf']),
             SendGrid4r::REST::Whitelabel::Domains.create_record(
-              resp['domain_spf']
-            ),
+              resp['domain_spf']),
             SendGrid4r::REST::Whitelabel::Domains.create_record(
-              resp['dkim']
-            )
+              resp['dkim'])
           )
         end
 
@@ -122,29 +114,21 @@ module SendGrid4r
           return resp if resp.nil?
           ValidationResults.new(
             SendGrid4r::REST::Whitelabel::Domains.create_validation_result(
-              resp['mail_cname']
-            ),
+              resp['mail_cname']),
             SendGrid4r::REST::Whitelabel::Domains.create_validation_result(
-              resp['dkim1']
-            ),
+              resp['dkim1']),
             SendGrid4r::REST::Whitelabel::Domains.create_validation_result(
-              resp['dkim2']
-            ),
+              resp['dkim2']),
             SendGrid4r::REST::Whitelabel::Domains.create_validation_result(
-              resp['spf']
-            ),
+              resp['spf']),
             SendGrid4r::REST::Whitelabel::Domains.create_validation_result(
-              resp['mail_server']
-            ),
+              resp['mail_server']),
             SendGrid4r::REST::Whitelabel::Domains.create_validation_result(
-              resp['subdomain_spf']
-            ),
+              resp['subdomain_spf']),
             SendGrid4r::REST::Whitelabel::Domains.create_validation_result(
-              resp['domain_spf']
-            ),
+              resp['domain_spf']),
             SendGrid4r::REST::Whitelabel::Domains.create_validation_result(
-              resp['dkim']
-            )
+              resp['dkim'])
           )
         end
 
@@ -196,17 +180,9 @@ module SendGrid4r
         end
 
         def patch_wl_domain(
-          id:, domain: nil, subdomain: nil, username: nil, ips: nil,
-          automatic_security: nil, custom_spf: nil, default: nil, &block
+          id:, custom_spf: nil, default: nil, &block
         )
           params = {}
-          params['domain'] = domain unless domain.nil?
-          params['subdomain'] = subdomain unless subdomain.nil?
-          params['username'] = username unless username.nil?
-          params['ips'] = ips unless ips.nil?
-          unless automatic_security.nil?
-            params['automatic_security'] = automatic_security
-          end
           params['custom_spf'] = custom_spf unless custom_spf.nil?
           params['default'] = default unless default.nil?
           endpoint = SendGrid4r::REST::Whitelabel::Domains.url(id)

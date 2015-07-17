@@ -84,6 +84,7 @@ describe SendGrid4r::REST::EmailActivity do
 
       it '#get_email_activities with start_time and end_time' do
         begin
+          pending('unknown field')
           start_time = Time.local(2015, 5, 20, 12, 23, 45)
           end_time = Time.local(2015, 5, 23, 12, 23, 45)
           activities = @client.get_email_activities(

@@ -15,8 +15,9 @@ module SendGrid4r
       module Ips
         include SendGrid4r::REST::Request
 
-        Ip = Struct.new(:id, :ip, :rdns, :users, :subdomain, :domain, :valid,
-          :legacy, :a_record
+        Ip = Struct.new(
+          :id, :ip, :rdns, :users, :subdomain, :domain, :valid, :legacy,
+          :a_record
         )
         User = Struct.new(:username, :user_id)
         ARecord = Struct.new(:host, :type, :data, :valid)

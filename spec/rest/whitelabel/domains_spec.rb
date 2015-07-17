@@ -17,12 +17,14 @@ describe SendGrid4r::REST::Whitelabel::Domains do
         # celan up test env(lists)
         domains = @client.get_wl_domains
         domains.each do |domain|
-          @client.delete_wl_domain(
-            id: domain.id
-          ) if "#{domain.subdomain}.#{domain.domain}" == "#{@subdomain_name}1.#{@domain_name}"
-          @client.delete_wl_domain(
-            id: domain.id
-          ) if "#{domain.subdomain}.#{domain.domain}" == "#{@subdomain_name}2.#{@domain_name}"
+          if domain.subdomain == "#{@subdomain_name}1" &&
+             domain.domain == @domain_name
+            @client.delete_wl_domain(id: domain.id)
+          end
+          if domain.subdomain == "#{@subdomain_name}2" &&
+             domain.domain == @domain_name
+            @client.delete_wl_domain(id: domain.id)
+          end
         end
 
         # post domain
@@ -60,7 +62,9 @@ describe SendGrid4r::REST::Whitelabel::Domains do
 
       it '#post_domain' do
         begin
-          expect(@domain1).to be_a(SendGrid4r::REST::Whitelabel::Domains::Domain)
+          expect(@domain1).to be_a(
+            SendGrid4r::REST::Whitelabel::Domains::Domain
+          )
           expect(@domain1.domain).to eq(@domain_name)
           expect(@domain1.subdomain).to eq(@subdomain_name + '1')
           expect(@domain1.username).to eq(@username)
@@ -83,7 +87,9 @@ describe SendGrid4r::REST::Whitelabel::Domains do
           expect(@domain1.dns.dkim2).to be_a(
             SendGrid4r::REST::Whitelabel::Domains::Record
           )
-          expect(@domain2).to be_a(SendGrid4r::REST::Whitelabel::Domains::Domain)
+          expect(@domain2).to be_a(
+            SendGrid4r::REST::Whitelabel::Domains::Domain
+          )
           expect(@domain2.domain).to eq(@domain_name)
           expect(@domain2.subdomain).to eq(@subdomain_name + '2')
           expect(@domain2.username).to eq(@username)
@@ -411,7 +417,8 @@ describe SendGrid4r::REST::Whitelabel::Domains do
           '"validation_results": {'\
             '"mail_cname": {'\
               '"valid": false,'\
-              '"reason": "Expected your MX record to be \"mx.sendgrid.net\" but found \"example.com\"."'\
+              '"reason": "Expected your MX record to be \"mx.sendgrid.net\" '\
+              'but found \"example.com\"."'\
             '},'\
             '"dkim1": {'\
               '"valid": true,'\

@@ -15,9 +15,10 @@ describe SendGrid4r::REST::Whitelabel::Links do
         # celan up test env(lists)
         links = @client.get_wl_links
         links.each do |link|
-          @client.delete_wl_link(
-            id: link.id
-          ) if "#{link.subdomain}.#{link.domain}" == "#{@subdomain_name}1.#{@domain_name}"
+          if link.subdomain == "#{@subdomain_name}1" &&
+             link.domain == @domain_name
+            @client.delete_wl_link(id: link.id)
+          end
         end
 
         # post link
@@ -235,7 +236,8 @@ describe SendGrid4r::REST::Whitelabel::Links do
           '"validation_results": {'\
             '"domain_cname": {'\
               '"valid": false,'\
-              '"reason": "Expected CNAME to match \"sendgrid.net.\" but found \"example.com.\"."'\
+              '"reason": "Expected CNAME to match \"sendgrid.net.\" but found'\
+              ' \"example.com.\"."'\
             '},'\
             '"owner_cname": {'\
               '"valid": true,'\

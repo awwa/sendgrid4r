@@ -15,8 +15,9 @@ module SendGrid4r
       module Links
         include SendGrid4r::REST::Request
 
-        Link = Struct.new(:id, :domain, :subdomain, :username,
-          :user_id, :default, :valid, :legacy, :dns
+        Link = Struct.new(
+          :id, :domain, :subdomain, :username, :user_id, :default,
+          :valid, :legacy, :dns
         )
         Dns = Struct.new(:domain_cname, :owner_cname)
         Record = Struct.new(:host, :type, :data, :valid)
