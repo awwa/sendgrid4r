@@ -45,7 +45,7 @@ describe SendGrid4r::REST::Whitelabel::Domains do
     end
 
     context 'without block call' do
-      it '#get_domains' do
+      it '#get_wl_domains' do
         begin
           domains = @client.get_wl_domains
           expect(domains).to be_a(Array)
@@ -60,7 +60,7 @@ describe SendGrid4r::REST::Whitelabel::Domains do
         end
       end
 
-      it '#post_domain' do
+      it '#post_wl_domain' do
         begin
           expect(@domain1).to be_a(
             SendGrid4r::REST::Whitelabel::Domains::Domain
@@ -118,7 +118,7 @@ describe SendGrid4r::REST::Whitelabel::Domains do
         end
       end
 
-      it '#get_domain' do
+      it '#get_wl_domain' do
         begin
           domain1 = @client.get_wl_domain(id: @domain1.id)
           expect(domain1).to be_a(SendGrid4r::REST::Whitelabel::Domains::Domain)
@@ -174,7 +174,7 @@ describe SendGrid4r::REST::Whitelabel::Domains do
         end
       end
 
-      it '#patch_domain' do
+      it '#patch_wl_domain' do
         begin
           domain1 = @client.patch_wl_domain(
             id: @domain1.id, custom_spf: true, default: nil
@@ -194,7 +194,7 @@ describe SendGrid4r::REST::Whitelabel::Domains do
         end
       end
 
-      it '#delete_domain' do
+      it '#delete_wl_domain' do
         begin
           @client.delete_wl_domain(id: @domain1.id)
         rescue RestClient::ExceptionWithResponse => e
@@ -203,7 +203,7 @@ describe SendGrid4r::REST::Whitelabel::Domains do
         end
       end
 
-      it '#get_default_domain' do
+      it '#get_default_wl_domain' do
         begin
           domain2 = @client.get_default_wl_domain
           expect(domain2).to be_a(SendGrid4r::REST::Whitelabel::Domains::Domain)
@@ -213,7 +213,7 @@ describe SendGrid4r::REST::Whitelabel::Domains do
         end
       end
 
-      it '#add_ip_to_domain' do
+      it '#add_ip_to_wl_domain' do
         begin
           domain2 = @client.add_ip_to_wl_domain(id: @domain2.id, ip: @ip)
           expect(domain2.ips).to eq([@ip])
@@ -223,7 +223,7 @@ describe SendGrid4r::REST::Whitelabel::Domains do
         end
       end
 
-      it '#remove_ip_from_domain' do
+      it '#remove_ip_from_wl_domain' do
         begin
           @client.add_ip_to_wl_domain(id: @domain2.id, ip: @ip)
           domain2 = @client.remove_ip_from_wl_domain(
@@ -236,7 +236,7 @@ describe SendGrid4r::REST::Whitelabel::Domains do
         end
       end
 
-      it '#validate_domain' do
+      it '#validate_wl_domain' do
         begin
           result1 = @client.validate_wl_domain(id: @domain1.id)
           expect(result1).to be_a(

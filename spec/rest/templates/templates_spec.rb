@@ -16,24 +16,9 @@ describe SendGrid4r::REST::Templates do
         # celan up test env
         tmps = @client.get_templates
         tmps.templates.each do |tmp|
-          if tmp.name == @template_name1
-            tmp.versions.each do |ver|
-              @client.delete_version(template_id: tmp.id, version_id: ver.id)
-            end
-            @client.delete_template(template_id: tmp.id)
-          end
-          if tmp.name == @template_name2
-            tmp.versions.each do |ver|
-              @client.delete_version(template_id: tmp.id, version_id: ver.id)
-            end
-            @client.delete_template(template_id: tmp.id)
-          end
-          if tmp.name == @template_edit1
-            tmp.versions.each do |ver|
-              @client.delete_version(template_id: tmp.id, version_id: ver.id)
-            end
-            @client.delete_template(template_id: tmp.id)
-          end
+          delete_template(tmp) if tmp.name == @template_name1
+          delete_template(tmp) if tmp.name == @template_name2
+          delete_template(tmp) if tmp.name == @template_edit1
         end
         # post a template
         @template1 = @client.post_template(name: @template_name1)
@@ -41,6 +26,13 @@ describe SendGrid4r::REST::Templates do
         puts e.inspect
         raise e
       end
+    end
+
+    def delete_template(tmp)
+      tmp.versions.each do |ver|
+        @client.delete_version(template_id: tmp.id, version_id: ver.id)
+      end
+      @client.delete_template(template_id: tmp.id)
     end
 
     context 'without block call' do
