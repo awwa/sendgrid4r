@@ -18,26 +18,20 @@ describe SendGrid4r::REST::Templates do
         tmps.templates.each do |tmp|
           if tmp.name == @template_name1
             tmp.versions.each do |ver|
-              puts 'delete version: ' + ver.name
               @client.delete_version(template_id: tmp.id, version_id: ver.id)
             end
-            puts 'delete template: ' + tmp.name
             @client.delete_template(template_id: tmp.id)
           end
           if tmp.name == @template_name2
             tmp.versions.each do |ver|
-              puts 'delete version: ' + ver.name
               @client.delete_version(template_id: tmp.id, version_id: ver.id)
             end
-            puts 'delete template: ' + tmp.name
             @client.delete_template(template_id: tmp.id)
           end
           if tmp.name == @template_edit1
             tmp.versions.each do |ver|
-              puts 'delete version: ' + ver.name
               @client.delete_version(template_id: tmp.id, version_id: ver.id)
             end
-            puts 'delete template: ' + tmp.name
             @client.delete_template(template_id: tmp.id)
           end
         end
@@ -88,11 +82,8 @@ describe SendGrid4r::REST::Templates do
           version = @factory.create(name: @version_name1)
           @client.post_version(template_id: @template1.id, version: version)
           tmp = @client.patch_template(
-            template_id: @template1.id, name: 'teketeketeke'
-          ) do |a, b, c|
-            puts a
-            puts b.inspect
-          end
+            template_id: @template1.id, name: @template_edit1
+          )
           expect(tmp.id).to be_a(String)
           expect(tmp.name).to be_a(String)
           expect(tmp.versions).to be_a(Array)
