@@ -6,9 +6,7 @@ describe SendGrid4r::REST::Contacts::CustomFields do
     before do
       begin
         Dotenv.load
-        @client = SendGrid4r::Client.new(
-          username: ENV['SENDGRID_USERNAME'],
-          password: ENV['SENDGRID_PASSWORD'])
+        @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
         @name1 = 'birthday'
         @type1 = 'text'
         @name2 = 'born_at'
@@ -22,7 +20,7 @@ describe SendGrid4r::REST::Contacts::CustomFields do
         end
         # post a custom field
         @new_field = @client.post_custom_field(name: @name1, type: @type1)
-      rescue => e
+      rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
         raise e
       end
@@ -35,7 +33,7 @@ describe SendGrid4r::REST::Contacts::CustomFields do
           expect(new_field.id).to be_a(Fixnum)
           expect(new_field.name).to eq(@name2)
           expect(new_field.type).to eq(@type2)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -46,7 +44,7 @@ describe SendGrid4r::REST::Contacts::CustomFields do
           expect do
             @client.post_custom_field(name: @name1, type: @type1)
           end.to raise_error(RestClient::BadRequest)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -62,7 +60,7 @@ describe SendGrid4r::REST::Contacts::CustomFields do
             expect(field.name).to eq(@new_field.name)
             expect(field.type).to eq(@new_field.type)
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -76,7 +74,7 @@ describe SendGrid4r::REST::Contacts::CustomFields do
           expect(actual_field.id).to eq(@new_field.id)
           expect(actual_field.name).to eq(@new_field.name)
           expect(actual_field.type).to eq(@new_field.type)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -85,69 +83,9 @@ describe SendGrid4r::REST::Contacts::CustomFields do
       it '#delete_custom_field' do
         begin
           @client.delete_custom_field(custom_field_id: @new_field.id)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
-        end
-      end
-    end
-
-    context 'with block call' do
-      it '#post_custom_field' do
-        @client.post_custom_field(
-          name: @name2, type: @type2
-        ) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Contacts::CustomFields.create_field(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Contacts::CustomFields::Field)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPCreated)
-        end
-      end
-
-      it '#post_custom_field for same key' do
-        @client.post_custom_field(
-          name: @name1, type: @type1
-        ) do |_resp, req, res|
-          # TODO: _resp
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPBadRequest)
-        end
-      end
-
-      it '#get_custom_fields' do
-        @client.get_custom_fields do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Contacts::CustomFields.create_fields(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Contacts::CustomFields::Fields)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#get_custom_field' do
-        @client.get_custom_field(
-          custom_field_id: @new_field.id
-        ) do |resp, req, res|
-          resp = SendGrid4r::REST::Contacts::CustomFields.create_field(
-            JSON.parse(resp)
-          )
-          expect(resp).to be_a(SendGrid4r::REST::Contacts::CustomFields::Field)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#delete_custom_field' do
-        @client.delete_custom_field(
-          custom_field_id: @new_field.id
-        ) do |_resp, req, res|
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPAccepted)
         end
       end
     end

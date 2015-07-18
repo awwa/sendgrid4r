@@ -30,6 +30,9 @@ require 'sendgrid4r/rest/contacts/segments'
 require 'sendgrid4r/rest/api_keys/api_keys'
 require 'sendgrid4r/rest/subusers/subusers'
 require 'sendgrid4r/rest/email_activity/email_activity'
+require 'sendgrid4r/rest/whitelabel/domains'
+require 'sendgrid4r/rest/whitelabel/ips'
+require 'sendgrid4r/rest/whitelabel/links'
 
 module SendGrid4r
   module REST
@@ -65,6 +68,9 @@ module SendGrid4r
       include SendGrid4r::REST::ApiKeys
       include SendGrid4r::REST::Subusers
       include SendGrid4r::REST::EmailActivity
+      include SendGrid4r::REST::Whitelabel::Domains
+      include SendGrid4r::REST::Whitelabel::Ips
+      include SendGrid4r::REST::Whitelabel::Links
     end
   end
 end

@@ -5,9 +5,7 @@ describe SendGrid4r::REST::Stats::Global do
   describe 'integration test', :it do
     before do
       Dotenv.load
-      @client = SendGrid4r::Client.new(
-        username: ENV['SENDGRID_USERNAME'],
-        password: ENV['SENDGRID_PASSWORD'])
+      @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
     end
 
     context 'without block call' do
@@ -38,7 +36,7 @@ describe SendGrid4r::REST::Stats::Global do
               expect(stat.metrics.unsubscribes.nil?).to be(false)
             end
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -60,7 +58,7 @@ describe SendGrid4r::REST::Stats::Global do
               expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
             end
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end

@@ -32,6 +32,12 @@ describe SendGrid4r::Client do
         # Subusers
         expect(@client.respond_to?('get_subusers')).to eq(true)
         expect(@client.respond_to?('post_subuser')).to eq(true)
+        expect(@client.respond_to?('patch_subuser')).to eq(true)
+        expect(@client.respond_to?('delete_subuser')).to eq(true)
+        expect(@client.respond_to?('get_subuser_monitor')).to eq(true)
+        expect(@client.respond_to?('post_subuser_monitor')).to eq(true)
+        expect(@client.respond_to?('put_subuser_monitor')).to eq(true)
+        expect(@client.respond_to?('delete_subuser_monitor')).to eq(true)
         expect(@client.respond_to?('get_subuser_reputation')).to eq(true)
         expect(@client.respond_to?('put_subuser_assigned_ips')).to eq(true)
         # Api Keys
@@ -196,12 +202,46 @@ describe SendGrid4r::Client do
         expect(@client.respond_to?('put_segment')).to eq(true)
         expect(@client.respond_to?('delete_segment')).to eq(true)
         expect(@client.respond_to?('get_recipients_from_segment')).to eq(true)
+
+        # Whitelabel
+        # Domains
+        expect(@client.respond_to?('get_wl_domains')).to eq(true)
+        expect(@client.respond_to?('post_wl_domain')).to eq(true)
+        expect(@client.respond_to?('get_wl_domain')).to eq(true)
+        expect(@client.respond_to?('patch_wl_domain')).to eq(true)
+        expect(@client.respond_to?('delete_wl_domain')).to eq(true)
+        expect(@client.respond_to?('get_default_wl_domain')).to eq(true)
+        expect(@client.respond_to?('add_ip_to_wl_domain')).to eq(true)
+        expect(@client.respond_to?('remove_ip_from_wl_domain')).to eq(true)
+        expect(@client.respond_to?('validate_wl_domain')).to eq(true)
+        expect(@client.respond_to?('get_associated_wl_domain')).to eq(true)
+        expect(@client.respond_to?('disassociate_wl_domain')).to eq(true)
+        expect(@client.respond_to?('associate_wl_domain')).to eq(true)
+
+        # IPs
+        expect(@client.respond_to?('get_wl_ips')).to eq(true)
+        expect(@client.respond_to?('post_wl_ip')).to eq(true)
+        expect(@client.respond_to?('get_wl_ip')).to eq(true)
+        expect(@client.respond_to?('delete_wl_ip')).to eq(true)
+        expect(@client.respond_to?('validate_wl_ip')).to eq(true)
+
+        # Email Links
+        expect(@client.respond_to?('get_wl_links')).to eq(true)
+        expect(@client.respond_to?('post_wl_link')).to eq(true)
+        expect(@client.respond_to?('get_wl_link')).to eq(true)
+        expect(@client.respond_to?('patch_wl_link')).to eq(true)
+        expect(@client.respond_to?('delete_wl_link')).to eq(true)
+        expect(@client.respond_to?('get_default_wl_link')).to eq(true)
+        expect(@client.respond_to?('validate_wl_link')).to eq(true)
+        expect(@client.respond_to?('get_associated_wl_link')).to eq(true)
+        expect(@client.respond_to?('disassociate_wl_link')).to eq(true)
+        expect(@client.respond_to?('associate_wl_link')).to eq(true)
       end
     end
 
     describe 'VERSION' do
       it 'returns VERSION value' do
-        expect(SendGrid4r::VERSION).to eq('0.5.0')
+        expect(SendGrid4r::VERSION).to eq('1.0.0')
       end
     end
   end

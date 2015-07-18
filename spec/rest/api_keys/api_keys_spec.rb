@@ -27,7 +27,7 @@ describe SendGrid4r::REST::ApiKeys do
 
         # post api_key
         @api_key1 = @client.post_api_key(name: @name1)
-      rescue => e
+      rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
         raise e
       end
@@ -39,7 +39,7 @@ describe SendGrid4r::REST::ApiKeys do
           api_keys = @client.get_api_keys
           expect(api_keys).to be_a(SendGrid4r::REST::ApiKeys::ApiKeys)
           expect(api_keys.result).to be_a(Array)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -53,7 +53,7 @@ describe SendGrid4r::REST::ApiKeys do
           expect(api_key2.api_key_id).to be_a(String)
           expect(api_key2.api_key).to be_a(String)
           expect(api_key2.scope_set_id).to be_a(String)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -62,7 +62,7 @@ describe SendGrid4r::REST::ApiKeys do
       it '#delete_api_key' do
         begin
           @client.delete_api_key(api_key_id: @api_key1.api_key_id)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -75,53 +75,9 @@ describe SendGrid4r::REST::ApiKeys do
           )
           expect(edit_api_key.api_key_id).to eq(@api_key1.api_key_id)
           expect(edit_api_key.name).to eq(@name1e)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
-        end
-      end
-    end
-
-    context 'with block call' do
-      it '#get_api_keys' do
-        @client.get_api_keys do |resp, req, res|
-          resp =
-            SendGrid4r::REST::ApiKeys.create_api_keys(JSON.parse(resp))
-          expect(resp).to be_a(SendGrid4r::REST::ApiKeys::ApiKeys)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#post_api_key' do
-        @client.post_api_key(name: @name2) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::ApiKeys.create_api_key(JSON.parse(resp))
-          expect(resp).to be_a(SendGrid4r::REST::ApiKeys::ApiKey)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPCreated)
-        end
-      end
-
-      it '#delete_api_key' do
-        @client.delete_api_key(
-          api_key_id: @api_key1.api_key_id
-        ) do |resp, req, res|
-          expect(resp).to eq('')
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPNoContent)
-        end
-      end
-
-      it '#patch_api_key' do
-        @client.patch_api_key(
-          api_key_id: @api_key1.api_key_id, name: @name1e
-        ) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::ApiKeys.create_api_key(JSON.parse(resp))
-          expect(resp).to be_a(SendGrid4r::REST::ApiKeys::ApiKey)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
         end
       end
     end

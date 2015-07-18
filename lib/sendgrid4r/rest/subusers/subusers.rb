@@ -44,6 +44,16 @@ module SendGrid4r
         )
       end
 
+      Monitor = Struct.new(:email, :frequency)
+
+      def self.create_monitor(resp)
+        return resp if resp.nil?
+        Monitor.new(
+          resp['email'],
+          resp['frequency']
+        )
+      end
+
       def get_subusers(limit: nil, offset: nil, username: nil, &block)
         params = {}
         params['limit'] = limit unless limit.nil?
@@ -63,19 +73,69 @@ module SendGrid4r
         SendGrid4r::REST::Subusers.create_subuser(resp)
       end
 
+      def patch_subuser(username:, disabled:, &block)
+        endpoint = SendGrid4r::REST::Subusers.url(username)
+        payload = {}
+        payload['disabled'] = disabled
+        resp = patch(@auth, endpoint, payload, &block)
+        SendGrid4r::REST::Subusers.create_subuser(resp)
+      end
+
+      def delete_subuser(username:, &block)
+        endpoint = SendGrid4r::REST::Subusers.url(username)
+        delete(@auth, endpoint, &block)
+      end
+
+      def get_subuser_monitor(username:, email:, frequency:, &block)
+        endpoint = SendGrid4r::REST::Subusers.url(username)
+        endpoint = "#{endpoint}/monitor"
+        payload = {}
+        payload['email'] = email
+        payload['frequency'] = frequency
+        resp = post(@auth, endpoint, payload, &block)
+        SendGrid4r::REST::Subusers.create_monitor(resp)
+      end
+
+      def post_subuser_monitor(username:, email:, frequency:, &block)
+        endpoint = SendGrid4r::REST::Subusers.url(username)
+        endpoint = "#{endpoint}/monitor"
+        payload = {}
+        payload['email'] = email
+        payload['frequency'] = frequency
+        resp = post(@auth, endpoint, payload, &block)
+        SendGrid4r::REST::Subusers.create_monitor(resp)
+      end
+
+      def put_subuser_monitor(username:, email:, frequency:, &block)
+        endpoint = SendGrid4r::REST::Subusers.url(username)
+        endpoint = "#{endpoint}/monitor"
+        payload = {}
+        payload['email'] = email
+        payload['frequency'] = frequency
+        resp = put(@auth, endpoint, payload, &block)
+        SendGrid4r::REST::Subusers.create_monitor(resp)
+      end
+
+      def delete_subuser_monitor(username:, &block)
+        endpoint = SendGrid4r::REST::Subusers.url(username)
+        endpoint = "#{endpoint}/monitor"
+        delete(@auth, endpoint, &block)
+      end
+
       def get_subuser_reputation(usernames:, &block)
         params = ''
         usernames.each do |username|
           params += "usernames=#{username}&"
         end
-        endpoint = "#{SendGrid4r::REST::Subusers.url}/reputations?#{params}"
+        endpoint = SendGrid4r::REST::Subusers.url
+        endpoint = "#{endpoint}/reputations?#{params}"
         resp = get(@auth, endpoint, usernames, &block)
         SendGrid4r::REST::Subusers.create_subusers(resp)
       end
 
-      def put_subuser_assigned_ips(username:, &block)
+      def put_subuser_assigned_ips(username:, ips:, &block)
         endpoint = "#{SendGrid4r::REST::Subusers.url(username)}/ips"
-        resp = put(@auth, endpoint, nil, &block)
+        resp = put(@auth, endpoint, ips, &block)
         SendGrid4r::REST::Subusers.create_subuser(resp)
       end
     end

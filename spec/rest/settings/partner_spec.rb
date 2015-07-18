@@ -5,9 +5,7 @@ describe SendGrid4r::REST::Settings::Partner do
   describe 'integration test', :it do
     before do
       Dotenv.load
-      @client = SendGrid4r::Client.new(
-        username: ENV['SENDGRID_USERNAME'],
-        password: ENV['SENDGRID_PASSWORD'])
+      @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
     end
 
     context 'without block call' do
@@ -17,7 +15,7 @@ describe SendGrid4r::REST::Settings::Partner do
           expect(
             actual
           ).to be_a(SendGrid4r::REST::Settings::Results)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -29,7 +27,7 @@ describe SendGrid4r::REST::Settings::Partner do
           expect(actual).to be_a(
             SendGrid4r::REST::Settings::Partner::Partner
           )
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -45,7 +43,7 @@ describe SendGrid4r::REST::Settings::Partner do
           edit = @client.patch_settings_new_relic(params: actual)
           expect(edit.enabled).to eq(false)
           expect(edit.license_key).to eq('new_relic_license_key')
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -55,7 +53,7 @@ describe SendGrid4r::REST::Settings::Partner do
         begin
           actual = @client.get_settings_sendwithus
           expect(actual).to be_a(SendGrid4r::REST::Settings::Partner::Partner)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -71,80 +69,9 @@ describe SendGrid4r::REST::Settings::Partner do
           edit = @client.patch_settings_sendwithus(params: actual)
           expect(edit.enabled).to eq(false)
           expect(edit.license_key).to eq('sendwithus_license_key')
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
-        end
-      end
-    end
-
-    context 'with block call' do
-      it '#get_partner_settings' do
-        @client.get_partner_settings do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings.create_results(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Settings::Results)
-          resp.result.each do |result|
-            expect(result).to be_a(SendGrid4r::REST::Settings::Result)
-          end
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#get_settings_new_relic' do
-        @client.get_settings_new_relic do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Partner.create_partner(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(
-            SendGrid4r::REST::Settings::Partner::Partner
-          )
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#patch_settings_new_relic' do
-        params = @client.get_settings_new_relic
-        @client.patch_settings_new_relic(params: params) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Partner.create_partner(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(
-            SendGrid4r::REST::Settings::Partner::Partner
-          )
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#get_settings_sendwithus' do
-        @client.get_settings_sendwithus do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Partner.create_partner(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Settings::Partner::Partner)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#patch_settings_sendwithus' do
-        params = @client.get_settings_sendwithus
-        @client.patch_settings_sendwithus(params: params) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Settings::Partner.create_partner(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Settings::Partner::Partner)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
         end
       end
     end

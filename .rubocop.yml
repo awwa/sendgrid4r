@@ -9,7 +9,7 @@ MethodLength:
 
 # Change limitation of the number of params
 ParameterLists:
-  Max: 7
+  Max: 8
   CountKeywordArgs: true
 
 # Change limitation of AbcSize

@@ -29,8 +29,8 @@ module SendGrid4r
         execute(:put, auth, endpoint, nil, payload, &block)
       end
 
-      def delete(auth, endpoint, payload = nil, &block)
-        execute(:delete, auth, endpoint, nil, payload, &block)
+      def delete(auth, endpoint, params = nil, payload = nil, &block)
+        execute(:delete, auth, endpoint, params, payload, &block)
       end
 
       def execute(method, auth, endpoint, params, payload, &block)

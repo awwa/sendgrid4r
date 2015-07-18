@@ -7,9 +7,7 @@ describe SendGrid4r::REST::Contacts::Lists do
       begin
         pending 'waiting sendgrid documentation update'
         Dotenv.load
-        @client = SendGrid4r::Client.new(
-          username: ENV['SENDGRID_USERNAME'],
-          password: ENV['SENDGRID_PASSWORD'])
+        @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
         @list_name1 = 'test_list1'
         @edit_name1 = 'test_list1_edit'
         @list_name2 = 'test_list2'
@@ -60,7 +58,7 @@ describe SendGrid4r::REST::Contacts::Lists do
         )
         # # Add multiple recipients to a single list
         # @client.post_recipients_to_list(@list1.id, @recipients)
-      rescue => e
+      rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
         raise e
       end
@@ -74,7 +72,7 @@ describe SendGrid4r::REST::Contacts::Lists do
           expect(list2.name).to eq(@list_name2)
           expect(list2.recipient_count).to eq(0)
           @client.delete_list(list_id: list2.id)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -85,7 +83,7 @@ describe SendGrid4r::REST::Contacts::Lists do
           expect do
             @client.post_list(name: @list_name1)
           end.to raise_error(RestClient::BadRequest)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -101,7 +99,7 @@ describe SendGrid4r::REST::Contacts::Lists do
             expect(list.name).to eq(@list1.name)
             expect(list.recipient_count).to be_a(Fixnum)
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -113,7 +111,7 @@ describe SendGrid4r::REST::Contacts::Lists do
           expect(actual_list.id).to eq(@list1.id)
           expect(actual_list.name).to eq(@list1.name)
           expect(actual_list.recipient_count).to be_a(Fixnum)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -124,7 +122,7 @@ describe SendGrid4r::REST::Contacts::Lists do
           edit_list = @client.patch_list(list_id: @list1.id, name: @edit_name1)
           expect(edit_list.id).to eq(@list1.id)
           expect(edit_list.name).to eq(@edit_name1)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -138,7 +136,7 @@ describe SendGrid4r::REST::Contacts::Lists do
               recipient
             ).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -154,7 +152,7 @@ describe SendGrid4r::REST::Contacts::Lists do
               recipient
             ).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
           end
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -165,7 +163,7 @@ describe SendGrid4r::REST::Contacts::Lists do
           @client.delete_recipient_from_list(
             list_id: @list1.id, recipient_id: @email1
           )
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -177,7 +175,7 @@ describe SendGrid4r::REST::Contacts::Lists do
           expect do
             @client.get_list(list_id: @list1.id)
           end.to raise_error(RestClient::ResourceNotFound)
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -187,7 +185,7 @@ describe SendGrid4r::REST::Contacts::Lists do
         begin
           list2 = @client.post_list(name: @list_name2)
           @client.delete_lists(list_ids: [@list1.id, list2.id])
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -198,7 +196,7 @@ describe SendGrid4r::REST::Contacts::Lists do
           @client.post_recipients_to_list(
             list_id: @list1.id, recipients: @recipients
           )
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
@@ -214,152 +212,9 @@ describe SendGrid4r::REST::Contacts::Lists do
           @client.post_recipient_to_list(
             list_id: @list1.id, recipient_id: recipient1.id
           )
-        rescue => e
+        rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
-        end
-      end
-    end
-
-    context 'with block call' do
-      it '#post_list' do
-        @client.post_list(name: @list_name2) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Contacts::Lists.create_list(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Contacts::Lists::List)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPCreated)
-        end
-      end
-
-      it '#post_list for same key' do
-        @client.post_list(name: @list_name1) do |_resp, req, res|
-          # TODO: _resp
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPBadRequest)
-        end
-      end
-
-      it '#get_lists' do
-        @client.get_lists do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Contacts::Lists.create_lists(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Contacts::Lists::Lists)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#get_list' do
-        @client.get_list(list_id: @list1.id) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Contacts::Lists.create_list(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Contacts::Lists::List)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#patch_list' do
-        @client.patch_list(
-          list_id: @list1.id, name: @edit_name1
-        ) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Contacts::Lists.create_list(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(SendGrid4r::REST::Contacts::Lists::List)
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#get_recipients_from_list' do
-        @client.get_recipients_from_list(
-          list_id: @list1.id
-        ) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Contacts::Recipients.create_recipients(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(
-            SendGrid4r::REST::Contacts::Recipients::Recipients
-          )
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#get_recipients_from_list with offset & limit' do
-        @client.get_recipients_from_list(
-          list_id: @list1.id, limit: 10, offset: 0
-        ) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Contacts::Recipients.create_recipients(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(
-            SendGrid4r::REST::Contacts::Recipients::Recipients
-          )
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
-        end
-      end
-
-      it '#delete_recipient_from_list' do
-        @client.delete_recipient_from_list(
-          list_id: @list1.id, recipient_id: @email1
-        ) do |resp, req, res|
-          expect(resp).to eq('')
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPNoContent)
-        end
-      end
-
-      it '#delete_list' do
-        @client.delete_list(list_id: @list1.id) do |resp, req, res|
-          expect(resp).to eq('')
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPNoContent)
-        end
-      end
-
-      it '#delete_lists' do
-        @client.delete_lists(list_ids: [@list1.id]) do |resp, req, res|
-          expect(resp).to eq('')
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPNoContent)
-        end
-      end
-
-      it '#post_recipients_to_list' do
-        @client.post_recipients_to_list(
-          list_id: @list1.id, recipients: @recipients
-        ) do |resp, req, res|
-          expect(resp).to eq('')
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPCreated)
-        end
-      end
-
-      it '#post_recipient_to_list' do
-        recipient1 = {}
-        recipient1['email'] = @email1
-        recipient1['last_name'] = @last_name1
-        recipient1[@custom_field_name] = @pet1
-        recipient1 = @client.post_recipient(recipient1)
-        @client.post_recipient_to_list(
-          list_id: @list1.id, recipient_id: recipient1.id
-        ) do |resp, req, res|
-          expect(resp).to eq('')
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPCreated)
         end
       end
     end
