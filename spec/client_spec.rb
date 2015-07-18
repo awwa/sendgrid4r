@@ -32,6 +32,12 @@ describe SendGrid4r::Client do
         # Subusers
         expect(@client.respond_to?('get_subusers')).to eq(true)
         expect(@client.respond_to?('post_subuser')).to eq(true)
+        expect(@client.respond_to?('patch_subuser')).to eq(true)
+        expect(@client.respond_to?('delete_subuser')).to eq(true)
+        expect(@client.respond_to?('get_subuser_monitor')).to eq(true)
+        expect(@client.respond_to?('post_subuser_monitor')).to eq(true)
+        expect(@client.respond_to?('put_subuser_monitor')).to eq(true)
+        expect(@client.respond_to?('delete_subuser_monitor')).to eq(true)
         expect(@client.respond_to?('get_subuser_reputation')).to eq(true)
         expect(@client.respond_to?('put_subuser_assigned_ips')).to eq(true)
         # Api Keys
