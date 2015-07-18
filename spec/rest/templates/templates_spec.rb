@@ -6,21 +6,40 @@ describe SendGrid4r::REST::Templates do
     before do
       begin
         Dotenv.load
-        @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
+        @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
         @template_name1 = 'template_test1'
         @template_name2 = 'template_test2'
         @template_edit1 = 'template_edit1'
+        @version_name1 = 'version_test1'
         @factory = SendGrid4r::Factory::VersionFactory.new
 
         # celan up test env
         tmps = @client.get_templates
         tmps.templates.each do |tmp|
-          @client.delete_template(
-            template_id: tmp.id) if tmp.name == @template_name1
-          @client.delete_template(
-            template_id: tmp.id) if tmp.name == @template_name2
-          @client.delete_template(
-            template_id: tmp.id) if tmp.name == @template_edit1
+          if tmp.name == @template_name1
+            tmp.versions.each do |ver|
+              puts 'delete version: ' + ver.name
+              @client.delete_version(template_id: tmp.id, version_id: ver.id)
+            end
+            puts 'delete template: ' + tmp.name
+            @client.delete_template(template_id: tmp.id)
+          end
+          if tmp.name == @template_name2
+            tmp.versions.each do |ver|
+              puts 'delete version: ' + ver.name
+              @client.delete_version(template_id: tmp.id, version_id: ver.id)
+            end
+            puts 'delete template: ' + tmp.name
+            @client.delete_template(template_id: tmp.id)
+          end
+          if tmp.name == @template_edit1
+            tmp.versions.each do |ver|
+              puts 'delete version: ' + ver.name
+              @client.delete_version(template_id: tmp.id, version_id: ver.id)
+            end
+            puts 'delete template: ' + tmp.name
+            @client.delete_template(template_id: tmp.id)
+          end
         end
         # post a template
         @template1 = @client.post_template(name: @template_name1)
@@ -66,11 +85,14 @@ describe SendGrid4r::REST::Templates do
 
       it '#patch_template' do
         begin
-          ver = @factory.create(name: @template_name1)
-          @client.post_version(template_id: @template1.id, version: ver)
+          version = @factory.create(name: @version_name1)
+          @client.post_version(template_id: @template1.id, version: version)
           tmp = @client.patch_template(
-            template_id: @template1.id, name: @template_edit1
-          )
+            template_id: @template1.id, name: 'teketeketeke'
+          ) do |a, b, c|
+            puts a
+            puts b.inspect
+          end
           expect(tmp.id).to be_a(String)
           expect(tmp.name).to be_a(String)
           expect(tmp.versions).to be_a(Array)

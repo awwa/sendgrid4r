@@ -60,7 +60,7 @@ module SendGrid4r
         endpoint = SendGrid4r::REST::Templates.url(template_id)
         payload = {}
         payload['name'] = name
-        resp = patch(@auth, endpoint, payload, &block)
+        resp = patch(@auth, endpoint, name: name, &block)
         SendGrid4r::REST::Templates.create_template(resp)
       end
 
