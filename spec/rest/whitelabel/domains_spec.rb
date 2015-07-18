@@ -457,7 +457,7 @@ describe SendGrid4r::REST::Whitelabel::Domains do
 
     it '#patch_domain' do
       allow(client).to receive(:execute).and_return(domain)
-      actual = client.patch_wl_domain(id: '', domain: '', subdomain: '')
+      actual = client.patch_wl_domain(id: '', custom_spf: true, default: false)
       expect(actual).to be_a(SendGrid4r::REST::Whitelabel::Domains::Domain)
     end
 
