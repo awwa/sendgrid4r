@@ -33,6 +33,7 @@ require 'sendgrid4r/rest/email_activity/email_activity'
 require 'sendgrid4r/rest/whitelabel/domains'
 require 'sendgrid4r/rest/whitelabel/ips'
 require 'sendgrid4r/rest/whitelabel/links'
+require 'sendgrid4r/rest/users/users'
 
 module SendGrid4r
   module REST
@@ -71,6 +72,7 @@ module SendGrid4r
       include SendGrid4r::REST::Whitelabel::Domains
       include SendGrid4r::REST::Whitelabel::Ips
       include SendGrid4r::REST::Whitelabel::Links
+      include SendGrid4r::REST::Users
     end
   end
 end
