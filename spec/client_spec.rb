@@ -236,12 +236,16 @@ describe SendGrid4r::Client do
         expect(@client.respond_to?('get_associated_wl_link')).to eq(true)
         expect(@client.respond_to?('disassociate_wl_link')).to eq(true)
         expect(@client.respond_to?('associate_wl_link')).to eq(true)
+
+        # Users API
+        expect(@client.respond_to?('get_user_profile')).to eq(true)
+        expect(@client.respond_to?('patch_user_profile')).to eq(true)
       end
     end
 
     describe 'VERSION' do
       it 'returns VERSION value' do
-        expect(SendGrid4r::VERSION).to eq('1.0.0')
+        expect(SendGrid4r::VERSION).to eq('1.1.0')
       end
     end
   end
