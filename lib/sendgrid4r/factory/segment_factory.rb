@@ -16,6 +16,7 @@ module SendGrid4r
           nil
         )
         hash = segment.to_h
+        hash.delete(:id)
         hash.delete(:list_id) if list_id.nil?
         hash
       end
