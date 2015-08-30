@@ -7,14 +7,17 @@ module SendGrid4r
     # SendGrid Web API v3 Segment Factory Class implementation
     #
     class SegmentFactory
-      def create(name:, conditions:)
-        SendGrid4r::REST::Contacts::Segments::Segment.new(
+      def create(name: nil, list_id: nil, conditions:)
+        segment = SendGrid4r::REST::Contacts::Segments::Segment.new(
           nil,
           name,
-          nil,
+          list_id,
           conditions,
           nil
-        ).to_h
+        )
+        hash = segment.to_h
+        hash.delete(:list_id) if list_id.nil?
+        hash
       end
     end
   end

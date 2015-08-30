@@ -78,9 +78,9 @@ module SendGrid4r
           SendGrid4r::REST::Contacts::Segments.create_segment(resp)
         end
 
-        def put_segment(segment_id:, params:, &block)
+        def patch_segment(segment_id:, params:, &block)
           endpoint = SendGrid4r::REST::Contacts::Segments.url(segment_id)
-          resp = put(@auth, endpoint, params, &block)
+          resp = patch(@auth, endpoint, params, &block)
           SendGrid4r::REST::Contacts::Segments.create_segment(resp)
         end
 
@@ -89,14 +89,9 @@ module SendGrid4r
           delete(@auth, endpoint, &block)
         end
 
-        def get_recipients_from_segment(
-          segment_id:, limit: nil, offset: nil, &block
-        )
-          params = {}
-          params['limit'] = limit unless limit.nil?
-          params['offset'] = offset unless offset.nil?
+        def get_recipients_on_segment(segment_id:, &block)
           url = SendGrid4r::REST::Contacts::Segments.url(segment_id)
-          resp = get(@auth, "#{url}/recipients", params, &block)
+          resp = get(@auth, "#{url}/recipients", nil, &block)
           SendGrid4r::REST::Contacts::Recipients.create_recipients(resp)
         end
       end

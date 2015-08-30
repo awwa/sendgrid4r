@@ -5,7 +5,6 @@ describe SendGrid4r::REST::Contacts::Lists do
   describe 'integration test', :it do
     before do
       begin
-        pending 'waiting sendgrid documentation update'
         Dotenv.load
         @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
         @list_name1 = 'test_list1'
@@ -18,7 +17,6 @@ describe SendGrid4r::REST::Contacts::Lists do
         @pet1 = 'Fluffy'
         @pet2 = 'FrouFrou'
         @custom_field_name = 'pet'
-        @recipients = [@email1, @email2]
 
         # celan up test env(lists)
         lists = @client.get_lists
@@ -44,17 +42,17 @@ describe SendGrid4r::REST::Contacts::Lists do
         recipient1['email'] = @email1
         recipient1['last_name'] = @last_name1
         recipient1[@custom_field_name] = @pet1
-        recipient1 = @client.post_recipient(params: recipient1)
-        @client.post_recipient_to_list(
-          list_id: @list1.id, recipient_id: recipient1.id
-        )
         recipient2 = {}
         recipient2['email'] = @email2
         recipient2['last_name'] = @last_name2
         recipient2[@custom_field_name] = @pet2
-        recipient2 = @client.post_recipient(params: recipient2)
+        result = @client.post_recipients(params: [recipient1, recipient2])
+        @recipients = result.persisted_recipients
         @client.post_recipient_to_list(
-          list_id: @list1.id, recipient_id: recipient2.id
+          list_id: @list1.id, recipient_id: result.persisted_recipients[0]
+        )
+        @client.post_recipient_to_list(
+          list_id: @list1.id, recipient_id: result.persisted_recipients[1]
         )
         # # Add multiple recipients to a single list
         # @client.post_recipients_to_list(@list1.id, @recipients)
@@ -145,7 +143,7 @@ describe SendGrid4r::REST::Contacts::Lists do
       it '#get_recipients_from_list with offset & limit' do
         begin
           recipients = @client.get_recipients_from_list(
-            list_id: @list1.id, limit: 10, offset: 0
+            list_id: @list1.id, page: 1, page_size: 10
           )
           recipients.recipients.each do |recipient|
             expect(
@@ -161,7 +159,7 @@ describe SendGrid4r::REST::Contacts::Lists do
       it '#delete_recipient_from_list' do
         begin
           @client.delete_recipient_from_list(
-            list_id: @list1.id, recipient_id: @email1
+            list_id: @list1.id, recipient_id: @recipients[0]
           )
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
@@ -208,9 +206,9 @@ describe SendGrid4r::REST::Contacts::Lists do
           recipient1['email'] = @email1
           recipient1['last_name'] = @last_name1
           recipient1[@custom_field_name] = @pet1
-          recipient1 = @client.post_recipient(params: recipient1)
+          result = @client.post_recipients(params: [recipient1])
           @client.post_recipient_to_list(
-            list_id: @list1.id, recipient_id: recipient1.id
+            list_id: @list1.id, recipient_id: result.persisted_recipients[0]
           )
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect

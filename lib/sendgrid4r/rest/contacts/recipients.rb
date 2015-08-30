@@ -44,7 +44,7 @@ module SendGrid4r
             resp['last_clicked'],
             resp['last_emailed'],
             resp['last_name'],
-            resp['last_opend'],
+            resp['last_opened'],
             Time.at(resp['updated_at'])
           )
         end
@@ -66,40 +66,28 @@ module SendGrid4r
           url
         end
 
-        def post_recipient(params:, &block)
+        def post_recipients(params:, &block)
           endpoint = SendGrid4r::REST::Contacts::Recipients.url
           resp = post(@auth, endpoint, params, &block)
-          SendGrid4r::REST::Contacts::Recipients.create_recipient(resp)
+          SendGrid4r::REST::Contacts::Recipients.create_result(resp)
         end
 
-        def delete_recipients(emails:, &block)
+        def patch_recipients(params:, &block)
           endpoint = SendGrid4r::REST::Contacts::Recipients.url
-          delete(@auth, endpoint, nil, emails, &block)
+          resp = patch(@auth, endpoint, params, &block)
+          SendGrid4r::REST::Contacts::Recipients.create_result(resp)
         end
 
-        def get_recipients(limit: nil, offset: nil, &block)
+        def delete_recipients(recipient_ids:, &block)
+          endpoint = SendGrid4r::REST::Contacts::Recipients.url
+          delete(@auth, endpoint, nil, recipient_ids, &block)
+        end
+
+        def get_recipients(page: nil, page_size: nil, &block)
           params = {}
-          params['limit'] = limit unless limit.nil?
-          params['offset'] = offset unless offset.nil?
+          params['page_size'] = page_size unless page_size.nil?
+          params['page'] = page unless page.nil?
           endpoint = SendGrid4r::REST::Contacts::Recipients.url
-          resp = get(@auth, endpoint, params, &block)
-          SendGrid4r::REST::Contacts::Recipients.create_recipients(resp)
-        end
-
-        def get_recipients_by_id(recipient_ids:, &block)
-          endpoint = "#{SendGrid4r::REST::Contacts::Recipients.url}/batch"
-          resp = get(@auth, endpoint, nil, recipient_ids, &block)
-          SendGrid4r::REST::Contacts::Recipients.create_recipients(resp)
-        end
-
-        def get_recipients_count(&block)
-          endpoint = "#{SendGrid4r::REST::Contacts::Recipients.url}/count"
-          resp = get(@auth, endpoint, &block)
-          resp['recipient_count'] unless resp.nil?
-        end
-
-        def search_recipients(params:, &block)
-          endpoint = "#{SendGrid4r::REST::Contacts::Recipients.url}/search"
           resp = get(@auth, endpoint, params, &block)
           SendGrid4r::REST::Contacts::Recipients.create_recipients(resp)
         end
@@ -124,13 +112,19 @@ module SendGrid4r
           SendGrid4r::REST::Contacts::Lists.create_lists(resp)
         end
 
-        def post_recipients(recipients:, &block)
-          endpoint = "#{BASE_URL}/contactdb/recipients_batch"
-          resp = post(@auth, endpoint, recipients, &block)
-          SendGrid4r::REST::Contacts::Recipients.create_result(resp)
+        def get_recipients_count(&block)
+          endpoint = "#{SendGrid4r::REST::Contacts::Recipients.url}/count"
+          resp = get(@auth, endpoint, &block)
+          resp['recipient_count'] unless resp.nil?
         end
 
-        ResultAddMultiple = Struct.new(
+        def search_recipients(params:, &block)
+          endpoint = "#{SendGrid4r::REST::Contacts::Recipients.url}/search"
+          resp = get(@auth, endpoint, params, &block)
+          SendGrid4r::REST::Contacts::Recipients.create_recipients(resp)
+        end
+
+        Result = Struct.new(
           :error_count,
           :error_indices,
           :new_count,
@@ -148,7 +142,7 @@ module SendGrid4r
           resp['persisted_recipients'].each do |value|
             persisted_recipients.push(value)
           end
-          ResultAddMultiple.new(
+          Result.new(
             resp['error_count'],
             error_indices,
             resp['new_count'],
