@@ -202,6 +202,20 @@ describe SendGrid4r::Client do
         expect(@client.respond_to?('delete_segment')).to eq(true)
         expect(@client.respond_to?('get_recipients_on_segment')).to eq(true)
 
+        # Campaigns
+        expect(@client.respond_to?('post_campaign')).to eq(true)
+        expect(@client.respond_to?('get_campaigns')).to eq(true)
+        expect(@client.respond_to?('get_campaign')).to eq(true)
+        expect(@client.respond_to?('delete_campaign')).to eq(true)
+        expect(@client.respond_to?('patch_campaign')).to eq(true)
+        expect(@client.respond_to?('send_campaign')).to eq(true)
+        expect(@client.respond_to?('schedule_campaign')).to eq(true)
+        expect(@client.respond_to?('schedule_campaign')).to eq(true)
+        expect(@client.respond_to?('reschedule_campaign')).to eq(true)
+        expect(@client.respond_to?('get_schedule_time_campaign')).to eq(true)
+        expect(@client.respond_to?('unschedule_campaign')).to eq(true)
+        expect(@client.respond_to?('test_campaign')).to eq(true)
+
         # Whitelabel
         # Domains
         expect(@client.respond_to?('get_wl_domains')).to eq(true)

@@ -27,6 +27,7 @@ require 'sendgrid4r/rest/contacts/lists'
 require 'sendgrid4r/rest/contacts/recipients'
 require 'sendgrid4r/rest/contacts/reserved_fields'
 require 'sendgrid4r/rest/contacts/segments'
+require 'sendgrid4r/rest/campaigns/campaigns'
 require 'sendgrid4r/rest/api_keys/api_keys'
 require 'sendgrid4r/rest/subusers/subusers'
 require 'sendgrid4r/rest/email_activity/email_activity'
@@ -66,6 +67,7 @@ module SendGrid4r
       include SendGrid4r::REST::Contacts::Recipients
       include SendGrid4r::REST::Contacts::ReservedFields
       include SendGrid4r::REST::Contacts::Segments
+      include SendGrid4r::REST::Campaigns::Campaigns
       include SendGrid4r::REST::ApiKeys
       include SendGrid4r::REST::Subusers
       include SendGrid4r::REST::EmailActivity
