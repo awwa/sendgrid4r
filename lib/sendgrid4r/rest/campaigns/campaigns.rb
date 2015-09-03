@@ -22,11 +22,12 @@ module SendGrid4r
 
         def self.create_campaign(resp)
           return resp if resp.nil?
+          send_at = Time.at(resp['send_at']) unless resp['send_at'].nil?
           Campaign.new(
             resp['id'], resp['title'], resp['subject'], resp['sender_id'],
             resp['list_ids'], resp['segment_ids'], resp['categories'],
             resp['suppression_group_id'], resp['html_content'],
-            resp['plain_content'], resp['send_at'], resp['status']
+            resp['plain_content'], send_at, resp['status']
           )
         end
 
@@ -72,7 +73,7 @@ module SendGrid4r
 
         def patch_campaign(campaign_id:, params:, &block)
           endpoint = SendGrid4r::REST::Campaigns::Campaigns.url(campaign_id)
-          resp = patch(@auth, endpoint, params, &block)
+          resp = patch(@auth, endpoint, params.to_h, &block)
           SendGrid4r::REST::Campaigns::Campaigns.create_campaign(resp)
         end
 

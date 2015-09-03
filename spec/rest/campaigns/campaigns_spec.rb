@@ -138,9 +138,9 @@ describe SendGrid4r::REST::Campaigns::Campaigns do
 
       it '#patch_campaign' do
         begin
-          @params[:title] = @title1_edit
+          @campaign1.title = @title1_edit
           actual = @client.patch_campaign(
-            campaign_id: @campaign1.id, params: @params
+            campaign_id: @campaign1.id, params: @campaign1
           )
           expect(actual.title).to eq(@title1_edit)
         rescue RestClient::ExceptionWithResponse => e
@@ -169,7 +169,7 @@ describe SendGrid4r::REST::Campaigns::Campaigns do
           )
           expect(actual.id).to eq(@campaign1.id)
           expect(actual.status).to eq('Scheduled')
-          expect(actual.send_at).to eq(send_at.to_i)
+          expect(actual.send_at).to eq(send_at)
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
@@ -190,7 +190,7 @@ describe SendGrid4r::REST::Campaigns::Campaigns do
           )
           expect(actual.id).to eq(@campaign1.id)
           expect(actual.status).to eq('Scheduled')
-          expect(actual.send_at).to eq(send_at.to_i)
+          expect(actual.send_at).to eq(send_at)
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
@@ -207,7 +207,7 @@ describe SendGrid4r::REST::Campaigns::Campaigns do
           actual = @client.get_schedule_time_campaign(
             campaign_id: @campaign1.id
           )
-          expect(actual.send_at).to eq(send_at.to_i)
+          expect(actual.send_at).to eq(send_at)
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
