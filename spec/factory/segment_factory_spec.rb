@@ -13,9 +13,7 @@ describe SendGrid4r::Factory::SegmentFactory do
         operator: 'eq',
         and_or: '')
       @expect = {}
-      @expect[:id] = nil
       @expect[:name] = 'Last Name Miller'
-      @expect[:list_id] = nil
       @expect[:conditions] = [@condition]
       @expect[:recipient_count] = nil
     end

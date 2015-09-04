@@ -5,7 +5,6 @@ describe SendGrid4r::REST::Contacts::Recipients do
   describe 'integration test', :it do
     before do
       begin
-        pending 'waiting sendgrid documentation update'
         Dotenv.load
         @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
         @email1 = 'jones@example.com'
@@ -33,7 +32,7 @@ describe SendGrid4r::REST::Contacts::Recipients do
         params['email'] = @email1
         params['last_name'] = @last_name1
         params[@custom_field_name] = @pet1
-        @new_recipient = @client.post_recipient(params: params)
+        @result = @client.post_recipients(params: [params])
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
         raise e
@@ -41,40 +40,44 @@ describe SendGrid4r::REST::Contacts::Recipients do
     end
 
     context 'without block call' do
-      it '#post_recipient' do
+      it '#post_recipients' do
         begin
           params = {}
           params['email'] = @email2
           params['last_name'] = @last_name2
           params[@custom_field_name] = @pet2
-          new_recipient = @client.post_recipient(params: params)
-          expect(new_recipient.created_at).to be_a(Time)
-          new_recipient.custom_fields.each do |custom_field|
-            expect(
-              custom_field
-            ).to be_a(SendGrid4r::REST::Contacts::CustomFields::Field)
-          end
-          expect(new_recipient.email).to eq(@email2)
-          expect(new_recipient.first_name).to eq(nil)
-          expect(new_recipient.id).to eq(@email2)
-          expect(new_recipient.last_clicked).to eq(nil)
-          expect(new_recipient.last_emailed).to eq(nil)
-          expect(new_recipient.last_name).to eq(@last_name2)
-          expect(new_recipient.last_opened).to eq(nil)
-          expect(new_recipient.updated_at).to be_a(Time)
+          result = @client.post_recipients(params: [params])
+          expect(result.error_count).to eq(0)
+          expect(result.error_indices).to eq([])
+          expect(result.new_count).to eq(1)
+          expect(result.persisted_recipients).to be_a(Array)
+          expect(result.updated_count).to eq(0)
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
         end
       end
 
-      it '#post_recipient for same key' do
+      it '#patch_recipients' do
         begin
           params = {}
           params['email'] = @email1
-          params['last_name'] = @last_name1
-          params[@custom_field_name] = @pet1
-          @client.post_recipient(params: params)
+          params['last_name'] = 'JonesEdit'
+          result = @client.patch_recipients(params: [params])
+          expect(result.error_count).to eq(0)
+          expect(result.error_indices).to eq([])
+          expect(result.new_count).to eq(0)
+          expect(result.persisted_recipients).to be_a(Array)
+          expect(result.updated_count).to eq(1)
+        rescue RestClient::ExceptionWithResponse => e
+          puts e.inspect
+          raise e
+        end
+      end
+
+      it '#delete_recipients' do
+        begin
+          @client.delete_recipients(recipient_ids: @result.persisted_recipients)
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
@@ -83,12 +86,56 @@ describe SendGrid4r::REST::Contacts::Recipients do
 
       it '#get_recipients' do
         begin
-          recipients = @client.get_recipients(limit: 100, offset: 0)
+          recipients = @client.get_recipients(page: 1, page_size: 100)
           expect(recipients.recipients.length).to be > 0
           recipients.recipients.each do |recipient|
             expect(
               recipient
             ).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
+          end
+        rescue RestClient::ExceptionWithResponse => e
+          puts e.inspect
+          raise e
+        end
+      end
+
+      it '#get_recipient' do
+        begin
+          recipient = @client.get_recipient(
+            recipient_id: @result.persisted_recipients[0]
+          )
+          expect(
+            recipient
+          ).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
+        rescue RestClient::ExceptionWithResponse => e
+          puts e.inspect
+          raise e
+        end
+      end
+
+      it '#delete_recipient' do
+        begin
+          @client.delete_recipient(
+            recipient_id: @result.persisted_recipients[0]
+          )
+          expect do
+            @client.get_recipient(recipient_id: @result.persisted_recipients[0])
+          end.to raise_error(RestClient::ResourceNotFound)
+        rescue RestClient::ExceptionWithResponse => e
+          puts e.inspect
+          raise e
+        end
+      end
+
+      it '#get_lists_recipient_belong' do
+        begin
+          lists = @client.get_lists_recipient_belong(
+            recipient_id: @result.persisted_recipients[0]
+          )
+          lists.lists.each do |list|
+            expect(
+              list.is_a?(SendGrid4r::REST::Contacts::Lists::List)
+            ).to eq(true)
           end
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
@@ -117,98 +164,6 @@ describe SendGrid4r::REST::Contacts::Recipients do
           raise e
         end
       end
-
-      it '#get_recipient' do
-        begin
-          recipient = @client.get_recipient(recipient_id: @new_recipient.id)
-          expect(
-            recipient
-          ).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
-      end
-
-      it '#get_lists_recipient_belong' do
-        begin
-          lists = @client.get_lists_recipient_belong(
-            recipient_id: @new_recipient.id
-          )
-          lists.lists.each do |list|
-            expect(
-              list.is_a?(SendGrid4r::REST::Contacts::Lists::List)
-            ).to eq(true)
-          end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
-      end
-
-      it '#post_recipients' do
-        begin
-          recipient1 = {}
-          recipient1['email'] = @email1
-          recipient1['last_name'] = @last_name1
-          recipient1[@custom_field_name] = @pet1
-          recipient2 = {}
-          recipient2['email'] = @email2
-          recipient2['last_name'] = @last_name2
-          recipient2[@custom_field_name] = @pet2
-          params = [recipient1, recipient2]
-          result = @client.post_recipients(params: params)
-          expect(result.error_count).to eq(0)
-          result.error_indices.each do |index|
-            expect(index).to be_a(Fixnum)
-          end
-          expect(result.new_count).to be_a(Fixnum)
-          expect(result.updated_count).to be_a(Fixnum)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
-      end
-
-      it '#get_recipients_by_id' do
-        begin
-          recipient_ids = [@email1, @email2]
-          actual_recipients = @client.get_recipients_by_id(
-            recipient_ids: recipient_ids
-          )
-          expect(actual_recipients.recipients).to be_a(Array)
-          expect(actual_recipients.recipients.length).to eq(1)
-          actual_recipients.recipients.each do |recip|
-            expect(
-              recip
-            ).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
-          end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
-      end
-
-      it '#delete_recipient' do
-        begin
-          @client.delete_recipient(recipient_id: @new_recipient.id)
-          expect do
-            @client.get_recipient(recipient_id: @new_recipient.id)
-          end.to raise_error(RestClient::ResourceNotFound)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
-      end
-
-      it '#delete_recipients' do
-        begin
-          @client.delete_recipients(emails: [@email1, @email2])
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
-      end
     end
   end
 
@@ -223,7 +178,7 @@ describe SendGrid4r::REST::Contacts::Recipients do
           '"created_at": 1422313607,'\
           '"email": "jones@example.com",'\
           '"first_name": null,'\
-          '"id": "jones@example.com",'\
+          '"id": "YUBh",'\
           '"last_clicked": null,'\
           '"last_emailed": null,'\
           '"last_name": "Jones",'\
@@ -249,7 +204,7 @@ describe SendGrid4r::REST::Contacts::Recipients do
               '"created_at": 1422313607,'\
               '"email": "jones@example.com",'\
               '"first_name": null,'\
-              '"id": "jones@example.com",'\
+              '"id": "YUBh",'\
               '"last_clicked": null,'\
               '"last_emailed": null,'\
               '"last_name": "Jones",'\
@@ -307,16 +262,46 @@ describe SendGrid4r::REST::Contacts::Recipients do
       )
     end
 
-    it '#post_recipient' do
-      allow(client).to receive(:execute).and_return(recipient)
-      actual = client.post_recipient(params: {})
-      expect(actual).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
+    it '#post_recipients' do
+      allow(client).to receive(:execute).and_return(result)
+      actual = client.post_recipients(params: {})
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Recipients::Result)
+    end
+
+    it '#patch_recipients' do
+      allow(client).to receive(:execute).and_return(result)
+      actual = client.patch_recipients(params: {})
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Recipients::Result)
+    end
+
+    it '#delete_recipients' do
+      allow(client).to receive(:execute).and_return('')
+      actual = client.delete_recipients(recipient_ids: ['', ''])
+      expect(actual).to eq('')
     end
 
     it '#get_recipients' do
       allow(client).to receive(:execute).and_return(recipients)
-      actual = client.get_recipients(limit: 0, offset: 0)
+      actual = client.get_recipients(page: 0, page_size: 0)
       expect(actual).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipients)
+    end
+
+    it '#get_recipient' do
+      allow(client).to receive(:execute).and_return(recipient)
+      actual = client.get_recipient(recipient_id: '')
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
+    end
+
+    it '#delete_recipient' do
+      allow(client).to receive(:execute).and_return('')
+      actual = client.delete_recipient(recipient_id: '')
+      expect(actual).to eq('')
+    end
+
+    it '#get_lists_recipient_belong' do
+      allow(client).to receive(:execute).and_return(lists)
+      actual = client.get_lists_recipient_belong(recipient_id: '')
+      expect(actual).to be_a(SendGrid4r::REST::Contacts::Lists::Lists)
     end
 
     it '#get_recipient_count' do
@@ -331,44 +316,6 @@ describe SendGrid4r::REST::Contacts::Recipients do
       expect(actual).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipients)
     end
 
-    it '#get_recipient' do
-      allow(client).to receive(:execute).and_return(recipient)
-      actual = client.get_recipient(recipient_id: 0)
-      expect(actual).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
-    end
-
-    it '#get_lists_recipient_belong' do
-      allow(client).to receive(:execute).and_return(lists)
-      actual = client.get_lists_recipient_belong(recipient_id: 0)
-      expect(actual).to be_a(SendGrid4r::REST::Contacts::Lists::Lists)
-    end
-
-    it '#post_recipients' do
-      allow(client).to receive(:execute).and_return(result)
-      actual = client.post_recipients(recipients: [{}, {}])
-      expect(actual).to be_a(
-        SendGrid4r::REST::Contacts::Recipients::ResultAddMultiple
-      )
-    end
-
-    it '#get_recipients_by_id' do
-      allow(client).to receive(:execute).and_return(recipients)
-      actual = client.get_recipients_by_id(recipient_ids: ['', ''])
-      expect(actual).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipients)
-    end
-
-    it '#delete_recipient' do
-      allow(client).to receive(:execute).and_return('')
-      actual = client.delete_recipient(recipient_id: 0)
-      expect(actual).to eq('')
-    end
-
-    it '#delete_recipients' do
-      allow(client).to receive(:execute).and_return('')
-      actual = client.delete_recipients(emails: ['', ''])
-      expect(actual).to eq('')
-    end
-
     it 'creates recipient instance' do
       actual = SendGrid4r::REST::Contacts::Recipients.create_recipient(
         recipient
@@ -377,7 +324,7 @@ describe SendGrid4r::REST::Contacts::Recipients do
       expect(actual.created_at).to eq(Time.at(1422313607))
       expect(actual.email).to eq('jones@example.com')
       expect(actual.first_name).to eq(nil)
-      expect(actual.id).to eq('jones@example.com')
+      expect(actual.id).to eq('YUBh')
       expect(actual.last_clicked).to eq(nil)
       expect(actual.last_emailed).to eq(nil)
       expect(actual.last_name).to eq('Jones')

@@ -53,6 +53,9 @@ module SendGrid4r
         args[:url] = process_url_params(endpoint, params)
         headers = {}
         headers[:content_type] = :json
+        # Added for Campaign API
+        headers['Accept-Encoding'] = 'plain'
+        #
         if !auth.api_key.nil?
           headers[:authorization] = "Bearer #{auth.api_key}"
         else

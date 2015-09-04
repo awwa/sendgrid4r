@@ -77,14 +77,16 @@ module SendGrid4r
         # no bodies returned
         def post_recipients_to_list(list_id:, recipients:, &block)
           url = SendGrid4r::REST::Contacts::Lists.url(list_id)
-          endpoint = "#{url}/recipients_batch"
+          endpoint = "#{url}/recipients"
           post(@auth, endpoint, recipients, &block)
         end
 
-        def get_recipients_from_list(list_id:, limit: nil, offset: nil, &block)
+        def get_recipients_from_list(
+          list_id:, page: nil, page_size: nil, &block
+        )
           params = {}
-          params['limit'] = limit unless limit.nil?
-          params['offset'] = offset unless offset.nil?
+          params['page'] = page unless page.nil?
+          params['page_size'] = page_size unless page_size.nil?
           endpoint = SendGrid4r::REST::Contacts::Lists.recipients_url(list_id)
           resp = get(@auth, endpoint, params, &block)
           SendGrid4r::REST::Contacts::Recipients.create_recipients(resp)
@@ -105,7 +107,7 @@ module SendGrid4r
         end
 
         def delete_lists(list_ids:, &block)
-          endpoint = "#{BASE_URL}/contactdb/lists_batch"
+          endpoint = "#{BASE_URL}/contactdb/lists"
           delete(@auth, endpoint, nil, list_ids, &block)
         end
       end

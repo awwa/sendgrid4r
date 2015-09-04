@@ -183,25 +183,38 @@ describe SendGrid4r::Client do
         expect(@client.respond_to?('delete_recipient_from_list')).to eq(true)
         expect(@client.respond_to?('delete_lists')).to eq(true)
         # Recipients
-        expect(@client.respond_to?('post_recipient')).to eq(true)
+        expect(@client.respond_to?('post_recipients')).to eq(true)
+        expect(@client.respond_to?('patch_recipients')).to eq(true)
         expect(@client.respond_to?('delete_recipients')).to eq(true)
         expect(@client.respond_to?('get_recipients')).to eq(true)
-        expect(@client.respond_to?('get_recipients_by_id')).to eq(true)
-        expect(@client.respond_to?('get_recipients_count')).to eq(true)
-        expect(@client.respond_to?('search_recipients')).to eq(true)
         expect(@client.respond_to?('get_recipient')).to eq(true)
         expect(@client.respond_to?('delete_recipient')).to eq(true)
         expect(@client.respond_to?('get_lists_recipient_belong')).to eq(true)
-        expect(@client.respond_to?('post_recipients')).to eq(true)
+        expect(@client.respond_to?('get_recipients_count')).to eq(true)
+        expect(@client.respond_to?('search_recipients')).to eq(true)
         # ReservedFields
         expect(@client.respond_to?('get_reserved_fields')).to eq(true)
         # Segments
         expect(@client.respond_to?('post_segment')).to eq(true)
         expect(@client.respond_to?('get_segments')).to eq(true)
         expect(@client.respond_to?('get_segment')).to eq(true)
-        expect(@client.respond_to?('put_segment')).to eq(true)
+        expect(@client.respond_to?('patch_segment')).to eq(true)
         expect(@client.respond_to?('delete_segment')).to eq(true)
-        expect(@client.respond_to?('get_recipients_from_segment')).to eq(true)
+        expect(@client.respond_to?('get_recipients_on_segment')).to eq(true)
+
+        # Campaigns
+        expect(@client.respond_to?('post_campaign')).to eq(true)
+        expect(@client.respond_to?('get_campaigns')).to eq(true)
+        expect(@client.respond_to?('get_campaign')).to eq(true)
+        expect(@client.respond_to?('delete_campaign')).to eq(true)
+        expect(@client.respond_to?('patch_campaign')).to eq(true)
+        expect(@client.respond_to?('send_campaign')).to eq(true)
+        expect(@client.respond_to?('schedule_campaign')).to eq(true)
+        expect(@client.respond_to?('schedule_campaign')).to eq(true)
+        expect(@client.respond_to?('reschedule_campaign')).to eq(true)
+        expect(@client.respond_to?('get_schedule_time_campaign')).to eq(true)
+        expect(@client.respond_to?('unschedule_campaign')).to eq(true)
+        expect(@client.respond_to?('test_campaign')).to eq(true)
 
         # Whitelabel
         # Domains
@@ -245,7 +258,7 @@ describe SendGrid4r::Client do
 
     describe 'VERSION' do
       it 'returns VERSION value' do
-        expect(SendGrid4r::VERSION).to eq('1.1.0')
+        expect(SendGrid4r::VERSION).to eq('1.2.0')
       end
     end
   end
