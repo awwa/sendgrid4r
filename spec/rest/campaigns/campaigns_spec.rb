@@ -405,5 +405,50 @@ describe SendGrid4r::REST::Campaigns::Campaigns do
       actual = client.test_campaign(campaign_id: 0, to: '')
       expect(actual).to eq('')
     end
+
+    it 'creates campaign instance' do
+      actual = SendGrid4r::REST::Campaigns::Campaigns.create_campaign(campaign)
+      expect(actual).to be_a(SendGrid4r::REST::Campaigns::Campaigns::Campaign)
+      expect(actual.id).to eq(986724)
+      expect(actual.title).to eq('March Newsletter')
+      expect(actual.subject).to eq('New Products for Spring!')
+      expect(actual.sender_id).to eq(124451)
+      expect(actual.list_ids).to eq([110, 124])
+      expect(actual.segment_ids).to eq([110])
+      expect(actual.categories).to eq(['spring line'])
+      expect(actual.suppression_group_id).to eq(42)
+      expect(actual.html_content).to eq(
+        '<html><head><title></title></head><body>'\
+        '<p>Check out our spring line!</p></body></html>')
+      expect(actual.plain_content).to eq('Check out our spring line!')
+      expect(actual.status).to eq('Draft')
+    end
+
+    it 'creates campaigns instance' do
+      actual = SendGrid4r::REST::Campaigns::Campaigns.create_campaigns(
+        campaigns
+      )
+      expect(actual).to be_a(SendGrid4r::REST::Campaigns::Campaigns::Campaigns)
+      actual.result.each do |campaign|
+        expect(campaign).to be_a(
+          SendGrid4r::REST::Campaigns::Campaigns::Campaign
+        )
+      end
+    end
+
+    it 'creates sent instance' do
+      actual = SendGrid4r::REST::Campaigns::Campaigns.create_campaign(sent)
+      expect(actual).to be_a(SendGrid4r::REST::Campaigns::Campaigns::Campaign)
+      expect(actual.id).to eq(986724)
+      expect(actual.status).to eq('Scheduled')
+    end
+
+    it 'creates schedule instance' do
+      actual = SendGrid4r::REST::Campaigns::Campaigns.create_campaign(schedule)
+      expect(actual).to be_a(SendGrid4r::REST::Campaigns::Campaigns::Campaign)
+      expect(actual.id).to eq(986724)
+      expect(actual.send_at).to eq(Time.at(1489771528))
+      expect(actual.status).to eq('Scheduled')
+    end
   end
 end
