@@ -11,19 +11,47 @@ describe SendGrid4r::REST::Whitelabel::Links do
         @domain_name = ENV['DOMAIN']
         @username = ENV['USERNAME']
         @subuser1 = ENV['SUBUSER1']
-
-        # celan up test env(lists)
+        @email1 = ENV['MAIL']
+        @password1 = ENV['PASS']
+        @ip = @client.get_ips[0].ip
+        # celan up test env
+        @id1 = nil
+        @id2 = nil
         links = @client.get_wl_links
         links.each do |link|
           if link.subdomain == "#{@subdomain_name}1" &&
              link.domain == @domain_name
-            @client.delete_wl_link(id: link.id)
+            @id1 = link.id
+          end
+          if link.subdomain == "#{@subdomain_name}2" &&
+             link.domain == @domain_name
+            @id2 = link.id
           end
         end
-
         # post link
         @link1 = @client.post_wl_link(
           subdomain: @subdomain_name + '1', domain: @domain_name, default: false
+        ) if @id1.nil?
+        @link2 = @client.post_wl_link(
+          subdomain: @subdomain_name + '2', domain: @domain_name, default: false
+        ) if @id2.nil?
+        # make a default
+        @id1 = @link1.id if @id1.nil?
+        @id2 = @link2.id if @id2.nil?
+        @client.patch_wl_link(id: @id1, default: true)
+        @client.delete_wl_link(id: @id2)
+        @link2 = @client.post_wl_link(
+          subdomain: @subdomain_name + '2', domain: @domain_name, default: false
+        )
+        # create a subuser
+        subusers = @client.get_subusers
+        count = subusers.count { |subuser| subuser.username == @subuser1 }
+        @client.delete_subuser(username: @subuser1) if count == 1
+        @client.post_subuser(
+          username: @subuser1,
+          email: @email1,
+          password: @password1,
+          ips: [@ip]
         )
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
@@ -49,18 +77,18 @@ describe SendGrid4r::REST::Whitelabel::Links do
 
       it '#post_wl_link' do
         begin
-          expect(@link1).to be_a(SendGrid4r::REST::Whitelabel::Links::Link)
-          expect(@link1.domain).to eq(@domain_name)
-          expect(@link1.subdomain).to eq(@subdomain_name + '1')
-          expect(@link1.username).to eq(@username)
-          expect(@link1.user_id).to be_a(Numeric)
-          expect(@link1.default).to eq(false)
-          expect(@link1.valid).to eq(false)
-          expect(@link1.legacy).to eq(false)
-          expect(@link1.dns.domain_cname).to be_a(
+          expect(@link2).to be_a(SendGrid4r::REST::Whitelabel::Links::Link)
+          expect(@link2.domain).to eq(@domain_name)
+          expect(@link2.subdomain).to eq(@subdomain_name + '2')
+          expect(@link2.username).to eq(@username)
+          expect(@link2.user_id).to be_a(Numeric)
+          expect(@link2.default).to eq(true)
+          expect(@link2.valid).to eq(false)
+          expect(@link2.legacy).to eq(false)
+          expect(@link2.dns.domain_cname).to be_a(
             SendGrid4r::REST::Whitelabel::Links::Record
           )
-          expect(@link1.dns.owner_cname).to be_a(
+          expect(@link2.dns.owner_cname).to be_a(
             SendGrid4r::REST::Whitelabel::Links::Record
           )
         rescue RestClient::ExceptionWithResponse => e
@@ -71,19 +99,19 @@ describe SendGrid4r::REST::Whitelabel::Links do
 
       it '#get_wl_link' do
         begin
-          link1 = @client.get_wl_link(id: @link1.id)
-          expect(link1).to be_a(SendGrid4r::REST::Whitelabel::Links::Link)
-          expect(link1.domain).to eq(@domain_name)
-          expect(link1.subdomain).to eq(@subdomain_name + '1')
-          expect(link1.username).to eq(@username)
-          expect(link1.user_id).to be_a(Numeric)
-          expect(link1.default).to eq(false)
-          expect(link1.valid).to eq(false)
-          expect(link1.legacy).to eq(false)
-          expect(link1.dns.domain_cname).to be_a(
+          link2 = @client.get_wl_link(id: @link2.id)
+          expect(link2).to be_a(SendGrid4r::REST::Whitelabel::Links::Link)
+          expect(link2.domain).to eq(@domain_name)
+          expect(link2.subdomain).to eq(@subdomain_name + '2')
+          expect(link2.username).to eq(@username)
+          expect(link2.user_id).to be_a(Numeric)
+          expect(link2.default).to eq(true)
+          expect(link2.valid).to eq(false)
+          expect(link2.legacy).to eq(false)
+          expect(link2.dns.domain_cname).to be_a(
             SendGrid4r::REST::Whitelabel::Links::Record
           )
-          expect(link1.dns.owner_cname).to be_a(
+          expect(link2.dns.owner_cname).to be_a(
             SendGrid4r::REST::Whitelabel::Links::Record
           )
         rescue RestClient::ExceptionWithResponse => e
@@ -94,19 +122,19 @@ describe SendGrid4r::REST::Whitelabel::Links do
 
       it '#patch_wl_link' do
         begin
-          link1 = @client.patch_wl_link(id: @link1.id, default: false)
-          expect(link1).to be_a(SendGrid4r::REST::Whitelabel::Links::Link)
-          expect(link1.domain).to eq(@domain_name)
-          expect(link1.subdomain).to eq(@subdomain_name + '1')
-          expect(link1.username).to eq(@username)
-          expect(link1.user_id).to be_a(Numeric)
-          expect(link1.default).to eq(false)
-          expect(link1.valid).to eq(false)
-          expect(link1.legacy).to eq(false)
-          expect(link1.dns.domain_cname).to be_a(
+          link2 = @client.patch_wl_link(id: @link2.id, default: true)
+          expect(link2).to be_a(SendGrid4r::REST::Whitelabel::Links::Link)
+          expect(link2.domain).to eq(@domain_name)
+          expect(link2.subdomain).to eq(@subdomain_name + '2')
+          expect(link2.username).to eq(@username)
+          expect(link2.user_id).to be_a(Numeric)
+          expect(link2.default).to eq(true)
+          expect(link2.valid).to eq(false)
+          expect(link2.legacy).to eq(false)
+          expect(link2.dns.domain_cname).to be_a(
             SendGrid4r::REST::Whitelabel::Links::Record
           )
-          expect(link1.dns.owner_cname).to be_a(
+          expect(link2.dns.owner_cname).to be_a(
             SendGrid4r::REST::Whitelabel::Links::Record
           )
         rescue RestClient::ExceptionWithResponse => e
@@ -117,7 +145,7 @@ describe SendGrid4r::REST::Whitelabel::Links do
 
       it '#delete_wl_link' do
         begin
-          @client.delete_wl_link(id: @link1.id)
+          @client.delete_wl_link(id: @id1)
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
@@ -136,7 +164,7 @@ describe SendGrid4r::REST::Whitelabel::Links do
 
       it '#validate_wl_link' do
         begin
-          result1 = @client.validate_wl_link(id: @link1.id)
+          result1 = @client.validate_wl_link(id: @id1)
           expect(result1).to be_a(
             SendGrid4r::REST::Whitelabel::Links::Result
           )
@@ -168,7 +196,7 @@ describe SendGrid4r::REST::Whitelabel::Links do
       it '#associate_wl_link' do
         begin
           @client.associate_wl_link(
-            id: @link1.id, username: @subuser1
+            id: @id1, username: @subuser1
           )
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
@@ -179,7 +207,7 @@ describe SendGrid4r::REST::Whitelabel::Links do
       it '#disassociate_wl_link' do
         begin
           @client.associate_wl_link(
-            id: @link1.id, username: @subuser1
+            id: @id1, username: @subuser1
           )
           @client.disassociate_wl_link(username: @subuser1)
         rescue RestClient::ExceptionWithResponse => e

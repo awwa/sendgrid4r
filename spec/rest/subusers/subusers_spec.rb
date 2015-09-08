@@ -12,15 +12,16 @@ describe SendGrid4r::REST::Subusers do
         @username3 = ENV['SUBUSER3']
         @email1 = ENV['MAIL']
         @password1  = ENV['PASS']
-
         @ip = @client.get_ips[0].ip
         # celan up test env
-        begin
-          @client.delete_subuser(username: @username3)
-        rescue => e
-          puts e.inspect
-        end
-
+        subusers = @client.get_subusers
+        count1 = subusers.count { |subuser| subuser.username == @username1 }
+        @client.delete_subuser(username: @username1) unless count1 == 0
+        count2 = subusers.count { |subuser| subuser.username == @username2 }
+        @client.delete_subuser(username: @username2) unless count2 == 0
+        count3 = subusers.count { |subuser| subuser.username == @username3 }
+        @client.delete_subuser(username: @username3) unless count3 == 0
+        # create a subuser
         @subuser3 = @client.post_subuser(
           username: @username3,
           email: @email1,
@@ -61,6 +62,7 @@ describe SendGrid4r::REST::Subusers do
       it '#patch_subuser' do
         begin
           @client.patch_subuser(username: @username3, disabled: true)
+          @client.patch_subuser(username: @username3, disabled: false)
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
@@ -130,8 +132,7 @@ describe SendGrid4r::REST::Subusers do
       it '#get_subuser_reputation' do
         begin
           params = []
-          params.push(@username1)
-          params.push(@username2)
+          params.push(@username3)
           subusers = @client.get_subuser_reputation(usernames: params)
           expect(subusers).to be_a(Array)
           subusers.each do |subuser|
@@ -146,7 +147,7 @@ describe SendGrid4r::REST::Subusers do
       it '#put_subuser_assigned_ips' do
         begin
           subuser = @client.put_subuser_assigned_ips(
-            username: @username2, ips: [@ip]
+            username: @username3, ips: [@ip]
           )
           expect(subuser.ips).to be_a(Array)
           subuser.ips.each do |ip|

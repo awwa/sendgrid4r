@@ -15,15 +15,12 @@ describe SendGrid4r::REST::Whitelabel::Ips do
         # celan up test env(lists)
         ips = @client.get_wl_ips
         ips.each do |ip|
-          @client.delete_wl_ip(
-            id: ip.id
-          ) if ip.subdomain == @subdomain_name && ip.domain == @domain_name
+          @client.delete_wl_ip(id: ip.id)
         end
 
         @ipw = @client.post_wl_ip(
           ip: @ip, subdomain: @subdomain_name, domain: @domain_name
         )
-
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
         raise e
