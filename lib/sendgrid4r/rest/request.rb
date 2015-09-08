@@ -35,16 +35,13 @@ module SendGrid4r
 
       def execute(method, auth, endpoint, params, payload, &block)
         args = create_args(method, auth, endpoint, params, payload)
-        if block_given?
-          RestClient::Request.execute(args, &block)
-          return nil
-        end
-        body = RestClient::Request.execute(args)
-        if body.nil? || body.length < 2
-          body
-        else
-          JSON.parse(body)
-        end
+        body = RestClient::Request.execute(args, &block)
+        return nil if block_given?
+        return JSON.parse(body) unless body.nil? || body.length < 2
+        body
+      rescue RestClient::TooManyRequests => e
+        sleep e.response.headers[:x_ratelimit_reset].to_i - Time.now.to_i
+        retry
       end
 
       def create_args(method, auth, endpoint, params, payload)
