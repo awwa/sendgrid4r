@@ -103,7 +103,7 @@ module SendGrid4r
           ValidationResult.new(resp['valid'], resp['reason'])
         end
 
-       def get_wl_links(
+        def get_wl_links(
           limit: nil, offset: nil, exclude_subusers: nil, username: nil,
           domain: nil, &block
         )
