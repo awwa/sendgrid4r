@@ -42,7 +42,7 @@ module SendGrid4r
         SendGrid4r::REST::Users.create_profile(resp)
       end
 
-      def patch_user_profile(params: params, &block)
+      def patch_user_profile(params: nil, &block)
         endpoint = SendGrid4r::REST::Users.url
         resp = patch(@auth, endpoint, params, &block)
         SendGrid4r::REST::Users.create_profile(resp)
