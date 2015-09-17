@@ -16,7 +16,7 @@ module SendGrid4r
     include SendGrid4r::REST::API
 
     def initialize(
-      username: username, password: password, api_key: api_key = nil
+      username: nil, password: nil, api_key: nil
     )
       @auth = Auth.new(username: username, password: password, api_key: api_key)
     end
