@@ -13,21 +13,51 @@ describe SendGrid4r::REST::Whitelabel::Domains do
         @ip = ENV['IP']
         @subuser1 = ENV['SUBUSER1']
         @subuser2 = ENV['SUBUSER2']
-
+        @email1 = ENV['MAIL']
+        @password1 = ENV['PASS']
+        @ip = ENV['IP']
         # celan up test env(lists)
+        @id1 = nil
+        @id2 = nil
+        @id3 = nil
         domains = @client.get_wl_domains
         domains.each do |domain|
           if domain.subdomain == "#{@subdomain_name}1" &&
              domain.domain == @domain_name
-            @client.delete_wl_domain(id: domain.id)
+            @id1 = domain.id
           end
           if domain.subdomain == "#{@subdomain_name}2" &&
              domain.domain == @domain_name
-            @client.delete_wl_domain(id: domain.id)
+            @id2 = domain.id
+          end
+          if domain.subdomain == "#{@subdomain_name}3" &&
+             domain.domain == @domain_name
+            @id3 = domain.id
           end
         end
-
         # post domain
+        @domain1 = @client.post_wl_domain(
+          domain: @domain_name, subdomain: @subdomain_name + '1',
+          username: @username, ips: nil,
+          automatic_security: true, custom_spf: false, default: false
+        ) if @id1.nil?
+        @domain2 = @client.post_wl_domain(
+          domain: @domain_name, subdomain: @subdomain_name + '2',
+          username: @username, ips: nil,
+          automatic_security: false, custom_spf: true, default: false
+        ) if @id2.nil?
+        @domain3 = @client.post_wl_domain(
+          domain: @domain_name, subdomain: @subdomain_name + '3',
+          username: @username, ips: nil,
+          automatic_security: true, custom_spf: false, default: false
+        ) if @id3.nil?
+        # make a default
+        @id1 = @domain1.id if @id1.nil?
+        @id2 = @domain2.id if @id2.nil?
+        @id3 = @domain3.id if @id3.nil?
+        @client.patch_wl_domain(id: @id3, default: true)
+        @client.delete_wl_domain(id: @id1)
+        @client.delete_wl_domain(id: @id2)
         @domain1 = @client.post_wl_domain(
           domain: @domain_name, subdomain: @subdomain_name + '1',
           username: @username, ips: nil,
@@ -37,6 +67,16 @@ describe SendGrid4r::REST::Whitelabel::Domains do
           domain: @domain_name, subdomain: @subdomain_name + '2',
           username: @username, ips: nil,
           automatic_security: false, custom_spf: true, default: false
+        )
+        # clean subusers
+        subusers = @client.get_subusers
+        count = subusers.count { |subuser| subuser.username == @subuser1 }
+        @client.delete_subuser(username: @subuser1) if count == 1
+        @client.post_subuser(
+          username: @subuser1,
+          email: @email1,
+          password: @password1,
+          ips: [@ip]
         )
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect

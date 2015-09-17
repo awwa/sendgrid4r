@@ -7,6 +7,17 @@ describe SendGrid4r::REST::Stats::Subuser do
       Dotenv.load
       @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
       @subuser = ENV['SUBUSER2']
+      @email1 = ENV['MAIL']
+      @password1 = ENV['PASS']
+      @ip = ENV['IP']
+      subusers = @client.get_subusers
+      count = subusers.count { |subuser| subuser.username == @subuser }
+      @client.post_subuser(
+        username: @subuser,
+        email: @email1,
+        password: @password1,
+        ips: [@ip]
+      ) if count == 0
     end
 
     context 'without block call' do
