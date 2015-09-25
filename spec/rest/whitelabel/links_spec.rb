@@ -62,7 +62,8 @@ describe SendGrid4r::REST::Whitelabel::Links do
     context 'without block call' do
       it '#get_wl_links' do
         begin
-          links = @client.get_wl_links
+          links = @client.get_wl_links(limit: 100, offset: 0,
+            exclude_subusers: true, username: 'somebody', domain: 'example.com')
           expect(links).to be_a(Array)
           links.each do |link|
             expect(link).to be_a(
