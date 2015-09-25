@@ -103,9 +103,20 @@ module SendGrid4r
           ValidationResult.new(resp['valid'], resp['reason'])
         end
 
-        def get_wl_links(&block)
+        def get_wl_links(
+          limit: nil, offset: nil, exclude_subusers: nil, username: nil,
+          domain: nil, &block
+        )
+          params = {}
+          params['limit'] = limit unless limit.nil?
+          params['offset'] = offset unless offset.nil?
+          unless exclude_subusers.nil?
+            params['exclude_subusers'] = exclude_subusers
+          end
+          params['username'] = username unless username.nil?
+          params['domain'] = domain unless domain.nil?
           endpoint = SendGrid4r::REST::Whitelabel::Links.url
-          resp = get(@auth, endpoint, nil, &block)
+          resp = get(@auth, endpoint, params, &block)
           SendGrid4r::REST::Whitelabel::Links.create_links(resp)
         end
 
