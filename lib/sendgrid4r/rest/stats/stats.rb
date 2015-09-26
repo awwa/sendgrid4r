@@ -18,7 +18,7 @@ module SendGrid4r
         MONTH = 'month'
       end
 
-      TopStat  = Struct.new(:date, :stats)
+      TopStat = Struct.new(:date, :stats)
       Stat        = Struct.new(:metrics, :name, :type)
       Metric      = Struct.new(
         :blocks,

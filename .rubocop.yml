@@ -7,6 +7,10 @@ MethodLength:
   CountComments: true  # count full line comments?
   Max: 20
 
+# Change limitation of module length
+ModuleLength:
+  Max: 300
+
 # Change limitation of the number of params
 ParameterLists:
   Max: 8
@@ -15,10 +19,6 @@ ParameterLists:
 # Change limitation of AbcSize
 AbcSize:
   Max: 21
-
-# Change limitation of the number of '/' within %r
-RegexpLiteral:
-  MaxSlashes: 0
 
 # Change numeric literals
 NumericLiterals:
