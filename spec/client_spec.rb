@@ -253,6 +253,7 @@ describe SendGrid4r::Client do
         # Users API
         expect(@client.respond_to?('get_user_profile')).to eq(true)
         expect(@client.respond_to?('patch_user_profile')).to eq(true)
+        expect(@client.respond_to?('get_user_account')).to eq(true)
       end
     end
 

@@ -16,8 +16,10 @@ module SendGrid4r
         :phone, :state, :website, :zip
       )
 
-      def self.url
-        url = "#{BASE_URL}/user/profile"
+      Account = Struct.new(:type, :reputation)
+
+      def self.url(path)
+        url = "#{BASE_URL}/user/#{path}"
         url
       end
 
@@ -37,15 +39,28 @@ module SendGrid4r
         )
       end
 
+      def self.create_account(resp)
+        return resp if resp.nil?
+        Account.new(
+          resp['type'],
+          resp['reputation']
+        )
+      end
+
       def get_user_profile(&block)
-        resp = get(@auth, SendGrid4r::REST::Users.url, nil, &block)
+        resp = get(@auth, SendGrid4r::REST::Users.url('profile'), nil, &block)
         SendGrid4r::REST::Users.create_profile(resp)
       end
 
-      def patch_user_profile(params: nil, &block)
-        endpoint = SendGrid4r::REST::Users.url
+      def patch_user_profile(params:, &block)
+        endpoint = SendGrid4r::REST::Users.url('profile')
         resp = patch(@auth, endpoint, params, &block)
         SendGrid4r::REST::Users.create_profile(resp)
+      end
+
+      def get_user_account(&block)
+        resp = get(@auth, SendGrid4r::REST::Users.url('account'), nil, &block)
+        SendGrid4r::REST::Users.create_account(resp)
       end
     end
   end
