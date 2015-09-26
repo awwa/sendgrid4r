@@ -18,7 +18,7 @@ module SendGrid4r
             aggregated_by: nil,
             country: nil,
             &block
-          )
+        )
           params = {
             start_date: start_date,
             end_date: end_date,
@@ -34,7 +34,7 @@ module SendGrid4r
             end_date: nil,
             aggregated_by: nil,
             &block
-          )
+        )
           params = {
             start_date: start_date,
             end_date: end_date,
@@ -49,7 +49,7 @@ module SendGrid4r
             end_date: nil,
             aggregated_by: nil,
             &block
-          )
+        )
           params = {
             start_date: start_date,
             end_date: end_date,
@@ -65,7 +65,7 @@ module SendGrid4r
             aggregated_by: nil,
             client_type:,
             &block
-          )
+        )
           params = {
             start_date: start_date,
             end_date: end_date,
@@ -83,7 +83,7 @@ module SendGrid4r
             aggregated_by: nil,
             esps: nil,
             &block
-          )
+        )
           params = {
             start_date: start_date,
             end_date: end_date,
@@ -101,7 +101,7 @@ module SendGrid4r
             aggregated_by: nil,
             browsers: nil,
             &block
-          )
+        )
           params = {
             start_date: start_date,
             end_date: end_date,

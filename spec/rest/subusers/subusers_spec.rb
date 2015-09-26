@@ -11,7 +11,7 @@ describe SendGrid4r::REST::Subusers do
         @username2 = ENV['SUBUSER2']
         @username3 = ENV['SUBUSER3']
         @email1 = ENV['MAIL']
-        @password1  = ENV['PASS']
+        @password1 = ENV['PASS']
         @ip = @client.get_ips[0].ip
         # celan up test env
         subusers = @client.get_subusers
