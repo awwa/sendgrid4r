@@ -13,7 +13,6 @@ describe SendGrid4r::REST::Contacts::Recipients do
         @last_name2 = 'Miller'
         @pet1 = 'Fluffy'
         @pet2 = 'FrouFrou'
-        @custom_field_name = 'pet'
 
         # celan up test env
         recipients = @client.get_recipients
@@ -21,17 +20,10 @@ describe SendGrid4r::REST::Contacts::Recipients do
           next if recipient.email != @email1 && recipient.email != @email2
           @client.delete_recipient(recipient_id: recipient.id)
         end
-        custom_fields = @client.get_custom_fields
-        custom_fields.custom_fields.each do |custom_field|
-          next if custom_field.name != @custom_field_name
-          @client.delete_custom_field(custom_field_id: custom_field.id)
-        end
-        @client.post_custom_field(name: @custom_field_name, type: 'text')
         # post a recipient
         params = {}
         params['email'] = @email1
         params['last_name'] = @last_name1
-        params[@custom_field_name] = @pet1
         @result = @client.post_recipients(params: [params])
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
@@ -45,7 +37,6 @@ describe SendGrid4r::REST::Contacts::Recipients do
           params = {}
           params['email'] = @email2
           params['last_name'] = @last_name2
-          params[@custom_field_name] = @pet2
           result = @client.post_recipients(params: [params])
           expect(result.error_count).to eq(0)
           expect(result.error_indices).to eq([])
