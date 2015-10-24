@@ -254,12 +254,26 @@ describe SendGrid4r::Client do
         expect(@client.respond_to?('get_user_profile')).to eq(true)
         expect(@client.respond_to?('patch_user_profile')).to eq(true)
         expect(@client.respond_to?('get_user_account')).to eq(true)
+
+        # Bounces API
+        expect(@client.respond_to?('get_bounces')).to eq(true)
+        expect(@client.respond_to?('delete_bounces')).to eq(true)
+        expect(@client.respond_to?('get_bounce')).to eq(true)
+        expect(@client.respond_to?('delete_bounce')).to eq(true)
+
+        # Cancel Scheduled Sends Api
+        expect(@client.respond_to?('generate_batch_id')).to eq(true)
+        expect(@client.respond_to?('validate_batch_id')).to eq(true)
+        expect(@client.respond_to?('post_scheduled_send')).to eq(true)
+        expect(@client.respond_to?('get_scheduled_sends')).to eq(true)
+        expect(@client.respond_to?('patch_scheduled_send')).to eq(true)
+        expect(@client.respond_to?('delete_scheduled_send')).to eq(true)
       end
     end
 
     describe 'VERSION' do
       it 'returns VERSION value' do
-        expect(SendGrid4r::VERSION).to eq('1.3.0')
+        expect(SendGrid4r::VERSION).to eq('1.4.0')
       end
     end
   end

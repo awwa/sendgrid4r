@@ -16,7 +16,6 @@ describe SendGrid4r::REST::Contacts::Lists do
         @last_name2 = 'Miller'
         @pet1 = 'Fluffy'
         @pet2 = 'FrouFrou'
-        @custom_field_name = 'pet'
 
         # celan up test env(lists)
         lists = @client.get_lists
@@ -41,11 +40,9 @@ describe SendGrid4r::REST::Contacts::Lists do
         recipient1 = {}
         recipient1['email'] = @email1
         recipient1['last_name'] = @last_name1
-        recipient1[@custom_field_name] = @pet1
         recipient2 = {}
         recipient2['email'] = @email2
         recipient2['last_name'] = @last_name2
-        recipient2[@custom_field_name] = @pet2
         result = @client.post_recipients(params: [recipient1, recipient2])
         @recipients = result.persisted_recipients
         @client.post_recipient_to_list(
@@ -54,8 +51,6 @@ describe SendGrid4r::REST::Contacts::Lists do
         @client.post_recipient_to_list(
           list_id: @list1.id, recipient_id: result.persisted_recipients[1]
         )
-        # # Add multiple recipients to a single list
-        # @client.post_recipients_to_list(@list1.id, @recipients)
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
         raise e
@@ -205,7 +200,6 @@ describe SendGrid4r::REST::Contacts::Lists do
           recipient1 = {}
           recipient1['email'] = @email1
           recipient1['last_name'] = @last_name1
-          recipient1[@custom_field_name] = @pet1
           result = @client.post_recipients(params: [recipient1])
           @client.post_recipient_to_list(
             list_id: @list1.id, recipient_id: result.persisted_recipients[0]

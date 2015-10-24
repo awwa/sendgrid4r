@@ -30,21 +30,18 @@ module SendGrid4r
         def self.create_recipient(resp)
           return resp if resp.nil?
           custom_fields = []
-          resp['custom_fields'].each do |field|
-            custom_fields.push(
-              SendGrid4r::REST::Contacts::CustomFields.create_field(field)
-            )
+          unless resp['custom_fields'].nil?
+            resp['custom_fields'].each do |field|
+              custom_fields.push(
+                SendGrid4r::REST::Contacts::CustomFields.create_field(field)
+              )
+            end
           end
           Recipient.new(
-            Time.at(resp['created_at']),
-            custom_fields,
-            resp['email'],
-            resp['first_name'],
-            resp['id'],
-            resp['last_clicked'],
-            resp['last_emailed'],
-            resp['last_name'],
-            resp['last_opened'],
+            Time.at(resp['created_at']), custom_fields,
+            resp['email'], resp['first_name'], resp['id'],
+            resp['last_clicked'], resp['last_emailed'],
+            resp['last_name'], resp['last_opened'],
             Time.at(resp['updated_at'])
           )
         end

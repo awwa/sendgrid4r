@@ -118,9 +118,6 @@ describe SendGrid4r::REST::Whitelabel::Domains do
           expect(@domain1.dns.mail_cname).to be_a(
             SendGrid4r::REST::Whitelabel::Domains::Record
           )
-          expect(@domain1.dns.spf).to be_a(
-            SendGrid4r::REST::Whitelabel::Domains::Record
-          )
           expect(@domain1.dns.dkim1).to be_a(
             SendGrid4r::REST::Whitelabel::Domains::Record
           )
@@ -144,9 +141,6 @@ describe SendGrid4r::REST::Whitelabel::Domains do
             SendGrid4r::REST::Whitelabel::Domains::Record
           )
           expect(@domain2.dns.subdomain_spf).to be_a(
-            SendGrid4r::REST::Whitelabel::Domains::Record
-          )
-          expect(@domain2.dns.domain_spf).to be_a(
             SendGrid4r::REST::Whitelabel::Domains::Record
           )
           expect(@domain2.dns.dkim).to be_a(
@@ -175,9 +169,6 @@ describe SendGrid4r::REST::Whitelabel::Domains do
           expect(domain1.dns.mail_cname).to be_a(
             SendGrid4r::REST::Whitelabel::Domains::Record
           )
-          expect(domain1.dns.spf).to be_a(
-            SendGrid4r::REST::Whitelabel::Domains::Record
-          )
           expect(domain1.dns.dkim1).to be_a(
             SendGrid4r::REST::Whitelabel::Domains::Record
           )
@@ -200,9 +191,6 @@ describe SendGrid4r::REST::Whitelabel::Domains do
             SendGrid4r::REST::Whitelabel::Domains::Record
           )
           expect(domain2.dns.subdomain_spf).to be_a(
-            SendGrid4r::REST::Whitelabel::Domains::Record
-          )
-          expect(domain2.dns.domain_spf).to be_a(
             SendGrid4r::REST::Whitelabel::Domains::Record
           )
           expect(domain2.dns.dkim).to be_a(
@@ -292,9 +280,6 @@ describe SendGrid4r::REST::Whitelabel::Domains do
           expect(result1.validation_results.dkim2.valid).to be(
             false
           )
-          expect(result1.validation_results.spf.valid).to be(
-            false
-          )
           result2 = @client.validate_wl_domain(id: @domain2.id)
           expect(result2).to be_a(
             SendGrid4r::REST::Whitelabel::Domains::Result
@@ -304,9 +289,6 @@ describe SendGrid4r::REST::Whitelabel::Domains do
             false
           )
           expect(result2.validation_results.subdomain_spf.valid).to be(
-            false
-          )
-          expect(result2.validation_results.domain_spf.valid).to be(
             false
           )
           expect(result2.validation_results.dkim.valid).to be(
@@ -382,12 +364,6 @@ describe SendGrid4r::REST::Whitelabel::Domains do
               '"data": "u7.wl.sendgrid.net",'\
               '"valid": true'\
             '},'\
-            '"spf": {'\
-              '"host": "example.com",'\
-              '"type": "txt",'\
-              '"data": "v=spf1 include:u7.wl.sendgrid.net -all",'\
-              '"valid": true'\
-            '},'\
             '"dkim1": {'\
               '"host": "s1._domainkey.example.com",'\
               '"type": "cname",'\
@@ -432,12 +408,6 @@ describe SendGrid4r::REST::Whitelabel::Domains do
               '"host": "mail2.example.com",'\
               '"data": "v=spf1 include:sendgrid.net ~all"'\
             '},'\
-            '"domain_spf": {'\
-              '"valid": false,'\
-              '"type": "txt",'\
-              '"host": "example.com",'\
-              '"data": "v=spf1 include:mail2.example.com -all"'\
-            '},'\
             '"dkim": {'\
               '"valid": false,'\
               '"type": "txt",'\
@@ -465,10 +435,6 @@ describe SendGrid4r::REST::Whitelabel::Domains do
               '"reason": null'\
             '},'\
             '"dkim2": {'\
-              '"valid": true,'\
-              '"reason": null'\
-            '},'\
-            '"spf": {'\
               '"valid": true,'\
               '"reason": null'\
             '}'\
@@ -573,15 +539,6 @@ describe SendGrid4r::REST::Whitelabel::Domains do
       expect(actual.dns.mail_cname.type).to eq('cname')
       expect(actual.dns.mail_cname.data).to eq('u7.wl.sendgrid.net')
       expect(actual.dns.mail_cname.valid).to eq(true)
-      expect(actual.dns.spf).to be_a(
-        SendGrid4r::REST::Whitelabel::Domains::Record
-      )
-      expect(actual.dns.spf.host).to eq('example.com')
-      expect(actual.dns.spf.type).to eq('txt')
-      expect(actual.dns.spf.data).to eq(
-        'v=spf1 include:u7.wl.sendgrid.net -all'
-      )
-      expect(actual.dns.spf.valid).to eq(true)
       expect(actual.dns.dkim1).to be_a(
         SendGrid4r::REST::Whitelabel::Domains::Record
       )
@@ -629,15 +586,6 @@ describe SendGrid4r::REST::Whitelabel::Domains do
         'v=spf1 include:sendgrid.net ~all'
       )
       expect(actual.dns.subdomain_spf.valid).to eq(false)
-      expect(actual.dns.domain_spf).to be_a(
-        SendGrid4r::REST::Whitelabel::Domains::Record
-      )
-      expect(actual.dns.domain_spf.host).to eq('example.com')
-      expect(actual.dns.domain_spf.type).to eq('txt')
-      expect(actual.dns.domain_spf.data).to eq(
-        'v=spf1 include:mail2.example.com -all'
-      )
-      expect(actual.dns.domain_spf.valid).to eq(false)
       expect(actual.dns.dkim).to be_a(
         SendGrid4r::REST::Whitelabel::Domains::Record
       )
@@ -667,11 +615,6 @@ describe SendGrid4r::REST::Whitelabel::Domains do
       )
       expect(actual.validation_results.dkim2.valid).to be(true)
       expect(actual.validation_results.dkim2.reason).to be(nil)
-      expect(actual.validation_results.spf).to be_a(
-        SendGrid4r::REST::Whitelabel::Domains::ValidationResult
-      )
-      expect(actual.validation_results.spf.valid).to be(true)
-      expect(actual.validation_results.spf.reason).to be(nil)
     end
   end
 end

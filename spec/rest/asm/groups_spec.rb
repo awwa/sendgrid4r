@@ -60,7 +60,6 @@ describe SendGrid4r::REST::Asm::Groups do
           expect(group_edit1.id).to be_a(Fixnum)
           expect(group_edit1.name).to eq(@group_name_edit1)
           expect(group_edit1.description).to eq(@group_desc_edit)
-          expect(group_edit1.last_email_sent_at).to eq(nil)
           expect(group_edit1.unsubscribes).to eq(nil)
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
@@ -87,7 +86,6 @@ describe SendGrid4r::REST::Asm::Groups do
           expect(group.id).to be_a(Fixnum)
           expect(group.name).to eq(@group_name1)
           expect(group.description).to eq(@group_desc)
-          expect(group.last_email_sent_at).to eq(nil)
           expect(group.unsubscribes).to eq(0)
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
@@ -117,7 +115,6 @@ describe SendGrid4r::REST::Asm::Groups do
           '"id": 100,'\
           '"name": "Newsletters",'\
           '"description": "Our monthly newsletter.",'\
-          '"last_email_sent_at": "2014-09-04 01:34:43",'\
           '"unsubscribes": 400'\
         '}'
       )
@@ -130,14 +127,12 @@ describe SendGrid4r::REST::Asm::Groups do
             '"id": 100,'\
             '"name": "Newsletters",'\
             '"description": "Our monthly newsletter.",'\
-            '"last_email_sent_at": "2014-09-04 01:34:43",'\
             '"unsubscribes": 400'\
           '},'\
           '{'\
             '"id": 101,'\
             '"name": "Alerts",'\
             '"description": "Emails triggered by user-defined rules.",'\
-            '"last_email_sent_at": "2012-11-06 09:37:33",'\
             '"unsubscribes": 1'\
           '}'\
         ']'
@@ -185,7 +180,6 @@ describe SendGrid4r::REST::Asm::Groups do
       expect(actual.id).to eq(100)
       expect(actual.name).to eq('Newsletters')
       expect(actual.description).to eq('Our monthly newsletter.')
-      expect(actual.last_email_sent_at).to eq('2014-09-04 01:34:43')
       expect(actual.unsubscribes).to eq(400)
     end
 

@@ -85,7 +85,7 @@ describe SendGrid4r::REST::Whitelabel::Links do
           expect(@link2.subdomain).to eq(@subdomain_name + '2')
           expect(@link2.username).to eq(@username)
           expect(@link2.user_id).to be_a(Numeric)
-          expect(@link2.default).to eq(true)
+          expect(@link2.default).to eq(false)
           expect(@link2.valid).to eq(false)
           expect(@link2.legacy).to eq(false)
           expect(@link2.dns.domain_cname).to be_a(
@@ -108,7 +108,7 @@ describe SendGrid4r::REST::Whitelabel::Links do
           expect(link2.subdomain).to eq(@subdomain_name + '2')
           expect(link2.username).to eq(@username)
           expect(link2.user_id).to be_a(Numeric)
-          expect(link2.default).to eq(true)
+          expect(link2.default).to eq(false)
           expect(link2.valid).to eq(false)
           expect(link2.legacy).to eq(false)
           expect(link2.dns.domain_cname).to be_a(
@@ -148,7 +148,7 @@ describe SendGrid4r::REST::Whitelabel::Links do
 
       it '#delete_wl_link' do
         begin
-          @client.delete_wl_link(id: @id1)
+          @client.delete_wl_link(id: @link2.id)
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e

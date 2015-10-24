@@ -93,9 +93,9 @@ module SendGrid4r
         Result = Struct.new(:id, :valid, :validation_results)
         ValidationResults = Struct.new(
           # automatic_security:true
-          :mail_cname, :spf, :dkim1, :dkim2,
+          :mail_cname, :dkim1, :dkim2,
           # automatic_security:false
-          :mail_server, :subdomain_spf, :domain_spf, :dkim
+          :mail_server, :subdomain_spf, :dkim
         )
         ValidationResult = Struct.new(:valid, :reason)
 
@@ -120,13 +120,9 @@ module SendGrid4r
             SendGrid4r::REST::Whitelabel::Domains.create_validation_result(
               resp['dkim2']),
             SendGrid4r::REST::Whitelabel::Domains.create_validation_result(
-              resp['spf']),
-            SendGrid4r::REST::Whitelabel::Domains.create_validation_result(
               resp['mail_server']),
             SendGrid4r::REST::Whitelabel::Domains.create_validation_result(
               resp['subdomain_spf']),
-            SendGrid4r::REST::Whitelabel::Domains.create_validation_result(
-              resp['domain_spf']),
             SendGrid4r::REST::Whitelabel::Domains.create_validation_result(
               resp['dkim'])
           )

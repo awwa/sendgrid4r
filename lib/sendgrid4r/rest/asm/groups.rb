@@ -13,7 +13,7 @@ module SendGrid4r
         include SendGrid4r::REST::Request
 
         Group = Struct.new(
-          :id, :name, :description, :last_email_sent_at, :unsubscribes)
+          :id, :name, :description, :unsubscribes)
 
         def self.url(group_id = nil)
           url = "#{BASE_URL}/asm/groups"
@@ -36,7 +36,6 @@ module SendGrid4r
             resp['id'],
             resp['name'],
             resp['description'],
-            resp['last_email_sent_at'],
             resp['unsubscribes']
           )
         end
