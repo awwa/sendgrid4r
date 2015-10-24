@@ -260,6 +260,14 @@ describe SendGrid4r::Client do
         expect(@client.respond_to?('delete_bounces')).to eq(true)
         expect(@client.respond_to?('get_bounce')).to eq(true)
         expect(@client.respond_to?('delete_bounce')).to eq(true)
+
+        # Cancel Scheduled Sends Api
+        expect(@client.respond_to?('generate_batch_id')).to eq(true)
+        expect(@client.respond_to?('validate_batch_id')).to eq(true)
+        expect(@client.respond_to?('post_scheduled_send')).to eq(true)
+        expect(@client.respond_to?('get_scheduled_sends')).to eq(true)
+        expect(@client.respond_to?('patch_scheduled_send')).to eq(true)
+        expect(@client.respond_to?('delete_scheduled_send')).to eq(true)
       end
     end
 
