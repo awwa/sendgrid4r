@@ -17,7 +17,11 @@ describe SendGrid4r::REST::Bounces do
     context 'without block call' do
       it '#get_bounces' do
         begin
-          bounces = @client.get_bounces
+          start_time = Time.now - 60 * 60 * 24 * 365
+          end_time = Time.now
+          bounces = @client.get_bounces(
+            start_time: start_time, end_time: end_time
+          )
           expect(bounces).to be_a(Array)
           bounces.each do |bounce|
             expect(bounce).to be_a(SendGrid4r::REST::Bounces::Bounce)
@@ -157,7 +161,7 @@ describe SendGrid4r::REST::Bounces do
     it 'creates bounce instance' do
       actual = SendGrid4r::REST::Bounces.create_bounce(bounce)
       expect(actual).to be_a(SendGrid4r::REST::Bounces::Bounce)
-      expect(actual.created).to eq(1433800303)
+      expect(actual.created).to eq(Time.at(1433800303))
       expect(actual.email).to eq('testemail2@testing.com')
       expect(actual.reason).to eq(
         '550 5.1.1 <testemail2@testing.com>: '\

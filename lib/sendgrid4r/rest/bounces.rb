@@ -32,8 +32,9 @@ module SendGrid4r
 
       def self.create_bounce(resp)
         return resp if resp.nil?
+        created = Time.at(resp['created']) unless resp['created'].nil?
         Bounce.new(
-          resp['created'],
+          created,
           resp['email'],
           resp['reason'],
           resp['status']
@@ -42,8 +43,8 @@ module SendGrid4r
 
       def get_bounces(start_time: nil, end_time: nil, &block)
         params = {}
-        params['start_time'] = start_time unless start_time.nil?
-        params['end_time'] = end_time unless end_time.nil?
+        params['start_time'] = start_time.to_i unless start_time.nil?
+        params['end_time'] = end_time.to_i unless end_time.nil?
         resp = get(@auth, SendGrid4r::REST::Bounces.url, params, &block)
         SendGrid4r::REST::Bounces.create_bounces(resp)
       end
