@@ -38,15 +38,10 @@ module SendGrid4r
             end
           end
           Recipient.new(
-            Time.at(resp['created_at']),
-            custom_fields,
-            resp['email'],
-            resp['first_name'],
-            resp['id'],
-            resp['last_clicked'],
-            resp['last_emailed'],
-            resp['last_name'],
-            resp['last_opened'],
+            Time.at(resp['created_at']), custom_fields,
+            resp['email'], resp['first_name'], resp['id'],
+            resp['last_clicked'], resp['last_emailed'],
+            resp['last_name'], resp['last_opened'],
             Time.at(resp['updated_at'])
           )
         end

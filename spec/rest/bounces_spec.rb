@@ -62,9 +62,9 @@ describe SendGrid4r::REST::Bounces do
 
       it '#delete_bounce' do
         begin
-          expect {
+          expect do
             @client.delete_bounce(email: 'a1@bounce.com')
-          }.to raise_error( RestClient::ResourceNotFound )
+          end.to raise_error(RestClient::ResourceNotFound)
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
@@ -112,7 +112,7 @@ describe SendGrid4r::REST::Bounces do
           'rejected: User unknown in virtual alias table ",'\
           '"status": "5.1.1"'\
         '}'
-       )
+      )
     end
 
     it '#get_bounces' do

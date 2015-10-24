@@ -78,11 +78,11 @@ describe SendGrid4r::REST::CancelScheduledSends do
       it '#patch_scheduled_send' do
         begin
           batch_id = @client.generate_batch_id.batch_id
-          expect {
+          expect do
             @client.patch_scheduled_send(
               batch_id: batch_id, status: 'pause'
             )
-          }.to raise_error( RestClient::ResourceNotFound)
+          end.to raise_error(RestClient::ResourceNotFound)
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
@@ -128,7 +128,7 @@ describe SendGrid4r::REST::CancelScheduledSends do
             '"status": "pause"'\
           '}'\
         ']'
-       )
+      )
     end
 
     it '#generate_batch_id' do
@@ -190,10 +190,10 @@ describe SendGrid4r::REST::CancelScheduledSends do
         expect(scheduled_send).to be_a(
           SendGrid4r::REST::CancelScheduledSends::ScheduledSend
         )
-      expect(actual[0].batch_id).to eq('BATCH_ID_1')
-      expect(actual[0].status).to eq('cancel')
-      expect(actual[1].batch_id).to eq('BATCH_ID_2')
-      expect(actual[1].status).to eq('pause')
+        expect(actual[0].batch_id).to eq('BATCH_ID_1')
+        expect(actual[0].status).to eq('cancel')
+        expect(actual[1].batch_id).to eq('BATCH_ID_2')
+        expect(actual[1].status).to eq('pause')
       end
     end
 
