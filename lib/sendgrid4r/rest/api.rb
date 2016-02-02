@@ -37,6 +37,7 @@ require 'sendgrid4r/rest/whitelabel/links'
 require 'sendgrid4r/rest/users'
 require 'sendgrid4r/rest/bounces'
 require 'sendgrid4r/rest/cancel_scheduled_sends'
+require 'sendgrid4r/rest/webhooks/parse_api'
 
 module SendGrid4r
   module REST
@@ -79,6 +80,7 @@ module SendGrid4r
       include SendGrid4r::REST::Users
       include SendGrid4r::REST::Bounces
       include SendGrid4r::REST::CancelScheduledSends
+      include SendGrid4r::REST::Webhooks::ParseApi
     end
   end
 end
