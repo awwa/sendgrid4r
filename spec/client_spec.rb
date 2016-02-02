@@ -121,8 +121,6 @@ describe SendGrid4r::Client do
         expect(@client.respond_to?('get_partner_settings')).to eq(true)
         expect(@client.respond_to?('get_settings_new_relic')).to eq(true)
         expect(@client.respond_to?('patch_settings_new_relic')).to eq(true)
-        expect(@client.respond_to?('get_settings_sendwithus')).to eq(true)
-        expect(@client.respond_to?('patch_settings_sendwithus')).to eq(true)
 
         # tracking
         expect(@client.respond_to?('get_tracking_settings')).to eq(true)
@@ -273,7 +271,7 @@ describe SendGrid4r::Client do
 
     describe 'VERSION' do
       it 'returns VERSION value' do
-        expect(SendGrid4r::VERSION).to eq('1.4.0')
+        expect(SendGrid4r::VERSION).to eq('1.5.0')
       end
     end
   end

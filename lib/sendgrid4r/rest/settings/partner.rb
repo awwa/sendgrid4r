@@ -44,18 +44,6 @@ module SendGrid4r
           resp = patch(@auth, endpoint, params.to_h, &block)
           SendGrid4r::REST::Settings::Partner.create_partner(resp)
         end
-
-        def get_settings_sendwithus(&block)
-          endpoint = SendGrid4r::REST::Settings::Partner.url('sendwithus')
-          resp = get(@auth, endpoint, &block)
-          SendGrid4r::REST::Settings::Partner.create_partner(resp)
-        end
-
-        def patch_settings_sendwithus(params:, &block)
-          endpoint = SendGrid4r::REST::Settings::Partner.url('sendwithus')
-          resp = patch(@auth, endpoint, params.to_h, &block)
-          SendGrid4r::REST::Settings::Partner.create_partner(resp)
-        end
       end
     end
   end
