@@ -50,17 +50,14 @@ describe SendGrid4r::REST::Asm::Groups do
         end
       end
 
-      it '#patch_group' do
+      it '#post_group with is_default' do
         begin
-          @group1.name = @group_name_edit1
-          @group1.description = @group_desc_edit
-          group_edit1 = @client.patch_group(
-            group_id: @group1.id, group: @group1
+          group2 = @client.post_group(
+            name: @group_name2, description: @group_desc, is_default: false
           )
-          expect(group_edit1.id).to be_a(Fixnum)
-          expect(group_edit1.name).to eq(@group_name_edit1)
-          expect(group_edit1.description).to eq(@group_desc_edit)
-          expect(group_edit1.unsubscribes).to eq(nil)
+          expect(@group_name2).to eq(group2.name)
+          expect(@group_desc).to eq(group2.description)
+          expect(false).to eq(group2.is_default)
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
@@ -93,6 +90,23 @@ describe SendGrid4r::REST::Asm::Groups do
         end
       end
 
+      it '#patch_group' do
+        begin
+          @group1.name = @group_name_edit1
+          @group1.description = @group_desc_edit
+          group_edit1 = @client.patch_group(
+            group_id: @group1.id, group: @group1
+          )
+          expect(group_edit1.id).to be_a(Fixnum)
+          expect(group_edit1.name).to eq(@group_name_edit1)
+          expect(group_edit1.description).to eq(@group_desc_edit)
+          expect(group_edit1.unsubscribes).to eq(nil)
+        rescue RestClient::ExceptionWithResponse => e
+          puts e.inspect
+          raise e
+        end
+      end
+
       it '#delete_group' do
         begin
           @client.delete_group(group_id: @group1.id)
@@ -115,6 +129,8 @@ describe SendGrid4r::REST::Asm::Groups do
           '"id": 100,'\
           '"name": "Newsletters",'\
           '"description": "Our monthly newsletter.",'\
+          '"last_email_sent_at": null,'\
+          '"is_default": true,'\
           '"unsubscribes": 400'\
         '}'
       )
@@ -127,12 +143,16 @@ describe SendGrid4r::REST::Asm::Groups do
             '"id": 100,'\
             '"name": "Newsletters",'\
             '"description": "Our monthly newsletter.",'\
+            '"last_email_sent_at": null,'\
+            '"is_default": true,'\
             '"unsubscribes": 400'\
           '},'\
           '{'\
             '"id": 101,'\
             '"name": "Alerts",'\
             '"description": "Emails triggered by user-defined rules.",'\
+            '"last_email_sent_at": null,'\
+            '"is_default": false,'\
             '"unsubscribes": 1'\
           '}'\
         ']'
@@ -180,6 +200,8 @@ describe SendGrid4r::REST::Asm::Groups do
       expect(actual.id).to eq(100)
       expect(actual.name).to eq('Newsletters')
       expect(actual.description).to eq('Our monthly newsletter.')
+      expect(actual.last_email_sent_at).to eq(nil)
+      expect(actual.is_default).to eq(true)
       expect(actual.unsubscribes).to eq(400)
     end
 

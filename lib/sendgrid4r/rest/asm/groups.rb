@@ -13,7 +13,9 @@ module SendGrid4r
         include SendGrid4r::REST::Request
 
         Group = Struct.new(
-          :id, :name, :description, :unsubscribes)
+          :id, :name, :description, :last_email_sent_at, :is_default,
+          :unsubscribes
+        )
 
         def self.url(group_id = nil)
           url = "#{BASE_URL}/asm/groups"
@@ -36,12 +38,15 @@ module SendGrid4r
             resp['id'],
             resp['name'],
             resp['description'],
+            resp['last_email_sent_at'],
+            resp['is_default'],
             resp['unsubscribes']
           )
         end
 
-        def post_group(name:, description:, &block)
+        def post_group(name:, description:, is_default: nil, &block)
           params = { name: name, description: description }
+          params['is_default'] = is_default unless is_default.nil?
           resp = post(@auth, SendGrid4r::REST::Asm::Groups.url, params, &block)
           SendGrid4r::REST::Asm::Groups.create_group(resp)
         end
