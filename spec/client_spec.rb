@@ -266,6 +266,17 @@ describe SendGrid4r::Client do
         expect(@client.respond_to?('get_scheduled_sends')).to eq(true)
         expect(@client.respond_to?('patch_scheduled_send')).to eq(true)
         expect(@client.respond_to?('delete_scheduled_send')).to eq(true)
+
+        # Api Keys
+        expect(@client.respond_to?('get_api_keys')).to eq(true)
+        expect(@client.respond_to?('post_api_key')).to eq(true)
+        expect(@client.respond_to?('get_api_key')).to eq(true)
+        expect(@client.respond_to?('delete_api_key')).to eq(true)
+        expect(@client.respond_to?('patch_api_key')).to eq(true)
+        expect(@client.respond_to?('put_api_key')).to eq(true)
+
+        # Permissions
+        expect(@client.respond_to?('get_permissions')).to eq(true)
       end
     end
 

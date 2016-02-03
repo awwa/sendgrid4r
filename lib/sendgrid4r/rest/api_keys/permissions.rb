@@ -1,0 +1,33 @@
+# -*- encoding: utf-8 -*-
+$LOAD_PATH.unshift File.dirname(__FILE__)
+
+require 'sendgrid4r/rest/request'
+
+module SendGrid4r
+  module REST
+    #
+    # SendGrid Web API v3 ApiKeys
+    #
+    module ApiKeys
+      module Permissions
+        include SendGrid4r::REST::Request
+
+        Permissions = Struct.new(:scopes)
+
+        def self.url
+          "#{BASE_URL}/scopes"
+        end
+
+        def self.create_permissions(resp)
+          return resp if resp.nil?
+          Permissions.new(resp['scopes'])
+        end
+
+        def get_permissions(&block)
+          resp = get(@auth, SendGrid4r::REST::ApiKeys::Permissions.url, &block)
+          SendGrid4r::REST::ApiKeys::Permissions.create_permissions(resp)
+        end
+      end
+    end
+  end
+end
