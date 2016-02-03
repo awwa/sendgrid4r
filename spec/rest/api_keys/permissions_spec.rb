@@ -12,7 +12,9 @@ describe SendGrid4r::REST::ApiKeys::Permissions do
       it '#get_permissions' do
         begin
           permissions = @client.get_permissions
-          expect(permissions).to be_a(SendGrid4r::REST::ApiKeys::Permissions::Permissions)
+          expect(permissions).to be_a(
+            SendGrid4r::REST::ApiKeys::Permissions::Permissions
+          )
           expect(permissions.scopes).to be_a(Array)
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
@@ -42,12 +44,18 @@ describe SendGrid4r::REST::ApiKeys::Permissions do
     it '#get_permissions' do
       allow(client).to receive(:execute).and_return(permissions)
       actual = client.get_permissions
-      expect(actual).to be_a(SendGrid4r::REST::ApiKeys::Permissions::Permissions)
+      expect(actual).to be_a(
+        SendGrid4r::REST::ApiKeys::Permissions::Permissions
+      )
     end
 
     it 'creates permissions instance' do
-      actual = SendGrid4r::REST::ApiKeys::Permissions.create_permissions(permissions)
-      expect(actual).to be_a(SendGrid4r::REST::ApiKeys::Permissions::Permissions)
+      actual = SendGrid4r::REST::ApiKeys::Permissions.create_permissions(
+        permissions
+      )
+      expect(actual).to be_a(
+        SendGrid4r::REST::ApiKeys::Permissions::Permissions
+      )
       expect(actual.scopes).to be_a(Array)
       expect(actual.scopes[0]).to eq('alerts.create')
       expect(actual.scopes[1]).to eq('alerts.read')

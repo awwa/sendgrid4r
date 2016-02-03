@@ -68,7 +68,8 @@ describe SendGrid4r::REST::Campaigns::Campaigns do
         @params = @campaign_factory.create(
           title: @title1, subject: @subject1, sender_id: 493,
           list_ids: [@list1.id], categories: ['cat1'],
-          suppression_group_id: @group1.id, html_content: 'html <a href="[unsubscribe]">unsub</a>',
+          suppression_group_id: @group1.id,
+          html_content: 'html <a href="[unsubscribe]">unsub</a>',
           plain_content: 'plain [unsubscribe]')
         @campaign1 = @client.post_campaign(params: @params)
       rescue RestClient::ExceptionWithResponse => e

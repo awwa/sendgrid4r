@@ -9,6 +9,9 @@ module SendGrid4r
     # SendGrid Web API v3 ApiKeys
     #
     module ApiKeys
+      #
+      # SendGrid Web API v3 ApiKeys Permissions
+      #
       module Permissions
         include SendGrid4r::REST::Request
 

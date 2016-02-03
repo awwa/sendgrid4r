@@ -14,7 +14,6 @@ describe SendGrid4r::REST::ApiKeys do
         # celan up test env(lists)
         api_keys = @client.get_api_keys
         api_keys.result.each do |api_key|
-          #puts api_key.api_key_id
           @client.delete_api_key(
             api_key_id: api_key.api_key_id
           ) if api_key.name == @name1
@@ -27,7 +26,7 @@ describe SendGrid4r::REST::ApiKeys do
         end
 
         # post api_key
-        @api_key1 = @client.post_api_key(name: @name1, scopes: ["mail.send"])
+        @api_key1 = @client.post_api_key(name: @name1, scopes: ['mail.send'])
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
         raise e
@@ -61,7 +60,7 @@ describe SendGrid4r::REST::ApiKeys do
 
       it '#post_api_key with scopes' do
         begin
-          api_key2 = @client.post_api_key(name: @name2, scopes: ["mail.send"])
+          api_key2 = @client.post_api_key(name: @name2, scopes: ['mail.send'])
           expect(api_key2).to be_a(SendGrid4r::REST::ApiKeys::ApiKey)
           expect(api_key2.name).to eq(@name2)
           expect(api_key2.api_key_id).to be_a(String)
@@ -113,11 +112,11 @@ describe SendGrid4r::REST::ApiKeys do
           edit_api_key = @client.put_api_key(
             api_key_id: @api_key1.api_key_id,
             name: @name1e,
-            scopes: ["mail.send"]
+            scopes: ['mail.send']
           )
           expect(edit_api_key.api_key_id).to eq(@api_key1.api_key_id)
           expect(edit_api_key.name).to eq(@name1e)
-          expect(edit_api_key.scopes).to eq(["mail.send"])
+          expect(edit_api_key.scopes).to eq(['mail.send'])
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
@@ -195,7 +194,7 @@ describe SendGrid4r::REST::ApiKeys do
       expect(actual.api_key).to eq('SG.xxxxxxxx.yyyyyyyy')
       expect(actual.api_key_id).to eq('xxxxxxxx')
       expect(actual.name).to eq('My API Key')
-      expect(actual.scopes).to eq(['mail.send','alerts.create','alerts.read'])
+      expect(actual.scopes).to eq(['mail.send', 'alerts.create', 'alerts.read'])
     end
 
     it 'creates api_keys instance' do

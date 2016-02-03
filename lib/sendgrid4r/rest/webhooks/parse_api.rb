@@ -9,12 +9,15 @@ module SendGrid4r
     # SendGrid Web API v3 Webhooks
     #
     module Webhooks
+      #
+      # SendGrid Web API v3 Webhooks ParseApi
+      #
       module ParseApi
         include SendGrid4r::REST::Request
 
         ParseSettings = Struct.new(:url, :hostname, :spam_check_outgoing)
 
-        def self.url(api_key = nil)
+        def self.url
           "#{BASE_URL}/webhooks/parse/settings"
         end
 
