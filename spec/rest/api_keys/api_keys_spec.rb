@@ -26,7 +26,7 @@ describe SendGrid4r::REST::ApiKeys do
         end
 
         # post api_key
-        @api_key1 = @client.post_api_key(name: @name1)
+        @api_key1 = @client.post_api_key(name: @name1, scopes: ['mail.send'])
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
         raise e
@@ -58,6 +58,33 @@ describe SendGrid4r::REST::ApiKeys do
         end
       end
 
+      it '#post_api_key with scopes' do
+        begin
+          api_key2 = @client.post_api_key(name: @name2, scopes: ['mail.send'])
+          expect(api_key2).to be_a(SendGrid4r::REST::ApiKeys::ApiKey)
+          expect(api_key2.name).to eq(@name2)
+          expect(api_key2.api_key_id).to be_a(String)
+          expect(api_key2.api_key).to be_a(String)
+          expect(api_key2.scopes).to be_a(Array)
+        rescue RestClient::ExceptionWithResponse => e
+          puts e.inspect
+          raise e
+        end
+      end
+
+      it '#get_api_key' do
+        begin
+          api_key = @client.get_api_key(api_key_id: @api_key1.api_key_id)
+          expect(api_key).to be_a(SendGrid4r::REST::ApiKeys::ApiKey)
+          expect(api_key.api_key_id).to eq(@api_key1.api_key_id)
+          expect(api_key.name).to eq('api_key_name1')
+          expect(api_key.scopes).to be_a(Array)
+        rescue RestClient::ExceptionWithResponse => e
+          puts e.inspect
+          raise e
+        end
+      end
+
       it '#delete_api_key' do
         begin
           @client.delete_api_key(api_key_id: @api_key1.api_key_id)
@@ -74,6 +101,22 @@ describe SendGrid4r::REST::ApiKeys do
           )
           expect(edit_api_key.api_key_id).to eq(@api_key1.api_key_id)
           expect(edit_api_key.name).to eq(@name1e)
+        rescue RestClient::ExceptionWithResponse => e
+          puts e.inspect
+          raise e
+        end
+      end
+
+      it '#put_api_key' do
+        begin
+          edit_api_key = @client.put_api_key(
+            api_key_id: @api_key1.api_key_id,
+            name: @name1e,
+            scopes: ['mail.send']
+          )
+          expect(edit_api_key.api_key_id).to eq(@api_key1.api_key_id)
+          expect(edit_api_key.name).to eq(@name1e)
+          expect(edit_api_key.scopes).to eq(['mail.send'])
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
@@ -103,8 +146,14 @@ describe SendGrid4r::REST::ApiKeys do
     let(:api_key) do
       JSON.parse(
         '{'\
-          '"api_key_id": "qfTQ6KG0QBiwWdJ0-pCLCA",'\
-          '"name": "A New Hope"'\
+          '"api_key": "SG.xxxxxxxx.yyyyyyyy",'\
+          '"api_key_id": "xxxxxxxx",'\
+          '"name": "My API Key",'\
+          '"scopes": ['\
+            '"mail.send",'\
+            '"alerts.create",'\
+            '"alerts.read"'\
+          ']'\
         '}'
       )
     end
@@ -133,11 +182,19 @@ describe SendGrid4r::REST::ApiKeys do
       expect(actual).to be_a(SendGrid4r::REST::ApiKeys::ApiKey)
     end
 
+    it '#put_api_key' do
+      allow(client).to receive(:execute).and_return(api_key)
+      actual = client.put_api_key(api_key_id: '', name: '', scopes: [])
+      expect(actual).to be_a(SendGrid4r::REST::ApiKeys::ApiKey)
+    end
+
     it 'creates api_key instance' do
       actual = SendGrid4r::REST::ApiKeys.create_api_key(api_key)
       expect(actual).to be_a(SendGrid4r::REST::ApiKeys::ApiKey)
-      expect(actual.api_key_id).to eq('qfTQ6KG0QBiwWdJ0-pCLCA')
-      expect(actual.name).to eq('A New Hope')
+      expect(actual.api_key).to eq('SG.xxxxxxxx.yyyyyyyy')
+      expect(actual.api_key_id).to eq('xxxxxxxx')
+      expect(actual.name).to eq('My API Key')
+      expect(actual.scopes).to eq(['mail.send', 'alerts.create', 'alerts.read'])
     end
 
     it 'creates api_keys instance' do

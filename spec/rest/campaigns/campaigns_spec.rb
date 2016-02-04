@@ -68,8 +68,9 @@ describe SendGrid4r::REST::Campaigns::Campaigns do
         @params = @campaign_factory.create(
           title: @title1, subject: @subject1, sender_id: 493,
           list_ids: [@list1.id], categories: ['cat1'],
-          suppression_group_id: @group1.id, html_content: 'html',
-          plain_content: 'plain')
+          suppression_group_id: @group1.id,
+          html_content: 'html <a href="[unsubscribe]">unsub</a>',
+          plain_content: 'plain [unsubscribe]')
         @campaign1 = @client.post_campaign(params: @params)
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
@@ -162,7 +163,7 @@ describe SendGrid4r::REST::Campaigns::Campaigns do
 
       it '#schedule_campaign' do
         begin
-          send_at = Time.new(2015, 12, 12, 12, 34, 56)
+          send_at = Time.at(Time.now.to_i, 0)
           actual = @client.schedule_campaign(
             campaign_id: @campaign1.id,
             send_at: send_at
@@ -178,12 +179,12 @@ describe SendGrid4r::REST::Campaigns::Campaigns do
 
       it '#reschedule_campaign' do
         begin
-          send_at = Time.new(2015, 12, 12, 12, 34, 56)
+          send_at = Time.at(Time.now.to_i, 0)
           @client.schedule_campaign(
             campaign_id: @campaign1.id,
             send_at: send_at
           )
-          send_at = Time.new(2015, 11, 11, 11, 11, 11)
+          send_at = Time.at(Time.now.to_i, 0)
           actual = @client.reschedule_campaign(
             campaign_id: @campaign1.id,
             send_at: send_at
@@ -199,7 +200,7 @@ describe SendGrid4r::REST::Campaigns::Campaigns do
 
       it '#get_schedule_time_campaign' do
         begin
-          send_at = Time.new(2015, 12, 12, 12, 34, 56)
+          send_at = Time.at(Time.now.to_i, 0)
           @client.schedule_campaign(
             campaign_id: @campaign1.id,
             send_at: send_at
@@ -216,7 +217,7 @@ describe SendGrid4r::REST::Campaigns::Campaigns do
 
       it '#unschedule_campaign' do
         begin
-          send_at = Time.new(2015, 12, 12, 12, 34, 56)
+          send_at = Time.at(Time.now.to_i, 0)
           @client.schedule_campaign(
             campaign_id: @campaign1.id, send_at: send_at
           )

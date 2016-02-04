@@ -50,34 +50,6 @@ describe SendGrid4r::REST::Settings::Partner do
           raise e
         end
       end
-
-      it '#get_settings_sendwithus' do
-        pending 'entry not found'
-        begin
-          actual = @client.get_settings_sendwithus
-          expect(actual).to be_a(SendGrid4r::REST::Settings::Partner::Partner)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
-      end
-
-      it '#patch_settings_sendwithus' do
-        pending 'entry not found'
-        begin
-          # get original settings
-          actual = @client.get_settings_sendwithus
-          # patch the value
-          actual.enabled = false
-          actual.license_key = 'sendwithus_license_key'
-          edit = @client.patch_settings_sendwithus(params: actual)
-          expect(edit.enabled).to eq(false)
-          expect(edit.license_key).to eq('sendwithus_license_key')
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
-      end
     end
   end
 
@@ -104,18 +76,6 @@ describe SendGrid4r::REST::Settings::Partner do
     it '#patch_settings_new_relic' do
       allow(client).to receive(:execute).and_return(partner)
       actual = client.patch_settings_new_relic(params: nil)
-      expect(actual).to be_a(SendGrid4r::REST::Settings::Partner::Partner)
-    end
-
-    it '#get_settings_sendwithus' do
-      allow(client).to receive(:execute).and_return(partner)
-      actual = client.get_settings_sendwithus
-      expect(actual).to be_a(SendGrid4r::REST::Settings::Partner::Partner)
-    end
-
-    it '#patch_settings_sendwithus' do
-      allow(client).to receive(:execute).and_return(partner)
-      actual = client.patch_settings_sendwithus(params: nil)
       expect(actual).to be_a(SendGrid4r::REST::Settings::Partner::Partner)
     end
 

@@ -29,6 +29,7 @@ require 'sendgrid4r/rest/contacts/reserved_fields'
 require 'sendgrid4r/rest/contacts/segments'
 require 'sendgrid4r/rest/campaigns/campaigns'
 require 'sendgrid4r/rest/api_keys/api_keys'
+require 'sendgrid4r/rest/api_keys/permissions'
 require 'sendgrid4r/rest/subusers'
 require 'sendgrid4r/rest/email_activity/email_activity'
 require 'sendgrid4r/rest/whitelabel/domains'
@@ -37,6 +38,7 @@ require 'sendgrid4r/rest/whitelabel/links'
 require 'sendgrid4r/rest/users'
 require 'sendgrid4r/rest/bounces'
 require 'sendgrid4r/rest/cancel_scheduled_sends'
+require 'sendgrid4r/rest/webhooks/parse_api'
 
 module SendGrid4r
   module REST
@@ -71,6 +73,7 @@ module SendGrid4r
       include SendGrid4r::REST::Contacts::Segments
       include SendGrid4r::REST::Campaigns::Campaigns
       include SendGrid4r::REST::ApiKeys
+      include SendGrid4r::REST::ApiKeys::Permissions
       include SendGrid4r::REST::Subusers
       include SendGrid4r::REST::EmailActivity
       include SendGrid4r::REST::Whitelabel::Domains
@@ -79,6 +82,7 @@ module SendGrid4r
       include SendGrid4r::REST::Users
       include SendGrid4r::REST::Bounces
       include SendGrid4r::REST::CancelScheduledSends
+      include SendGrid4r::REST::Webhooks::ParseApi
     end
   end
 end

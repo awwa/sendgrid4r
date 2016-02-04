@@ -2,8 +2,11 @@ language: ruby
 rvm:
   - "2.1"
   - "2.2"
+  - "2.3.0"
 before_script:
   - bundle install
+before_install:
+  - gem update bundler
 script:
   - rubocop --fail-level=W
   - rspec --tag ut
