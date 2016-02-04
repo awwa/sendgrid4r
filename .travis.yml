@@ -4,6 +4,8 @@ rvm:
   - "2.2"
 before_script:
   - bundle install
+before_install:
+  - gem update bundler
 script:
   - rubocop --fail-level=W
   - rspec --tag ut
