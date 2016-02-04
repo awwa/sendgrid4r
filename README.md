@@ -7,23 +7,6 @@ See [api reference](https://sendgrid.com/docs/API_Reference/Web_API_v3/index.htm
 
 # [Documentation](https://github.com/awwa/sendgrid4r/wiki)
 
-# Test
-
-Unit test
-```
-$ rspec --tag ut
-```
-
-Integration test
-```
-$ rspec --tag it
-```
-
-All test
-```
-$ rspec
-```
-
 # Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/sendgrid4r/fork )
