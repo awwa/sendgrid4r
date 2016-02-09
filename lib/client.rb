@@ -1,5 +1,4 @@
 # -*- encoding: utf-8 -*-
-$LOAD_PATH.unshift File.dirname(__FILE__)
 
 require 'auth'
 require 'sendgrid4r/rest/api'
