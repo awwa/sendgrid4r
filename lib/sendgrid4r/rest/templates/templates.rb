@@ -1,7 +1,5 @@
 # -*- encoding: utf-8 -*-
 
-require 'sendgrid4r/rest/request'
-require 'versions'
 
 module SendGrid4r
   module REST
