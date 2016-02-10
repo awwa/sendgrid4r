@@ -1,6 +1,5 @@
 # -*- encoding: utf-8 -*-
 
-
 module SendGrid4r
   module REST
     module Asm
