@@ -1,12 +1,4 @@
 # -*- encoding: utf-8 -*-
-$LOAD_PATH.unshift File.dirname(__FILE__)
-
-require 'sendgrid4r/auth'
-require 'sendgrid4r/rest/api'
-require 'sendgrid4r/factory/version_factory'
-require 'sendgrid4r/factory/condition_factory'
-require 'sendgrid4r/factory/segment_factory'
-require 'sendgrid4r/factory/campaign_factory'
 
 module SendGrid4r
   #
