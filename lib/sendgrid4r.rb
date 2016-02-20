@@ -32,6 +32,8 @@ require 'sendgrid4r/rest/contacts/segments'
 
 require 'sendgrid4r/rest/email_activity/email_activity'
 
+require 'sendgrid4r/rest/ip_access_management'
+
 require 'sendgrid4r/rest/ips/addresses'
 require 'sendgrid4r/rest/ips/pools'
 require 'sendgrid4r/rest/ips/warmup'
