@@ -36,22 +36,6 @@ module SendGrid4r
           )
         end
 
-        EventNotification = Struct.new(
-          :enabled, :url, :group_resubscribe, :delivered, :group_unsubscribe,
-          :spam_report, :bounce, :deferred, :unsubscribe, :processed, :open,
-          :click, :dropped
-        )
-
-        def self.create_event_notification(resp)
-          return resp if resp.nil?
-          EventNotification.new(
-            resp['enabled'], resp['url'], resp['group_resubscribe'],
-            resp['delivered'], resp['group_unsubscribe'], resp['spam_report'],
-            resp['bounce'], resp['deferred'], resp['unsubscribe'],
-            resp['processed'], resp['open'], resp['click'], resp['dropped']
-          )
-        end
-
         Footer = Struct.new(:enabled, :html_content, :plain_content)
 
         def self.create_footer(resp)
@@ -93,10 +77,6 @@ module SendGrid4r
           url = "#{BASE_URL}/mail_settings"
           url = "#{url}/#{name}" unless name.nil?
           url
-        end
-
-        def self.url_event(path)
-          "#{BASE_URL}/user/webhooks/event/#{path}"
         end
 
         def get_mail_settings(limit: nil, offset: nil, &block)
@@ -142,25 +122,6 @@ module SendGrid4r
           endpoint = SendGrid4r::REST::Settings::Mail.url('bounce_purge')
           resp = patch(@auth, endpoint, params.to_h, &block)
           SendGrid4r::REST::Settings::Mail.create_bounce_purge(resp)
-        end
-
-        def get_settings_event_notification(&block)
-          endpoint = SendGrid4r::REST::Settings::Mail.url_event('settings')
-          resp = get(@auth, endpoint, &block)
-          SendGrid4r::REST::Settings::Mail.create_event_notification(resp)
-        end
-
-        def patch_settings_event_notification(params:, &block)
-          endpoint = SendGrid4r::REST::Settings::Mail.url_event('settings')
-          resp = patch(@auth, endpoint, params.to_h, &block)
-          SendGrid4r::REST::Settings::Mail.create_event_notification(resp)
-        end
-
-        def test_settings_event_notification(url:, &block)
-          params = {}
-          params['url'] = url
-          endpoint = SendGrid4r::REST::Settings::Mail.url_event('test')
-          post(@auth, endpoint, params, &block)
         end
 
         def get_settings_footer(&block)

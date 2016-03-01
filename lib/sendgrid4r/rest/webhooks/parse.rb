@@ -7,9 +7,9 @@ module SendGrid4r
     #
     module Webhooks
       #
-      # SendGrid Web API v3 Webhooks ParseApi
+      # SendGrid Web API v3 Webhooks Parse
       #
-      module ParseApi
+      module Parse
         include SendGrid4r::REST::Request
 
         ParseSettings = Struct.new(:result)
@@ -24,7 +24,7 @@ module SendGrid4r
           parse_settings = []
           resp['result'].each do |setting|
             parse_settings.push(
-              SendGrid4r::REST::Webhooks::ParseApi.create_parse_setting(
+              SendGrid4r::REST::Webhooks::Parse.create_parse_setting(
                 setting
               )
             )
@@ -42,8 +42,8 @@ module SendGrid4r
         end
 
         def get_parse_settings(&block)
-          resp = get(@auth, SendGrid4r::REST::Webhooks::ParseApi.url, &block)
-          SendGrid4r::REST::Webhooks::ParseApi.create_parse_settings(resp)
+          resp = get(@auth, SendGrid4r::REST::Webhooks::Parse.url, &block)
+          SendGrid4r::REST::Webhooks::Parse.create_parse_settings(resp)
         end
       end
     end

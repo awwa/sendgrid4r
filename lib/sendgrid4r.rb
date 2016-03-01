@@ -51,7 +51,8 @@ require 'sendgrid4r/rest/stats/parse'
 require 'sendgrid4r/rest/stats/stats'
 require 'sendgrid4r/rest/stats/subuser'
 
-require 'sendgrid4r/rest/webhooks/parse_api'
+require 'sendgrid4r/rest/webhooks/event'
+require 'sendgrid4r/rest/webhooks/parse'
 
 require 'sendgrid4r/rest/whitelabel/domains'
 require 'sendgrid4r/rest/whitelabel/ips'
