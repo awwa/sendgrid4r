@@ -21,7 +21,6 @@ module SendGrid4r
 
         def self.create_parse_settings(resp)
           return resp if resp.nil?
-          #puts resp['result']
           parse_settings = []
           resp['result'].each do |setting|
             parse_settings.push(
