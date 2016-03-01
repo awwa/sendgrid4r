@@ -12,15 +12,30 @@ module SendGrid4r
       module ParseApi
         include SendGrid4r::REST::Request
 
-        ParseSettings = Struct.new(:url, :hostname, :spam_check_outgoing)
+        ParseSettings = Struct.new(:result)
+        ParseSetting = Struct.new(:url, :hostname, :spam_check_outgoing)
 
         def self.url
-          "#{BASE_URL}/webhooks/parse/settings"
+          "#{BASE_URL}/user/webhooks/parse/settings"
         end
 
         def self.create_parse_settings(resp)
           return resp if resp.nil?
-          ParseSettings.new(
+          #puts resp['result']
+          parse_settings = []
+          resp['result'].each do |setting|
+            parse_settings.push(
+              SendGrid4r::REST::Webhooks::ParseApi.create_parse_setting(
+                setting
+              )
+            )
+          end
+          ParseSettings.new(parse_settings)
+        end
+
+        def self.create_parse_setting(resp)
+          return resp if resp.nil?
+          ParseSetting.new(
             resp['url'],
             resp['hostname'],
             resp['spam_check_outgoing']
