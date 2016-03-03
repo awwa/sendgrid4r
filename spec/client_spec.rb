@@ -277,12 +277,20 @@ describe SendGrid4r::Client do
 
         # Permissions
         expect(@client.respond_to?('get_permissions')).to eq(true)
+
+        # Ip Access Management
+        expect(@client.respond_to?('get_ip_activities')).to eq(true)
+        expect(@client.respond_to?('get_whitelisted_ips')).to eq(true)
+        expect(@client.respond_to?('post_whitelisted_ips')).to eq(true)
+        expect(@client.respond_to?('delete_whitelisted_ips')).to eq(true)
+        expect(@client.respond_to?('get_whitelisted_ip')).to eq(true)
+        expect(@client.respond_to?('delete_whitelisted_ip')).to eq(true)
       end
     end
 
     describe 'VERSION' do
       it 'returns VERSION value' do
-        expect(SendGrid4r::VERSION).to eq('1.5.1')
+        expect(SendGrid4r::VERSION).to eq('1.6.0')
       end
     end
   end

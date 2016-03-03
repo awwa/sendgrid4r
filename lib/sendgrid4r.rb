@@ -32,6 +32,8 @@ require 'sendgrid4r/rest/contacts/segments'
 
 require 'sendgrid4r/rest/email_activity/email_activity'
 
+require 'sendgrid4r/rest/ip_access_management'
+
 require 'sendgrid4r/rest/ips/addresses'
 require 'sendgrid4r/rest/ips/pools'
 require 'sendgrid4r/rest/ips/warmup'
@@ -49,7 +51,8 @@ require 'sendgrid4r/rest/stats/parse'
 require 'sendgrid4r/rest/stats/stats'
 require 'sendgrid4r/rest/stats/subuser'
 
-require 'sendgrid4r/rest/webhooks/parse_api'
+require 'sendgrid4r/rest/webhooks/event'
+require 'sendgrid4r/rest/webhooks/parse'
 
 require 'sendgrid4r/rest/whitelabel/domains'
 require 'sendgrid4r/rest/whitelabel/ips'

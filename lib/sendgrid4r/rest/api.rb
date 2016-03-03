@@ -42,7 +42,9 @@ module SendGrid4r
       include SendGrid4r::REST::Users
       include SendGrid4r::REST::Bounces
       include SendGrid4r::REST::CancelScheduledSends
-      include SendGrid4r::REST::Webhooks::ParseApi
+      include SendGrid4r::REST::Webhooks::Event
+      include SendGrid4r::REST::Webhooks::Parse
+      include SendGrid4r::REST::IpAccessManagement
     end
   end
 end

@@ -104,65 +104,6 @@ describe SendGrid4r::REST::Settings::Mail do
         end
       end
 
-      it '#get_settings_event_notification' do
-        begin
-          actual = @client.get_settings_event_notification
-          expect(actual).to be_a(
-            SendGrid4r::REST::Settings::Mail::EventNotification
-          )
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
-      end
-
-      it '#patch_settings_event_notification' do
-        begin
-          # get original settings
-          actual = @client.get_settings_event_notification
-          # patch the value
-          actual.enabled = false
-          actual.url = 'http://www.google.com/?=test@test.com'
-          actual.group_resubscribe = true
-          actual.delivered = true
-          actual.group_unsubscribe = true
-          actual.spam_report = true
-          actual.bounce = true
-          actual.deferred = true
-          actual.unsubscribe = true
-          actual.processed = true
-          actual.open = true
-          actual.click = true
-          actual.dropped = true
-          edit = @client.patch_settings_event_notification(params: actual)
-          expect(edit.enabled).to eq(false)
-          expect(edit.url).to eq('http://www.google.com/?=test@test.com')
-          expect(edit.group_resubscribe).to eq(true)
-          expect(edit.delivered).to eq(true)
-          expect(edit.group_unsubscribe).to eq(true)
-          expect(edit.spam_report).to eq(true)
-          expect(edit.bounce).to eq(true)
-          expect(edit.deferred).to eq(true)
-          expect(edit.unsubscribe).to eq(true)
-          expect(edit.processed).to eq(true)
-          expect(edit.open).to eq(true)
-          expect(edit.click).to eq(true)
-          expect(edit.dropped).to eq(true)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
-      end
-
-      it '#test_settings_event_notification' do
-        begin
-          @client.test_settings_event_notification(url: ENV['EVENT_URL'])
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
-      end
-
       it '#get_settings_footer' do
         begin
           actual = @client.get_settings_footer
@@ -395,61 +336,6 @@ describe SendGrid4r::REST::Settings::Mail do
       expect(actual.enabled).to eq(true)
       expect(actual.hard_bounces).to eq(1)
       expect(actual.soft_bounces).to eq(1)
-    end
-
-    let(:event_notification) do
-      JSON.parse(
-        '{'\
-          '"enabled": true,'\
-          '"url": "url",'\
-          '"group_resubscribe": true,'\
-          '"delivered": true,'\
-          '"group_unsubscribe": true,'\
-          '"spam_report": true,'\
-          '"bounce": true,'\
-          '"deferred": true,'\
-          '"unsubscribe": true,'\
-          '"processed": true,'\
-          '"open": true,'\
-          '"click": true,'\
-          '"dropped": true'\
-        '}'
-      )
-    end
-
-    it '#get_settings_event_notification' do
-      allow(client).to receive(:execute).and_return(event_notification)
-      actual = client.get_settings_event_notification
-      expect(actual).to be_a(
-        SendGrid4r::REST::Settings::Mail::EventNotification
-      )
-    end
-
-    it '#patch_settings_event_notification' do
-      allow(client).to receive(:execute).and_return(event_notification)
-      actual = client.patch_settings_event_notification(params: nil)
-      expect(actual).to be_a(
-        SendGrid4r::REST::Settings::Mail::EventNotification
-      )
-    end
-
-    it 'creates event_notification instance' do
-      actual = SendGrid4r::REST::Settings::Mail.create_event_notification(
-        event_notification
-      )
-      expect(actual.enabled).to eq(true)
-      expect(actual.url).to eq('url')
-      expect(actual.group_resubscribe).to eq(true)
-      expect(actual.delivered).to eq(true)
-      expect(actual.group_unsubscribe).to eq(true)
-      expect(actual.spam_report).to eq(true)
-      expect(actual.bounce).to eq(true)
-      expect(actual.deferred).to eq(true)
-      expect(actual.unsubscribe).to eq(true)
-      expect(actual.processed).to eq(true)
-      expect(actual.open).to eq(true)
-      expect(actual.click).to eq(true)
-      expect(actual.dropped).to eq(true)
     end
 
     let(:footer) do
