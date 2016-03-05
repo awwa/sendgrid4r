@@ -2,9 +2,9 @@
 
 module SendGrid4r
   module REST
-    module Asm
+    module Sm
       #
-      # SendGrid Web API v3 Advanced Suppression Manager - Suppressions
+      # SendGrid Web API v3 Suppression Management - Suppressions
       #
       module Suppressions
         include SendGrid4r::REST::Request
@@ -23,7 +23,7 @@ module SendGrid4r
           suppressions = []
           resp['suppressions'].each do |suppression|
             suppressions.push(
-              SendGrid4r::REST::Asm::Suppressions.create_suppression(
+              SendGrid4r::REST::Sm::Suppressions.create_suppression(
                 suppression
               )
             )
@@ -50,29 +50,29 @@ module SendGrid4r
         def post_suppressed_emails(group_id:, recipient_emails:, &block)
           resp = post(
             @auth,
-            SendGrid4r::REST::Asm::Suppressions.url(group_id),
+            SendGrid4r::REST::Sm::Suppressions.url(group_id),
             recipient_emails: recipient_emails,
             &block
           )
-          SendGrid4r::REST::Asm.create_recipient_emails(resp)
+          SendGrid4r::REST::Sm.create_recipient_emails(resp)
         end
 
         def get_suppressed_emails(group_id:, &block)
-          endpoint = SendGrid4r::REST::Asm::Suppressions.url(group_id)
+          endpoint = SendGrid4r::REST::Sm::Suppressions.url(group_id)
           resp = get(@auth, endpoint, &block)
-          SendGrid4r::REST::Asm::Suppressions.create_emails(resp)
+          SendGrid4r::REST::Sm::Suppressions.create_emails(resp)
         end
 
         def get_suppressions(email_address:, &block)
           endpoint = "#{BASE_URL}/asm/suppressions/#{email_address}"
           resp = get(@auth, endpoint, &block)
-          SendGrid4r::REST::Asm::Suppressions.create_suppressions(resp)
+          SendGrid4r::REST::Sm::Suppressions.create_suppressions(resp)
         end
 
         def delete_suppressed_email(group_id:, email_address:, &block)
           delete(
             @auth,
-            SendGrid4r::REST::Asm::Suppressions.url(group_id, email_address),
+            SendGrid4r::REST::Sm::Suppressions.url(group_id, email_address),
             &block
           )
         end

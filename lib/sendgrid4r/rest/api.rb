@@ -8,10 +8,10 @@ module SendGrid4r
     module API
       include SendGrid4r::REST::Templates
       include SendGrid4r::REST::Templates::Versions
-      include SendGrid4r::REST::Asm
-      include SendGrid4r::REST::Asm::Groups
-      include SendGrid4r::REST::Asm::Suppressions
-      include SendGrid4r::REST::Asm::GlobalSuppressions
+      include SendGrid4r::REST::Sm
+      include SendGrid4r::REST::Sm::Groups
+      include SendGrid4r::REST::Sm::Suppressions
+      include SendGrid4r::REST::Sm::GlobalUnsubscribes
       include SendGrid4r::REST::Settings
       include SendGrid4r::REST::Settings::EnforcedTls
       include SendGrid4r::REST::Settings::Mail
@@ -41,6 +41,9 @@ module SendGrid4r
       include SendGrid4r::REST::Whitelabel::Links
       include SendGrid4r::REST::Users
       include SendGrid4r::REST::Bounces
+      include SendGrid4r::REST::Blocks
+      include SendGrid4r::REST::InvalidEmails
+      include SendGrid4r::REST::SpamReports
       include SendGrid4r::REST::CancelScheduledSends
       include SendGrid4r::REST::Webhooks::Event
       include SendGrid4r::REST::Webhooks::Parse

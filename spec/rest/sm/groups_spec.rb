@@ -1,7 +1,7 @@
 # encoding: utf-8
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe SendGrid4r::REST::Asm::Groups do
+describe SendGrid4r::REST::Sm::Groups do
   describe 'integration test', :it do
     before do
       begin
@@ -69,7 +69,7 @@ describe SendGrid4r::REST::Asm::Groups do
           groups = @client.get_groups
           expect(groups).to be_a(Array)
           groups.each do |group|
-            expect(group).to be_a(SendGrid4r::REST::Asm::Groups::Group)
+            expect(group).to be_a(SendGrid4r::REST::Sm::Groups::Group)
           end
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
@@ -162,13 +162,13 @@ describe SendGrid4r::REST::Asm::Groups do
     it '#post_group' do
       allow(client).to receive(:execute).and_return(group)
       actual = client.post_group(name: '', description: '')
-      expect(actual).to be_a(SendGrid4r::REST::Asm::Groups::Group)
+      expect(actual).to be_a(SendGrid4r::REST::Sm::Groups::Group)
     end
 
     it '#patch_group' do
       allow(client).to receive(:execute).and_return(group)
       actual = client.patch_group(group_id: 0, group: nil)
-      expect(actual).to be_a(SendGrid4r::REST::Asm::Groups::Group)
+      expect(actual).to be_a(SendGrid4r::REST::Sm::Groups::Group)
     end
 
     it '#get_groups' do
@@ -176,14 +176,14 @@ describe SendGrid4r::REST::Asm::Groups do
       actual = client.get_groups
       expect(actual).to be_a(Array)
       actual.each do |group|
-        expect(group).to be_a(SendGrid4r::REST::Asm::Groups::Group)
+        expect(group).to be_a(SendGrid4r::REST::Sm::Groups::Group)
       end
     end
 
     it '#get_group' do
       allow(client).to receive(:execute).and_return(group)
       actual = client.get_group(group_id: 0)
-      expect(actual).to be_a(SendGrid4r::REST::Asm::Groups::Group)
+      expect(actual).to be_a(SendGrid4r::REST::Sm::Groups::Group)
     end
 
     it '#delete_group' do
@@ -193,9 +193,9 @@ describe SendGrid4r::REST::Asm::Groups do
     end
 
     it 'creates group instance' do
-      actual = SendGrid4r::REST::Asm::Groups.create_group(group)
+      actual = SendGrid4r::REST::Sm::Groups.create_group(group)
       expect(actual).to be_a(
-        SendGrid4r::REST::Asm::Groups::Group
+        SendGrid4r::REST::Sm::Groups::Group
       )
       expect(actual.id).to eq(100)
       expect(actual.name).to eq('Newsletters')
@@ -206,10 +206,10 @@ describe SendGrid4r::REST::Asm::Groups do
     end
 
     it 'creates groups instance' do
-      actual = SendGrid4r::REST::Asm::Groups.create_groups(groups)
+      actual = SendGrid4r::REST::Sm::Groups.create_groups(groups)
       expect(actual).to be_a(Array)
       actual.each do |group|
-        expect(group).to be_a(SendGrid4r::REST::Asm::Groups::Group)
+        expect(group).to be_a(SendGrid4r::REST::Sm::Groups::Group)
       end
     end
   end

@@ -1,7 +1,7 @@
 # encoding: utf-8
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe SendGrid4r::REST::Asm::GlobalSuppressions do
+describe SendGrid4r::REST::Sm::GlobalUnsubscribes do
   describe 'integration test', :it do
     before do
       begin
@@ -39,6 +39,21 @@ describe SendGrid4r::REST::Asm::GlobalSuppressions do
     end
 
     context 'without block call' do
+      it '#get_global_unsubscribes' do
+        begin
+          global_unsubscribes = @client.get_global_unsubscribes
+          expect(global_unsubscribes).to be_a(Array)
+          global_unsubscribes.each do |global_unsubscribe|
+            expect(global_unsubscribe).to be_a(
+              SendGrid4r::REST::Sm::GlobalUnsubscribes::Unsubscribe
+            )
+          end
+        rescue RestClient::ExceptionWithResponse => e
+          puts e.inspect
+          raise e
+        end
+      end
+
       it '#post_global_suppressed_emails' do
         begin
           emails = @client.post_global_suppressed_emails(
@@ -115,13 +130,13 @@ describe SendGrid4r::REST::Asm::GlobalSuppressions do
     it '#post_global_suppressed_emails' do
       allow(client).to receive(:execute).and_return(recipient_emails)
       emails = client.post_global_suppressed_emails(recipient_emails: [])
-      expect(emails).to be_a(SendGrid4r::REST::Asm::RecipientEmails)
+      expect(emails).to be_a(SendGrid4r::REST::Sm::RecipientEmails)
     end
 
     it '#get_global_suppressed_email' do
       allow(client).to receive(:execute).and_return(recipient_email)
       actual = client.get_global_suppressed_email(email_address: '')
-      expect(actual).to be_a(SendGrid4r::REST::Asm::RecipientEmail)
+      expect(actual).to be_a(SendGrid4r::REST::Sm::RecipientEmail)
     end
 
     it '#delete_global_suppressed_email' do

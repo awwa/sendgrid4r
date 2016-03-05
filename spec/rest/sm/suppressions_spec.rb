@@ -1,7 +1,7 @@
 # encoding: utf-8
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe SendGrid4r::REST::Asm::Suppressions do
+describe SendGrid4r::REST::Sm::Suppressions do
   describe 'integration test', :it do
     before do
       begin
@@ -165,7 +165,7 @@ describe SendGrid4r::REST::Asm::Suppressions do
       actual = client.post_suppressed_emails(
         group_id: 0, recipient_emails: ['', '']
       )
-      expect(actual).to be_a(SendGrid4r::REST::Asm::RecipientEmails)
+      expect(actual).to be_a(SendGrid4r::REST::Sm::RecipientEmails)
     end
 
     it '#get_suppressed_emails' do
@@ -180,7 +180,7 @@ describe SendGrid4r::REST::Asm::Suppressions do
       expect(actual.suppressions).to be_a(Array)
       actual.suppressions.each do |suppression|
         expect(suppression).to be_a(
-          SendGrid4r::REST::Asm::Suppressions::Suppression
+          SendGrid4r::REST::Sm::Suppressions::Suppression
         )
       end
     end
@@ -192,11 +192,11 @@ describe SendGrid4r::REST::Asm::Suppressions do
     end
 
     it 'creates suppression instance' do
-      actual = SendGrid4r::REST::Asm::Suppressions.create_suppression(
+      actual = SendGrid4r::REST::Sm::Suppressions.create_suppression(
         suppression
       )
       expect(actual).to be_a(
-        SendGrid4r::REST::Asm::Suppressions::Suppression
+        SendGrid4r::REST::Sm::Suppressions::Suppression
       )
       expect(actual.id).to eq(4)
       expect(actual.name).to eq('Special Offers')
@@ -205,16 +205,16 @@ describe SendGrid4r::REST::Asm::Suppressions do
     end
 
     it 'creates suppressions instance' do
-      actual = SendGrid4r::REST::Asm::Suppressions.create_suppressions(
+      actual = SendGrid4r::REST::Sm::Suppressions.create_suppressions(
         suppressions
       )
       expect(actual).to be_a(
-        SendGrid4r::REST::Asm::Suppressions::Suppressions
+        SendGrid4r::REST::Sm::Suppressions::Suppressions
       )
       expect(actual.suppressions).to be_a(Array)
       actual.suppressions.each do |suppression|
         expect(suppression).to be_a(
-          SendGrid4r::REST::Asm::Suppressions::Suppression
+          SendGrid4r::REST::Sm::Suppressions::Suppression
         )
       end
     end
