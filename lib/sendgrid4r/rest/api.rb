@@ -11,7 +11,7 @@ module SendGrid4r
       include SendGrid4r::REST::Sm
       include SendGrid4r::REST::Sm::Groups
       include SendGrid4r::REST::Sm::Suppressions
-      include SendGrid4r::REST::Sm::GlobalSuppressions
+      include SendGrid4r::REST::Sm::GlobalUnsubscribes
       include SendGrid4r::REST::Settings
       include SendGrid4r::REST::Settings::EnforcedTls
       include SendGrid4r::REST::Settings::Mail

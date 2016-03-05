@@ -1,7 +1,7 @@
 # encoding: utf-8
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe SendGrid4r::REST::Sm::GlobalSuppressions do
+describe SendGrid4r::REST::Sm::GlobalUnsubscribes do
   describe 'integration test', :it do
     before do
       begin
@@ -45,7 +45,7 @@ describe SendGrid4r::REST::Sm::GlobalSuppressions do
           expect(global_suppressions).to be_a(Array)
           global_suppressions.each do |global_suppression|
             expect(global_suppression).to be_a(
-              SendGrid4r::REST::Sm::GlobalSuppressions::Suppression
+              SendGrid4r::REST::Sm::GlobalUnsubscribes::Unsubscribe
             )
           end
         rescue RestClient::ExceptionWithResponse => e

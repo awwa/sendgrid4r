@@ -45,7 +45,7 @@ describe SendGrid4r::Client do
         expect(@client.respond_to?('post_api_key')).to eq(true)
         expect(@client.respond_to?('delete_api_key')).to eq(true)
         expect(@client.respond_to?('patch_api_key')).to eq(true)
-        # Advanced Suppression Manager
+        # Suppression Management
         # groups
         expect(@client.respond_to?('get_groups')).to eq(true)
         expect(@client.respond_to?('get_group')).to eq(true)
@@ -57,8 +57,12 @@ describe SendGrid4r::Client do
         expect(@client.respond_to?('get_suppressions')).to eq(true)
         expect(@client.respond_to?('get_suppressed_emails')).to eq(true)
         expect(@client.respond_to?('delete_suppressed_email')).to eq(true)
-        # global suppressions
+        # global unsubscribes
         expect(@client.respond_to?('get_global_unsubscribes')).to eq(true)
+        expect(@client.respond_to?('post_global_unsubscribes')).to eq(true)
+        expect(@client.respond_to?('get_global_unsubscribe')).to eq(true)
+        expect(@client.respond_to?('delete_global_unsubscribe')).to eq(true)
+        # deprecated
         expect(@client.respond_to?('post_global_suppressed_emails')).to eq(true)
         expect(@client.respond_to?('get_global_suppressed_email')).to eq(true)
         expect(
