@@ -41,6 +41,9 @@ module SendGrid4r
       include SendGrid4r::REST::Whitelabel::Links
       include SendGrid4r::REST::Users
       include SendGrid4r::REST::Bounces
+      include SendGrid4r::REST::Blocks
+      include SendGrid4r::REST::InvalidEmails
+      include SendGrid4r::REST::SpamReports
       include SendGrid4r::REST::CancelScheduledSends
       include SendGrid4r::REST::Webhooks::Event
       include SendGrid4r::REST::Webhooks::Parse

@@ -259,6 +259,24 @@ describe SendGrid4r::Client do
         expect(@client.respond_to?('get_bounce')).to eq(true)
         expect(@client.respond_to?('delete_bounce')).to eq(true)
 
+        # Blocks API
+        expect(@client.respond_to?('get_blocks')).to eq(true)
+        expect(@client.respond_to?('delete_blocks')).to eq(true)
+        expect(@client.respond_to?('get_block')).to eq(true)
+        expect(@client.respond_to?('delete_block')).to eq(true)
+
+        # Invalid Emails API
+        expect(@client.respond_to?('get_invalid_emails')).to eq(true)
+        expect(@client.respond_to?('delete_invalid_emails')).to eq(true)
+        expect(@client.respond_to?('get_invalid_email')).to eq(true)
+        expect(@client.respond_to?('delete_invalid_email')).to eq(true)
+
+        # Spam Reports API
+        expect(@client.respond_to?('get_spam_reports')).to eq(true)
+        expect(@client.respond_to?('delete_spam_reports')).to eq(true)
+        expect(@client.respond_to?('get_spam_report')).to eq(true)
+        expect(@client.respond_to?('delete_spam_report')).to eq(true)
+
         # Cancel Scheduled Sends Api
         expect(@client.respond_to?('generate_batch_id')).to eq(true)
         expect(@client.respond_to?('validate_batch_id')).to eq(true)
@@ -290,7 +308,7 @@ describe SendGrid4r::Client do
 
     describe 'VERSION' do
       it 'returns VERSION value' do
-        expect(SendGrid4r::VERSION).to eq('1.6.0')
+        expect(SendGrid4r::VERSION).to eq('1.7.0')
       end
     end
   end

@@ -18,6 +18,9 @@ require 'sendgrid4r/rest/asm/groups'
 require 'sendgrid4r/rest/asm/suppressions'
 
 require 'sendgrid4r/rest/bounces'
+require 'sendgrid4r/rest/blocks'
+require 'sendgrid4r/rest/invalid_emails'
+require 'sendgrid4r/rest/spam_reports'
 require 'sendgrid4r/rest/cancel_scheduled_sends'
 
 require 'sendgrid4r/rest/campaigns/campaigns'
