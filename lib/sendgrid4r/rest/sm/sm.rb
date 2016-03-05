@@ -3,9 +3,9 @@
 module SendGrid4r
   module REST
     #
-    # SendGrid Web API v3 Advanced Suppression Manager
+    # SendGrid Web API v3 Suppression Management
     #
-    module Asm
+    module Sm
       include SendGrid4r::REST::Request
 
       RecipientEmails = Struct.new(:recipient_emails)

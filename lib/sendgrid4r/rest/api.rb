@@ -8,10 +8,10 @@ module SendGrid4r
     module API
       include SendGrid4r::REST::Templates
       include SendGrid4r::REST::Templates::Versions
-      include SendGrid4r::REST::Asm
-      include SendGrid4r::REST::Asm::Groups
-      include SendGrid4r::REST::Asm::Suppressions
-      include SendGrid4r::REST::Asm::GlobalSuppressions
+      include SendGrid4r::REST::Sm
+      include SendGrid4r::REST::Sm::Groups
+      include SendGrid4r::REST::Sm::Suppressions
+      include SendGrid4r::REST::Sm::GlobalSuppressions
       include SendGrid4r::REST::Settings
       include SendGrid4r::REST::Settings::EnforcedTls
       include SendGrid4r::REST::Settings::Mail

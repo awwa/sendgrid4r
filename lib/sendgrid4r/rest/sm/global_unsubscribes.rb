@@ -2,9 +2,9 @@
 
 module SendGrid4r
   module REST
-    module Asm
+    module Sm
       #
-      # SendGrid Web API v3 Advanced Suppression Manager - Global Suppressions
+      # SendGrid Web API v3 Suppression Management - Global Unsubscribes
       #
       module GlobalSuppressions
         include SendGrid4r::REST::Request
@@ -39,28 +39,28 @@ module SendGrid4r
           params['end_time'] = end_time.to_i unless end_time.nil?
           params['limit'] = limit.to_i unless limit.nil?
           params['offset'] = offset.to_i unless offset.nil?
-          endpoint = SendGrid4r::REST::Asm::GlobalSuppressions.url_unsubscribes
+          endpoint = SendGrid4r::REST::Sm::GlobalSuppressions.url_unsubscribes
           resp = get(@auth, endpoint, params, &block)
-          SendGrid4r::REST::Asm::GlobalSuppressions.create_supressions(resp)
+          SendGrid4r::REST::Sm::GlobalSuppressions.create_supressions(resp)
         end
 
         def post_global_suppressed_emails(recipient_emails:, &block)
           params = { recipient_emails: recipient_emails }
-          endpoint = SendGrid4r::REST::Asm::GlobalSuppressions.url
+          endpoint = SendGrid4r::REST::Sm::GlobalSuppressions.url
           resp = post(@auth, endpoint, params, &block)
-          SendGrid4r::REST::Asm.create_recipient_emails(resp)
+          SendGrid4r::REST::Sm.create_recipient_emails(resp)
         end
 
         def get_global_suppressed_email(email_address:, &block)
           endpoint =
-            SendGrid4r::REST::Asm::GlobalSuppressions.url(email_address)
+            SendGrid4r::REST::Sm::GlobalSuppressions.url(email_address)
           resp = get(@auth, endpoint, &block)
-          SendGrid4r::REST::Asm.create_recipient_email(resp)
+          SendGrid4r::REST::Sm.create_recipient_email(resp)
         end
 
         def delete_global_suppressed_email(email_address:, &block)
           endpoint =
-            SendGrid4r::REST::Asm::GlobalSuppressions.url(email_address)
+            SendGrid4r::REST::Sm::GlobalSuppressions.url(email_address)
           delete(@auth, endpoint, &block)
         end
       end
