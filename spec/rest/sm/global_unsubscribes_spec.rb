@@ -41,10 +41,10 @@ describe SendGrid4r::REST::Sm::GlobalUnsubscribes do
     context 'without block call' do
       it '#get_global_unsubscribes' do
         begin
-          global_suppressions = @client.get_global_unsubscribes
-          expect(global_suppressions).to be_a(Array)
-          global_suppressions.each do |global_suppression|
-            expect(global_suppression).to be_a(
+          global_unsubscribes = @client.get_global_unsubscribes
+          expect(global_unsubscribes).to be_a(Array)
+          global_unsubscribes.each do |global_unsubscribe|
+            expect(global_unsubscribe).to be_a(
               SendGrid4r::REST::Sm::GlobalUnsubscribes::Unsubscribe
             )
           end
