@@ -39,6 +39,21 @@ describe SendGrid4r::REST::Asm::GlobalSuppressions do
     end
 
     context 'without block call' do
+      it '#get_global_unsubscribes' do
+        begin
+          global_suppressions = @client.get_global_unsubscribes
+          expect(global_suppressions).to be_a(Array)
+          global_suppressions.each do |global_suppression|
+            expect(global_suppression).to be_a(
+              SendGrid4r::REST::Asm::GlobalSuppressions::Suppression
+            )
+          end
+        rescue RestClient::ExceptionWithResponse => e
+          puts e.inspect
+          raise e
+        end
+      end
+
       it '#post_global_suppressed_emails' do
         begin
           emails = @client.post_global_suppressed_emails(

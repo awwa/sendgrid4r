@@ -9,10 +9,39 @@ module SendGrid4r
       module GlobalSuppressions
         include SendGrid4r::REST::Request
 
+        Suppression = Struct.new(:created, :email)
+
         def self.url(email_address = nil)
           url = "#{BASE_URL}/asm/suppressions/global"
           url = "#{url}/#{email_address}" unless email_address.nil?
           url
+        end
+
+        def self.url_unsubscribes
+          "#{BASE_URL}/suppression/unsubscribes"
+        end
+
+        def self.create_supressions(resp)
+          return resp if resp.nil?
+          suppressions = []
+          resp.each do |suppression|
+            created = Time.at(suppression['created'])
+            suppressions.push(Suppression.new(created, suppression['email']))
+          end
+          suppressions
+        end
+
+        def get_global_unsubscribes(
+          start_time: nil, end_time: nil, limit: nil, offset: nil, &block
+        )
+          params = {}
+          params['start_time'] = start_time.to_i unless start_time.nil?
+          params['end_time'] = end_time.to_i unless end_time.nil?
+          params['limit'] = limit.to_i unless limit.nil?
+          params['offset'] = offset.to_i unless offset.nil?
+          endpoint = SendGrid4r::REST::Asm::GlobalSuppressions.url_unsubscribes
+          resp = get(@auth, endpoint, params, &block)
+          SendGrid4r::REST::Asm::GlobalSuppressions.create_supressions(resp)
         end
 
         def post_global_suppressed_emails(recipient_emails:, &block)

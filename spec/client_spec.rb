@@ -58,6 +58,7 @@ describe SendGrid4r::Client do
         expect(@client.respond_to?('get_suppressed_emails')).to eq(true)
         expect(@client.respond_to?('delete_suppressed_email')).to eq(true)
         # global suppressions
+        expect(@client.respond_to?('get_global_unsubscribes')).to eq(true)
         expect(@client.respond_to?('post_global_suppressed_emails')).to eq(true)
         expect(@client.respond_to?('get_global_suppressed_email')).to eq(true)
         expect(
