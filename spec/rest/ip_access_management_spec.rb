@@ -5,17 +5,22 @@ describe SendGrid4r::REST::IpAccessManagement do
   describe 'integration test', :it do
     before do
       begin
-        pending('resource not found')
         Dotenv.load
         @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
 
         # clean up test env(whitelisted_ips)
+        @ip1 = '192.168.0.1/32'
+        @ip2 = '1.12.34.56/32'
         ips = @client.get_whitelisted_ips
         ips.result.each do |whitelisted_ip|
-          @client.delete_whitelisted_ip(rule_id: whitelisted_ip.id)
+          @client.delete_whitelisted_ip(
+            rule_id: whitelisted_ip.id
+          ) if whitelisted_ip.ip == @ip1 || whitelisted_ip.ip == @ip2
         end
-        @ips = @client.post_whitelisted_ip('0.0.0.0')
-        @id1 = @ips.result[0].id
+        @ips = @client.post_whitelisted_ips(ips: [@ip1])
+        @ips.result.each do |ip|
+          @id1 = ip.id if ip.ip == @ip1
+        end
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
         raise e
@@ -71,7 +76,7 @@ describe SendGrid4r::REST::IpAccessManagement do
 
       it '#post_whitelisted_ips' do
         begin
-          ips = @client.post_whitelisted_ips(ips: ['127.0.0.1'])
+          ips = @client.post_whitelisted_ips(ips: [@ip2])
           expect(ips).to be_a(
             SendGrid4r::REST::IpAccessManagement::WhitelistedIps
           )
@@ -104,9 +109,7 @@ describe SendGrid4r::REST::IpAccessManagement do
 
       it '#delete_whitelisted_ip' do
         begin
-          expect do
-            @client.delete_whitelisted_ip(rule_id: @id1)
-          end.to raise_error(RestClient::ResourceNotFound)
+          @client.delete_whitelisted_ip(rule_id: @id1)
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
           raise e
@@ -168,10 +171,12 @@ describe SendGrid4r::REST::IpAccessManagement do
     let(:whitelisted_ip) do
       JSON.parse(
         '{'\
-          '"id": 1,'\
-          '"ip": "192.168.1.1",'\
-          '"created_at": 1441824715,'\
-          '"updated_at": 1441824715'\
+          '"result": {'\
+            '"created_at": 1459011215,'\
+            '"id": 1,'\
+            '"ip": "192.168.1.1/32",'\
+            '"updated_at": 1459011215'\
+          '}'\
         '}'
       )
     end
@@ -195,7 +200,7 @@ describe SendGrid4r::REST::IpAccessManagement do
       )
       actual.result.each do |whitelisted_ip|
         expect(whitelisted_ip).to be_a(
-          SendGrid4r::REST::IpAccessManagement::WhitelistedIp
+          SendGrid4r::REST::IpAccessManagement::WhitelistedIpResult
         )
       end
     end
@@ -208,7 +213,7 @@ describe SendGrid4r::REST::IpAccessManagement do
       )
       actual.result.each do |whitelisted_ip|
         expect(whitelisted_ip).to be_a(
-          SendGrid4r::REST::IpAccessManagement::WhitelistedIp
+          SendGrid4r::REST::IpAccessManagement::WhitelistedIpResult
         )
       end
     end
@@ -257,6 +262,16 @@ describe SendGrid4r::REST::IpAccessManagement do
       expect(ip1.ip).to eq('192.168.1.1/32')
       expect(ip1.created_at).to eq(Time.at(1441824715))
       expect(ip1.updated_at).to eq(Time.at(1441824715))
+    end
+
+    it 'creates whitelisted_ip instance' do
+      actual = SendGrid4r::REST::IpAccessManagement.create_whitelisted_ip(
+        whitelisted_ip
+      )
+      expect(actual.result.id).to eq(1)
+      expect(actual.result.ip).to eq('192.168.1.1/32')
+      expect(actual.result.created_at).to eq(Time.at(1459011215))
+      expect(actual.result.updated_at).to eq(Time.at(1459011215))
     end
   end
 end
