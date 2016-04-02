@@ -20,6 +20,7 @@ describe SendGrid4r::REST::Whitelabel::Domains do
         @id1 = nil
         @id2 = nil
         @id3 = nil
+        @id4 = nil
         domains = @client.get_wl_domains
         domains.each do |domain|
           if domain.subdomain == "#{@subdomain_name}1" &&
@@ -34,16 +35,18 @@ describe SendGrid4r::REST::Whitelabel::Domains do
              domain.domain == @domain_name
             @id3 = domain.id
           end
+          if domain.subdomain == "#{@subdomain_name}4" &&
+             domain.domain == @domain_name
+            @id4 = domain.id
+          end
         end
         # post domain
         @domain1 = @client.post_wl_domain(
-          domain: @domain_name, subdomain: @subdomain_name + '1',
-          username: @username, ips: nil,
-          automatic_security: true, custom_spf: false, default: false
+          domain: @domain_name, subdomain: @subdomain_name + '1'
         ) if @id1.nil?
         @domain2 = @client.post_wl_domain(
           domain: @domain_name, subdomain: @subdomain_name + '2',
-          username: @username, ips: nil,
+          username: @username,
           automatic_security: false, custom_spf: true, default: false
         ) if @id2.nil?
         @domain3 = @client.post_wl_domain(
@@ -51,21 +54,31 @@ describe SendGrid4r::REST::Whitelabel::Domains do
           username: @username, ips: nil,
           automatic_security: true, custom_spf: false, default: false
         ) if @id3.nil?
+        @domain4 = @client.post_wl_domain(
+          domain: @domain_name, subdomain: @subdomain_name + '4',
+          username: @username, ips: [@ip],
+          automatic_security: true, custom_spf: true, default: false
+        ) if @id4.nil?
         # make a default
         @id1 = @domain1.id if @id1.nil?
         @id2 = @domain2.id if @id2.nil?
         @id3 = @domain3.id if @id3.nil?
+        @id4 = @domain4.id if @id4.nil?
         @client.patch_wl_domain(id: @id3, default: true)
         @client.delete_wl_domain(id: @id1)
         @client.delete_wl_domain(id: @id2)
+        @client.delete_wl_domain(id: @id4)
         @domain1 = @client.post_wl_domain(
-          domain: @domain_name, subdomain: @subdomain_name + '1',
-          username: @username, ips: nil,
-          automatic_security: true, custom_spf: false, default: false
+          domain: @domain_name, subdomain: @subdomain_name + '1'
         )
         @domain2 = @client.post_wl_domain(
           domain: @domain_name, subdomain: @subdomain_name + '2',
           username: @username, ips: nil,
+          automatic_security: false, custom_spf: false, default: false
+        )
+        @domain4 = @client.post_wl_domain(
+          domain: @domain_name, subdomain: @subdomain_name + '4',
+          username: @username, ips: [@ip],
           automatic_security: false, custom_spf: true, default: false
         )
         # clean subusers
@@ -133,7 +146,7 @@ describe SendGrid4r::REST::Whitelabel::Domains do
           expect(@domain2.user_id).to be_a(Numeric)
           expect(@domain2.ips).to eq([])
           expect(@domain2.automatic_security).to eq(false)
-          expect(@domain2.custom_spf).to eq(true)
+          expect(@domain2.custom_spf).to eq(false)
           expect(@domain2.default).to eq(false)
           expect(@domain2.legacy).to eq(false)
           expect(@domain2.valid).to eq(false)
@@ -166,15 +179,36 @@ describe SendGrid4r::REST::Whitelabel::Domains do
           expect(domain1.default).to eq(false)
           expect(domain1.legacy).to eq(false)
           expect(domain1.valid).to eq(false)
+          # mail_cname
           expect(domain1.dns.mail_cname).to be_a(
             SendGrid4r::REST::Whitelabel::Domains::Record
           )
+          expect(domain1.dns.mail_cname.valid).to eq(false)
+          expect(domain1.dns.mail_cname.type).to eq('cname')
+          expect(domain1.dns.mail_cname.host).to eq(
+            "#{@subdomain_name}1.#{@domain_name}"
+          )
+          expect(domain1.dns.mail_cname.data).to be_a(String)
+          # dkim1
           expect(domain1.dns.dkim1).to be_a(
             SendGrid4r::REST::Whitelabel::Domains::Record
           )
+          expect(domain1.dns.dkim1.valid).to eq(false)
+          expect(domain1.dns.dkim1.type).to eq('cname')
+          expect(domain1.dns.dkim1.host).to eq(
+            "s1._domainkey.#{@domain_name}"
+          )
+          expect(domain1.dns.dkim1.data).to be_a(String)
+          # dkim2
           expect(domain1.dns.dkim2).to be_a(
             SendGrid4r::REST::Whitelabel::Domains::Record
           )
+          expect(domain1.dns.dkim2.valid).to eq(false)
+          expect(domain1.dns.dkim2.type).to eq('cname')
+          expect(domain1.dns.dkim2.host).to eq(
+            "s2._domainkey.#{@domain_name}"
+          )
+          expect(domain1.dns.dkim2.data).to be_a(String)
           domain2 = @client.get_wl_domain(id: @domain2.id)
           expect(domain2).to be_a(SendGrid4r::REST::Whitelabel::Domains::Domain)
           expect(domain2.domain).to eq(@domain_name)
@@ -183,18 +217,89 @@ describe SendGrid4r::REST::Whitelabel::Domains do
           expect(domain2.user_id).to be_a(Numeric)
           expect(domain2.ips).to eq([])
           expect(domain2.automatic_security).to eq(false)
-          expect(domain2.custom_spf).to eq(true)
+          expect(domain2.custom_spf).to eq(false)
           expect(domain2.default).to eq(false)
           expect(domain2.legacy).to eq(false)
           expect(domain2.valid).to eq(false)
+          # mail_server
           expect(domain2.dns.mail_server).to be_a(
             SendGrid4r::REST::Whitelabel::Domains::Record
           )
+          expect(domain2.dns.mail_server.valid).to eq(false)
+          expect(domain2.dns.mail_server.type).to eq('mx')
+          expect(domain2.dns.mail_server.host).to eq(
+            "#{@subdomain_name}2.#{@domain_name}"
+          )
+          expect(domain2.dns.mail_server.data).to eq('mx.sendgrid.net.')
+          # subdomain_spf
           expect(domain2.dns.subdomain_spf).to be_a(
             SendGrid4r::REST::Whitelabel::Domains::Record
           )
+          expect(domain2.dns.subdomain_spf.valid).to eq(false)
+          expect(domain2.dns.subdomain_spf.type).to eq('txt')
+          expect(domain2.dns.subdomain_spf.host).to eq(
+            "#{@subdomain_name}2.#{@domain_name}"
+          )
+          expect(domain2.dns.subdomain_spf.data).to eq(
+            'v=spf1 include:sendgrid.net ~all'
+          )
+          # dkim
           expect(domain2.dns.dkim).to be_a(
             SendGrid4r::REST::Whitelabel::Domains::Record
+          )
+          expect(domain2.dns.dkim.valid).to eq(false)
+          expect(domain2.dns.dkim.type).to eq('txt')
+          expect(domain2.dns.dkim.host).to eq(
+            "m1._domainkey.#{@domain_name}"
+          )
+          expect(domain2.dns.dkim.data).to start_with(
+            'k=rsa; t=s; p='
+          )
+          domain4 = @client.get_wl_domain(id: @domain4.id)
+          expect(domain4).to be_a(SendGrid4r::REST::Whitelabel::Domains::Domain)
+          expect(domain4.domain).to eq(@domain_name)
+          expect(domain4.subdomain).to eq(@subdomain_name + '4')
+          expect(domain4.username).to eq(@username)
+          expect(domain4.user_id).to be_a(Numeric)
+          expect(domain4.ips).to eq([@ip])
+          expect(domain4.automatic_security).to eq(false)
+          expect(domain4.custom_spf).to eq(true)
+          expect(domain4.default).to eq(false)
+          expect(domain4.legacy).to eq(false)
+          expect(domain4.valid).to eq(false)
+          # mail_server
+          expect(domain4.dns.mail_server).to be_a(
+            SendGrid4r::REST::Whitelabel::Domains::Record
+          )
+          expect(domain4.dns.mail_server.valid).to eq(false)
+          expect(domain4.dns.mail_server.type).to eq('mx')
+          expect(domain4.dns.mail_server.host).to eq(
+            "#{@subdomain_name}4.#{@domain_name}"
+          )
+          expect(domain4.dns.mail_server.data).to eq('mx.sendgrid.net.')
+          # subdomain_spf
+          expect(domain4.dns.subdomain_spf).to be_a(
+            SendGrid4r::REST::Whitelabel::Domains::Record
+          )
+          expect(domain4.dns.subdomain_spf.valid).to eq(false)
+          expect(domain4.dns.subdomain_spf.type).to eq('txt')
+          expect(domain4.dns.subdomain_spf.host).to eq(
+            "#{@subdomain_name}4.#{@domain_name}"
+          )
+          expect(domain4.dns.subdomain_spf.data).to eq(
+            "v=spf1 ip4:#{@ip} -all"
+          )
+          # dkim
+          expect(domain4.dns.dkim).to be_a(
+            SendGrid4r::REST::Whitelabel::Domains::Record
+          )
+          expect(domain4.dns.dkim.valid).to eq(false)
+          expect(domain4.dns.dkim.type).to eq('txt')
+          expect(domain4.dns.dkim.host).to eq(
+            "m1._domainkey.#{@domain_name}"
+          )
+          expect(domain4.dns.dkim.data).to start_with(
+            'k=rsa; t=s; p='
           )
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
@@ -274,11 +379,20 @@ describe SendGrid4r::REST::Whitelabel::Domains do
           expect(result1.validation_results.mail_cname.valid).to be(
             false
           )
+          expect(result1.validation_results.mail_cname.reason).to be_a(
+            String
+          )
           expect(result1.validation_results.dkim1.valid).to be(
             false
           )
+          expect(result1.validation_results.dkim1.reason).to be_a(
+            String
+          )
           expect(result1.validation_results.dkim2.valid).to be(
             false
+          )
+          expect(result1.validation_results.dkim2.reason).to be_a(
+            String
           )
           result2 = @client.validate_wl_domain(id: @domain2.id)
           expect(result2).to be_a(
@@ -288,11 +402,20 @@ describe SendGrid4r::REST::Whitelabel::Domains do
           expect(result2.validation_results.mail_server.valid).to be(
             false
           )
+          expect(result2.validation_results.mail_server.reason).to be_a(
+            String
+          )
           expect(result2.validation_results.subdomain_spf.valid).to be(
             false
           )
+          expect(result2.validation_results.subdomain_spf.reason).to be_a(
+            String
+          )
           expect(result2.validation_results.dkim.valid).to be(
             false
+          )
+          expect(result2.validation_results.dkim.reason).to be_a(
+            String
           )
         rescue RestClient::ExceptionWithResponse => e
           puts e.inspect
