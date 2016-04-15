@@ -17,6 +17,8 @@ describe SendGrid4r::Factory::CampaignFactory do
         segment_ids: [110],
         categories: ['spring line'],
         suppression_group_id: 42,
+        custom_unsubscribe_url: 'https://sendgrid.com',
+        ip_pool: 'marketing',
         html_content: '<html><head><title></title></head><body>'\
           '<p>Check out our spring line!</p></body></html>',
         plain_content: 'Check out our spring line!'
@@ -29,6 +31,8 @@ describe SendGrid4r::Factory::CampaignFactory do
       @expect[:segment_ids] = [110]
       @expect[:categories] = ['spring line']
       @expect[:suppression_group_id] = 42
+      @expect[:custom_unsubscribe_url] = 'https://sendgrid.com'
+      @expect[:ip_pool] = 'marketing'
       @expect[:html_content] = '<html><head><title></title></head><body>'\
         '<p>Check out our spring line!</p></body></html>'
       @expect[:plain_content] = 'Check out our spring line!'

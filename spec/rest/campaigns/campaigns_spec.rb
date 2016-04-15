@@ -17,6 +17,7 @@ describe SendGrid4r::REST::Campaigns::Campaigns do
         @last_name1 = 'Last Name1'
         @list_name1 = 'List Name1'
         @group_name1 = 'Group Name1'
+        @pool_name1 = 'pool_test1'
 
         # celan up test env
         # delete campaigns
@@ -50,6 +51,11 @@ describe SendGrid4r::REST::Campaigns::Campaigns do
           next if grp.name != @group_name1
           @client.delete_group(group_id: grp.id)
         end
+        # delete ip pools
+        pools = @client.get_pools
+        pools.each do |pool|
+          @client.delete_pool(name: pool.name) if pool.name == @pool_name1
+        end
         # post a recipient
         recipient1 = {}
         recipient1['email'] = @email1
@@ -61,8 +67,10 @@ describe SendGrid4r::REST::Campaigns::Campaigns do
         @client.post_recipient_to_list(
           list_id: @list1.id, recipient_id: @result.persisted_recipients[0]
         )
-        # add agroup
+        # add a group
         @group1 = @client.post_group(name: @group_name1, description: 'test')
+        # add an ip pool
+        @pool1 = @client.post_pool(name: @pool_name1)
         # add a campaign
         @campaign_factory = SendGrid4r::Factory::CampaignFactory.new
         @params = @campaign_factory.create(
@@ -86,6 +94,28 @@ describe SendGrid4r::REST::Campaigns::Campaigns do
             list_ids: [@list1.id], categories: ['cat1'],
             suppression_group_id: @group1.id, html_content: 'html',
             plain_content: 'plain')
+          campaign2 = @client.post_campaign(params: params)
+          expect(campaign2.title).to eq(@title2)
+          expect(campaign2.subject).to eq(@subject2)
+          expect(campaign2.sender_id).to eq(493)
+          expect(campaign2.list_ids).to eq([@list1.id])
+          expect(campaign2.categories).to eq(['cat1'])
+          expect(campaign2.suppression_group_id).to eq(@group1.id)
+          expect(campaign2.html_content).to eq('html')
+          expect(campaign2.plain_content).to eq('plain')
+        rescue RestClient::ExceptionWithResponse => e
+          puts e.inspect
+          raise e
+        end
+      end
+
+      it '#post_campaign with custom_unsubscribe_url' do
+        begin
+          params = @campaign_factory.create(
+            title: @title2, subject: @subject2, sender_id: 493,
+            list_ids: [@list1.id], categories: ['cat1'],
+            custom_unsubscribe_url: 'https://sendgrid.com',
+            ip_pool: @pool_name1, html_content: 'html', plain_content: 'plain')
           campaign2 = @client.post_campaign(params: params)
           expect(campaign2.title).to eq(@title2)
           expect(campaign2.subject).to eq(@subject2)
@@ -262,6 +292,8 @@ describe SendGrid4r::REST::Campaigns::Campaigns do
             '"spring line"'\
           '],'\
           '"suppression_group_id": 42,'\
+          '"custom_unsubscribe_url": "",'\
+          '"ip_pool": "marketing",'\
           '"html_content": "<html><head><title></title></head><body>'\
             '<p>Check out our spring line!</p></body></html>",'\
           '"plain_content": "Check out our spring line!",'\
@@ -290,6 +322,8 @@ describe SendGrid4r::REST::Campaigns::Campaigns do
                 '"spring line"'\
               '],'\
               '"suppression_group_id": 42,'\
+              '"custom_unsubscribe_url": "",'\
+              '"ip_pool": "marketing",'\
               '"html_content": "<html><head><title></title></head><body>'\
                 '<p>Check out our spring line!</p></body></html>",'\
               '"plain_content": "Check out our spring line!",'\
@@ -311,6 +345,8 @@ describe SendGrid4r::REST::Campaigns::Campaigns do
                 '"winter line"'\
               '],'\
               '"suppression_group_id": 42,'\
+              '"custom_unsubscribe_url": "",'\
+              '"ip_pool": "marketing",'\
               '"html_content": "<html><head><title></title></head><body>'\
                 '<p>Last call for winter clothes!</p></body></html>",'\
               '"plain_content": "Last call for winter clothes!",'\
@@ -418,6 +454,8 @@ describe SendGrid4r::REST::Campaigns::Campaigns do
       expect(actual.segment_ids).to eq([110])
       expect(actual.categories).to eq(['spring line'])
       expect(actual.suppression_group_id).to eq(42)
+      expect(actual.custom_unsubscribe_url).to eq('')
+      expect(actual.ip_pool).to eq('marketing')
       expect(actual.html_content).to eq(
         '<html><head><title></title></head><body>'\
         '<p>Check out our spring line!</p></body></html>')
