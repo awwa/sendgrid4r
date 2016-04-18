@@ -6,7 +6,7 @@ describe SendGrid4r::REST::Campaigns::Campaigns do
     before do
       begin
         Dotenv.load
-        @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
+        @client = SendGrid4r::Client.new(api_key: ENV['KN_API_KEY'])
         @title1 = 'Test Title1'
         @title2 = 'Test Title2'
         @title1_edit = 'Edit Title1'
@@ -74,7 +74,7 @@ describe SendGrid4r::REST::Campaigns::Campaigns do
         # add a campaign
         @campaign_factory = SendGrid4r::Factory::CampaignFactory.new
         @params = @campaign_factory.create(
-          title: @title1, subject: @subject1, sender_id: 493,
+          title: @title1, subject: @subject1, sender_id: 516,
           list_ids: [@list1.id], categories: ['cat1'],
           suppression_group_id: @group1.id,
           html_content: 'html <a href="[unsubscribe]">unsub</a>',
@@ -90,14 +90,14 @@ describe SendGrid4r::REST::Campaigns::Campaigns do
       it '#post_campaign' do
         begin
           params = @campaign_factory.create(
-            title: @title2, subject: @subject2, sender_id: 493,
+            title: @title2, subject: @subject2, sender_id: 516,
             list_ids: [@list1.id], categories: ['cat1'],
             suppression_group_id: @group1.id, html_content: 'html',
             plain_content: 'plain')
           campaign2 = @client.post_campaign(params: params)
           expect(campaign2.title).to eq(@title2)
           expect(campaign2.subject).to eq(@subject2)
-          expect(campaign2.sender_id).to eq(493)
+          expect(campaign2.sender_id).to eq(516)
           expect(campaign2.list_ids).to eq([@list1.id])
           expect(campaign2.categories).to eq(['cat1'])
           expect(campaign2.suppression_group_id).to eq(@group1.id)
@@ -112,17 +112,16 @@ describe SendGrid4r::REST::Campaigns::Campaigns do
       it '#post_campaign with custom_unsubscribe_url' do
         begin
           params = @campaign_factory.create(
-            title: @title2, subject: @subject2, sender_id: 493,
+            title: @title2, subject: @subject2, sender_id: 516,
             list_ids: [@list1.id], categories: ['cat1'],
             custom_unsubscribe_url: 'https://sendgrid.com',
             ip_pool: @pool_name1, html_content: 'html', plain_content: 'plain')
           campaign2 = @client.post_campaign(params: params)
           expect(campaign2.title).to eq(@title2)
           expect(campaign2.subject).to eq(@subject2)
-          expect(campaign2.sender_id).to eq(493)
+          expect(campaign2.sender_id).to eq(516)
           expect(campaign2.list_ids).to eq([@list1.id])
           expect(campaign2.categories).to eq(['cat1'])
-          expect(campaign2.suppression_group_id).to eq(@group1.id)
           expect(campaign2.html_content).to eq('html')
           expect(campaign2.plain_content).to eq('plain')
         rescue RestClient::ExceptionWithResponse => e
