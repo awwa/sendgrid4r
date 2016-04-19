@@ -11,8 +11,8 @@ module SendGrid4r
 
         Campaign = Struct.new(
           :id, :title, :subject, :sender_id, :list_ids, :segment_ids,
-          :categories, :suppression_group_id, :html_content,
-          :plain_content, :send_at, :status
+          :categories, :suppression_group_id, :custom_unsubscribe_url,
+          :ip_pool, :html_content, :plain_content, :send_at, :status
         )
 
         Campaigns = Struct.new(:result)
@@ -23,8 +23,9 @@ module SendGrid4r
           Campaign.new(
             resp['id'], resp['title'], resp['subject'], resp['sender_id'],
             resp['list_ids'], resp['segment_ids'], resp['categories'],
-            resp['suppression_group_id'], resp['html_content'],
-            resp['plain_content'], send_at, resp['status']
+            resp['suppression_group_id'], resp['custom_unsubscribe_url'],
+            resp['ip_pool'], resp['html_content'], resp['plain_content'],
+            send_at, resp['status']
           )
         end
 
