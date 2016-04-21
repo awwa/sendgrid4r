@@ -313,7 +313,7 @@ describe SendGrid4r::Client do
 
     describe 'VERSION' do
       it 'returns VERSION value' do
-        expect(SendGrid4r::VERSION).to eq('1.8.0')
+        expect(SendGrid4r::VERSION).to eq('1.8.1')
       end
     end
   end
