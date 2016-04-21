@@ -39,7 +39,8 @@ module SendGrid4r
         return JSON.parse(body) unless body.nil? || body.length < 2
         body
       rescue RestClient::TooManyRequests => e
-        sleep e.response.headers[:x_ratelimit_reset].to_i - Time.now.to_i
+        duration = e.response.headers[:x_ratelimit_remaining].to_i
+        sleep duration if duration > 0
         retry
       end
 
