@@ -9,8 +9,10 @@ describe SendGrid4r::REST::Contacts::Recipients do
         @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
         @email1 = 'jones@example.com'
         @email2 = 'miller@example.com'
+        @email3 = 'jones...example.com'
         @last_name1 = 'Jones'
         @last_name2 = 'Miller'
+        @last_name3 = 'Invalid'
         @pet1 = 'Fluffy'
         @pet2 = 'FrouFrou'
 
@@ -41,6 +43,28 @@ describe SendGrid4r::REST::Contacts::Recipients do
           expect(result.error_count).to eq(0)
           expect(result.error_indices).to eq([])
           expect(result.new_count).to eq(1)
+          expect(result.persisted_recipients).to be_a(Array)
+          expect(result.updated_count).to eq(0)
+        rescue RestClient::ExceptionWithResponse => e
+          puts e.inspect
+          raise e
+        end
+      end
+
+      it '#post_recipients with error' do
+        begin
+          params = {}
+          params['email'] = @email3
+          params['last_name'] = @last_name3
+          result = @client.post_recipients(params: [params])
+          expect(result.error_count).to eq(1)
+          expect(result.error_indices).to eq([0])
+          expect(result.errors).to be_a(Array)
+          result.errors.each do |error|
+            expect(error.error_indices).to be_a(Array)
+            expect(error.message).to be_a(String)
+          end
+          expect(result.new_count).to eq(0)
           expect(result.persisted_recipients).to be_a(Array)
           expect(result.updated_count).to eq(0)
         rescue RestClient::ExceptionWithResponse => e
@@ -240,15 +264,24 @@ describe SendGrid4r::REST::Contacts::Recipients do
     let(:result) do
       JSON.parse(
         '{'\
-          '"error_count": 0,'\
+          '"error_count": 1,'\
           '"error_indices": ['\
+            '2'\
           '],'\
           '"new_count": 2,'\
           '"persisted_recipients": ['\
-            '"jones@example.com",'\
-            '"miller@example.com"'\
+            '"YUBh",'\
+            '"bWlsbGVyQG1pbGxlci50ZXN0"'\
           '],'\
-          '"updated_count": 0'\
+          '"updated_count": 0,'\
+          '"errors": ['\
+            '{'\
+              '"message": "Invalid email.",'\
+              '"error_indices": ['\
+                '2'\
+              ']'\
+            '}'\
+          ']'\
         '}'
       )
     end
@@ -338,6 +371,26 @@ describe SendGrid4r::REST::Contacts::Recipients do
           recipient
         ).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
       end
+    end
+
+    it 'creates result instance' do
+      actual = SendGrid4r::REST::Contacts::Recipients.create_result(
+        result
+      )
+      expect(actual.error_count).to eq(1)
+      expect(actual.error_indices).to be_a(Array)
+      expect(actual.error_indices[0]).to eq(2)
+      expect(actual.new_count).to eq(2)
+      expect(actual.persisted_recipients).to be_a(Array)
+      expect(actual.persisted_recipients[0]).to eq('YUBh')
+      expect(actual.persisted_recipients[1]).to eq(
+        'bWlsbGVyQG1pbGxlci50ZXN0'
+      )
+      expect(actual.updated_count).to eq(0)
+      expect(actual.errors).to be_a(Array)
+      expect(actual.errors[0].message).to eq('Invalid email.')
+      expect(actual.error_indices).to be_a(Array)
+      expect(actual.error_indices[0]).to eq(2)
     end
   end
 end

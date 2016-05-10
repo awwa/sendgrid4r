@@ -123,7 +123,8 @@ module SendGrid4r
           :error_indices,
           :new_count,
           :persisted_recipients,
-          :updated_count
+          :updated_count,
+          :errors
         )
 
         def self.create_result(resp)
@@ -136,12 +137,29 @@ module SendGrid4r
           resp['persisted_recipients'].each do |value|
             persisted_recipients.push(value)
           end
+          errors = []
+          resp['errors'].each do |error|
+            errors.push(
+              SendGrid4r::REST::Contacts::Recipients.create_error(error)
+            )
+          end unless resp['errors'].nil?
           Result.new(
-            resp['error_count'],
+            resp['error_count'], error_indices, resp['new_count'],
+            persisted_recipients, resp['updated_count'], errors
+          )
+        end
+
+        Error = Struct.new(:error_indices, :message)
+
+        def self.create_error(resp)
+          return resp if resp.nil?
+          error_indices = []
+          resp['error_indices'].each do |index|
+            error_indices.push(index)
+          end
+          Error.new(
             error_indices,
-            resp['new_count'],
-            persisted_recipients,
-            resp['updated_count']
+            resp['message']
           )
         end
       end
