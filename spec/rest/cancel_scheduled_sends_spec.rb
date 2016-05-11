@@ -4,100 +4,65 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe SendGrid4r::REST::CancelScheduledSends do
   describe 'integration test', :it do
     before do
-      begin
-        Dotenv.load
-        @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
-        @scheduled_sends = @client.get_scheduled_sends
-        @scheduled_sends.each do |scheduled_send|
-          @client.delete_scheduled_send(batch_id: scheduled_send.batch_id)
-        end
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-        raise e
+      Dotenv.load
+      @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
+      @scheduled_sends = @client.get_scheduled_sends
+      @scheduled_sends.each do |scheduled_send|
+        @client.delete_scheduled_send(batch_id: scheduled_send.batch_id)
       end
     end
 
     context 'without block call' do
       it '#generate_batch_id' do
-        begin
-          scheduled_send = @client.generate_batch_id
-          expect(scheduled_send).to be_a(
-            SendGrid4r::REST::CancelScheduledSends::ScheduledSend
-          )
-          expect(scheduled_send.batch_id.length).to be > 0
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        scheduled_send = @client.generate_batch_id
+        expect(scheduled_send).to be_a(
+          SendGrid4r::REST::CancelScheduledSends::ScheduledSend
+        )
+        expect(scheduled_send.batch_id.length).to be > 0
       end
 
       it '#validate_batch_id' do
-        begin
-          batch_id = @client.generate_batch_id.batch_id
-          scheduled_send = @client.validate_batch_id(batch_id: batch_id)
-          expect(scheduled_send).to be_a(
-            SendGrid4r::REST::CancelScheduledSends::ScheduledSend
-          )
-          expect(scheduled_send.batch_id).to eq(batch_id)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        batch_id = @client.generate_batch_id.batch_id
+        scheduled_send = @client.validate_batch_id(batch_id: batch_id)
+        expect(scheduled_send).to be_a(
+          SendGrid4r::REST::CancelScheduledSends::ScheduledSend
+        )
+        expect(scheduled_send.batch_id).to eq(batch_id)
       end
 
       it '#post_scheduled_send' do
-        begin
-          batch_id = @client.generate_batch_id.batch_id
-          scheduled_send = @client.post_scheduled_send(
-            batch_id: batch_id, status: 'cancel'
-          )
-          expect(scheduled_send).to be_a(
-            SendGrid4r::REST::CancelScheduledSends::ScheduledSend
-          )
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        batch_id = @client.generate_batch_id.batch_id
+        scheduled_send = @client.post_scheduled_send(
+          batch_id: batch_id, status: 'cancel'
+        )
+        expect(scheduled_send).to be_a(
+          SendGrid4r::REST::CancelScheduledSends::ScheduledSend
+        )
       end
 
       it '#get_scheduled_sends' do
-        begin
-          scheduled_sends = @client.get_scheduled_sends
-          expect(scheduled_sends).to be_a(Array)
-          scheduled_sends.each do |scheduled_send|
-            expect(scheduled_send).to be_a(
-              SendGrid4r::REST::CancelScheduledSends::ScheduledSend
-            )
-          end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
+        scheduled_sends = @client.get_scheduled_sends
+        expect(scheduled_sends).to be_a(Array)
+        scheduled_sends.each do |scheduled_send|
+          expect(scheduled_send).to be_a(
+            SendGrid4r::REST::CancelScheduledSends::ScheduledSend
+          )
         end
       end
 
       it '#patch_scheduled_send' do
-        begin
-          batch_id = @client.generate_batch_id.batch_id
-          expect do
-            @client.patch_scheduled_send(
-              batch_id: batch_id, status: 'pause'
-            )
-          end.to raise_error(RestClient::ResourceNotFound)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        batch_id = @client.generate_batch_id.batch_id
+        expect do
+          @client.patch_scheduled_send(
+            batch_id: batch_id, status: 'pause'
+          )
+        end.to raise_error(RestClient::ResourceNotFound)
       end
 
       it '#delete_scheduled_send' do
-        begin
-          scheduled_sends = @client.get_scheduled_sends
-          scheduled_sends.each do |scheduled_send|
-            @client.delete_scheduled_send(batch_id: scheduled_send.batch_id)
-          end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
+        scheduled_sends = @client.get_scheduled_sends
+        scheduled_sends.each do |scheduled_send|
+          @client.delete_scheduled_send(batch_id: scheduled_send.batch_id)
         end
       end
     end

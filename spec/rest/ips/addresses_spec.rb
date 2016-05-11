@@ -11,15 +11,10 @@ describe SendGrid4r::REST::Ips::Addresses do
     context 'account is free' do
       describe '#get_ip' do
         it 'raise error' do
-          begin
-            expect do
-              @client.get_ip(ip: '10.10.10.10').to raise_error(
-                RestClient::Forbidden
-              )
-            end
-          rescue RestClient::ExceptionWithResponse => e
-            puts e.inspect
-            raise e
+          expect do
+            @client.get_ip(ip: '10.10.10.10').to raise_error(
+              RestClient::Forbidden
+            )
           end
         end
       end
@@ -29,73 +24,48 @@ describe SendGrid4r::REST::Ips::Addresses do
       TEST_POOL = 'test_pool'
 
       before do
-        begin
-          @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
-          # refresh the pool
-          pools = @client.get_pools
-          pools.each do |pool|
-            @client.delete_pool(name: TEST_POOL) if pool.name == TEST_POOL
-          end
-          @client.post_pool(name: TEST_POOL)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
+        @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
+        # refresh the pool
+        pools = @client.get_pools
+        pools.each do |pool|
+          @client.delete_pool(name: TEST_POOL) if pool.name == TEST_POOL
         end
+        @client.post_pool(name: TEST_POOL)
       end
 
       context 'without block call' do
         it '#get_ips' do
-          begin
-            ips = @client.get_ips
-            expect(ips.length).to be > 0
-            ip = ips[0]
-            expect(ip).to be_a(SendGrid4r::REST::Ips::Addresses::Address)
-            expect(ip.ip).to be_a(String)
-            expect(ip.pools).to be_a(Array)
-            expect(ip.warmup ? true : true).to eq(true)
-          rescue RestClient::ExceptionWithResponse => e
-            puts e.inspect
-            raise e
-          end
+          ips = @client.get_ips
+          expect(ips.length).to be > 0
+          ip = ips[0]
+          expect(ip).to be_a(SendGrid4r::REST::Ips::Addresses::Address)
+          expect(ip.ip).to be_a(String)
+          expect(ip.pools).to be_a(Array)
+          expect(ip.warmup ? true : true).to eq(true)
         end
 
         it '#get_ips_assigned' do
-          begin
-            ips = @client.get_ips_assigned
-            expect(ips.length).to be > 0
-            expect(ips[0]).to be_a(SendGrid4r::REST::Ips::Addresses::Address)
-          rescue RestClient::ExceptionWithResponse => e
-            puts e.inspect
-            raise e
-          end
+          ips = @client.get_ips_assigned
+          expect(ips.length).to be > 0
+          expect(ips[0]).to be_a(SendGrid4r::REST::Ips::Addresses::Address)
         end
 
         it '#get_ip' do
-          begin
-            ips = @client.get_ips_assigned
-            expect(
-              @client.get_ip(ip: ips[0].ip)
-            ).to be_a(SendGrid4r::REST::Ips::Addresses::Address)
-          rescue RestClient::ExceptionWithResponse => e
-            puts e.inspect
-            raise e
-          end
+          ips = @client.get_ips_assigned
+          expect(
+            @client.get_ip(ip: ips[0].ip)
+          ).to be_a(SendGrid4r::REST::Ips::Addresses::Address)
         end
 
         it '#post_ip_to_pool' do
-          begin
-            ips = @client.get_ips_assigned
-            actual = @client.post_ip_to_pool(
-              pool_name: TEST_POOL, ip: ips[0].ip
-            )
-            expect(actual.ip).to eq(ips[0].ip)
-            expect(actual.pools).to include(TEST_POOL)
-            expect(actual.pools).to be_a(Array)
-            @client.delete_ip_from_pool(pool_name: TEST_POOL, ip: ips[0].ip)
-          rescue RestClient::ExceptionWithResponse => e
-            puts e.inspect
-            raise e
-          end
+          ips = @client.get_ips_assigned
+          actual = @client.post_ip_to_pool(
+            pool_name: TEST_POOL, ip: ips[0].ip
+          )
+          expect(actual.ip).to eq(ips[0].ip)
+          expect(actual.pools).to include(TEST_POOL)
+          expect(actual.pools).to be_a(Array)
+          @client.delete_ip_from_pool(pool_name: TEST_POOL, ip: ips[0].ip)
         end
       end
     end

@@ -4,100 +4,70 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 describe SendGrid4r::REST::EmailActivity do
   describe 'integration test', :it do
     before do
-      begin
-        Dotenv.load
-        @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-        raise e
-      end
+      Dotenv.load
+      @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
     end
 
     context 'without block call' do
       it '#get_email_activities' do
-        begin
-          activities = @client.get_email_activities
-          activities.each do |activity|
-            expect(activity).to be_a(SendGrid4r::REST::EmailActivity::Activity)
-          end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
+        activities = @client.get_email_activities
+        activities.each do |activity|
+          expect(activity).to be_a(SendGrid4r::REST::EmailActivity::Activity)
         end
       end
 
       it '#get_email_activities with email' do
-        begin
-          activities = @client.get_email_activities(email: 'test@test.com')
-          activities.each do |activity|
-            expect(activity).to be_a(SendGrid4r::REST::EmailActivity::Activity)
-          end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
+        activities = @client.get_email_activities(email: 'test@test.com')
+        activities.each do |activity|
+          expect(activity).to be_a(SendGrid4r::REST::EmailActivity::Activity)
         end
       end
 
       it '#get_email_activities with events' do
-        begin
-          activities = @client.get_email_activities(
-            events: [SendGrid4r::Client::Event::DROPS]
-          )
-          expect(activities.length).to be >= 0
-          activities.each do |activity|
-            expect(activity).to be_a(SendGrid4r::REST::EmailActivity::Activity)
-            expect(activity.event).to eq('drop')
-          end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
+        activities = @client.get_email_activities(
+          events: [SendGrid4r::Client::Event::DROPS]
+        )
+        expect(activities.length).to be >= 0
+        activities.each do |activity|
+          expect(activity).to be_a(SendGrid4r::REST::EmailActivity::Activity)
+          expect(activity.event).to eq('drop')
         end
       end
 
       it '#get_email_activities with multiple events' do
-        begin
-          events = []
-          events.push(SendGrid4r::Client::Event::DROPS)
-          events.push(SendGrid4r::Client::Event::DELIVERED)
-          events.push(SendGrid4r::Client::Event::BOUNCES)
-          events.push(SendGrid4r::Client::Event::CLICKS)
-          events.push(SendGrid4r::Client::Event::DEFERRED)
-          events.push(SendGrid4r::Client::Event::DELIVERED)
-          events.push(SendGrid4r::Client::Event::DROPS)
-          events.push(SendGrid4r::Client::Event::GROUP_UNSUBSCRIBE)
-          events.push(SendGrid4r::Client::Event::GROUP_RESUBSCRIBE)
-          events.push(SendGrid4r::Client::Event::OPENS)
-          events.push(SendGrid4r::Client::Event::PROCESSED)
-          events.push(SendGrid4r::Client::Event::PARSEAPI)
-          events.push(SendGrid4r::Client::Event::SPAM_REPORTS)
-          events.push(SendGrid4r::Client::Event::UNSUBSCRIBE)
-          activities = @client.get_email_activities(events: events)
-          expect(activities.length).to be >= 0
-          activities.each do |activity|
-            expect(activity).to be_a(SendGrid4r::REST::EmailActivity::Activity)
-          end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
+        events = []
+        events.push(SendGrid4r::Client::Event::DROPS)
+        events.push(SendGrid4r::Client::Event::DELIVERED)
+        events.push(SendGrid4r::Client::Event::BOUNCES)
+        events.push(SendGrid4r::Client::Event::CLICKS)
+        events.push(SendGrid4r::Client::Event::DEFERRED)
+        events.push(SendGrid4r::Client::Event::DELIVERED)
+        events.push(SendGrid4r::Client::Event::DROPS)
+        events.push(SendGrid4r::Client::Event::GROUP_UNSUBSCRIBE)
+        events.push(SendGrid4r::Client::Event::GROUP_RESUBSCRIBE)
+        events.push(SendGrid4r::Client::Event::OPENS)
+        events.push(SendGrid4r::Client::Event::PROCESSED)
+        events.push(SendGrid4r::Client::Event::PARSEAPI)
+        events.push(SendGrid4r::Client::Event::SPAM_REPORTS)
+        events.push(SendGrid4r::Client::Event::UNSUBSCRIBE)
+        activities = @client.get_email_activities(events: events)
+        expect(activities.length).to be >= 0
+        activities.each do |activity|
+          expect(activity).to be_a(SendGrid4r::REST::EmailActivity::Activity)
         end
       end
 
       it '#get_email_activities with start_time and end_time' do
-        begin
-          pending('unknown field')
-          start_time = Time.local(2015, 5, 20, 12, 23, 45)
-          end_time = Time.local(2015, 5, 23, 12, 23, 45)
-          activities = @client.get_email_activities(
-            start_time: start_time, end_time: end_time
-          )
-          expect(activities.length).to be >= 0
-          activities.each do |activity|
-            expect(activity).to be_a(SendGrid4r::REST::EmailActivity::Activity)
-            puts activity.inspect
-          end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
+        pending('unknown field')
+        start_time = Time.local(2015, 5, 20, 12, 23, 45)
+        end_time = Time.local(2015, 5, 23, 12, 23, 45)
+        activities = @client.get_email_activities(
+          start_time: start_time, end_time: end_time
+        )
+        expect(activities.length).to be >= 0
+        activities.each do |activity|
+          expect(activity).to be_a(SendGrid4r::REST::EmailActivity::Activity)
+          puts activity.inspect
         end
       end
     end

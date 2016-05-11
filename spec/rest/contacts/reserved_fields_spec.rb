@@ -42,23 +42,18 @@ describe SendGrid4r::REST::Contacts::ReservedFields do
 
     context 'without block call' do
       it '#get_reserved_fields' do
-        begin
-          # get the reserved fields
-          fields = @client.get_reserved_fields
-          expect(fields.reserved_fields.length).to eq(8)
-          set = Set.new(fields.reserved_fields)
-          expect(set.include?(@first_name)).to eq(true)
-          expect(set.include?(@last_name)).to eq(true)
-          expect(set.include?(@email)).to eq(true)
-          expect(set.include?(@created_at)).to eq(true)
-          expect(set.include?(@updated_at)).to eq(true)
-          expect(set.include?(@last_emailed)).to eq(true)
-          expect(set.include?(@last_clicked)).to eq(true)
-          expect(set.include?(@last_opened)).to eq(true)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        # get the reserved fields
+        fields = @client.get_reserved_fields
+        expect(fields.reserved_fields.length).to eq(8)
+        set = Set.new(fields.reserved_fields)
+        expect(set.include?(@first_name)).to eq(true)
+        expect(set.include?(@last_name)).to eq(true)
+        expect(set.include?(@email)).to eq(true)
+        expect(set.include?(@created_at)).to eq(true)
+        expect(set.include?(@updated_at)).to eq(true)
+        expect(set.include?(@last_emailed)).to eq(true)
+        expect(set.include?(@last_clicked)).to eq(true)
+        expect(set.include?(@last_opened)).to eq(true)
       end
     end
   end

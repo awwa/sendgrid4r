@@ -4,89 +4,59 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 describe SendGrid4r::REST::Contacts::CustomFields do
   describe 'integration test', :it do
     before do
-      begin
-        Dotenv.load
-        @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
-        @name1 = 'birthday'
-        @type1 = 'text'
-        @name2 = 'born_at'
-        @type2 = 'date'
+      Dotenv.load
+      @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
+      @name1 = 'birthday'
+      @type1 = 'text'
+      @name2 = 'born_at'
+      @type2 = 'date'
 
-        # celan up test env
-        fields = @client.get_custom_fields
-        fields.custom_fields.each do |field|
-          next if field.name != @name1 && field.name != @name2
-          @client.delete_custom_field(custom_field_id: field.id)
-        end
-        # post a custom field
-        @new_field = @client.post_custom_field(name: @name1, type: @type1)
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-        raise e
+      # celan up test env
+      fields = @client.get_custom_fields
+      fields.custom_fields.each do |field|
+        next if field.name != @name1 && field.name != @name2
+        @client.delete_custom_field(custom_field_id: field.id)
       end
+      # post a custom field
+      @new_field = @client.post_custom_field(name: @name1, type: @type1)
     end
 
     context 'without block call' do
       it '#post_custom_field' do
-        begin
-          new_field = @client.post_custom_field(name: @name2, type: @type2)
-          expect(new_field.id).to be_a(Fixnum)
-          expect(new_field.name).to eq(@name2)
-          expect(new_field.type).to eq(@type2)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        new_field = @client.post_custom_field(name: @name2, type: @type2)
+        expect(new_field.id).to be_a(Fixnum)
+        expect(new_field.name).to eq(@name2)
+        expect(new_field.type).to eq(@type2)
       end
 
       it '#post_custom_field for same key' do
-        begin
-          expect do
-            @client.post_custom_field(name: @name1, type: @type1)
-          end.to raise_error(RestClient::BadRequest)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        expect do
+          @client.post_custom_field(name: @name1, type: @type1)
+        end.to raise_error(RestClient::BadRequest)
       end
 
       it '#get_custom_fields' do
-        begin
-          fields = @client.get_custom_fields
-          expect(fields.length).to be >= 1
-          fields.custom_fields.each do |field|
-            next if field.name != @name1
-            expect(field.id).to eq(@new_field.id)
-            expect(field.name).to eq(@new_field.name)
-            expect(field.type).to eq(@new_field.type)
-          end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
+        fields = @client.get_custom_fields
+        expect(fields.length).to be >= 1
+        fields.custom_fields.each do |field|
+          next if field.name != @name1
+          expect(field.id).to eq(@new_field.id)
+          expect(field.name).to eq(@new_field.name)
+          expect(field.type).to eq(@new_field.type)
         end
       end
 
       it '#get_custom_field' do
-        begin
-          actual_field = @client.get_custom_field(
-            custom_field_id: @new_field.id
-          )
-          expect(actual_field.id).to eq(@new_field.id)
-          expect(actual_field.name).to eq(@new_field.name)
-          expect(actual_field.type).to eq(@new_field.type)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        actual_field = @client.get_custom_field(
+          custom_field_id: @new_field.id
+        )
+        expect(actual_field.id).to eq(@new_field.id)
+        expect(actual_field.name).to eq(@new_field.name)
+        expect(actual_field.type).to eq(@new_field.type)
       end
 
       it '#delete_custom_field' do
-        begin
-          @client.delete_custom_field(custom_field_id: @new_field.id)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        @client.delete_custom_field(custom_field_id: @new_field.id)
       end
     end
   end

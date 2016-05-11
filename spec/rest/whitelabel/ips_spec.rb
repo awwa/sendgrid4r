@@ -4,112 +4,82 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 describe SendGrid4r::REST::Whitelabel::Ips do
   describe 'integration test', :it do
     before do
-      begin
-        Dotenv.load
-        @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
-        @subdomain_name = ENV['SUBDOMAIN_IP']
-        @domain_name = ENV['DOMAIN']
-        @username = ENV['USERNAME']
-        @ip = ENV['IP']
+      Dotenv.load
+      @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
+      @subdomain_name = ENV['SUBDOMAIN_IP']
+      @domain_name = ENV['DOMAIN']
+      @username = ENV['USERNAME']
+      @ip = ENV['IP']
 
-        # celan up test env(lists)
-        ips = @client.get_wl_ips
-        ips.each do |ip|
-          @client.delete_wl_ip(id: ip.id)
-        end
-
-        @ipw = @client.post_wl_ip(
-          ip: @ip, subdomain: @subdomain_name, domain: @domain_name
-        )
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-        raise e
+      # celan up test env(lists)
+      ips = @client.get_wl_ips
+      ips.each do |ip|
+        @client.delete_wl_ip(id: ip.id)
       end
+
+      @ipw = @client.post_wl_ip(
+        ip: @ip, subdomain: @subdomain_name, domain: @domain_name
+      )
     end
 
     context 'without block call' do
       it '#get_wl_ips' do
-        begin
-          ips = @client.get_wl_ips
-          expect(ips).to be_a(Array)
-          ips.each do |ip|
-            expect(ip).to be_a(SendGrid4r::REST::Whitelabel::Ips::Ip)
-          end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
+        ips = @client.get_wl_ips
+        expect(ips).to be_a(Array)
+        ips.each do |ip|
+          expect(ip).to be_a(SendGrid4r::REST::Whitelabel::Ips::Ip)
         end
       end
 
       it '#post_wl_ip' do
-        begin
-          expect(@ipw).to be_a(SendGrid4r::REST::Whitelabel::Ips::Ip)
-          expect(@ipw.id).to be_a(Numeric)
-          expect(@ipw.ip).to eq(@ip)
-          expect(@ipw.rdns).to be_a(String)
-          expect(@ipw.users).to be_a(Array)
-          expect(@ipw.subdomain).to eq(@subdomain_name)
-          expect(@ipw.domain).to eq(@domain_name)
-          expect(@ipw.valid).to eq(false)
-          expect(@ipw.legacy).to eq(false)
-          expect(@ipw.a_record).to be_a(
-            SendGrid4r::REST::Whitelabel::Ips::ARecord
-          )
-          expect(@ipw.a_record.valid).to eq(false)
-          expect(@ipw.a_record.type).to eq('a')
-          expect(@ipw.a_record.host).to be_a(String)
-          expect(@ipw.a_record.data).to eq(@ip)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        expect(@ipw).to be_a(SendGrid4r::REST::Whitelabel::Ips::Ip)
+        expect(@ipw.id).to be_a(Numeric)
+        expect(@ipw.ip).to eq(@ip)
+        expect(@ipw.rdns).to be_a(String)
+        expect(@ipw.users).to be_a(Array)
+        expect(@ipw.subdomain).to eq(@subdomain_name)
+        expect(@ipw.domain).to eq(@domain_name)
+        expect(@ipw.valid).to eq(false)
+        expect(@ipw.legacy).to eq(false)
+        expect(@ipw.a_record).to be_a(
+          SendGrid4r::REST::Whitelabel::Ips::ARecord
+        )
+        expect(@ipw.a_record.valid).to eq(false)
+        expect(@ipw.a_record.type).to eq('a')
+        expect(@ipw.a_record.host).to be_a(String)
+        expect(@ipw.a_record.data).to eq(@ip)
       end
 
       it '#get_wl_ip' do
-        begin
-          ip = @client.get_wl_ip(id: @ipw.id)
-          expect(ip).to be_a(SendGrid4r::REST::Whitelabel::Ips::Ip)
-          expect(ip.ip).to eq(@ip)
-          expect(ip.users).to be_a(Array)
-          expect(ip.subdomain).to eq(@subdomain_name)
-          expect(ip.domain).to eq(@domain_name)
-          expect(ip.valid).to eq(false)
-          expect(ip.legacy).to eq(false)
-          expect(ip.a_record).to be_a(
-            SendGrid4r::REST::Whitelabel::Ips::ARecord
-          )
-          expect(ip.a_record.valid).to eq(false)
-          expect(ip.a_record.type).to eq('a')
-          expect(ip.a_record.host).to be_a(String)
-          expect(ip.a_record.data).to eq(@ip)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        ip = @client.get_wl_ip(id: @ipw.id)
+        expect(ip).to be_a(SendGrid4r::REST::Whitelabel::Ips::Ip)
+        expect(ip.ip).to eq(@ip)
+        expect(ip.users).to be_a(Array)
+        expect(ip.subdomain).to eq(@subdomain_name)
+        expect(ip.domain).to eq(@domain_name)
+        expect(ip.valid).to eq(false)
+        expect(ip.legacy).to eq(false)
+        expect(ip.a_record).to be_a(
+          SendGrid4r::REST::Whitelabel::Ips::ARecord
+        )
+        expect(ip.a_record.valid).to eq(false)
+        expect(ip.a_record.type).to eq('a')
+        expect(ip.a_record.host).to be_a(String)
+        expect(ip.a_record.data).to eq(@ip)
       end
 
       it '#delete_wl_ip' do
-        begin
-          @client.delete_wl_ip(id: @ipw.id)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        @client.delete_wl_ip(id: @ipw.id)
       end
 
       it '#validate_wl_ip' do
-        begin
-          result = @client.validate_wl_ip(id: @ipw.id)
-          expect(result).to be_a(
-            SendGrid4r::REST::Whitelabel::Ips::Result
-          )
-          expect(result.valid).to be(false)
-          expect(result.validation_results.a_record.valid).to be(false)
-          expect(result.validation_results.a_record.reason).to be_a(String)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        result = @client.validate_wl_ip(id: @ipw.id)
+        expect(result).to be_a(
+          SendGrid4r::REST::Whitelabel::Ips::Result
+        )
+        expect(result.valid).to be(false)
+        expect(result.validation_results.a_record.valid).to be(false)
+        expect(result.validation_results.a_record.reason).to be_a(String)
       end
     end
   end

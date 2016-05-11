@@ -4,46 +4,26 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe SendGrid4r::REST::Users do
   describe 'integration test', :it do
     before do
-      begin
-        Dotenv.load
-        @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-        raise e
-      end
+      Dotenv.load
+      @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
     end
 
     context 'without block call' do
       it '#get_user_profile' do
-        begin
-          profile = @client.get_user_profile
-          expect(profile).to be_a(SendGrid4r::REST::Users::Profile)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        profile = @client.get_user_profile
+        expect(profile).to be_a(SendGrid4r::REST::Users::Profile)
       end
 
       it '#patch_user_profile' do
-        begin
-          params = {}
-          params['city'] = 'nakano'
-          profile = @client.patch_user_profile(params: params)
-          expect(profile).to be_a(SendGrid4r::REST::Users::Profile)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        params = {}
+        params['city'] = 'nakano'
+        profile = @client.patch_user_profile(params: params)
+        expect(profile).to be_a(SendGrid4r::REST::Users::Profile)
       end
 
       it '#get_user_account' do
-        begin
-          account = @client.get_user_account
-          expect(account).to be_a(SendGrid4r::REST::Users::Account)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        account = @client.get_user_account
+        expect(account).to be_a(SendGrid4r::REST::Users::Account)
       end
     end
   end

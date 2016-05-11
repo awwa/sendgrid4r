@@ -10,287 +10,227 @@ describe SendGrid4r::REST::Stats::Advanced do
 
     context 'without block call' do
       it '#get_geo_stats with mandatory params' do
-        begin
-          top_stats = @client.get_geo_stats(start_date: '2015-01-01')
-          expect(top_stats).to be_a(Array)
-          top_stats.each do |top_stat|
-            expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
-            expect(top_stat.date).to be_a(String)
-            expect(top_stat.stats).to be_a(Array)
-            top_stat.stats.each do |stat|
-              expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
-              expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
-              expect(stat.metrics.clicks.nil?).to be(false)
-              expect(stat.metrics.opens.nil?).to be(false)
-              expect(stat.metrics.unique_clicks.nil?).to be(false)
-              expect(stat.metrics.unique_opens.nil?).to be(false)
-              expect(stat.name).to be_a(String)
-              expect(stat.type).to eq('country')
-            end
+        top_stats = @client.get_geo_stats(start_date: '2015-01-01')
+        expect(top_stats).to be_a(Array)
+        top_stats.each do |top_stat|
+          expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
+          expect(top_stat.date).to be_a(String)
+          expect(top_stat.stats).to be_a(Array)
+          top_stat.stats.each do |stat|
+            expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
+            expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
+            expect(stat.metrics.clicks.nil?).to be(false)
+            expect(stat.metrics.opens.nil?).to be(false)
+            expect(stat.metrics.unique_clicks.nil?).to be(false)
+            expect(stat.metrics.unique_opens.nil?).to be(false)
+            expect(stat.name).to be_a(String)
+            expect(stat.type).to eq('country')
           end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
         end
       end
 
       it '#get_geo_stats with all params' do
-        begin
-          top_stats = @client.get_geo_stats(
-            start_date: '2015-01-01',
-            end_date: '2015-01-02',
-            aggregated_by: SendGrid4r::REST::Stats::AggregatedBy::WEEK,
-            country: 'US'
-          )
-          expect(top_stats).to be_a(Array)
-          top_stats.each do |top_stat|
-            expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
-            expect(top_stat.date).to be_a(String)
-            expect(top_stat.stats).to be_a(Array)
-            top_stat.stats.each do |stat|
-              expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
-              expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
-            end
+        top_stats = @client.get_geo_stats(
+          start_date: '2015-01-01',
+          end_date: '2015-01-02',
+          aggregated_by: SendGrid4r::REST::Stats::AggregatedBy::WEEK,
+          country: 'US'
+        )
+        expect(top_stats).to be_a(Array)
+        top_stats.each do |top_stat|
+          expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
+          expect(top_stat.date).to be_a(String)
+          expect(top_stat.stats).to be_a(Array)
+          top_stat.stats.each do |stat|
+            expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
+            expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
           end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
         end
       end
 
       it '#get_devices_stats with mandatory params' do
-        begin
-          top_stats = @client.get_devices_stats(start_date: '2015-01-01')
-          expect(top_stats).to be_a(Array)
-          top_stats.each do |top_stat|
-            expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
-            expect(top_stat.date).to be_a(String)
-            expect(top_stat.stats).to be_a(Array)
-            top_stat.stats.each do |stat|
-              expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
-              expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
-              expect(stat.name).to be_a(String)
-              expect(stat.type).to eq('device')
-            end
+        top_stats = @client.get_devices_stats(start_date: '2015-01-01')
+        expect(top_stats).to be_a(Array)
+        top_stats.each do |top_stat|
+          expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
+          expect(top_stat.date).to be_a(String)
+          expect(top_stat.stats).to be_a(Array)
+          top_stat.stats.each do |stat|
+            expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
+            expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
+            expect(stat.name).to be_a(String)
+            expect(stat.type).to eq('device')
           end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
         end
       end
 
       it '#get_devices_stats with all params' do
-        begin
-          top_stats = @client.get_devices_stats(
-            start_date: '2015-01-01',
-            end_date: '2015-01-02',
-            aggregated_by: SendGrid4r::REST::Stats::AggregatedBy::WEEK
-          )
-          expect(top_stats).to be_a(Array)
-          top_stats.each do |top_stat|
-            expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
-            expect(top_stat.date).to be_a(String)
-            expect(top_stat.stats).to be_a(Array)
-            top_stat.stats.each do |stat|
-              expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
-              expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
-            end
+        top_stats = @client.get_devices_stats(
+          start_date: '2015-01-01',
+          end_date: '2015-01-02',
+          aggregated_by: SendGrid4r::REST::Stats::AggregatedBy::WEEK
+        )
+        expect(top_stats).to be_a(Array)
+        top_stats.each do |top_stat|
+          expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
+          expect(top_stat.date).to be_a(String)
+          expect(top_stat.stats).to be_a(Array)
+          top_stat.stats.each do |stat|
+            expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
+            expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
           end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
         end
       end
 
       it '#get_clients_stats with mandatory params' do
-        begin
-          top_stats = @client.get_clients_stats(start_date: '2015-01-01')
-          expect(top_stats).to be_a(Array)
-          top_stats.each do |top_stat|
-            expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
-            expect(top_stat.date).to be_a(String)
-            expect(top_stat.stats).to be_a(Array)
-            top_stat.stats.each do |stat|
-              expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
-              expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
-              expect(stat.name).to be_a(String)
-              expect(stat.type).to eq('client')
-            end
+        top_stats = @client.get_clients_stats(start_date: '2015-01-01')
+        expect(top_stats).to be_a(Array)
+        top_stats.each do |top_stat|
+          expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
+          expect(top_stat.date).to be_a(String)
+          expect(top_stat.stats).to be_a(Array)
+          top_stat.stats.each do |stat|
+            expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
+            expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
+            expect(stat.name).to be_a(String)
+            expect(stat.type).to eq('client')
           end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
         end
       end
 
       it '#get_clients_stats with all params' do
-        begin
-          top_stats = @client.get_clients_stats(
-            start_date: '2015-01-01',
-            end_date: '2015-01-02',
-            aggregated_by: SendGrid4r::REST::Stats::AggregatedBy::WEEK
-          )
-          expect(top_stats).to be_a(Array)
-          top_stats.each do |top_stat|
-            expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
-            expect(top_stat.date).to be_a(String)
-            expect(top_stat.stats).to be_a(Array)
-            top_stat.stats.each do |stat|
-              expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
-              expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
-            end
+        top_stats = @client.get_clients_stats(
+          start_date: '2015-01-01',
+          end_date: '2015-01-02',
+          aggregated_by: SendGrid4r::REST::Stats::AggregatedBy::WEEK
+        )
+        expect(top_stats).to be_a(Array)
+        top_stats.each do |top_stat|
+          expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
+          expect(top_stat.date).to be_a(String)
+          expect(top_stat.stats).to be_a(Array)
+          top_stat.stats.each do |stat|
+            expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
+            expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
           end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
         end
       end
 
       it '#get_clients_type_stats with mandatory params' do
-        begin
-          top_stats = @client.get_clients_type_stats(
-            start_date: '2015-01-01', client_type: 'webmail'
-          )
-          expect(top_stats).to be_a(Array)
-          top_stats.each do |top_stat|
-            expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
-            expect(top_stat.date).to be_a(String)
-            expect(top_stat.stats).to be_a(Array)
-            top_stat.stats.each do |stat|
-              expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
-              expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
-              expect(stat.name).to be_a(String)
-              expect(stat.type).to eq('client')
-            end
+        top_stats = @client.get_clients_type_stats(
+          start_date: '2015-01-01', client_type: 'webmail'
+        )
+        expect(top_stats).to be_a(Array)
+        top_stats.each do |top_stat|
+          expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
+          expect(top_stat.date).to be_a(String)
+          expect(top_stat.stats).to be_a(Array)
+          top_stat.stats.each do |stat|
+            expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
+            expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
+            expect(stat.name).to be_a(String)
+            expect(stat.type).to eq('client')
           end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
         end
       end
 
       it '#get_clients_stats with all params' do
-        begin
-          top_stats = @client.get_clients_type_stats(
-            start_date: '2015-01-01',
-            end_date: '2015-01-02',
-            aggregated_by: SendGrid4r::REST::Stats::AggregatedBy::WEEK,
-            client_type: 'webmail'
-          )
-          expect(top_stats).to be_a(Array)
-          top_stats.each do |top_stat|
-            expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
-            expect(top_stat.date).to be_a(String)
-            expect(top_stat.stats).to be_a(Array)
-            top_stat.stats.each do |stat|
-              expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
-              expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
-            end
+        top_stats = @client.get_clients_type_stats(
+          start_date: '2015-01-01',
+          end_date: '2015-01-02',
+          aggregated_by: SendGrid4r::REST::Stats::AggregatedBy::WEEK,
+          client_type: 'webmail'
+        )
+        expect(top_stats).to be_a(Array)
+        top_stats.each do |top_stat|
+          expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
+          expect(top_stat.date).to be_a(String)
+          expect(top_stat.stats).to be_a(Array)
+          top_stat.stats.each do |stat|
+            expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
+            expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
           end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
         end
       end
 
       it '#get_mailbox_providers_stats with mandatory params' do
-        begin
-          top_stats =
-            @client.get_mailbox_providers_stats(start_date: '2015-01-01')
-          expect(top_stats).to be_a(Array)
-          top_stats.each do |top_stat|
-            expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
-            expect(top_stat.date).to be_a(String)
-            expect(top_stat.stats).to be_a(Array)
-            top_stat.stats.each do |stat|
-              expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
-              expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
-              expect(stat.metrics.blocks.nil?).to be(false)
-              expect(stat.metrics.bounces.nil?).to be(false)
-              expect(stat.metrics.clicks.nil?).to be(false)
-              expect(stat.metrics.deferred.nil?).to be(false)
-              expect(stat.metrics.delivered.nil?).to be(false)
-              expect(stat.metrics.drops.nil?).to be(false)
-              expect(stat.metrics.opens.nil?).to be(false)
-              expect(stat.metrics.spam_reports.nil?).to be(false)
-              expect(stat.metrics.unique_clicks.nil?).to be(false)
-              expect(stat.metrics.unique_opens.nil?).to be(false)
-              expect(stat.name).to be_a(String)
-              expect(stat.type).to eq('mailbox_provider')
-            end
+        top_stats =
+          @client.get_mailbox_providers_stats(start_date: '2015-01-01')
+        expect(top_stats).to be_a(Array)
+        top_stats.each do |top_stat|
+          expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
+          expect(top_stat.date).to be_a(String)
+          expect(top_stat.stats).to be_a(Array)
+          top_stat.stats.each do |stat|
+            expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
+            expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
+            expect(stat.metrics.blocks.nil?).to be(false)
+            expect(stat.metrics.bounces.nil?).to be(false)
+            expect(stat.metrics.clicks.nil?).to be(false)
+            expect(stat.metrics.deferred.nil?).to be(false)
+            expect(stat.metrics.delivered.nil?).to be(false)
+            expect(stat.metrics.drops.nil?).to be(false)
+            expect(stat.metrics.opens.nil?).to be(false)
+            expect(stat.metrics.spam_reports.nil?).to be(false)
+            expect(stat.metrics.unique_clicks.nil?).to be(false)
+            expect(stat.metrics.unique_opens.nil?).to be(false)
+            expect(stat.name).to be_a(String)
+            expect(stat.type).to eq('mailbox_provider')
           end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
         end
       end
 
       it '#get_mailbox_providers_stats with all params' do
-        begin
-          top_stats = @client.get_mailbox_providers_stats(
-            start_date: '2015-01-01',
-            end_date: '2015-01-02',
-            aggregated_by: SendGrid4r::REST::Stats::AggregatedBy::WEEK,
-            esps: 'sss'
-          )
-          expect(top_stats).to be_a(Array)
-          top_stats.each do |top_stat|
-            expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
-            expect(top_stat.date).to be_a(String)
-            expect(top_stat.stats).to be_a(Array)
-            top_stat.stats.each do |stat|
-              expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
-              expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
-            end
+        top_stats = @client.get_mailbox_providers_stats(
+          start_date: '2015-01-01',
+          end_date: '2015-01-02',
+          aggregated_by: SendGrid4r::REST::Stats::AggregatedBy::WEEK,
+          esps: 'sss'
+        )
+        expect(top_stats).to be_a(Array)
+        top_stats.each do |top_stat|
+          expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
+          expect(top_stat.date).to be_a(String)
+          expect(top_stat.stats).to be_a(Array)
+          top_stat.stats.each do |stat|
+            expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
+            expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
           end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
         end
       end
 
       it '#get_browsers_stats with mandatory params' do
-        begin
-          top_stats = @client.get_browsers_stats(start_date: '2015-01-01')
-          expect(top_stats).to be_a(Array)
-          top_stats.each do |top_stat|
-            expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
-            expect(top_stat.date).to be_a(String)
-            expect(top_stat.stats).to be_a(Array)
-            top_stat.stats.each do |stat|
-              expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
-              expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
-              expect(stat.name).to eq(nil)
-              expect(stat.type).to eq('browser')
-            end
+        top_stats = @client.get_browsers_stats(start_date: '2015-01-01')
+        expect(top_stats).to be_a(Array)
+        top_stats.each do |top_stat|
+          expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
+          expect(top_stat.date).to be_a(String)
+          expect(top_stat.stats).to be_a(Array)
+          top_stat.stats.each do |stat|
+            expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
+            expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
+            expect(stat.name).to eq(nil)
+            expect(stat.type).to eq('browser')
           end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
         end
       end
 
       it '#get_browsers_stats with all params' do
-        begin
-          top_stats = @client.get_browsers_stats(
-            start_date: '2015-01-01',
-            end_date: '2015-01-02',
-            aggregated_by: SendGrid4r::REST::Stats::AggregatedBy::WEEK,
-            browsers: 'chrome'
-          )
-          expect(top_stats).to be_a(Array)
-          top_stats.each do |top_stat|
-            expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
-            expect(top_stat.date).to be_a(String)
-            expect(top_stat.stats).to be_a(Array)
-            top_stat.stats.each do |stat|
-              expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
-              expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
-            end
+        top_stats = @client.get_browsers_stats(
+          start_date: '2015-01-01',
+          end_date: '2015-01-02',
+          aggregated_by: SendGrid4r::REST::Stats::AggregatedBy::WEEK,
+          browsers: 'chrome'
+        )
+        expect(top_stats).to be_a(Array)
+        top_stats.each do |top_stat|
+          expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
+          expect(top_stat.date).to be_a(String)
+          expect(top_stat.stats).to be_a(Array)
+          top_stat.stats.each do |stat|
+            expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
+            expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
           end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
         end
       end
     end

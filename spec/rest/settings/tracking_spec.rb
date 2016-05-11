@@ -10,129 +10,84 @@ describe SendGrid4r::REST::Settings::Tracking do
 
     context 'without block call' do
       it '#get_tracking_settings' do
-        begin
-          actual = @client.get_tracking_settings
-          expect(
-            actual
-          ).to be_a(SendGrid4r::REST::Settings::Results)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        actual = @client.get_tracking_settings
+        expect(
+          actual
+        ).to be_a(SendGrid4r::REST::Settings::Results)
       end
 
       it '#get_settings_click' do
-        begin
-          actual = @client.get_settings_click
-          expect(actual).to be_a(
-            SendGrid4r::REST::Settings::Tracking::Click
-          )
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        actual = @client.get_settings_click
+        expect(actual).to be_a(
+          SendGrid4r::REST::Settings::Tracking::Click
+        )
       end
 
       it '#patch_settings_click' do
-        begin
-          # get original settings
-          actual = @client.get_settings_click
-          # patch the value
-          actual.enabled = false
-          edit = @client.patch_settings_click(params: actual)
-          expect(edit.enabled).to eq(false)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        # get original settings
+        actual = @client.get_settings_click
+        # patch the value
+        actual.enabled = false
+        edit = @client.patch_settings_click(params: actual)
+        expect(edit.enabled).to eq(false)
       end
 
       it '#get_settings_google_analytics' do
-        begin
-          actual = @client.get_settings_google_analytics
-          expect(actual).to be_a(
-            SendGrid4r::REST::Settings::Tracking::GoogleAnalytics
-          )
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        actual = @client.get_settings_google_analytics
+        expect(actual).to be_a(
+          SendGrid4r::REST::Settings::Tracking::GoogleAnalytics
+        )
       end
 
       it '#patch_settings_google_analytics' do
-        begin
-          # get original settings
-          actual = @client.get_settings_google_analytics
-          # patch the value
-          actual.enabled = false
-          actual.utm_source = 'a'
-          actual.utm_medium = 'b'
-          actual.utm_term = 'c'
-          actual.utm_content = 'd'
-          actual.utm_campaign = 'e'
-          edit = @client.patch_settings_google_analytics(params: actual)
-          expect(edit.enabled).to eq(false)
-          expect(edit.utm_source).to eq('a')
-          expect(edit.utm_medium).to eq('b')
-          expect(edit.utm_term).to eq('c')
-          expect(edit.utm_content).to eq('d')
-          expect(edit.utm_campaign).to eq('e')
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        # get original settings
+        actual = @client.get_settings_google_analytics
+        # patch the value
+        actual.enabled = false
+        actual.utm_source = 'a'
+        actual.utm_medium = 'b'
+        actual.utm_term = 'c'
+        actual.utm_content = 'd'
+        actual.utm_campaign = 'e'
+        edit = @client.patch_settings_google_analytics(params: actual)
+        expect(edit.enabled).to eq(false)
+        expect(edit.utm_source).to eq('a')
+        expect(edit.utm_medium).to eq('b')
+        expect(edit.utm_term).to eq('c')
+        expect(edit.utm_content).to eq('d')
+        expect(edit.utm_campaign).to eq('e')
       end
 
       it '#get_settings_open' do
-        begin
-          actual = @client.get_settings_open
-          expect(actual).to be_a(
-            SendGrid4r::REST::Settings::Tracking::Open
-          )
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        actual = @client.get_settings_open
+        expect(actual).to be_a(
+          SendGrid4r::REST::Settings::Tracking::Open
+        )
       end
 
       it '#patch_settings_open' do
-        begin
-          # get original settings
-          actual = @client.get_settings_open
-          # patch the value
-          actual.enabled = false
-          edit = @client.patch_settings_open(params: actual)
-          expect(edit.enabled).to eq(false)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        # get original settings
+        actual = @client.get_settings_open
+        # patch the value
+        actual.enabled = false
+        edit = @client.patch_settings_open(params: actual)
+        expect(edit.enabled).to eq(false)
       end
 
       it '#get_settings_subscription' do
-        begin
-          actual = @client.get_settings_subscription
-          expect(actual).to be_a(
-            SendGrid4r::REST::Settings::Tracking::Subscription
-          )
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        actual = @client.get_settings_subscription
+        expect(actual).to be_a(
+          SendGrid4r::REST::Settings::Tracking::Subscription
+        )
       end
 
       it '#patch_settings_subscription' do
-        begin
-          # get original settings
-          actual = @client.get_settings_subscription
-          # patch the value
-          actual.enabled = false
-          edit = @client.patch_settings_subscription(params: actual)
-          expect(edit.enabled).to eq(false)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        # get original settings
+        actual = @client.get_settings_subscription
+        # patch the value
+        actual.enabled = false
+        edit = @client.patch_settings_subscription(params: actual)
+        expect(edit.enabled).to eq(false)
       end
     end
   end

@@ -4,27 +4,17 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 describe SendGrid4r::REST::Webhooks::Parse do
   describe 'integration test', :it do
     before do
-      begin
-        Dotenv.load
-        @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-        raise e
-      end
+      Dotenv.load
+      @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
     end
 
     context 'without block call' do
       it '#get_parse_settings' do
-        begin
-          parse_settings = @client.get_parse_settings
-          expect(parse_settings).to be_a(
-            SendGrid4r::REST::Webhooks::Parse::ParseSettings
-          )
-          expect(parse_settings.result).to be_a(Array)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        parse_settings = @client.get_parse_settings
+        expect(parse_settings).to be_a(
+          SendGrid4r::REST::Webhooks::Parse::ParseSettings
+        )
+        expect(parse_settings.result).to be_a(Array)
       end
     end
   end

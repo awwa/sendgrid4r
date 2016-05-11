@@ -4,85 +4,55 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 describe SendGrid4r::REST::Ips::Pools do
   describe 'integration test', :it do
     before do
-      begin
-        Dotenv.load
-        @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
-        @pool_name1 = 'pool_test1'
-        @pool_name2 = 'pool_test2'
-        @pool_edit1 = 'pool_edit1'
+      Dotenv.load
+      @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
+      @pool_name1 = 'pool_test1'
+      @pool_name2 = 'pool_test2'
+      @pool_edit1 = 'pool_edit1'
 
-        # clean up test env
-        pools = @client.get_pools
-        pools.each do |pool|
-          @client.delete_pool(name: pool.name) if pool.name == @pool_name1
-          @client.delete_pool(name: pool.name) if pool.name == @pool_name2
-          @client.delete_pool(name: pool.name) if pool.name == @pool_edit1
-        end
-        # post a pool
-        @client.post_pool(name: @pool_name1)
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-        raise e
+      # clean up test env
+      pools = @client.get_pools
+      pools.each do |pool|
+        @client.delete_pool(name: pool.name) if pool.name == @pool_name1
+        @client.delete_pool(name: pool.name) if pool.name == @pool_name2
+        @client.delete_pool(name: pool.name) if pool.name == @pool_edit1
       end
+      # post a pool
+      @client.post_pool(name: @pool_name1)
     end
 
     context 'account is silver' do
       context 'without block call' do
         it '#post_pool' do
-          begin
-            new_pool = @client.post_pool(name: @pool_name2)
-            expect(new_pool.name).to eq(@pool_name2)
-          rescue RestClient::ExceptionWithResponse => e
-            puts e.inspect
-            raise e
-          end
+          new_pool = @client.post_pool(name: @pool_name2)
+          expect(new_pool.name).to eq(@pool_name2)
         end
 
         it '#get_pools' do
-          begin
-            pools = @client.get_pools
-            expect(pools.length).to be > 0
-            pools.each do |pool|
-              expect(pool).to be_a(SendGrid4r::REST::Ips::Pools::Pool)
-              expect(pool.name).to be_a(String)
-            end
-          rescue RestClient::ExceptionWithResponse => e
-            puts e.inspect
-            raise e
+          pools = @client.get_pools
+          expect(pools.length).to be > 0
+          pools.each do |pool|
+            expect(pool).to be_a(SendGrid4r::REST::Ips::Pools::Pool)
+            expect(pool.name).to be_a(String)
           end
         end
 
         it '#get_pool' do
-          begin
-            pool = @client.get_pool(name: @pool_name1)
-            expect(pool).to be_a(SendGrid4r::REST::Ips::Pools::Pool)
-            expect(pool.pool_name).to eq(@pool_name1)
-            expect(pool.ips).to be_a(Array)
-          rescue RestClient::ExceptionWithResponse => e
-            puts e.inspect
-            raise e
-          end
+          pool = @client.get_pool(name: @pool_name1)
+          expect(pool).to be_a(SendGrid4r::REST::Ips::Pools::Pool)
+          expect(pool.pool_name).to eq(@pool_name1)
+          expect(pool.ips).to be_a(Array)
         end
 
         it '#put_pool' do
-          begin
-            edit_pool = @client.put_pool(
-              name: @pool_name1, new_name: @pool_edit1
-            )
-            expect(edit_pool.name).to eq(@pool_edit1)
-          rescue RestClient::ExceptionWithResponse => e
-            puts e.inspect
-            raise e
-          end
+          edit_pool = @client.put_pool(
+            name: @pool_name1, new_name: @pool_edit1
+          )
+          expect(edit_pool.name).to eq(@pool_edit1)
         end
 
         it '#delete_pool' do
-          begin
-            @client.delete_pool(name: @pool_name1)
-          rescue RestClient::ExceptionWithResponse => e
-            puts e.inspect
-            raise e
-          end
+          @client.delete_pool(name: @pool_name1)
         end
       end
     end

@@ -4,158 +4,103 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe SendGrid4r::REST::Subusers do
   describe 'integration test', :it do
     before do
-      begin
-        Dotenv.load
-        @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
-        @username1 = ENV['SUBUSER1']
-        @username2 = ENV['SUBUSER2']
-        @username3 = ENV['SUBUSER3']
-        @email1 = ENV['MAIL']
-        @password1 = ENV['PASS']
-        @ip = @client.get_ips[0].ip
-        # celan up test env
-        subusers = @client.get_subusers
-        count1 = subusers.count { |subuser| subuser.username == @username1 }
-        @client.delete_subuser(username: @username1) unless count1 == 0
-        count2 = subusers.count { |subuser| subuser.username == @username2 }
-        @client.delete_subuser(username: @username2) unless count2 == 0
-        count3 = subusers.count { |subuser| subuser.username == @username3 }
-        @client.delete_subuser(username: @username3) unless count3 == 0
-        # create a subuser
-        @subuser3 = @client.post_subuser(
-          username: @username3,
-          email: @email1,
-          password: @password1,
-          ips: [@ip]
-        )
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-        raise e
-      end
+      Dotenv.load
+      @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
+      @username1 = ENV['SUBUSER1']
+      @username2 = ENV['SUBUSER2']
+      @username3 = ENV['SUBUSER3']
+      @email1 = ENV['MAIL']
+      @password1 = ENV['PASS']
+      @ip = @client.get_ips[0].ip
+      # celan up test env
+      subusers = @client.get_subusers
+      count1 = subusers.count { |subuser| subuser.username == @username1 }
+      @client.delete_subuser(username: @username1) unless count1 == 0
+      count2 = subusers.count { |subuser| subuser.username == @username2 }
+      @client.delete_subuser(username: @username2) unless count2 == 0
+      count3 = subusers.count { |subuser| subuser.username == @username3 }
+      @client.delete_subuser(username: @username3) unless count3 == 0
+      # create a subuser
+      @subuser3 = @client.post_subuser(
+        username: @username3,
+        email: @email1,
+        password: @password1,
+        ips: [@ip]
+      )
     end
 
     context 'without block call' do
       it '#get_subusers' do
-        begin
-          subusers = @client.get_subusers(limit: 100, offset: 0)
-          expect(subusers).to be_a(Array)
-          subusers.each do |subuser|
-            expect(subuser).to be_a(SendGrid4r::REST::Subusers::Subuser)
-          end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
+        subusers = @client.get_subusers(limit: 100, offset: 0)
+        expect(subusers).to be_a(Array)
+        subusers.each do |subuser|
+          expect(subuser).to be_a(SendGrid4r::REST::Subusers::Subuser)
         end
       end
 
       it '#post_subuser' do
-        begin
-          expect(@subuser3).to be_a(SendGrid4r::REST::Subusers::Subuser)
-          expect(@subuser3.username).to eq(@username3)
-          expect(@subuser3.email).to eq(@email1)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        expect(@subuser3).to be_a(SendGrid4r::REST::Subusers::Subuser)
+        expect(@subuser3.username).to eq(@username3)
+        expect(@subuser3.email).to eq(@email1)
       end
 
       it '#patch_subuser' do
-        begin
-          @client.patch_subuser(username: @username3, disabled: true)
-          @client.patch_subuser(username: @username3, disabled: false)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        @client.patch_subuser(username: @username3, disabled: true)
+        @client.patch_subuser(username: @username3, disabled: false)
       end
 
       it '#delete_subuser' do
-        begin
-          @client.delete_subuser(username: @username3)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        @client.delete_subuser(username: @username3)
       end
 
       it '#get_subuser_monitor' do
-        begin
-          monitor = @client.get_subuser_monitor(
-            username: @username3, email: @email1, frequency: 10
-          )
-          expect(monitor).to be_a(SendGrid4r::REST::Subusers::Monitor)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        monitor = @client.get_subuser_monitor(
+          username: @username3, email: @email1, frequency: 10
+        )
+        expect(monitor).to be_a(SendGrid4r::REST::Subusers::Monitor)
       end
 
       it '#post_subuser_monitor' do
-        begin
-          monitor = @client.post_subuser_monitor(
-            username: @username3, email: @email1, frequency: 10
-          )
-          expect(monitor).to be_a(SendGrid4r::REST::Subusers::Monitor)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        monitor = @client.post_subuser_monitor(
+          username: @username3, email: @email1, frequency: 10
+        )
+        expect(monitor).to be_a(SendGrid4r::REST::Subusers::Monitor)
       end
 
       it '#put_subuser_monitor' do
-        begin
-          @client.post_subuser_monitor(
-            username: @username3, email: @email1, frequency: 10
-          )
-          monitor = @client.put_subuser_monitor(
-            username: @username3, email: @email1, frequency: 10
-          )
-          expect(monitor).to be_a(SendGrid4r::REST::Subusers::Monitor)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        @client.post_subuser_monitor(
+          username: @username3, email: @email1, frequency: 10
+        )
+        monitor = @client.put_subuser_monitor(
+          username: @username3, email: @email1, frequency: 10
+        )
+        expect(monitor).to be_a(SendGrid4r::REST::Subusers::Monitor)
       end
 
       it '#delete_subuser_monitor' do
-        begin
-          @client.post_subuser_monitor(
-            username: @username3, email: @email1, frequency: 10
-          )
-          @client.delete_subuser_monitor(username: @username3)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        @client.post_subuser_monitor(
+          username: @username3, email: @email1, frequency: 10
+        )
+        @client.delete_subuser_monitor(username: @username3)
       end
 
       it '#get_subuser_reputation' do
-        begin
-          params = []
-          params.push(@username3)
-          subusers = @client.get_subuser_reputation(usernames: params)
-          expect(subusers).to be_a(Array)
-          subusers.each do |subuser|
-            expect(subuser).to be_a(SendGrid4r::REST::Subusers::Subuser)
-          end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
+        params = []
+        params.push(@username3)
+        subusers = @client.get_subuser_reputation(usernames: params)
+        expect(subusers).to be_a(Array)
+        subusers.each do |subuser|
+          expect(subuser).to be_a(SendGrid4r::REST::Subusers::Subuser)
         end
       end
 
       it '#put_subuser_assigned_ips' do
-        begin
-          subuser = @client.put_subuser_assigned_ips(
-            username: @username3, ips: [@ip]
-          )
-          expect(subuser.ips).to be_a(Array)
-          subuser.ips.each do |ip|
-            expect(ip).to be_a(String)
-          end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
+        subuser = @client.put_subuser_assigned_ips(
+          username: @username3, ips: [@ip]
+        )
+        expect(subuser.ips).to be_a(Array)
+        subuser.ips.each do |ip|
+          expect(ip).to be_a(String)
         end
       end
     end

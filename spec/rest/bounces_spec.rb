@@ -4,71 +4,41 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe SendGrid4r::REST::Bounces do
   describe 'integration test', :it do
     before do
-      begin
-        Dotenv.load
-        @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
-        @emails = ['a1@bounce.com', 'a2@bounce.com', 'a3@bounce.com']
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-        raise e
-      end
+      Dotenv.load
+      @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
+      @emails = ['a1@bounce.com', 'a2@bounce.com', 'a3@bounce.com']
     end
 
     context 'without block call' do
       it '#get_bounces' do
-        begin
-          start_time = Time.now - 60 * 60 * 24 * 365
-          end_time = Time.now
-          bounces = @client.get_bounces(
-            start_time: start_time, end_time: end_time
-          )
-          expect(bounces).to be_a(Array)
-          bounces.each do |bounce|
-            expect(bounce).to be_a(SendGrid4r::REST::Bounces::Bounce)
-          end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
+        start_time = Time.now - 60 * 60 * 24 * 365
+        end_time = Time.now
+        bounces = @client.get_bounces(
+          start_time: start_time, end_time: end_time
+        )
+        expect(bounces).to be_a(Array)
+        bounces.each do |bounce|
+          expect(bounce).to be_a(SendGrid4r::REST::Bounces::Bounce)
         end
       end
 
       it '#delete_bounces(delete_all: true)' do
-        begin
-          @client.delete_bounces(delete_all: true)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        @client.delete_bounces(delete_all: true)
       end
 
       it '#delete_bounces(emails: [])' do
-        begin
-          @client.delete_bounces(emails: @emails)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        @client.delete_bounces(emails: @emails)
       end
 
       it '#get_bounce' do
-        begin
-          bounce = @client.get_bounce(email: @email)
-          expect(bounce).to be_a(Array)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        bounce = @client.get_bounce(email: @email)
+        expect(bounce).to be_a(Array)
       end
 
       it '#delete_bounce' do
-        begin
-          expect do
-            @client.delete_bounce(email: 'a1@bounce.com')
-          end.to raise_error(RestClient::ResourceNotFound)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        expect do
+          @client.delete_bounce(email: 'a1@bounce.com')
+        end.to raise_error(RestClient::ResourceNotFound)
       end
     end
   end

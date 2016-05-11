@@ -10,45 +10,30 @@ describe SendGrid4r::REST::Settings::Partner do
 
     context 'without block call' do
       it '#get_partner_settings' do
-        begin
-          actual = @client.get_partner_settings
-          expect(
-            actual
-          ).to be_a(SendGrid4r::REST::Settings::Results)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        actual = @client.get_partner_settings
+        expect(
+          actual
+        ).to be_a(SendGrid4r::REST::Settings::Results)
       end
 
       it '#get_settings_new_relic' do
         pending 'invalid json received'
-        begin
-          actual = @client.get_settings_new_relic
-          expect(actual).to be_a(
-            SendGrid4r::REST::Settings::Partner::Partner
-          )
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        actual = @client.get_settings_new_relic
+        expect(actual).to be_a(
+          SendGrid4r::REST::Settings::Partner::Partner
+        )
       end
 
       it '#patch_settings_new_relic' do
         pending 'invalid json received'
-        begin
-          # get original settings
-          actual = @client.get_settings_new_relic
-          # patch the value
-          actual.enabled = false
-          actual.license_key = 'new_relic_license_key'
-          edit = @client.patch_settings_new_relic(params: actual)
-          expect(edit.enabled).to eq(false)
-          expect(edit.license_key).to eq('new_relic_license_key')
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        # get original settings
+        actual = @client.get_settings_new_relic
+        # patch the value
+        actual.enabled = false
+        actual.license_key = 'new_relic_license_key'
+        edit = @client.patch_settings_new_relic(params: actual)
+        expect(edit.enabled).to eq(false)
+        expect(edit.license_key).to eq('new_relic_license_key')
       end
     end
   end

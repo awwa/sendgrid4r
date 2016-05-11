@@ -4,71 +4,41 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe SendGrid4r::REST::Blocks do
   describe 'integration test', :it do
     before do
-      begin
-        Dotenv.load
-        @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
-        @emails = ['a1@block.com', 'a2@block.com', 'a3@block.com']
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-        raise e
-      end
+      Dotenv.load
+      @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
+      @emails = ['a1@block.com', 'a2@block.com', 'a3@block.com']
     end
 
     context 'without block call' do
       it '#get_blocks' do
-        begin
-          start_time = Time.now - 60 * 60 * 24 * 365
-          end_time = Time.now
-          blocks = @client.get_blocks(
-            start_time: start_time, end_time: end_time
-          )
-          expect(blocks).to be_a(Array)
-          blocks.each do |block|
-            expect(block).to be_a(SendGrid4r::REST::Blocks::Block)
-          end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
+        start_time = Time.now - 60 * 60 * 24 * 365
+        end_time = Time.now
+        blocks = @client.get_blocks(
+          start_time: start_time, end_time: end_time
+        )
+        expect(blocks).to be_a(Array)
+        blocks.each do |block|
+          expect(block).to be_a(SendGrid4r::REST::Blocks::Block)
         end
       end
 
       it '#delete_blocks(delete_all: true)' do
-        begin
-          @client.delete_blocks(delete_all: true)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        @client.delete_blocks(delete_all: true)
       end
 
       it '#delete_blocks(emails: [])' do
-        begin
-          @client.delete_blocks(emails: @emails)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        @client.delete_blocks(emails: @emails)
       end
 
       it '#get_block' do
-        begin
-          block = @client.get_block(email: @email)
-          expect(block).to be_a(Array)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        block = @client.get_block(email: @email)
+        expect(block).to be_a(Array)
       end
 
       it '#delete_block' do
-        begin
-          expect do
-            @client.delete_block(email: 'a1@block.com')
-          end.to raise_error(RestClient::ResourceNotFound)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        expect do
+          @client.delete_block(email: 'a1@block.com')
+        end.to raise_error(RestClient::ResourceNotFound)
       end
     end
   end

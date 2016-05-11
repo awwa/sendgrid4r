@@ -10,31 +10,21 @@ describe SendGrid4r::REST::Settings::EnforcedTls do
 
     context 'without block call' do
       it '#get_enforced_tls' do
-        begin
-          actual = @client.get_enforced_tls
-          expect(
-            actual
-          ).to be_a(SendGrid4r::REST::Settings::EnforcedTls::EnforcedTls)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        actual = @client.get_enforced_tls
+        expect(
+          actual
+        ).to be_a(SendGrid4r::REST::Settings::EnforcedTls::EnforcedTls)
       end
 
       it '#patch_enforced_tls' do
-        begin
-          # get original enforced_tls settings
-          actual = @client.get_enforced_tls
-          # patch both value
-          actual.require_tls = false
-          actual.require_valid_cert = false
-          edit = @client.patch_enforced_tls(params: actual)
-          expect(actual.require_tls).to eq(edit.require_tls)
-          expect(actual.require_valid_cert).to eq(edit.require_valid_cert)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        # get original enforced_tls settings
+        actual = @client.get_enforced_tls
+        # patch both value
+        actual.require_tls = false
+        actual.require_valid_cert = false
+        edit = @client.patch_enforced_tls(params: actual)
+        expect(actual.require_tls).to eq(edit.require_tls)
+        expect(actual.require_valid_cert).to eq(edit.require_valid_cert)
       end
     end
   end

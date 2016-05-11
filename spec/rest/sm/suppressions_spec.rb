@@ -4,96 +4,71 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 describe SendGrid4r::REST::Sm::Suppressions do
   describe 'integration test', :it do
     before do
-      begin
-        Dotenv.load
-        @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
-        @email1 = 'test1@test.com'
-        @email2 = 'test2@test.com'
-        @email3 = 'test3@test.com'
-        @group_name = 'suppressions_test'
-        @group_desc = 'group_desc'
+      Dotenv.load
+      @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
+      @email1 = 'test1@test.com'
+      @email2 = 'test2@test.com'
+      @email3 = 'test3@test.com'
+      @group_name = 'suppressions_test'
+      @group_desc = 'group_desc'
 
-        # celan up test env
-        grps = @client.get_groups
-        grps.each do |grp|
-          next if grp.name != @group_name
-          emails = @client.get_suppressed_emails(group_id: grp.id)
-          emails.each do |email|
-            @client.delete_suppressed_email(
-              group_id: grp.id, email_address: email
-            )
-          end
-          @client.delete_group(group_id: grp.id)
+      # celan up test env
+      grps = @client.get_groups
+      grps.each do |grp|
+        next if grp.name != @group_name
+        emails = @client.get_suppressed_emails(group_id: grp.id)
+        emails.each do |email|
+          @client.delete_suppressed_email(
+            group_id: grp.id, email_address: email
+          )
         end
-        # post a group
-        @group = @client.post_group(name: @group_name, description: @group_desc)
-        # post suppressed email
-        @client.post_suppressed_emails(
-          group_id: @group.id, recipient_emails: [@email1]
-        )
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-        raise e
+        @client.delete_group(group_id: grp.id)
       end
+      # post a group
+      @group = @client.post_group(name: @group_name, description: @group_desc)
+      # post suppressed email
+      @client.post_suppressed_emails(
+        group_id: @group.id, recipient_emails: [@email1]
+      )
     end
 
     context 'wthout block call' do
       it '#post_suppressed_emails' do
-        begin
-          emails = @client.post_suppressed_emails(
-            group_id: @group.id, recipient_emails: [@email2, @email3]
-          )
-          expect(emails.recipient_emails.length).to eq(2)
-          expect(emails.recipient_emails[0]).to eq(@email2)
-          expect(emails.recipient_emails[1]).to eq(@email3)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        emails = @client.post_suppressed_emails(
+          group_id: @group.id, recipient_emails: [@email2, @email3]
+        )
+        expect(emails.recipient_emails.length).to eq(2)
+        expect(emails.recipient_emails[0]).to eq(@email2)
+        expect(emails.recipient_emails[1]).to eq(@email3)
       end
 
       it '#get_suppressed_emails' do
-        begin
-          emails = @client.get_suppressed_emails(group_id: @group.id)
-          expect(emails.length).to eq(1)
-          expect(emails[0]).to eq(@email1)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        emails = @client.get_suppressed_emails(group_id: @group.id)
+        expect(emails.length).to eq(1)
+        expect(emails[0]).to eq(@email1)
       end
 
       it '#get_suppressions' do
-        begin
-          suppressions = @client.get_suppressions(email_address: @email1)
-          expect(suppressions.suppressions).to be_a(Array)
-          suppressions.suppressions.each do |suppression|
-            next unless suppression.name == @group_name
-            expect(suppression.name).to eq(@group_name)
-            expect(suppression.description).to eq(@group_desc)
-            expect(suppression.suppressed).to eq(true)
-          end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
+        suppressions = @client.get_suppressions(email_address: @email1)
+        expect(suppressions.suppressions).to be_a(Array)
+        suppressions.suppressions.each do |suppression|
+          next unless suppression.name == @group_name
+          expect(suppression.name).to eq(@group_name)
+          expect(suppression.description).to eq(@group_desc)
+          expect(suppression.suppressed).to eq(true)
         end
       end
 
       it '#delete_suppressed_email' do
-        begin
-          @client.delete_suppressed_email(
-            group_id: @group.id, email_address: @email1
-          )
-          @client.delete_suppressed_email(
-            group_id: @group.id, email_address: @email2
-          )
-          @client.delete_suppressed_email(
-            group_id: @group.id, email_address: @email3
-          )
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        @client.delete_suppressed_email(
+          group_id: @group.id, email_address: @email1
+        )
+        @client.delete_suppressed_email(
+          group_id: @group.id, email_address: @email2
+        )
+        @client.delete_suppressed_email(
+          group_id: @group.id, email_address: @email3
+        )
       end
     end
   end

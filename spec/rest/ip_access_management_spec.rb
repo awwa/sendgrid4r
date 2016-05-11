@@ -4,116 +4,76 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe SendGrid4r::REST::IpAccessManagement do
   describe 'integration test', :it do
     before do
-      begin
-        Dotenv.load
-        @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
+      Dotenv.load
+      @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
 
-        # clean up test env(whitelisted_ips)
-        @ip1 = '192.168.0.1/32'
-        @ip2 = '1.12.34.56/32'
-        ips = @client.get_whitelisted_ips
-        ips.result.each do |whitelisted_ip|
-          @client.delete_whitelisted_ip(
-            rule_id: whitelisted_ip.id
-          ) if whitelisted_ip.ip == @ip1 || whitelisted_ip.ip == @ip2
-        end
-        @ips = @client.post_whitelisted_ips(ips: [@ip1])
-        @ips.result.each do |ip|
-          @id1 = ip.id if ip.ip == @ip1
-        end
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-        raise e
+      # clean up test env(whitelisted_ips)
+      @ip1 = '192.168.0.1/32'
+      @ip2 = '1.12.34.56/32'
+      ips = @client.get_whitelisted_ips
+      ips.result.each do |whitelisted_ip|
+        @client.delete_whitelisted_ip(
+          rule_id: whitelisted_ip.id
+        ) if whitelisted_ip.ip == @ip1 || whitelisted_ip.ip == @ip2
+      end
+      @ips = @client.post_whitelisted_ips(ips: [@ip1])
+      @ips.result.each do |ip|
+        @id1 = ip.id if ip.ip == @ip1
       end
     end
 
     context 'without block call' do
       it '#get_ip_activities without limit' do
-        begin
-          activities = @client.get_ip_activities
-          expect(activities).to be_a(
-            SendGrid4r::REST::IpAccessManagement::IpActivities
+        activities = @client.get_ip_activities
+        expect(activities).to be_a(
+          SendGrid4r::REST::IpAccessManagement::IpActivities
+        )
+        activities.result.each do |activity|
+          expect(activity).to be_a(
+            SendGrid4r::REST::IpAccessManagement::IpActivity
           )
-          activities.result.each do |activity|
-            expect(activity).to be_a(
-              SendGrid4r::REST::IpAccessManagement::IpActivity
-            )
-          end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
         end
       end
 
       it '#get_ip_activities with limit' do
-        begin
-          activities = @client.get_ip_activities(limit: 1)
-          expect(activities).to be_a(
-            SendGrid4r::REST::IpAccessManagement::IpActivities
+        activities = @client.get_ip_activities(limit: 1)
+        expect(activities).to be_a(
+          SendGrid4r::REST::IpAccessManagement::IpActivities
+        )
+        activities.result.each do |activity|
+          expect(activity).to be_a(
+            SendGrid4r::REST::IpAccessManagement::IpActivity
           )
-          activities.result.each do |activity|
-            expect(activity).to be_a(
-              SendGrid4r::REST::IpAccessManagement::IpActivity
-            )
-          end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
         end
       end
 
       it '#get_whitelisted_ips' do
-        begin
-          ips = @client.get_whitelisted_ips
-          expect(ips).to be_a(
-            SendGrid4r::REST::IpAccessManagement::WhitelistedIps
-          )
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        ips = @client.get_whitelisted_ips
+        expect(ips).to be_a(
+          SendGrid4r::REST::IpAccessManagement::WhitelistedIps
+        )
       end
 
       it '#post_whitelisted_ips' do
-        begin
-          ips = @client.post_whitelisted_ips(ips: [@ip2])
-          expect(ips).to be_a(
-            SendGrid4r::REST::IpAccessManagement::WhitelistedIps
-          )
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        ips = @client.post_whitelisted_ips(ips: [@ip2])
+        expect(ips).to be_a(
+          SendGrid4r::REST::IpAccessManagement::WhitelistedIps
+        )
       end
 
       it '#delete_whitelisted_ips' do
-        begin
-          @client.delete_whitelisted_ips(ids: [@id1])
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        @client.delete_whitelisted_ips(ids: [@id1])
       end
 
       it '#get_whitelisted_ip' do
-        begin
-          whitelisted_ip = @client.get_whitelisted_ip(rule_id: @id1)
-          expect(whitelisted_ip).to be_a(
-            SendGrid4r::REST::IpAccessManagement::WhitelistedIp
-          )
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        whitelisted_ip = @client.get_whitelisted_ip(rule_id: @id1)
+        expect(whitelisted_ip).to be_a(
+          SendGrid4r::REST::IpAccessManagement::WhitelistedIp
+        )
       end
 
       it '#delete_whitelisted_ip' do
-        begin
-          @client.delete_whitelisted_ip(rule_id: @id1)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        @client.delete_whitelisted_ip(rule_id: @id1)
       end
     end
   end

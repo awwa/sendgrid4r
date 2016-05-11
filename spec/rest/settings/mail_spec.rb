@@ -10,232 +10,147 @@ describe SendGrid4r::REST::Settings::Mail do
 
     context 'without block call' do
       it '#get_mail_settings' do
-        begin
-          actual = @client.get_mail_settings
-          expect(
-            actual
-          ).to be_a(SendGrid4r::REST::Settings::Results)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        actual = @client.get_mail_settings
+        expect(
+          actual
+        ).to be_a(SendGrid4r::REST::Settings::Results)
       end
 
       it '#get_settings_address_whitelist' do
-        begin
-          actual = @client.get_settings_address_whitelist
-          expect(actual).to be_a(
-            SendGrid4r::REST::Settings::Mail::AddressWhitelist
-          )
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        actual = @client.get_settings_address_whitelist
+        expect(actual).to be_a(
+          SendGrid4r::REST::Settings::Mail::AddressWhitelist
+        )
       end
 
       it '#patch_settings_address_whitelist' do
-        begin
-          # get original settings
-          actual = @client.get_settings_address_whitelist
-          # patch the value
-          actual.enabled = false
-          actual.list = ['test@white.list.com', 'white.list.com']
-          edit = @client.patch_settings_address_whitelist(params: actual)
-          expect(edit.enabled).to eq(false)
-          expect(edit.list[0]).to eq('test@white.list.com')
-          expect(edit.list[1]).to eq('white.list.com')
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        # get original settings
+        actual = @client.get_settings_address_whitelist
+        # patch the value
+        actual.enabled = false
+        actual.list = ['test@white.list.com', 'white.list.com']
+        edit = @client.patch_settings_address_whitelist(params: actual)
+        expect(edit.enabled).to eq(false)
+        expect(edit.list[0]).to eq('test@white.list.com')
+        expect(edit.list[1]).to eq('white.list.com')
       end
 
       it '#get_settings_bcc' do
-        begin
-          actual = @client.get_settings_bcc
-          expect(actual).to be_a(SendGrid4r::REST::Settings::Mail::Bcc)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        actual = @client.get_settings_bcc
+        expect(actual).to be_a(SendGrid4r::REST::Settings::Mail::Bcc)
       end
 
       it '#patch_settings_bcc' do
-        begin
-          # get original settings
-          actual = @client.get_settings_bcc
-          # patch the value
-          actual.enabled = false
-          actual.email = 'test@bcc.com'
-          edit = @client.patch_settings_bcc(params: actual)
-          expect(edit.enabled).to eq(false)
-          expect(edit.email).to eq('test@bcc.com')
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        # get original settings
+        actual = @client.get_settings_bcc
+        # patch the value
+        actual.enabled = false
+        actual.email = 'test@bcc.com'
+        edit = @client.patch_settings_bcc(params: actual)
+        expect(edit.enabled).to eq(false)
+        expect(edit.email).to eq('test@bcc.com')
       end
 
       it '#get_settings_bounce_purge' do
-        begin
-          actual = @client.get_settings_bounce_purge
-          expect(actual).to be_a(SendGrid4r::REST::Settings::Mail::BouncePurge)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        actual = @client.get_settings_bounce_purge
+        expect(actual).to be_a(SendGrid4r::REST::Settings::Mail::BouncePurge)
       end
 
       it '#patch_settings_bounce_purge' do
-        begin
-          # get original settings
-          actual = @client.get_settings_bounce_purge
-          # patch the value
-          actual.enabled = false
-          # actual.hard_bounces = 123
-          # actual.soft_bounces = 321
-          edit = @client.patch_settings_bounce_purge(params: actual)
-          expect(edit.enabled).to eq(false)
-          # expect(actual.hard_bounces).to eq(123)
-          # expect(actual.soft_bounces).to eq(321)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        # get original settings
+        actual = @client.get_settings_bounce_purge
+        # patch the value
+        actual.enabled = false
+        # actual.hard_bounces = 123
+        # actual.soft_bounces = 321
+        edit = @client.patch_settings_bounce_purge(params: actual)
+        expect(edit.enabled).to eq(false)
+        # expect(actual.hard_bounces).to eq(123)
+        # expect(actual.soft_bounces).to eq(321)
       end
 
       it '#get_settings_footer' do
-        begin
-          actual = @client.get_settings_footer
-          expect(actual).to be_a(SendGrid4r::REST::Settings::Mail::Footer)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        actual = @client.get_settings_footer
+        expect(actual).to be_a(SendGrid4r::REST::Settings::Mail::Footer)
       end
 
       it '#patch_settings_footer' do
-        begin
-          # get original settings
-          actual = @client.get_settings_footer
-          # patch the value
-          actual.enabled = false
-          actual.html_content = 'abc...'
-          actual.plain_content = 'xyz...'
-          edit = @client.patch_settings_footer(params: actual)
-          expect(edit.enabled).to eq(false)
-          expect(edit.html_content).to eq('abc...')
-          expect(edit.plain_content).to eq('xyz...')
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        # get original settings
+        actual = @client.get_settings_footer
+        # patch the value
+        actual.enabled = false
+        actual.html_content = 'abc...'
+        actual.plain_content = 'xyz...'
+        edit = @client.patch_settings_footer(params: actual)
+        expect(edit.enabled).to eq(false)
+        expect(edit.html_content).to eq('abc...')
+        expect(edit.plain_content).to eq('xyz...')
       end
 
       it '#get_settings_forward_bounce' do
-        begin
-          actual = @client.get_settings_forward_bounce
-          expect(actual).to be_a(
-            SendGrid4r::REST::Settings::Mail::ForwardBounce
-          )
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        actual = @client.get_settings_forward_bounce
+        expect(actual).to be_a(
+          SendGrid4r::REST::Settings::Mail::ForwardBounce
+        )
       end
 
       it '#patch_settings_forward_bounce' do
-        begin
-          # get original settings
-          actual = @client.get_settings_forward_bounce
-          # patch the value
-          actual.enabled = false
-          actual.email = ENV['MAIL']
-          edit = @client.patch_settings_forward_bounce(params: actual)
-          expect(edit.enabled).to eq(false)
-          expect(edit.email).to eq(ENV['MAIL'])
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        # get original settings
+        actual = @client.get_settings_forward_bounce
+        # patch the value
+        actual.enabled = false
+        actual.email = ENV['MAIL']
+        edit = @client.patch_settings_forward_bounce(params: actual)
+        expect(edit.enabled).to eq(false)
+        expect(edit.email).to eq(ENV['MAIL'])
       end
 
       it '#get_settings_forward_spam' do
-        begin
-          actual = @client.get_settings_forward_spam
-          expect(actual).to be_a(
-            SendGrid4r::REST::Settings::Mail::ForwardSpam
-          )
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        actual = @client.get_settings_forward_spam
+        expect(actual).to be_a(
+          SendGrid4r::REST::Settings::Mail::ForwardSpam
+        )
       end
 
       it '#patch_settings_forward_spam' do
-        begin
-          # get original settings
-          actual = @client.get_settings_forward_spam
-          # patch the value
-          actual.enabled = false
-          actual.email = ENV['MAIL']
-          edit = @client.patch_settings_forward_spam(params: actual)
-          expect(edit.enabled).to eq(false)
-          expect(edit.email).to eq(ENV['MAIL'])
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        # get original settings
+        actual = @client.get_settings_forward_spam
+        # patch the value
+        actual.enabled = false
+        actual.email = ENV['MAIL']
+        edit = @client.patch_settings_forward_spam(params: actual)
+        expect(edit.enabled).to eq(false)
+        expect(edit.email).to eq(ENV['MAIL'])
       end
 
       it '#get_settings_template' do
-        begin
-          actual = @client.get_settings_template
-          expect(actual).to be_a(SendGrid4r::REST::Settings::Mail::Template)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        actual = @client.get_settings_template
+        expect(actual).to be_a(SendGrid4r::REST::Settings::Mail::Template)
       end
 
       it '#patch_settings_template' do
-        begin
-          # get original settings
-          actual = @client.get_settings_template
-          # patch the value
-          actual.enabled = false
-          actual.html_content = '...<% body %>'
-          edit = @client.patch_settings_template(params: actual)
-          expect(edit.enabled).to eq(false)
-          expect(edit.html_content).to eq('...<% body %>')
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        # get original settings
+        actual = @client.get_settings_template
+        # patch the value
+        actual.enabled = false
+        actual.html_content = '...<% body %>'
+        edit = @client.patch_settings_template(params: actual)
+        expect(edit.enabled).to eq(false)
+        expect(edit.html_content).to eq('...<% body %>')
       end
 
       it '#get_settings_plain_content' do
-        begin
-          actual = @client.get_settings_plain_content
-          expect(actual).to be_a(SendGrid4r::REST::Settings::Mail::PlainContent)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        actual = @client.get_settings_plain_content
+        expect(actual).to be_a(SendGrid4r::REST::Settings::Mail::PlainContent)
       end
 
       it '#patch_settings_plain_content' do
-        begin
-          # get original settings
-          actual = @client.get_settings_plain_content
-          # patch the value
-          actual.enabled = false
-          edit = @client.patch_settings_plain_content(params: actual)
-          expect(edit.enabled).to eq(false)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        # get original settings
+        actual = @client.get_settings_plain_content
+        # patch the value
+        actual.enabled = false
+        edit = @client.patch_settings_plain_content(params: actual)
+        expect(edit.enabled).to eq(false)
       end
     end
   end

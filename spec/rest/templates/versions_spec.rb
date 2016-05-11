@@ -4,106 +4,76 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 describe SendGrid4r::REST::Templates::Versions do
   describe 'integration test', :it do
     before do
-      begin
-        Dotenv.load
-        @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
-        @template_name = 'version_test'
-        @version1_name = 'version_name1'
-        @version2_name = 'version_name2'
-        @factory = SendGrid4r::Factory::VersionFactory.new
+      Dotenv.load
+      @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
+      @template_name = 'version_test'
+      @version1_name = 'version_name1'
+      @version2_name = 'version_name2'
+      @factory = SendGrid4r::Factory::VersionFactory.new
 
-        # celan up test env
-        tmps = @client.get_templates
-        tmps.templates.each do |tmp|
-          next if tmp.name != @template_name
-          tmp.versions.each do |ver|
-            @client.delete_version(template_id: tmp.id, version_id: ver.id)
-          end
-          @client.delete_template(template_id: tmp.id)
+      # celan up test env
+      tmps = @client.get_templates
+      tmps.templates.each do |tmp|
+        next if tmp.name != @template_name
+        tmp.versions.each do |ver|
+          @client.delete_version(template_id: tmp.id, version_id: ver.id)
         end
-        # post a template
-        @template = @client.post_template(name: @template_name)
-        # post a version
-        ver1 = @factory.create(name: @version1_name)
-        @version1 = @client.post_version(
-          template_id: @template.id, version: ver1
-        )
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-        raise e
+        @client.delete_template(template_id: tmp.id)
       end
+      # post a template
+      @template = @client.post_template(name: @template_name)
+      # post a version
+      ver1 = @factory.create(name: @version1_name)
+      @version1 = @client.post_version(
+        template_id: @template.id, version: ver1
+      )
     end
 
     context 'without block call' do
       it '#post_version' do
-        begin
-          ver2 = @factory.create(name: @version2_name)
-          version2 = @client.post_version(
-            template_id: @template.id, version: ver2
-          )
-          expect(version2.name).to eq(@version2_name)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        ver2 = @factory.create(name: @version2_name)
+        version2 = @client.post_version(
+          template_id: @template.id, version: ver2
+        )
+        expect(version2.name).to eq(@version2_name)
       end
 
       it '#activate_version' do
-        begin
-          actual = @client.activate_version(
-            template_id: @template.id, version_id: @version1.id
-          )
-          expect(actual.active).to eq(1)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        actual = @client.activate_version(
+          template_id: @template.id, version_id: @version1.id
+        )
+        expect(actual.active).to eq(1)
       end
 
       it '#get_version' do
-        begin
-          actual = @client.get_version(
-            template_id: @template.id, version_id: @version1.id
-          )
-          expect(actual.template_id).to eq(@version1.template_id)
-          expect(actual.active).to be_a(Fixnum)
-          expect(actual.name).to eq(@version1.name)
-          expect(actual.html_content).to eq(@version1.html_content)
-          expect(actual.plain_content).to eq(@version1.plain_content)
-          expect(actual.subject).to eq(@version1.subject)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        actual = @client.get_version(
+          template_id: @template.id, version_id: @version1.id
+        )
+        expect(actual.template_id).to eq(@version1.template_id)
+        expect(actual.active).to be_a(Fixnum)
+        expect(actual.name).to eq(@version1.name)
+        expect(actual.html_content).to eq(@version1.html_content)
+        expect(actual.plain_content).to eq(@version1.plain_content)
+        expect(actual.subject).to eq(@version1.subject)
       end
 
       it '#patch_version' do
-        begin
-          edit_ver1 = @version1.dup
-          edit_ver1.name = 'edit_version'
-          edit_ver1.subject = 'edit<%subject%>edit'
-          edit_ver1.html_content = 'edit<%body%>edit'
-          edit_ver1.plain_content = 'edit<%body%>edit'
-          edit_ver1.active = 0
-          @client.patch_version(
-            template_id: @template.id, version_id: @version1.id,
-            version: edit_ver1
-          )
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        edit_ver1 = @version1.dup
+        edit_ver1.name = 'edit_version'
+        edit_ver1.subject = 'edit<%subject%>edit'
+        edit_ver1.html_content = 'edit<%body%>edit'
+        edit_ver1.plain_content = 'edit<%body%>edit'
+        edit_ver1.active = 0
+        @client.patch_version(
+          template_id: @template.id, version_id: @version1.id,
+          version: edit_ver1
+        )
       end
 
       it '#delete_version' do
-        begin
-          @client.delete_version(
-            template_id: @template.id, version_id: @version1.id
-          )
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        @client.delete_version(
+          template_id: @template.id, version_id: @version1.id
+        )
       end
     end
 

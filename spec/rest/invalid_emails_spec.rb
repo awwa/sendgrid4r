@@ -4,75 +4,45 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe SendGrid4r::REST::InvalidEmails do
   describe 'integration test', :it do
     before do
-      begin
-        Dotenv.load
-        @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
-        @emails = [
-          'a1@invalid_email.com', 'a2@invalid_email.com', 'a3@invalid_email.com'
-        ]
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-        raise e
-      end
+      Dotenv.load
+      @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
+      @emails = [
+        'a1@invalid_email.com', 'a2@invalid_email.com', 'a3@invalid_email.com'
+      ]
     end
 
     context 'without block call' do
       it '#get_invalid_emails' do
-        begin
-          start_time = Time.now - 60 * 60 * 24 * 365
-          end_time = Time.now
-          invalid_emails = @client.get_invalid_emails(
-            start_time: start_time, end_time: end_time
+        start_time = Time.now - 60 * 60 * 24 * 365
+        end_time = Time.now
+        invalid_emails = @client.get_invalid_emails(
+          start_time: start_time, end_time: end_time
+        )
+        expect(invalid_emails).to be_a(Array)
+        invalid_emails.each do |invalid_email|
+          expect(invalid_email).to be_a(
+            SendGrid4r::REST::InvalidEmails::InvalidEmail
           )
-          expect(invalid_emails).to be_a(Array)
-          invalid_emails.each do |invalid_email|
-            expect(invalid_email).to be_a(
-              SendGrid4r::REST::InvalidEmails::InvalidEmail
-            )
-          end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
         end
       end
 
       it '#delete_invalid_emails(delete_all: true)' do
-        begin
-          @client.delete_invalid_emails(delete_all: true)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        @client.delete_invalid_emails(delete_all: true)
       end
 
       it '#delete_invalid_emails(emails: [])' do
-        begin
-          @client.delete_invalid_emails(emails: @emails)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        @client.delete_invalid_emails(emails: @emails)
       end
 
       it '#get_invalid_email' do
-        begin
-          invalid_email = @client.get_invalid_email(email: @email)
-          expect(invalid_email).to be_a(Array)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        invalid_email = @client.get_invalid_email(email: @email)
+        expect(invalid_email).to be_a(Array)
       end
 
       it '#delete_invalid_email' do
-        begin
-          expect do
-            @client.delete_invalid_email(email: 'a1@invalid_email.com')
-          end.to raise_error(RestClient::ResourceNotFound)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        expect do
+          @client.delete_invalid_email(email: 'a1@invalid_email.com')
+        end.to raise_error(RestClient::ResourceNotFound)
       end
     end
   end

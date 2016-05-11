@@ -4,73 +4,53 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 describe SendGrid4r::REST::Webhooks::Event do
   describe 'integration test', :it do
     before do
-      begin
-        Dotenv.load
-        @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-        raise e
-      end
+      Dotenv.load
+      @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
     end
 
     context 'without block call' do
       it '#get_settings_event_notification' do
-        begin
-          actual = @client.get_settings_event_notification
-          expect(actual).to be_a(
-            SendGrid4r::REST::Webhooks::Event::EventNotification
-          )
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        actual = @client.get_settings_event_notification
+        expect(actual).to be_a(
+          SendGrid4r::REST::Webhooks::Event::EventNotification
+        )
       end
 
       it '#patch_settings_event_notification' do
-        begin
-          # get original settings
-          actual = @client.get_settings_event_notification
-          # patch the value
-          actual.enabled = false
-          actual.url = 'http://www.google.com/?=test@test.com'
-          actual.group_resubscribe = true
-          actual.delivered = true
-          actual.group_unsubscribe = true
-          actual.spam_report = true
-          actual.bounce = true
-          actual.deferred = true
-          actual.unsubscribe = true
-          actual.processed = true
-          actual.open = true
-          actual.click = true
-          actual.dropped = true
-          edit = @client.patch_settings_event_notification(params: actual)
-          expect(edit.enabled).to eq(false)
-          expect(edit.url).to eq('http://www.google.com/?=test@test.com')
-          expect(edit.group_resubscribe).to eq(true)
-          expect(edit.delivered).to eq(true)
-          expect(edit.group_unsubscribe).to eq(true)
-          expect(edit.spam_report).to eq(true)
-          expect(edit.bounce).to eq(true)
-          expect(edit.deferred).to eq(true)
-          expect(edit.unsubscribe).to eq(true)
-          expect(edit.processed).to eq(true)
-          expect(edit.open).to eq(true)
-          expect(edit.click).to eq(true)
-          expect(edit.dropped).to eq(true)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        # get original settings
+        actual = @client.get_settings_event_notification
+        # patch the value
+        actual.enabled = false
+        actual.url = 'http://www.google.com/?=test@test.com'
+        actual.group_resubscribe = true
+        actual.delivered = true
+        actual.group_unsubscribe = true
+        actual.spam_report = true
+        actual.bounce = true
+        actual.deferred = true
+        actual.unsubscribe = true
+        actual.processed = true
+        actual.open = true
+        actual.click = true
+        actual.dropped = true
+        edit = @client.patch_settings_event_notification(params: actual)
+        expect(edit.enabled).to eq(false)
+        expect(edit.url).to eq('http://www.google.com/?=test@test.com')
+        expect(edit.group_resubscribe).to eq(true)
+        expect(edit.delivered).to eq(true)
+        expect(edit.group_unsubscribe).to eq(true)
+        expect(edit.spam_report).to eq(true)
+        expect(edit.bounce).to eq(true)
+        expect(edit.deferred).to eq(true)
+        expect(edit.unsubscribe).to eq(true)
+        expect(edit.processed).to eq(true)
+        expect(edit.open).to eq(true)
+        expect(edit.click).to eq(true)
+        expect(edit.dropped).to eq(true)
       end
 
       it '#test_settings_event_notification' do
-        begin
-          @client.test_settings_event_notification(url: ENV['EVENT_URL'])
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        @client.test_settings_event_notification(url: ENV['EVENT_URL'])
       end
     end
   end

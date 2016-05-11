@@ -10,16 +10,11 @@ describe SendGrid4r::REST::ApiKeys::Permissions do
 
     context 'without block call' do
       it '#get_permissions' do
-        begin
-          permissions = @client.get_permissions
-          expect(permissions).to be_a(
-            SendGrid4r::REST::ApiKeys::Permissions::Permissions
-          )
-          expect(permissions.scopes).to be_a(Array)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        permissions = @client.get_permissions
+        expect(permissions).to be_a(
+          SendGrid4r::REST::ApiKeys::Permissions::Permissions
+        )
+        expect(permissions.scopes).to be_a(Array)
       end
     end
   end

@@ -10,42 +10,32 @@ describe SendGrid4r::REST::Ips::Warmup do
 
     context 'account is silver' do
       before do
-        begin
-          # celan up test env
-          warmup_ips = @client.get_warmup_ips
-          if warmup_ips.length > 0
-            warmup_ips.each do |warmup_ip|
-              @client.delete_warmup_ip(ip: warmup_ip.ip)
-            end
+        # celan up test env
+        warmup_ips = @client.get_warmup_ips
+        if warmup_ips.length > 0
+          warmup_ips.each do |warmup_ip|
+            @client.delete_warmup_ip(ip: warmup_ip.ip)
           end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
         end
       end
 
       context 'without block call' do
         it 'warmup_ip spec' do
-          begin
-            # get warmup ip
-            warmup_ips = @client.get_warmup_ips
-            expect(warmup_ips.length).to eq(0)
-            # post warmup ip
-            ips = @client.get_ips
-            expect(ips.length).to be > 0
-            warmup_ip = @client.post_warmup_ip(ip: ips[0].ip)
-            expect(warmup_ip.ip).to eq(ips[0].ip)
-            warmup_ip = @client.get_warmup_ip(ip: warmup_ip.ip)
-            expect(warmup_ip.ip).to eq(ips[0].ip)
-            # delete the warmup ip
-            @client.delete_warmup_ip(ip: warmup_ip.ip)
-            expect do
-              @client.get_warmup_ip(ip: warmup_ip.ip)
-            end.to raise_error(RestClient::ResourceNotFound)
-          rescue RestClient::ExceptionWithResponse => ex
-            puts ex.inspect
-            raise ex
-          end
+          # get warmup ip
+          warmup_ips = @client.get_warmup_ips
+          expect(warmup_ips.length).to eq(0)
+          # post warmup ip
+          ips = @client.get_ips
+          expect(ips.length).to be > 0
+          warmup_ip = @client.post_warmup_ip(ip: ips[0].ip)
+          expect(warmup_ip.ip).to eq(ips[0].ip)
+          warmup_ip = @client.get_warmup_ip(ip: warmup_ip.ip)
+          expect(warmup_ip.ip).to eq(ips[0].ip)
+          # delete the warmup ip
+          @client.delete_warmup_ip(ip: warmup_ip.ip)
+          expect do
+            @client.get_warmup_ip(ip: warmup_ip.ip)
+          end.to raise_error(RestClient::ResourceNotFound)
         end
       end
     end

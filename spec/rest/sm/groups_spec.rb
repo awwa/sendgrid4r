@@ -4,116 +4,81 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 describe SendGrid4r::REST::Sm::Groups do
   describe 'integration test', :it do
     before do
-      begin
-        Dotenv.load
-        @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
-        @group_name1 = 'group_test1'
-        @group_name2 = 'group_test2'
-        @group_name_edit1 = 'group_edit1'
-        @group_desc = 'group_desc'
-        @group_desc_edit = 'group_desc_edit'
+      Dotenv.load
+      @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
+      @group_name1 = 'group_test1'
+      @group_name2 = 'group_test2'
+      @group_name_edit1 = 'group_edit1'
+      @group_desc = 'group_desc'
+      @group_desc_edit = 'group_desc_edit'
 
-        # celan up test env
-        grps = @client.get_groups
-        grps.each do |grp|
-          @client.delete_group(
-            group_id: grp.id
-          ) if grp.name == @group_name1
-          @client.delete_group(
-            group_id: grp.id
-          ) if grp.name == @group_name_edit1
-          @client.delete_group(
-            group_id: grp.id
-          ) if grp.name == @group_name2
-        end
-        # post a group
-        @group1 = @client.post_group(
-          name: @group_name1, description: @group_desc
-        )
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-        raise e
+      # celan up test env
+      grps = @client.get_groups
+      grps.each do |grp|
+        @client.delete_group(
+          group_id: grp.id
+        ) if grp.name == @group_name1
+        @client.delete_group(
+          group_id: grp.id
+        ) if grp.name == @group_name_edit1
+        @client.delete_group(
+          group_id: grp.id
+        ) if grp.name == @group_name2
       end
+      # post a group
+      @group1 = @client.post_group(
+        name: @group_name1, description: @group_desc
+      )
     end
 
     context 'without block call' do
       it '#post_group' do
-        begin
-          group2 = @client.post_group(
-            name: @group_name2, description: @group_desc
-          )
-          expect(@group_name2).to eq(group2.name)
-          expect(@group_desc).to eq(group2.description)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        group2 = @client.post_group(
+          name: @group_name2, description: @group_desc
+        )
+        expect(@group_name2).to eq(group2.name)
+        expect(@group_desc).to eq(group2.description)
       end
 
       it '#post_group with is_default' do
-        begin
-          group2 = @client.post_group(
-            name: @group_name2, description: @group_desc, is_default: false
-          )
-          expect(@group_name2).to eq(group2.name)
-          expect(@group_desc).to eq(group2.description)
-          expect(false).to eq(group2.is_default)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        group2 = @client.post_group(
+          name: @group_name2, description: @group_desc, is_default: false
+        )
+        expect(@group_name2).to eq(group2.name)
+        expect(@group_desc).to eq(group2.description)
+        expect(false).to eq(group2.is_default)
       end
 
       it '#get_groups' do
-        begin
-          groups = @client.get_groups
-          expect(groups).to be_a(Array)
-          groups.each do |group|
-            expect(group).to be_a(SendGrid4r::REST::Sm::Groups::Group)
-          end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
+        groups = @client.get_groups
+        expect(groups).to be_a(Array)
+        groups.each do |group|
+          expect(group).to be_a(SendGrid4r::REST::Sm::Groups::Group)
         end
       end
 
       it '#get_group' do
-        begin
-          group = @client.get_group(group_id: @group1.id)
-          expect(group.id).to be_a(Fixnum)
-          expect(group.name).to eq(@group_name1)
-          expect(group.description).to eq(@group_desc)
-          expect(group.unsubscribes).to eq(0)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        group = @client.get_group(group_id: @group1.id)
+        expect(group.id).to be_a(Fixnum)
+        expect(group.name).to eq(@group_name1)
+        expect(group.description).to eq(@group_desc)
+        expect(group.unsubscribes).to eq(0)
       end
 
       it '#patch_group' do
-        begin
-          @group1.name = @group_name_edit1
-          @group1.description = @group_desc_edit
-          group_edit1 = @client.patch_group(
-            group_id: @group1.id, group: @group1
-          )
-          expect(group_edit1.id).to be_a(Fixnum)
-          expect(group_edit1.name).to eq(@group_name_edit1)
-          expect(group_edit1.description).to eq(@group_desc_edit)
-          expect(group_edit1.unsubscribes).to eq(nil)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        @group1.name = @group_name_edit1
+        @group1.description = @group_desc_edit
+        group_edit1 = @client.patch_group(
+          group_id: @group1.id, group: @group1
+        )
+        expect(group_edit1.id).to be_a(Fixnum)
+        expect(group_edit1.name).to eq(@group_name_edit1)
+        expect(group_edit1.description).to eq(@group_desc_edit)
+        expect(group_edit1.unsubscribes).to eq(nil)
       end
 
       it '#delete_group' do
-        begin
-          @client.delete_group(group_id: @group1.id)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        @client.delete_group(group_id: @group1.id)
       end
     end
   end

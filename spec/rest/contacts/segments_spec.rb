@@ -4,146 +4,111 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 describe SendGrid4r::REST::Contacts::Segments do
   describe 'integration test', :it do
     before do
-      begin
-        Dotenv.load
-        @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
-        @name1 = 'test_segment1'
-        @name2 = 'test_segment2'
-        @edit_name1 = 'test_segment_edit'
-        @field = 'last_name1'
-        @value = 'Miller'
-        @operator = 'eq'
-        @and_or = ''
-        @condition_factory = SendGrid4r::Factory::ConditionFactory.new
-        @segment_factory = SendGrid4r::Factory::SegmentFactory.new
+      Dotenv.load
+      @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
+      @name1 = 'test_segment1'
+      @name2 = 'test_segment2'
+      @edit_name1 = 'test_segment_edit'
+      @field = 'last_name1'
+      @value = 'Miller'
+      @operator = 'eq'
+      @and_or = ''
+      @condition_factory = SendGrid4r::Factory::ConditionFactory.new
+      @segment_factory = SendGrid4r::Factory::SegmentFactory.new
 
-        # celan up test env(segment)
-        @client.get_segments.segments.each do |segment|
-          @client.delete_segment(
-            segment_id: segment.id
-          ) if segment.name == @name1
-          @client.delete_segment(
-            segment_id: segment.id
-          ) if segment.name == @edit_name1
-          @client.delete_segment(
-            segment_id: segment.id
-          ) if segment.name == @name2
-        end
-        # clean up test env(custom_fields)
-        @client.get_custom_fields.custom_fields.each do |field|
-          @client.delete_custom_field(
-            custom_field_id: field.id
-          ) if field.name == @field
-        end
-        # post a custom field and a segment
-        @client.post_custom_field(name: @field, type: 'text')
-        @condition = @condition_factory.create(
-          field: @field, value: @value, operator: @operator, and_or: @and_or
-        )
-        params1 = @segment_factory.create(
-          name: @name1, list_id: nil, conditions: [@condition]
-        )
-        @segment1 = @client.post_segment(params: params1)
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-        raise e
+      # celan up test env(segment)
+      @client.get_segments.segments.each do |segment|
+        @client.delete_segment(
+          segment_id: segment.id
+        ) if segment.name == @name1
+        @client.delete_segment(
+          segment_id: segment.id
+        ) if segment.name == @edit_name1
+        @client.delete_segment(
+          segment_id: segment.id
+        ) if segment.name == @name2
       end
+      # clean up test env(custom_fields)
+      @client.get_custom_fields.custom_fields.each do |field|
+        @client.delete_custom_field(
+          custom_field_id: field.id
+        ) if field.name == @field
+      end
+      # post a custom field and a segment
+      @client.post_custom_field(name: @field, type: 'text')
+      @condition = @condition_factory.create(
+        field: @field, value: @value, operator: @operator, and_or: @and_or
+      )
+      params1 = @segment_factory.create(
+        name: @name1, list_id: nil, conditions: [@condition]
+      )
+      @segment1 = @client.post_segment(params: params1)
     end
 
     context 'without block call' do
       it '#post_segment' do
-        begin
-          lists = @client.get_lists
-          params2 = @segment_factory.create(
-            name: @name2, list_id: lists.lists[0].id, conditions: [@condition]
-          )
-          segment = @client.post_segment(params: params2)
-          expect(segment.id).to be_a(Fixnum)
-          expect(segment.name).to eq(@name2)
-          expect(segment.list_id).to eq(lists.lists[0].id)
-          expect(segment.conditions.length).to eq(1)
-          expect(segment.recipient_count).to eq(0)
-          condition = segment.conditions[0]
-          expect(condition.field).to eq(@field)
-          expect(condition.value).to eq(@value)
-          expect(condition.operator).to eq(@operator)
-          expect(condition.and_or).to eq(nil)
-          expect(segment.recipient_count).to eq(0)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        lists = @client.get_lists
+        params2 = @segment_factory.create(
+          name: @name2, list_id: lists.lists[0].id, conditions: [@condition]
+        )
+        segment = @client.post_segment(params: params2)
+        expect(segment.id).to be_a(Fixnum)
+        expect(segment.name).to eq(@name2)
+        expect(segment.list_id).to eq(lists.lists[0].id)
+        expect(segment.conditions.length).to eq(1)
+        expect(segment.recipient_count).to eq(0)
+        condition = segment.conditions[0]
+        expect(condition.field).to eq(@field)
+        expect(condition.value).to eq(@value)
+        expect(condition.operator).to eq(@operator)
+        expect(condition.and_or).to eq(nil)
+        expect(segment.recipient_count).to eq(0)
       end
 
       it '#get_segments' do
-        begin
-          segments = @client.get_segments
-          segments.segments.each do |segment|
-            expect(
-              segment
-            ).to be_a(SendGrid4r::REST::Contacts::Segments::Segment)
-          end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
+        segments = @client.get_segments
+        segments.segments.each do |segment|
+          expect(
+            segment
+          ).to be_a(SendGrid4r::REST::Contacts::Segments::Segment)
         end
       end
 
       it '#get_segment' do
-        begin
-          segment = @client.get_segment(segment_id: @segment1.id)
-          expect(segment.id).to eq(@segment1.id)
-          expect(segment.name).to eq(@segment1.name)
-          expect(segment.list_id).to eq(nil)
-          condition = segment.conditions[0]
-          expect(condition.field).to eq(@field)
-          expect(condition.value).to eq(@value)
-          expect(condition.operator).to eq(@operator)
-          expect(condition.and_or).to eq(nil)
-          expect(segment.recipient_count).to be_a(Fixnum)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        segment = @client.get_segment(segment_id: @segment1.id)
+        expect(segment.id).to eq(@segment1.id)
+        expect(segment.name).to eq(@segment1.name)
+        expect(segment.list_id).to eq(nil)
+        condition = segment.conditions[0]
+        expect(condition.field).to eq(@field)
+        expect(condition.value).to eq(@value)
+        expect(condition.operator).to eq(@operator)
+        expect(condition.and_or).to eq(nil)
+        expect(segment.recipient_count).to be_a(Fixnum)
       end
 
       it '#patch_segment' do
-        begin
-          edit_params = @segment_factory.create(
-            name: @edit_name1, conditions: [@condition]
-          )
-          edit_segment = @client.patch_segment(
-            segment_id: @segment1.id, params: edit_params
-          )
-          expect(edit_segment.name).to eq(@edit_name1)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        edit_params = @segment_factory.create(
+          name: @edit_name1, conditions: [@condition]
+        )
+        edit_segment = @client.patch_segment(
+          segment_id: @segment1.id, params: edit_params
+        )
+        expect(edit_segment.name).to eq(@edit_name1)
       end
 
       it '#delete_segment' do
-        begin
-          @client.delete_segment(segment_id: @segment1.id)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        @client.delete_segment(segment_id: @segment1.id)
       end
 
       it '#get_recipients_on_segment' do
-        begin
-          recipients = @client.get_recipients_on_segment(
-            segment_id: @segment1.id
-          )
-          recipients.recipients.each do |recipient|
-            expect(
-              recipient
-            ).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
-          end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
+        recipients = @client.get_recipients_on_segment(
+          segment_id: @segment1.id
+        )
+        recipients.recipients.each do |recipient|
+          expect(
+            recipient
+          ).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
         end
       end
     end

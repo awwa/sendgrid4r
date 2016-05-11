@@ -4,180 +4,125 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 describe SendGrid4r::REST::Contacts::Recipients do
   describe 'integration test', :it do
     before do
-      begin
-        Dotenv.load
-        @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
-        @email1 = 'jones@example.com'
-        @email2 = 'miller@example.com'
-        @email3 = 'jones...example.com'
-        @last_name1 = 'Jones'
-        @last_name2 = 'Miller'
-        @last_name3 = 'Invalid'
-        @pet1 = 'Fluffy'
-        @pet2 = 'FrouFrou'
+      Dotenv.load
+      @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
+      @email1 = 'jones@example.com'
+      @email2 = 'miller@example.com'
+      @email3 = 'jones...example.com'
+      @last_name1 = 'Jones'
+      @last_name2 = 'Miller'
+      @last_name3 = 'Invalid'
+      @pet1 = 'Fluffy'
+      @pet2 = 'FrouFrou'
 
-        # celan up test env
-        recipients = @client.get_recipients
-        recipients.recipients.each do |recipient|
-          next if recipient.email != @email1 && recipient.email != @email2
-          @client.delete_recipient(recipient_id: recipient.id)
-        end
-        # post a recipient
-        params = {}
-        params['email'] = @email1
-        params['last_name'] = @last_name1
-        @result = @client.post_recipients(params: [params])
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-        raise e
+      # celan up test env
+      recipients = @client.get_recipients
+      recipients.recipients.each do |recipient|
+        next if recipient.email != @email1 && recipient.email != @email2
+        @client.delete_recipient(recipient_id: recipient.id)
       end
+      # post a recipient
+      params = {}
+      params['email'] = @email1
+      params['last_name'] = @last_name1
+      @result = @client.post_recipients(params: [params])
     end
 
     context 'without block call' do
       it '#post_recipients' do
-        begin
-          params = {}
-          params['email'] = @email2
-          params['last_name'] = @last_name2
-          result = @client.post_recipients(params: [params])
-          expect(result.error_count).to eq(0)
-          expect(result.error_indices).to eq([])
-          expect(result.new_count).to eq(1)
-          expect(result.persisted_recipients).to be_a(Array)
-          expect(result.updated_count).to eq(0)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        params = {}
+        params['email'] = @email2
+        params['last_name'] = @last_name2
+        result = @client.post_recipients(params: [params])
+        expect(result.error_count).to eq(0)
+        expect(result.error_indices).to eq([])
+        expect(result.new_count).to eq(1)
+        expect(result.persisted_recipients).to be_a(Array)
+        expect(result.updated_count).to eq(0)
       end
 
       it '#post_recipients with error' do
-        begin
-          params = {}
-          params['email'] = @email3
-          params['last_name'] = @last_name3
-          result = @client.post_recipients(params: [params])
-          expect(result.error_count).to eq(1)
-          expect(result.error_indices).to eq([0])
-          expect(result.errors).to be_a(Array)
-          result.errors.each do |error|
-            expect(error.error_indices).to be_a(Array)
-            expect(error.message).to be_a(String)
-          end
-          expect(result.new_count).to eq(0)
-          expect(result.persisted_recipients).to be_a(Array)
-          expect(result.updated_count).to eq(0)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
+        params = {}
+        params['email'] = @email3
+        params['last_name'] = @last_name3
+        result = @client.post_recipients(params: [params])
+        expect(result.error_count).to eq(1)
+        expect(result.error_indices).to eq([0])
+        expect(result.errors).to be_a(Array)
+        result.errors.each do |error|
+          expect(error.error_indices).to be_a(Array)
+          expect(error.message).to be_a(String)
         end
+        expect(result.new_count).to eq(0)
+        expect(result.persisted_recipients).to be_a(Array)
+        expect(result.updated_count).to eq(0)
       end
 
       it '#patch_recipients' do
-        begin
-          params = {}
-          params['email'] = @email1
-          params['last_name'] = 'JonesEdit'
-          result = @client.patch_recipients(params: [params])
-          expect(result.error_count).to eq(0)
-          expect(result.error_indices).to eq([])
-          expect(result.new_count).to eq(0)
-          expect(result.persisted_recipients).to be_a(Array)
-          expect(result.updated_count).to eq(1)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        params = {}
+        params['email'] = @email1
+        params['last_name'] = 'JonesEdit'
+        result = @client.patch_recipients(params: [params])
+        expect(result.error_count).to eq(0)
+        expect(result.error_indices).to eq([])
+        expect(result.new_count).to eq(0)
+        expect(result.persisted_recipients).to be_a(Array)
+        expect(result.updated_count).to eq(1)
       end
 
       it '#delete_recipients' do
-        begin
-          @client.delete_recipients(recipient_ids: @result.persisted_recipients)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        @client.delete_recipients(recipient_ids: @result.persisted_recipients)
       end
 
       it '#get_recipients' do
-        begin
-          recipients = @client.get_recipients(page: 1, page_size: 100)
-          expect(recipients.recipients.length).to be > 0
-          recipients.recipients.each do |recipient|
-            expect(
-              recipient
-            ).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
-          end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
+        recipients = @client.get_recipients(page: 1, page_size: 100)
+        expect(recipients.recipients.length).to be > 0
+        recipients.recipients.each do |recipient|
+          expect(
+            recipient
+          ).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
         end
       end
 
       it '#get_recipient' do
-        begin
-          recipient = @client.get_recipient(
-            recipient_id: @result.persisted_recipients[0]
-          )
-          expect(
-            recipient
-          ).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        recipient = @client.get_recipient(
+          recipient_id: @result.persisted_recipients[0]
+        )
+        expect(
+          recipient
+        ).to be_a(SendGrid4r::REST::Contacts::Recipients::Recipient)
       end
 
       it '#delete_recipient' do
-        begin
-          @client.delete_recipient(
-            recipient_id: @result.persisted_recipients[0]
-          )
-          expect do
-            @client.get_recipient(recipient_id: @result.persisted_recipients[0])
-          end.to raise_error(RestClient::ResourceNotFound)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        @client.delete_recipient(
+          recipient_id: @result.persisted_recipients[0]
+        )
+        expect do
+          @client.get_recipient(recipient_id: @result.persisted_recipients[0])
+        end.to raise_error(RestClient::ResourceNotFound)
       end
 
       it '#get_lists_recipient_belong' do
-        begin
-          lists = @client.get_lists_recipient_belong(
-            recipient_id: @result.persisted_recipients[0]
-          )
-          lists.lists.each do |list|
-            expect(
-              list.is_a?(SendGrid4r::REST::Contacts::Lists::List)
-            ).to eq(true)
-          end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
+        lists = @client.get_lists_recipient_belong(
+          recipient_id: @result.persisted_recipients[0]
+        )
+        lists.lists.each do |list|
+          expect(
+            list.is_a?(SendGrid4r::REST::Contacts::Lists::List)
+          ).to eq(true)
         end
       end
 
       it '#get_recipient_count' do
-        begin
-          actual_count = @client.get_recipients_count
-          expect(actual_count).to be >= 0
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        actual_count = @client.get_recipients_count
+        expect(actual_count).to be >= 0
       end
 
       it '#search_recipients' do
-        begin
-          params = {}
-          params['email'] = @email1
-          recipients = @client.search_recipients(params: params)
-          expect(recipients.recipients).to be_a(Array)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
-        end
+        params = {}
+        params['email'] = @email1
+        recipients = @client.search_recipients(params: params)
+        expect(recipients.recipients).to be_a(Array)
       end
     end
   end
