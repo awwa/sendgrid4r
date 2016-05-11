@@ -1,32 +1,30 @@
 # -*- encoding: utf-8 -*-
 
-module SendGrid4r
-  module REST
+module SendGrid4r::REST
+  #
+  # SendGrid Web API v3 ApiKeys
+  #
+  module ApiKeys
     #
-    # SendGrid Web API v3 ApiKeys
+    # SendGrid Web API v3 ApiKeys Permissions
     #
-    module ApiKeys
-      #
-      # SendGrid Web API v3 ApiKeys Permissions
-      #
-      module Permissions
-        include SendGrid4r::REST::Request
+    module Permissions
+      include SendGrid4r::REST::Request
 
-        Permissions = Struct.new(:scopes)
+      Permissions = Struct.new(:scopes)
 
-        def self.url
-          "#{BASE_URL}/scopes"
-        end
+      def self.url
+        "#{BASE_URL}/scopes"
+      end
 
-        def self.create_permissions(resp)
-          return resp if resp.nil?
-          Permissions.new(resp['scopes'])
-        end
+      def self.create_permissions(resp)
+        return resp if resp.nil?
+        Permissions.new(resp['scopes'])
+      end
 
-        def get_permissions(&block)
-          resp = get(@auth, SendGrid4r::REST::ApiKeys::Permissions.url, &block)
-          SendGrid4r::REST::ApiKeys::Permissions.create_permissions(resp)
-        end
+      def get_permissions(&block)
+        resp = get(@auth, SendGrid4r::REST::ApiKeys::Permissions.url, &block)
+        SendGrid4r::REST::ApiKeys::Permissions.create_permissions(resp)
       end
     end
   end
