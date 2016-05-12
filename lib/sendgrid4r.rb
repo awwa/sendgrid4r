@@ -33,7 +33,7 @@ require 'sendgrid4r/rest/contacts/recipients'
 require 'sendgrid4r/rest/contacts/reserved_fields'
 require 'sendgrid4r/rest/contacts/segments'
 
-require 'sendgrid4r/rest/email_activity/email_activity'
+require 'sendgrid4r/rest/email_activity'
 
 require 'sendgrid4r/rest/ip_access_management'
 
