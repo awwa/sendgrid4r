@@ -25,12 +25,12 @@ module SendGrid4r::REST
     include SendGrid4r::REST::Stats::Subuser
     include SendGrid4r::REST::Stats::Advanced
     include SendGrid4r::REST::Stats::Parse
-    include SendGrid4r::REST::Contacts::CustomFields
-    include SendGrid4r::REST::Contacts::Lists
-    include SendGrid4r::REST::Contacts::Recipients
-    include SendGrid4r::REST::Contacts::ReservedFields
-    include SendGrid4r::REST::Contacts::Segments
     include SendGrid4r::REST::MarketingCampaigns
+    include SendGrid4r::REST::MarketingCampaigns::Contacts::CustomFields
+    include SendGrid4r::REST::MarketingCampaigns::Contacts::Lists
+    include SendGrid4r::REST::MarketingCampaigns::Contacts::Recipients
+    include SendGrid4r::REST::MarketingCampaigns::Contacts::ReservedFields
+    include SendGrid4r::REST::MarketingCampaigns::Contacts::Segments
     include SendGrid4r::REST::ApiKeys
     include SendGrid4r::REST::ApiKeys::Permissions
     include SendGrid4r::REST::Subusers

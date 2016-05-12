@@ -24,14 +24,13 @@ require 'sendgrid4r/rest/spam_reports'
 require 'sendgrid4r/rest/cancel_scheduled_sends'
 
 require 'sendgrid4r/rest/marketing_campaigns/marketing_campaigns'
+require 'sendgrid4r/rest/marketing_campaigns/contacts/custom_fields'
+require 'sendgrid4r/rest/marketing_campaigns/contacts/lists'
+require 'sendgrid4r/rest/marketing_campaigns/contacts/recipients'
+require 'sendgrid4r/rest/marketing_campaigns/contacts/reserved_fields'
+require 'sendgrid4r/rest/marketing_campaigns/contacts/segments'
 
 require 'sendgrid4r/rest/categories/categories'
-
-require 'sendgrid4r/rest/contacts/custom_fields'
-require 'sendgrid4r/rest/contacts/lists'
-require 'sendgrid4r/rest/contacts/recipients'
-require 'sendgrid4r/rest/contacts/reserved_fields'
-require 'sendgrid4r/rest/contacts/segments'
 
 require 'sendgrid4r/rest/email_activity'
 
