@@ -30,7 +30,7 @@ module SendGrid4r::REST
     include SendGrid4r::REST::Contacts::Recipients
     include SendGrid4r::REST::Contacts::ReservedFields
     include SendGrid4r::REST::Contacts::Segments
-    include SendGrid4r::REST::Campaigns::Campaigns
+    include SendGrid4r::REST::MarketingCampaigns
     include SendGrid4r::REST::ApiKeys
     include SendGrid4r::REST::ApiKeys::Permissions
     include SendGrid4r::REST::Subusers

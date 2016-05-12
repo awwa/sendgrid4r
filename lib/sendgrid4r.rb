@@ -23,7 +23,7 @@ require 'sendgrid4r/rest/invalid_emails'
 require 'sendgrid4r/rest/spam_reports'
 require 'sendgrid4r/rest/cancel_scheduled_sends'
 
-require 'sendgrid4r/rest/campaigns/campaigns'
+require 'sendgrid4r/rest/marketing_campaigns/marketing_campaigns'
 
 require 'sendgrid4r/rest/categories/categories'
 

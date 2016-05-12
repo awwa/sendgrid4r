@@ -1,7 +1,7 @@
 # encoding: utf-8
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe SendGrid4r::REST::Campaigns::Campaigns do
+describe SendGrid4r::REST::MarketingCampaigns do
   describe 'integration test', :it do
     before do
       Dotenv.load
@@ -313,21 +313,21 @@ describe SendGrid4r::REST::Campaigns::Campaigns do
     it '#post_campaign' do
       allow(client).to receive(:execute).and_return(campaign)
       actual = client.post_campaign(params: nil)
-      expect(actual).to be_a(SendGrid4r::REST::Campaigns::Campaigns::Campaign)
+      expect(actual).to be_a(SendGrid4r::REST::MarketingCampaigns::Campaign)
     end
 
     it '#get_campaigns' do
       allow(client).to receive(:execute).and_return(campaigns)
       actual = client.get_campaigns
       expect(actual).to be_a(
-        SendGrid4r::REST::Campaigns::Campaigns::Campaigns
+        SendGrid4r::REST::MarketingCampaigns::Campaigns
       )
     end
 
     it '#get_campaign' do
       allow(client).to receive(:execute).and_return(campaign)
       actual = client.get_campaign(campaign_id: 0)
-      expect(actual).to be_a(SendGrid4r::REST::Campaigns::Campaigns::Campaign)
+      expect(actual).to be_a(SendGrid4r::REST::MarketingCampaigns::Campaign)
     end
 
     it '#delete_campaign' do
@@ -338,31 +338,31 @@ describe SendGrid4r::REST::Campaigns::Campaigns do
     it '#patch_campaign' do
       allow(client).to receive(:execute).and_return(campaign)
       actual = client.patch_campaign(campaign_id: 0, params: nil)
-      expect(actual).to be_a(SendGrid4r::REST::Campaigns::Campaigns::Campaign)
+      expect(actual).to be_a(SendGrid4r::REST::MarketingCampaigns::Campaign)
     end
 
     it '#send_campaign' do
       allow(client).to receive(:execute).and_return(sent)
       actual = client.send_campaign(campaign_id: 0)
-      expect(actual).to be_a(SendGrid4r::REST::Campaigns::Campaigns::Campaign)
+      expect(actual).to be_a(SendGrid4r::REST::MarketingCampaigns::Campaign)
     end
 
     it '#schedule_campaign' do
       allow(client).to receive(:execute).and_return(schedule)
       actual = client.schedule_campaign(campaign_id: 0, send_at: nil)
-      expect(actual).to be_a(SendGrid4r::REST::Campaigns::Campaigns::Campaign)
+      expect(actual).to be_a(SendGrid4r::REST::MarketingCampaigns::Campaign)
     end
 
     it '#reschedule_campaign' do
       allow(client).to receive(:execute).and_return(schedule)
       actual = client.reschedule_campaign(campaign_id: 0, send_at: nil)
-      expect(actual).to be_a(SendGrid4r::REST::Campaigns::Campaigns::Campaign)
+      expect(actual).to be_a(SendGrid4r::REST::MarketingCampaigns::Campaign)
     end
 
     it '#get_schedule_time_campaign' do
       allow(client).to receive(:execute).and_return(schedule)
       actual = client.get_schedule_time_campaign(campaign_id: 0)
-      expect(actual).to be_a(SendGrid4r::REST::Campaigns::Campaigns::Campaign)
+      expect(actual).to be_a(SendGrid4r::REST::MarketingCampaigns::Campaign)
     end
 
     it '#unschedule_campaign' do
@@ -378,8 +378,8 @@ describe SendGrid4r::REST::Campaigns::Campaigns do
     end
 
     it 'creates campaign instance' do
-      actual = SendGrid4r::REST::Campaigns::Campaigns.create_campaign(campaign)
-      expect(actual).to be_a(SendGrid4r::REST::Campaigns::Campaigns::Campaign)
+      actual = SendGrid4r::REST::MarketingCampaigns.create_campaign(campaign)
+      expect(actual).to be_a(SendGrid4r::REST::MarketingCampaigns::Campaign)
       expect(actual.id).to eq(986724)
       expect(actual.title).to eq('March Newsletter')
       expect(actual.subject).to eq('New Products for Spring!')
@@ -398,27 +398,27 @@ describe SendGrid4r::REST::Campaigns::Campaigns do
     end
 
     it 'creates campaigns instance' do
-      actual = SendGrid4r::REST::Campaigns::Campaigns.create_campaigns(
+      actual = SendGrid4r::REST::MarketingCampaigns.create_campaigns(
         campaigns
       )
-      expect(actual).to be_a(SendGrid4r::REST::Campaigns::Campaigns::Campaigns)
+      expect(actual).to be_a(SendGrid4r::REST::MarketingCampaigns::Campaigns)
       actual.result.each do |campaign|
         expect(campaign).to be_a(
-          SendGrid4r::REST::Campaigns::Campaigns::Campaign
+          SendGrid4r::REST::MarketingCampaigns::Campaign
         )
       end
     end
 
     it 'creates sent instance' do
-      actual = SendGrid4r::REST::Campaigns::Campaigns.create_campaign(sent)
-      expect(actual).to be_a(SendGrid4r::REST::Campaigns::Campaigns::Campaign)
+      actual = SendGrid4r::REST::MarketingCampaigns.create_campaign(sent)
+      expect(actual).to be_a(SendGrid4r::REST::MarketingCampaigns::Campaign)
       expect(actual.id).to eq(986724)
       expect(actual.status).to eq('Scheduled')
     end
 
     it 'creates schedule instance' do
-      actual = SendGrid4r::REST::Campaigns::Campaigns.create_campaign(schedule)
-      expect(actual).to be_a(SendGrid4r::REST::Campaigns::Campaigns::Campaign)
+      actual = SendGrid4r::REST::MarketingCampaigns.create_campaign(schedule)
+      expect(actual).to be_a(SendGrid4r::REST::MarketingCampaigns::Campaign)
       expect(actual.id).to eq(986724)
       expect(actual.send_at).to eq(Time.at(1489771528))
       expect(actual.status).to eq('Scheduled')
