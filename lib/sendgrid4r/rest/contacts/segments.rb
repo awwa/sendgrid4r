@@ -6,14 +6,10 @@ module SendGrid4r::REST
     # SendGrid Web API v3 Contacts - Segments
     #
     module Segments
-      include SendGrid4r::REST::Request
+      include Request
 
-      Condition = Struct.new(
-        :field, :value, :operator, :and_or
-      )
-      Segment = Struct.new(
-        :id, :name, :list_id, :conditions, :recipient_count
-      )
+      Condition = Struct.new(:field, :value, :operator, :and_or)
+      Segment = Struct.new(:id, :name, :list_id, :conditions, :recipient_count)
       Segments = Struct.new(:segments)
 
       def self.url(segment_id = nil)
@@ -31,11 +27,8 @@ module SendGrid4r::REST
 
       def self.create_segment(resp)
         return resp if resp.nil?
-        conditions = []
-        resp['conditions'].each do |condition|
-          conditions.push(
-            SendGrid4r::REST::Contacts::Segments.create_condition(condition)
-          )
+        conditions = resp['conditions'].map do |condition|
+          Contacts::Segments.create_condition(condition)
         end
         Segment.new(
           resp['id'],
@@ -48,47 +41,40 @@ module SendGrid4r::REST
 
       def self.create_segments(resp)
         return resp if resp.nil?
-        segments = []
-        resp['segments'].each do |segment|
-          segments.push(
-            SendGrid4r::REST::Contacts::Segments.create_segment(segment)
-          )
+        segments = resp['segments'].map do |segment|
+          Contacts::Segments.create_segment(segment)
         end
         Segments.new(segments)
       end
 
       def post_segment(params:, &block)
-        endpoint = SendGrid4r::REST::Contacts::Segments.url
-        resp = post(@auth, endpoint, params.to_h, &block)
-        SendGrid4r::REST::Contacts::Segments.create_segment(resp)
+        resp = post(@auth, Contacts::Segments.url, params.to_h, &block)
+        Contacts::Segments.create_segment(resp)
       end
 
       def get_segments(&block)
-        resp = get(@auth, SendGrid4r::REST::Contacts::Segments.url, &block)
-        SendGrid4r::REST::Contacts::Segments.create_segments(resp)
+        resp = get(@auth, Contacts::Segments.url, &block)
+        Contacts::Segments.create_segments(resp)
       end
 
       def get_segment(segment_id:, &block)
-        endpoint = SendGrid4r::REST::Contacts::Segments.url(segment_id)
-        resp = get(@auth, endpoint, &block)
-        SendGrid4r::REST::Contacts::Segments.create_segment(resp)
+        resp = get(@auth, Contacts::Segments.url(segment_id), &block)
+        Contacts::Segments.create_segment(resp)
       end
 
       def patch_segment(segment_id:, params:, &block)
-        endpoint = SendGrid4r::REST::Contacts::Segments.url(segment_id)
-        resp = patch(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Contacts::Segments.create_segment(resp)
+        resp = patch(@auth, Contacts::Segments.url(segment_id), params, &block)
+        Contacts::Segments.create_segment(resp)
       end
 
       def delete_segment(segment_id:, &block)
-        endpoint = SendGrid4r::REST::Contacts::Segments.url(segment_id)
-        delete(@auth, endpoint, &block)
+        delete(@auth, Contacts::Segments.url(segment_id), &block)
       end
 
       def get_recipients_on_segment(segment_id:, &block)
-        url = SendGrid4r::REST::Contacts::Segments.url(segment_id)
-        resp = get(@auth, "#{url}/recipients", nil, &block)
-        SendGrid4r::REST::Contacts::Recipients.create_recipients(resp)
+        endpoint = "#{Contacts::Segments.url(segment_id)}/recipients"
+        resp = get(@auth, endpoint, nil, &block)
+        Contacts::Recipients.create_recipients(resp)
       end
     end
   end

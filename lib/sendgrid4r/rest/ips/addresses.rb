@@ -9,18 +9,15 @@ module SendGrid4r::REST
     # SendGrid Web API v3 Ip Management - Pools
     #
     module Addresses
-      include SendGrid4r::REST::Request
+      include Request
 
       Address = Struct.new(
-        :ip, :pools, :warmup, :start_date, :subusers, :rdns, :pool_name)
+        :ip, :pools, :warmup, :start_date, :subusers, :rdns, :pool_name
+      )
 
       def self.create_addresses(resp)
         return resp if resp.nil?
-        ips = []
-        resp.each do |address|
-          ips.push(SendGrid4r::REST::Ips::Addresses.create_address(address))
-        end
-        ips
+        resp.map { |address| Ips::Addresses.create_address(address) }
       end
 
       def self.create_address(resp)
@@ -43,31 +40,27 @@ module SendGrid4r::REST
       end
 
       def post_ip_to_pool(pool_name:, ip:, &block)
-        endpoint = SendGrid4r::REST::Ips::Pools.url(pool_name, 'ips')
-        resp = post(@auth, endpoint, ip: ip, &block)
-        SendGrid4r::REST::Ips::Addresses.create_address(resp)
+        resp = post(@auth, Ips::Pools.url(pool_name, 'ips'), ip: ip, &block)
+        Ips::Addresses.create_address(resp)
       end
 
       def get_ips(&block)
-        resp = get(@auth, SendGrid4r::REST::Ips::Addresses.url, &block)
-        SendGrid4r::REST::Ips::Addresses.create_addresses(resp)
+        resp = get(@auth, Ips::Addresses.url, &block)
+        Ips::Addresses.create_addresses(resp)
       end
 
       def get_ips_assigned(&block)
-        endpoint = SendGrid4r::REST::Ips::Addresses.url('assigned')
-        resp = get(@auth, endpoint, &block)
-        SendGrid4r::REST::Ips::Addresses.create_addresses(resp)
+        resp = get(@auth, Ips::Addresses.url('assigned'), &block)
+        Ips::Addresses.create_addresses(resp)
       end
 
       def get_ip(ip:, &block)
-        endpoint = SendGrid4r::REST::Ips::Addresses.url(ip)
-        resp = get(@auth, endpoint, &block)
-        SendGrid4r::REST::Ips::Addresses.create_address(resp)
+        resp = get(@auth, Ips::Addresses.url(ip), &block)
+        Ips::Addresses.create_address(resp)
       end
 
       def delete_ip_from_pool(pool_name:, ip:, &block)
-        endpoint = SendGrid4r::REST::Ips::Pools.url(pool_name, 'ips', ip)
-        delete(@auth, endpoint, &block)
+        delete(@auth, Ips::Pools.url(pool_name, 'ips', ip), &block)
       end
     end
   end

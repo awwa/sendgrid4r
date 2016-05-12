@@ -6,17 +6,13 @@ module SendGrid4r::REST
     # SendGrid Web API v3 Settings - Mail
     #
     module Mail
-      include SendGrid4r::REST::Request
+      include Request
 
       AddressWhitelist = Struct.new(:enabled, :list)
 
       def self.create_address_whitelist(resp)
         return resp if resp.nil?
-        list = []
-        resp['list'].each do |address|
-          list.push(address)
-        end
-        AddressWhitelist.new(resp['enabled'], list)
+        AddressWhitelist.new(resp['enabled'], resp['list'])
       end
 
       Bcc = Struct.new(:enabled, :email)
@@ -82,105 +78,95 @@ module SendGrid4r::REST
         params = {}
         params['limit'] = limit unless limit.nil?
         params['offset'] = offset unless offset.nil?
-        endpoint = SendGrid4r::REST::Settings::Mail.url
-        resp = get(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Settings.create_results(resp)
+        resp = get(@auth, Settings::Mail.url, params, &block)
+        Settings.create_results(resp)
       end
 
       def get_settings_address_whitelist(&block)
-        endpoint = SendGrid4r::REST::Settings::Mail.url('address_whitelist')
-        resp = get(@auth, endpoint, &block)
-        SendGrid4r::REST::Settings::Mail.create_address_whitelist(resp)
+        resp = get(@auth, Settings::Mail.url('address_whitelist'), &block)
+        Settings::Mail.create_address_whitelist(resp)
       end
 
       def patch_settings_address_whitelist(params:, &block)
-        endpoint = SendGrid4r::REST::Settings::Mail.url('address_whitelist')
+        endpoint = Settings::Mail.url('address_whitelist')
         resp = patch(@auth, endpoint, params.to_h, &block)
-        SendGrid4r::REST::Settings::Mail.create_address_whitelist(resp)
+        Settings::Mail.create_address_whitelist(resp)
       end
 
       def get_settings_bcc(&block)
-        endpoint = SendGrid4r::REST::Settings::Mail.url('bcc')
-        resp = get(@auth, endpoint, &block)
-        SendGrid4r::REST::Settings::Mail.create_bcc(resp)
+        resp = get(@auth, Settings::Mail.url('bcc'), &block)
+        Settings::Mail.create_bcc(resp)
       end
 
       def patch_settings_bcc(params:, &block)
-        endpoint = SendGrid4r::REST::Settings::Mail.url('bcc')
+        endpoint = Settings::Mail.url('bcc')
         resp = patch(@auth, endpoint, params.to_h, &block)
-        SendGrid4r::REST::Settings::Mail.create_bcc(resp)
+        Settings::Mail.create_bcc(resp)
       end
 
       def get_settings_bounce_purge(&block)
-        endpoint = SendGrid4r::REST::Settings::Mail.url('bounce_purge')
-        resp = get(@auth, endpoint, &block)
-        SendGrid4r::REST::Settings::Mail.create_bounce_purge(resp)
+        resp = get(@auth, Settings::Mail.url('bounce_purge'), &block)
+        Settings::Mail.create_bounce_purge(resp)
       end
 
       def patch_settings_bounce_purge(params:, &block)
-        endpoint = SendGrid4r::REST::Settings::Mail.url('bounce_purge')
+        endpoint = Settings::Mail.url('bounce_purge')
         resp = patch(@auth, endpoint, params.to_h, &block)
-        SendGrid4r::REST::Settings::Mail.create_bounce_purge(resp)
+        Settings::Mail.create_bounce_purge(resp)
       end
 
       def get_settings_footer(&block)
-        endpoint = SendGrid4r::REST::Settings::Mail.url('footer')
-        resp = get(@auth, endpoint, &block)
-        SendGrid4r::REST::Settings::Mail.create_footer(resp)
+        resp = get(@auth, Settings::Mail.url('footer'), &block)
+        Settings::Mail.create_footer(resp)
       end
 
       def patch_settings_footer(params:, &block)
-        endpoint = SendGrid4r::REST::Settings::Mail.url('footer')
-        resp = patch(@auth, endpoint, params.to_h, &block)
-        SendGrid4r::REST::Settings::Mail.create_footer(resp)
+        resp = patch(@auth, Settings::Mail.url('footer'), params.to_h, &block)
+        Settings::Mail.create_footer(resp)
       end
 
       def get_settings_forward_bounce(&block)
-        endpoint = SendGrid4r::REST::Settings::Mail.url('forward_bounce')
-        resp = get(@auth, endpoint, &block)
-        SendGrid4r::REST::Settings::Mail.create_forward_bounce(resp)
+        resp = get(@auth, Settings::Mail.url('forward_bounce'), &block)
+        Settings::Mail.create_forward_bounce(resp)
       end
 
       def patch_settings_forward_bounce(params:, &block)
-        endpoint = SendGrid4r::REST::Settings::Mail.url('forward_bounce')
+        endpoint = Settings::Mail.url('forward_bounce')
         resp = patch(@auth, endpoint, params.to_h, &block)
-        SendGrid4r::REST::Settings::Mail.create_forward_bounce(resp)
+        Settings::Mail.create_forward_bounce(resp)
       end
 
       def get_settings_forward_spam(&block)
-        endpoint = SendGrid4r::REST::Settings::Mail.url('forward_spam')
-        resp = get(@auth, endpoint, &block)
-        SendGrid4r::REST::Settings::Mail.create_forward_spam(resp)
+        resp = get(@auth, Settings::Mail.url('forward_spam'), &block)
+        Settings::Mail.create_forward_spam(resp)
       end
 
       def patch_settings_forward_spam(params:, &block)
-        endpoint = SendGrid4r::REST::Settings::Mail.url('forward_spam')
+        endpoint = Settings::Mail.url('forward_spam')
         resp = patch(@auth, endpoint, params.to_h, &block)
-        SendGrid4r::REST::Settings::Mail.create_forward_spam(resp)
+        Settings::Mail.create_forward_spam(resp)
       end
 
       def get_settings_template(&block)
-        endpoint = SendGrid4r::REST::Settings::Mail.url('template')
-        resp = get(@auth, endpoint, &block)
-        SendGrid4r::REST::Settings::Mail.create_template(resp)
+        resp = get(@auth, Settings::Mail.url('template'), &block)
+        Settings::Mail.create_template(resp)
       end
 
       def patch_settings_template(params:, &block)
-        endpoint = SendGrid4r::REST::Settings::Mail.url('template')
+        endpoint = Settings::Mail.url('template')
         resp = patch(@auth, endpoint, params.to_h, &block)
-        SendGrid4r::REST::Settings::Mail.create_template(resp)
+        Settings::Mail.create_template(resp)
       end
 
       def get_settings_plain_content(&block)
-        endpoint = SendGrid4r::REST::Settings::Mail.url('plain_content')
-        resp = get(@auth, endpoint, &block)
-        SendGrid4r::REST::Settings::Mail.create_plain_content(resp)
+        resp = get(@auth, Settings::Mail.url('plain_content'), &block)
+        Settings::Mail.create_plain_content(resp)
       end
 
       def patch_settings_plain_content(params:, &block)
-        endpoint = SendGrid4r::REST::Settings::Mail.url('plain_content')
+        endpoint = Settings::Mail.url('plain_content')
         resp = patch(@auth, endpoint, params.to_h, &block)
-        SendGrid4r::REST::Settings::Mail.create_plain_content(resp)
+        Settings::Mail.create_plain_content(resp)
       end
     end
   end

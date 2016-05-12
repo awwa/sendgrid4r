@@ -6,7 +6,7 @@ module SendGrid4r::REST
     # SendGrid Web API v3 Contacts - Custom Fields
     #
     module CustomFields
-      include SendGrid4r::REST::Request
+      include Request
 
       Field = Struct.new(:id, :name, :type, :value) do
         def eql?(other)
@@ -33,11 +33,8 @@ module SendGrid4r::REST
 
       def self.create_fields(resp)
         return resp if resp.nil?
-        custom_fields = []
-        resp['custom_fields'].each do |field|
-          custom_fields.push(
-            SendGrid4r::REST::Contacts::CustomFields.create_field(field)
-          )
+        custom_fields = resp['custom_fields'].map do |field|
+          Contacts::CustomFields.create_field(field)
         end
         Fields.new(custom_fields)
       end
@@ -46,34 +43,22 @@ module SendGrid4r::REST
         params = {}
         params['name'] = name
         params['type'] = type
-        resp = post(
-          @auth, SendGrid4r::REST::Contacts::CustomFields.url, params, &block
-        )
-        SendGrid4r::REST::Contacts::CustomFields.create_field(resp)
+        resp = post(@auth, Contacts::CustomFields.url, params, &block)
+        Contacts::CustomFields.create_field(resp)
       end
 
       def get_custom_fields(&block)
-        resp = get(
-          @auth, SendGrid4r::REST::Contacts::CustomFields.url, &block
-        )
-        SendGrid4r::REST::Contacts::CustomFields.create_fields(resp)
+        resp = get(@auth, Contacts::CustomFields.url, &block)
+        Contacts::CustomFields.create_fields(resp)
       end
 
       def get_custom_field(custom_field_id:, &block)
-        resp = get(
-          @auth,
-          SendGrid4r::REST::Contacts::CustomFields.url(custom_field_id),
-          &block
-        )
-        SendGrid4r::REST::Contacts::CustomFields.create_field(resp)
+        resp = get(@auth, Contacts::CustomFields.url(custom_field_id), &block)
+        Contacts::CustomFields.create_field(resp)
       end
 
       def delete_custom_field(custom_field_id:, &block)
-        delete(
-          @auth,
-          SendGrid4r::REST::Contacts::CustomFields.url(custom_field_id),
-          &block
-        )
+        delete(@auth, Contacts::CustomFields.url(custom_field_id), &block)
       end
     end
   end

@@ -6,7 +6,7 @@ module SendGrid4r::REST
     # SendGrid Web API v3 Stats - Advanced
     #
     module Advanced
-      include SendGrid4r::REST::Request
+      include Request
 
       def get_geo_stats(
           start_date:,
@@ -22,7 +22,7 @@ module SendGrid4r::REST
           country: country
         }
         resp = get(@auth, "#{BASE_URL}/geo/stats", params, &block)
-        SendGrid4r::REST::Stats.create_top_stats(resp)
+        Stats.create_top_stats(resp)
       end
 
       def get_devices_stats(
@@ -37,7 +37,7 @@ module SendGrid4r::REST
           aggregated_by: aggregated_by
         }
         resp = get(@auth, "#{BASE_URL}/devices/stats", params, &block)
-        SendGrid4r::REST::Stats.create_top_stats(resp)
+        Stats.create_top_stats(resp)
       end
 
       def get_clients_stats(
@@ -52,7 +52,7 @@ module SendGrid4r::REST
           aggregated_by: aggregated_by
         }
         resp = get(@auth, "#{BASE_URL}/clients/stats", params, &block)
-        SendGrid4r::REST::Stats.create_top_stats(resp)
+        Stats.create_top_stats(resp)
       end
 
       def get_clients_type_stats(
@@ -70,7 +70,7 @@ module SendGrid4r::REST
         }
         endpoint = "#{BASE_URL}/clients/#{client_type}/stats"
         resp = get(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Stats.create_top_stats(resp)
+        Stats.create_top_stats(resp)
       end
 
       def get_mailbox_providers_stats(
@@ -88,7 +88,7 @@ module SendGrid4r::REST
         }
         endpoint = "#{BASE_URL}/mailbox_providers/stats"
         resp = get(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Stats.create_top_stats(resp)
+        Stats.create_top_stats(resp)
       end
 
       def get_browsers_stats(
@@ -105,7 +105,7 @@ module SendGrid4r::REST
           browsers: browsers
         }
         resp = get(@auth, "#{BASE_URL}/browsers/stats", params, &block)
-        SendGrid4r::REST::Stats.create_top_stats(resp)
+        Stats.create_top_stats(resp)
       end
     end
   end

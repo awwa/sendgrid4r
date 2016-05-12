@@ -5,7 +5,7 @@ module SendGrid4r::REST
   # SendGrid Web API v3 Template Engine - Templates
   #
   module Templates
-    include SendGrid4r::REST::Request
+    include Request
 
     Templates = Struct.new(:templates)
     Template = Struct.new(:id, :name, :versions)

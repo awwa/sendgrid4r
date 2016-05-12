@@ -6,7 +6,7 @@ module SendGrid4r::REST
     # SendGrid Web API v3 Contacts - Lists
     #
     module Lists
-      include SendGrid4r::REST::Request
+      include Request
 
       List = Struct.new(:id, :name, :recipient_count)
       Lists = Struct.new(:lists)
@@ -18,7 +18,7 @@ module SendGrid4r::REST
       end
 
       def self.recipients_url(list_id, recipient_id = nil)
-        url = "#{SendGrid4r::REST::Contacts::Lists.url(list_id)}/recipients"
+        url = "#{Contacts::Lists.url(list_id)}/recipients"
         url = "#{url}/#{recipient_id}" unless recipient_id.nil?
         url
       end
@@ -30,81 +30,65 @@ module SendGrid4r::REST
 
       def self.create_lists(resp)
         return resp if resp.nil?
-        lists = []
-        resp['lists'].each do |list|
-          lists.push(SendGrid4r::REST::Contacts::Lists.create_list(list))
-        end
+        lists = resp['lists'].map { |list| Contacts::Lists.create_list(list) }
         Lists.new(lists)
       end
 
       def post_list(name:, &block)
         params = {}
         params['name'] = name
-        resp = post(
-          @auth, SendGrid4r::REST::Contacts::Lists.url, params, &block
-        )
-        SendGrid4r::REST::Contacts::Lists.create_list(resp)
+        resp = post(@auth, Contacts::Lists.url, params, &block)
+        Contacts::Lists.create_list(resp)
       end
 
       def get_lists(&block)
-        resp = get(@auth, SendGrid4r::REST::Contacts::Lists.url, &block)
-        SendGrid4r::REST::Contacts::Lists.create_lists(resp)
+        resp = get(@auth, Contacts::Lists.url, &block)
+        Contacts::Lists.create_lists(resp)
       end
 
       def get_list(list_id:, &block)
-        resp = get(
-          @auth, SendGrid4r::REST::Contacts::Lists.url(list_id), &block
-        )
-        SendGrid4r::REST::Contacts::Lists.create_list(resp)
+        resp = get(@auth, Contacts::Lists.url(list_id), &block)
+        Contacts::Lists.create_list(resp)
       end
 
       def patch_list(list_id:, name:, &block)
         params = {}
         params['name'] = name
-        endpoint = SendGrid4r::REST::Contacts::Lists.url(list_id)
-        resp = patch(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Contacts::Lists.create_list(resp)
+        resp = patch(@auth, Contacts::Lists.url(list_id), params, &block)
+        Contacts::Lists.create_list(resp)
       end
 
       def delete_list(list_id:, &block)
-        delete(@auth, SendGrid4r::REST::Contacts::Lists.url(list_id), &block)
+        delete(@auth, Contacts::Lists.url(list_id), &block)
       end
 
       # no bodies returned
       def post_recipients_to_list(list_id:, recipients:, &block)
-        url = SendGrid4r::REST::Contacts::Lists.url(list_id)
-        endpoint = "#{url}/recipients"
+        endpoint = "#{Contacts::Lists.url(list_id)}/recipients"
         post(@auth, endpoint, recipients, &block)
       end
 
-      def get_recipients_from_list(
-        list_id:, page: nil, page_size: nil, &block
-      )
+      def get_recipients_from_list(list_id:, page: nil, page_size: nil, &block)
         params = {}
         params['page'] = page unless page.nil?
         params['page_size'] = page_size unless page_size.nil?
-        endpoint = SendGrid4r::REST::Contacts::Lists.recipients_url(list_id)
+        endpoint = Contacts::Lists.recipients_url(list_id)
         resp = get(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Contacts::Recipients.create_recipients(resp)
+        Contacts::Recipients.create_recipients(resp)
       end
 
       def post_recipient_to_list(list_id:, recipient_id:, &block)
-        endpoint = SendGrid4r::REST::Contacts::Lists.recipients_url(
-          list_id, recipient_id
-        )
+        endpoint = Contacts::Lists.recipients_url(list_id, recipient_id)
         post(@auth, endpoint, &block)
       end
 
       def delete_recipient_from_list(list_id:, recipient_id:, &block)
-        endpoint = SendGrid4r::REST::Contacts::Lists.recipients_url(
-          list_id, recipient_id
-        )
+        endpoint = Contacts::Lists.recipients_url(list_id, recipient_id)
         delete(@auth, endpoint, &block)
       end
 
       def delete_lists(list_ids:, &block)
-        endpoint = "#{BASE_URL}/contactdb/lists"
-        delete(@auth, endpoint, nil, list_ids, &block)
+        delete(@auth, "#{BASE_URL}/contactdb/lists", nil, list_ids, &block)
       end
     end
   end

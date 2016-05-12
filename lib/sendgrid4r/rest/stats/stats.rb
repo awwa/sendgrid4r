@@ -39,17 +39,13 @@ module SendGrid4r::REST
 
     def self.create_top_stat(resp)
       return resp if resp.nil?
-      stats = []
-      resp['stats'].each do |stat|
-        stats.push(SendGrid4r::REST::Stats.create_stat(stat))
-      end
+      stats = resp['stats'].map { |stat| Stats.create_stat(stat) }
       TopStat.new(resp['date'], stats)
     end
 
     def self.create_stat(resp)
       return resp if resp.nil?
-      stat = SendGrid4r::REST::Stats.create_metric(resp['metrics'])
-      Stat.new(stat, resp['name'], resp['type'])
+      Stat.new(Stats.create_metric(resp['metrics']), resp['name'], resp['type'])
     end
 
     def self.create_metric(resp)
@@ -69,11 +65,7 @@ module SendGrid4r::REST
 
     def self.create_top_stats(resp_a)
       return resp_a if resp_a.nil?
-      top_stats = []
-      resp_a.each do |resp|
-        top_stats.push(SendGrid4r::REST::Stats.create_top_stat(resp))
-      end
-      top_stats
+      resp_a.map { |resp| Stats.create_top_stat(resp) }
     end
   end
 end

@@ -5,10 +5,10 @@ module SendGrid4r::REST
   # SendGrid Web API v3 EmailActivity
   #
   module EmailActivity
-    include SendGrid4r::REST::Request
+    include Request
 
     #
-    # SendGrid Web API v3 Stats - AggregatedBy
+    # SendGrid Web API v3 Event - AggregatedBy
     #
     module Event
       BOUNCES = 'bounces'
@@ -31,19 +31,12 @@ module SendGrid4r::REST
     )
 
     def self.url
-      url = "#{BASE_URL}/email_activity"
-      url
+      "#{BASE_URL}/email_activity"
     end
 
     def self.create_activities(resp)
       return resp if resp.nil?
-      activities = []
-      resp.each do |activity|
-        activities.push(
-          SendGrid4r::REST::EmailActivity.create_activity(activity)
-        )
-      end
-      activities
+      resp.map { |activity| EmailActivity.create_activity(activity) }
     end
 
     def self.create_activity(resp)
@@ -72,8 +65,8 @@ module SendGrid4r::REST
       params['exclude_events'] = exclude_events unless exclude_events.nil?
       params['start_time'] = start_time.to_i unless start_time.nil?
       params['end_time'] = end_time.to_i unless end_time.nil?
-      resp = get(@auth, SendGrid4r::REST::EmailActivity.url, params, &block)
-      SendGrid4r::REST::EmailActivity.create_activities(resp)
+      resp = get(@auth, EmailActivity.url, params, &block)
+      EmailActivity.create_activities(resp)
     end
   end
 end

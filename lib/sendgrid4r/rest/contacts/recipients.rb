@@ -6,7 +6,7 @@ module SendGrid4r::REST
     # SendGrid Web API v3 Contacts - Recipients
     #
     module Recipients
-      include SendGrid4r::REST::Request
+      include Request
 
       Recipient = Struct.new(
         :created_at,
@@ -26,13 +26,9 @@ module SendGrid4r::REST
       def self.create_recipient(resp)
         return resp if resp.nil?
         custom_fields = []
-        unless resp['custom_fields'].nil?
-          resp['custom_fields'].each do |field|
-            custom_fields.push(
-              SendGrid4r::REST::Contacts::CustomFields.create_field(field)
-            )
-          end
-        end
+        custom_fields = resp['custom_fields'].map do |field|
+          Contacts::CustomFields.create_field(field)
+        end unless resp['custom_fields'].nil?
         Recipient.new(
           Time.at(resp['created_at']), custom_fields,
           resp['email'], resp['first_name'], resp['id'],
@@ -44,11 +40,8 @@ module SendGrid4r::REST
 
       def self.create_recipients(resp)
         return resp if resp.nil?
-        recipients = []
-        resp['recipients'].each do |recipient|
-          recipients.push(
-            SendGrid4r::REST::Contacts::Recipients.create_recipient(recipient)
-          )
+        recipients = resp['recipients'].map do |recipient|
+          Contacts::Recipients.create_recipient(recipient)
         end
         Recipients.new(recipients)
       end
@@ -60,61 +53,51 @@ module SendGrid4r::REST
       end
 
       def post_recipients(params:, &block)
-        endpoint = SendGrid4r::REST::Contacts::Recipients.url
-        resp = post(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Contacts::Recipients.create_result(resp)
+        resp = post(@auth, Contacts::Recipients.url, params, &block)
+        Contacts::Recipients.create_result(resp)
       end
 
       def patch_recipients(params:, &block)
-        endpoint = SendGrid4r::REST::Contacts::Recipients.url
-        resp = patch(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Contacts::Recipients.create_result(resp)
+        resp = patch(@auth, Contacts::Recipients.url, params, &block)
+        Contacts::Recipients.create_result(resp)
       end
 
       def delete_recipients(recipient_ids:, &block)
-        endpoint = SendGrid4r::REST::Contacts::Recipients.url
-        delete(@auth, endpoint, nil, recipient_ids, &block)
+        delete(@auth, Contacts::Recipients.url, nil, recipient_ids, &block)
       end
 
       def get_recipients(page: nil, page_size: nil, &block)
         params = {}
         params['page_size'] = page_size unless page_size.nil?
         params['page'] = page unless page.nil?
-        endpoint = SendGrid4r::REST::Contacts::Recipients.url
-        resp = get(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Contacts::Recipients.create_recipients(resp)
+        resp = get(@auth, Contacts::Recipients.url, params, &block)
+        Contacts::Recipients.create_recipients(resp)
       end
 
       def get_recipient(recipient_id:, &block)
-        endpoint = SendGrid4r::REST::Contacts::Recipients.url(recipient_id)
-        resp = get(@auth, endpoint, &block)
-        SendGrid4r::REST::Contacts::Recipients.create_recipient(resp)
+        resp = get(@auth, Contacts::Recipients.url(recipient_id), &block)
+        Contacts::Recipients.create_recipient(resp)
       end
 
       def delete_recipient(recipient_id:, &block)
-        endpoint = SendGrid4r::REST::Contacts::Recipients.url(recipient_id)
-        delete(@auth, endpoint, &block)
+        delete(@auth, Contacts::Recipients.url(recipient_id), &block)
       end
 
       def get_lists_recipient_belong(recipient_id:, &block)
         resp = get(
-          @auth,
-          "#{SendGrid4r::REST::Contacts::Recipients.url(recipient_id)}/lists",
-          &block
+          @auth, "#{Contacts::Recipients.url(recipient_id)}/lists", &block
         )
-        SendGrid4r::REST::Contacts::Lists.create_lists(resp)
+        Contacts::Lists.create_lists(resp)
       end
 
       def get_recipients_count(&block)
-        endpoint = "#{SendGrid4r::REST::Contacts::Recipients.url}/count"
-        resp = get(@auth, endpoint, &block)
+        resp = get(@auth, "#{Contacts::Recipients.url}/count", &block)
         resp['recipient_count'] unless resp.nil?
       end
 
       def search_recipients(params:, &block)
-        endpoint = "#{SendGrid4r::REST::Contacts::Recipients.url}/search"
-        resp = get(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Contacts::Recipients.create_recipients(resp)
+        resp = get(@auth, "#{Contacts::Recipients.url}/search", params, &block)
+        Contacts::Recipients.create_recipients(resp)
       end
 
       Result = Struct.new(
@@ -128,23 +111,12 @@ module SendGrid4r::REST
 
       def self.create_result(resp)
         return resp if resp.nil?
-        error_indices = []
-        resp['error_indices'].each do |index|
-          error_indices.push(index)
-        end
-        persisted_recipients = []
-        resp['persisted_recipients'].each do |value|
-          persisted_recipients.push(value)
-        end
-        errors = []
-        resp['errors'].each do |error|
-          errors.push(
-            SendGrid4r::REST::Contacts::Recipients.create_error(error)
-          )
+        errors = resp['errors'].map do |error|
+          Contacts::Recipients.create_error(error)
         end unless resp['errors'].nil?
         Result.new(
-          resp['error_count'], error_indices, resp['new_count'],
-          persisted_recipients, resp['updated_count'], errors
+          resp['error_count'], resp['error_indices'], resp['new_count'],
+          resp['persisted_recipients'], resp['updated_count'], errors
         )
       end
 
@@ -152,14 +124,7 @@ module SendGrid4r::REST
 
       def self.create_error(resp)
         return resp if resp.nil?
-        error_indices = []
-        resp['error_indices'].each do |index|
-          error_indices.push(index)
-        end
-        Error.new(
-          error_indices,
-          resp['message']
-        )
+        Error.new(resp['error_indices'], resp['message'])
       end
     end
   end

@@ -7,9 +7,7 @@ module SendGrid4r::REST
   module Bounces
     include Request
 
-    Bounce = Struct.new(
-      :created, :email, :reason, :status
-    )
+    Bounce = Struct.new(:created, :email, :reason, :status)
 
     def self.url(email = nil)
       url = "#{BASE_URL}/suppression/bounces"
@@ -20,21 +18,14 @@ module SendGrid4r::REST
     def self.create_bounces(resp)
       return resp if resp.nil?
       bounces = []
-      resp.each do |bounce|
-        bounces.push(Bounces.create_bounce(bounce))
-      end
+      resp.each { |bounce| bounces.push(Bounces.create_bounce(bounce)) }
       bounces
     end
 
     def self.create_bounce(resp)
       return resp if resp.nil?
       created = Time.at(resp['created']) unless resp['created'].nil?
-      Bounce.new(
-        created,
-        resp['email'],
-        resp['reason'],
-        resp['status']
-      )
+      Bounce.new(created, resp['email'], resp['reason'], resp['status'])
     end
 
     def get_bounces(start_time: nil, end_time: nil, &block)
@@ -46,29 +37,26 @@ module SendGrid4r::REST
     end
 
     def delete_bounces(delete_all: nil, emails: nil, &block)
-      endpoint = Bounces.url
       payload = {}
-      if delete_all == true
+      if delete_all
         payload['delete_all'] = delete_all
       else
         payload['emails'] = emails
       end
-      delete(@auth, endpoint, nil, payload, &block)
+      delete(@auth, Bounces.url, nil, payload, &block)
     end
 
     def get_bounce(email:, &block)
-      endpoint = Bounces.url(email)
       params = {}
       params['email'] = email
-      resp = get(@auth, endpoint, params, &block)
+      resp = get(@auth, Bounces.url(email), params, &block)
       Bounces.create_bounces(resp)
     end
 
     def delete_bounce(email:, &block)
-      endpoint = Bounces.url(email)
       params = {}
       params['email'] = email
-      delete(@auth, endpoint, params, &block)
+      delete(@auth, Bounces.url(email), params, &block)
     end
   end
 end

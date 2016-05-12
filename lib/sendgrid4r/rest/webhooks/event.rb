@@ -9,7 +9,7 @@ module SendGrid4r::REST
     # SendGrid Web API v3 Webhooks ParseApi
     #
     module Event
-      include SendGrid4r::REST::Request
+      include Request
 
       def self.url_event(path)
         "#{BASE_URL}/user/webhooks/event/#{path}"
@@ -32,22 +32,19 @@ module SendGrid4r::REST
       end
 
       def get_settings_event_notification(&block)
-        endpoint = SendGrid4r::REST::Webhooks::Event.url_event('settings')
-        resp = get(@auth, endpoint, &block)
-        SendGrid4r::REST::Webhooks::Event.create_event_notification(resp)
+        resp = get(@auth, Event.url_event('settings'), &block)
+        Event.create_event_notification(resp)
       end
 
       def patch_settings_event_notification(params:, &block)
-        endpoint = SendGrid4r::REST::Webhooks::Event.url_event('settings')
-        resp = patch(@auth, endpoint, params.to_h, &block)
-        SendGrid4r::REST::Webhooks::Event.create_event_notification(resp)
+        resp = patch(@auth, Event.url_event('settings'), params.to_h, &block)
+        Event.create_event_notification(resp)
       end
 
       def test_settings_event_notification(url:, &block)
         params = {}
         params['url'] = url
-        endpoint = SendGrid4r::REST::Webhooks::Event.url_event('test')
-        post(@auth, endpoint, params, &block)
+        post(@auth, Event.url_event('test'), params, &block)
       end
     end
   end

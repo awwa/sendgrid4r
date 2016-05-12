@@ -36,10 +36,7 @@ module SendGrid4r::REST
 
     def self.create_account(resp)
       return resp if resp.nil?
-      Account.new(
-        resp['type'],
-        resp['reputation']
-      )
+      Account.new(resp['type'], resp['reputation'])
     end
 
     def get_user_profile(&block)
@@ -48,8 +45,7 @@ module SendGrid4r::REST
     end
 
     def patch_user_profile(params:, &block)
-      endpoint = Users.url('profile')
-      resp = patch(@auth, endpoint, params, &block)
+      resp = patch(@auth, Users.url('profile'), params, &block)
       Users.create_profile(resp)
     end
 

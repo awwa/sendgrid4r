@@ -6,7 +6,8 @@ module SendGrid4r::REST
     # SendGrid Web API v3 Settings - Partner
     #
     module Partner
-      include SendGrid4r::REST::Request
+      include Request
+
       Partner = Struct.new(:enabled, :license_key)
 
       def self.create_partner(resp)
@@ -24,21 +25,19 @@ module SendGrid4r::REST
         params = {}
         params['limit'] = limit unless limit.nil?
         params['offset'] = offset unless offset.nil?
-        endpoint = SendGrid4r::REST::Settings::Partner.url
-        resp = get(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Settings.create_results(resp)
+        resp = get(@auth, Settings::Partner.url, params, &block)
+        Settings.create_results(resp)
       end
 
       def get_settings_new_relic(&block)
-        endpoint = SendGrid4r::REST::Settings::Partner.url('new_relic')
-        resp = get(@auth, endpoint, &block)
-        SendGrid4r::REST::Settings::Partner.create_partner(resp)
+        resp = get(@auth, Settings::Partner.url('new_relic'), &block)
+        Settings::Partner.create_partner(resp)
       end
 
       def patch_settings_new_relic(params:, &block)
-        endpoint = SendGrid4r::REST::Settings::Partner.url('new_relic')
+        endpoint = Settings::Partner.url('new_relic')
         resp = patch(@auth, endpoint, params.to_h, &block)
-        SendGrid4r::REST::Settings::Partner.create_partner(resp)
+        Settings::Partner.create_partner(resp)
       end
     end
   end

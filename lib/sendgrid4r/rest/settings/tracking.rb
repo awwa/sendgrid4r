@@ -6,7 +6,7 @@ module SendGrid4r::REST
     # SendGrid Web API v3 Settings - Tracking
     #
     module Tracking
-      include SendGrid4r::REST::Request
+      include Request
 
       Click = Struct.new(:enabled)
 
@@ -57,61 +57,53 @@ module SendGrid4r::REST
         params = {}
         params['limit'] = limit unless limit.nil?
         params['offset'] = offset unless offset.nil?
-        endpoint = SendGrid4r::REST::Settings::Tracking.url
-        resp = get(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Settings.create_results(resp)
+        resp = get(@auth, Settings::Tracking.url, params, &block)
+        Settings.create_results(resp)
       end
 
       def get_settings_click(&block)
-        endpoint = SendGrid4r::REST::Settings::Tracking.url('click')
-        resp = get(@auth, endpoint, &block)
-        SendGrid4r::REST::Settings::Tracking.create_click(resp)
+        resp = get(@auth, Settings::Tracking.url('click'), &block)
+        Settings::Tracking.create_click(resp)
       end
 
       def patch_settings_click(params:, &block)
-        endpoint = SendGrid4r::REST::Settings::Tracking.url('click')
+        endpoint = Settings::Tracking.url('click')
         resp = patch(@auth, endpoint, params.to_h, &block)
-        SendGrid4r::REST::Settings::Tracking.create_click(resp)
+        Settings::Tracking.create_click(resp)
       end
 
       def get_settings_google_analytics(&block)
-        endpoint = SendGrid4r::REST::Settings::Tracking.url(
-          'google_analytics'
-        )
+        endpoint = Settings::Tracking.url('google_analytics')
         resp = get(@auth, endpoint, &block)
-        SendGrid4r::REST::Settings::Tracking.create_google_analytics(resp)
+        Settings::Tracking.create_google_analytics(resp)
       end
 
       def patch_settings_google_analytics(params:, &block)
-        endpoint = SendGrid4r::REST::Settings::Tracking.url(
-          'google_analytics'
-        )
+        endpoint = Settings::Tracking.url('google_analytics')
         resp = patch(@auth, endpoint, params.to_h, &block)
-        SendGrid4r::REST::Settings::Tracking.create_google_analytics(resp)
+        Settings::Tracking.create_google_analytics(resp)
       end
 
       def get_settings_open(&block)
-        endpoint = SendGrid4r::REST::Settings::Tracking.url('open')
-        resp = get(@auth, endpoint, &block)
-        SendGrid4r::REST::Settings::Tracking.create_open(resp)
+        resp = get(@auth, Settings::Tracking.url('open'), &block)
+        Settings::Tracking.create_open(resp)
       end
 
       def patch_settings_open(params:, &block)
-        endpoint = SendGrid4r::REST::Settings::Tracking.url('open')
-        resp = patch(@auth, endpoint, params.to_h, &block)
-        SendGrid4r::REST::Settings::Tracking.create_open(resp)
+        resp = patch(@auth, Settings::Tracking.url('open'), params.to_h, &block)
+        Settings::Tracking.create_open(resp)
       end
 
       def get_settings_subscription(&block)
-        endpoint = SendGrid4r::REST::Settings::Tracking.url('subscription')
+        endpoint = Settings::Tracking.url('subscription')
         resp = get(@auth, endpoint, &block)
-        SendGrid4r::REST::Settings::Tracking.create_subscription(resp)
+        Settings::Tracking.create_subscription(resp)
       end
 
       def patch_settings_subscription(params:, &block)
-        endpoint = SendGrid4r::REST::Settings::Tracking.url('subscription')
+        endpoint = Settings::Tracking.url('subscription')
         resp = patch(@auth, endpoint, params.to_h, &block)
-        SendGrid4r::REST::Settings::Tracking.create_subscription(resp)
+        Settings::Tracking.create_subscription(resp)
       end
     end
   end

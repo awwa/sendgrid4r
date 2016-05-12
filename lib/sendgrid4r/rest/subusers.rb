@@ -18,6 +18,10 @@ module SendGrid4r::REST
       url
     end
 
+    def self.url_monitor(username)
+      "#{Subusers.url(username)}/monitor"
+    end
+
     def self.create_subusers(resp)
       return resp if resp.nil?
       subusers = []
@@ -76,7 +80,7 @@ module SendGrid4r::REST
     end
 
     def get_subuser_monitor(username:, email:, frequency:, &block)
-      endpoint = "#{Subusers.url(username)}/monitor"
+      endpoint = Subusers.url_monitor(username)
       payload = {}
       payload['email'] = email
       payload['frequency'] = frequency
@@ -84,7 +88,7 @@ module SendGrid4r::REST
     end
 
     def post_subuser_monitor(username:, email:, frequency:, &block)
-      endpoint = "#{Subusers.url(username)}/monitor"
+      endpoint = Subusers.url_monitor(username)
       payload = {}
       payload['email'] = email
       payload['frequency'] = frequency
@@ -92,7 +96,7 @@ module SendGrid4r::REST
     end
 
     def put_subuser_monitor(username:, email:, frequency:, &block)
-      endpoint = "#{Subusers.url(username)}/monitor"
+      endpoint = Subusers.url_monitor(username)
       payload = {}
       payload['email'] = email
       payload['frequency'] = frequency
@@ -100,12 +104,12 @@ module SendGrid4r::REST
     end
 
     def delete_subuser_monitor(username:, &block)
-      delete(@auth, "#{Subusers.url(username)}/monitor", &block)
+      delete(@auth, Subusers.url_monitor(username), &block)
     end
 
     def get_subuser_reputation(usernames:, &block)
       params = ''
-      usernames.each {|username| params += "usernames=#{username}&"}
+      usernames.each { |username| params += "usernames=#{username}&" }
       endpoint = "#{Subusers.url}/reputations?#{params}"
       Subusers.create_subusers(get(@auth, endpoint, usernames, &block))
     end

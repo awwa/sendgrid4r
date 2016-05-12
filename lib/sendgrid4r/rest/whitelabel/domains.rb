@@ -9,7 +9,7 @@ module SendGrid4r::REST
     # SendGrid Web API v3 Whitelabel Domains
     #
     module Domains
-      include SendGrid4r::REST::Request
+      include Request
 
       Domain = Struct.new(
         :id, :domain, :subdomain, :username, :user_id, :ips, :custom_spf,
@@ -32,13 +32,7 @@ module SendGrid4r::REST
 
       def self.create_domains(resp)
         return resp if resp.nil?
-        domains = []
-        resp.each do |domain|
-          domains.push(
-            SendGrid4r::REST::Whitelabel::Domains.create_domain(domain)
-          )
-        end
-        domains
+        resp.map { |domain| Domains.create_domain(domain) }
       end
 
       def self.create_domain(resp)
@@ -55,29 +49,21 @@ module SendGrid4r::REST
           resp['legacy'],
           resp['automatic_security'],
           resp['valid'],
-          SendGrid4r::REST::Whitelabel::Domains.create_dns(resp['dns'])
+          Domains.create_dns(resp['dns'])
         )
       end
 
       def self.create_dns(resp)
         return resp if resp.nil?
         Dns.new(
-          SendGrid4r::REST::Whitelabel::Domains.create_record(
-            resp['mail_cname']),
-          SendGrid4r::REST::Whitelabel::Domains.create_record(
-            resp['spf']),
-          SendGrid4r::REST::Whitelabel::Domains.create_record(
-            resp['dkim1']),
-          SendGrid4r::REST::Whitelabel::Domains.create_record(
-            resp['dkim2']),
-          SendGrid4r::REST::Whitelabel::Domains.create_record(
-            resp['mail_server']),
-          SendGrid4r::REST::Whitelabel::Domains.create_record(
-            resp['subdomain_spf']),
-          SendGrid4r::REST::Whitelabel::Domains.create_record(
-            resp['domain_spf']),
-          SendGrid4r::REST::Whitelabel::Domains.create_record(
-            resp['dkim'])
+          Domains.create_record(resp['mail_cname']),
+          Domains.create_record(resp['spf']),
+          Domains.create_record(resp['dkim1']),
+          Domains.create_record(resp['dkim2']),
+          Domains.create_record(resp['mail_server']),
+          Domains.create_record(resp['subdomain_spf']),
+          Domains.create_record(resp['domain_spf']),
+          Domains.create_record(resp['dkim'])
         )
       end
 
@@ -100,27 +86,19 @@ module SendGrid4r::REST
         Result.new(
           resp['id'],
           resp['valid'],
-          SendGrid4r::REST::Whitelabel::Domains.create_validation_results(
-            resp['validation_results']
-          )
+          Domains.create_validation_results(resp['validation_results'])
         )
       end
 
       def self.create_validation_results(resp)
         return resp if resp.nil?
         ValidationResults.new(
-          SendGrid4r::REST::Whitelabel::Domains.create_validation_result(
-            resp['mail_cname']),
-          SendGrid4r::REST::Whitelabel::Domains.create_validation_result(
-            resp['dkim1']),
-          SendGrid4r::REST::Whitelabel::Domains.create_validation_result(
-            resp['dkim2']),
-          SendGrid4r::REST::Whitelabel::Domains.create_validation_result(
-            resp['mail_server']),
-          SendGrid4r::REST::Whitelabel::Domains.create_validation_result(
-            resp['subdomain_spf']),
-          SendGrid4r::REST::Whitelabel::Domains.create_validation_result(
-            resp['dkim'])
+          Domains.create_validation_result(resp['mail_cname']),
+          Domains.create_validation_result(resp['dkim1']),
+          Domains.create_validation_result(resp['dkim2']),
+          Domains.create_validation_result(resp['mail_server']),
+          Domains.create_validation_result(resp['subdomain_spf']),
+          Domains.create_validation_result(resp['dkim'])
         )
       end
 
@@ -141,9 +119,8 @@ module SendGrid4r::REST
         end
         params['username'] = username unless username.nil?
         params['domain'] = domain unless domain.nil?
-        endpoint = SendGrid4r::REST::Whitelabel::Domains.url
-        resp = get(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Whitelabel::Domains.create_domains(resp)
+        resp = get(@auth, Domains.url, params, &block)
+        Domains.create_domains(resp)
       end
 
       def post_wl_domain(
@@ -160,88 +137,70 @@ module SendGrid4r::REST
         end
         params['custom_spf'] = custom_spf unless custom_spf.nil?
         params['default'] = default unless default.nil?
-        endpoint = SendGrid4r::REST::Whitelabel::Domains.url
-        resp = post(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Whitelabel::Domains.create_domain(resp)
+        resp = post(@auth, Domains.url, params, &block)
+        Domains.create_domain(resp)
       end
 
       def get_wl_domain(id:, &block)
-        endpoint = SendGrid4r::REST::Whitelabel::Domains.url(id)
-        resp = get(@auth, endpoint, nil, &block)
-        SendGrid4r::REST::Whitelabel::Domains.create_domain(resp)
+        resp = get(@auth, Domains.url(id), nil, &block)
+        Domains.create_domain(resp)
       end
 
-      def patch_wl_domain(
-        id:, custom_spf: nil, default: nil, &block
-      )
+      def patch_wl_domain(id:, custom_spf: nil, default: nil, &block)
         params = {}
         params['custom_spf'] = custom_spf unless custom_spf.nil?
         params['default'] = default unless default.nil?
-        endpoint = SendGrid4r::REST::Whitelabel::Domains.url(id)
-        resp = patch(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Whitelabel::Domains.create_domain(resp)
+        resp = patch(@auth, Domains.url(id), params, &block)
+        Domains.create_domain(resp)
       end
 
       def delete_wl_domain(id:, &block)
-        endpoint = SendGrid4r::REST::Whitelabel::Domains.url(id)
-        delete(@auth, endpoint, &block)
+        delete(@auth, Domains.url(id), &block)
       end
 
       def get_default_wl_domain(domain: nil, &block)
         params = {}
         params['domain'] = domain unless domain.nil?
-        endpoint = SendGrid4r::REST::Whitelabel::Domains.url
-        endpoint = "#{endpoint}/default"
-        resp = get(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Whitelabel::Domains.create_domain(resp)
+        resp = get(@auth, "#{Domains.url}/default", params, &block)
+        Domains.create_domain(resp)
       end
 
       def add_ip_to_wl_domain(id:, ip:, &block)
-        endpoint = SendGrid4r::REST::Whitelabel::Domains.url(id)
-        endpoint = "#{endpoint}/ips"
         params = {}
         params['ip'] = ip
-        resp = post(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Whitelabel::Domains.create_domain(resp)
+        resp = post(@auth, "#{Domains.url(id)}/ips", params, &block)
+        Domains.create_domain(resp)
       end
 
       def remove_ip_from_wl_domain(id:, ip:, &block)
-        endpoint = SendGrid4r::REST::Whitelabel::Domains.url(id, ip)
-        resp = delete(@auth, endpoint, &block)
-        SendGrid4r::REST::Whitelabel::Domains.create_domain(resp)
+        resp = delete(@auth, Domains.url(id, ip), &block)
+        Domains.create_domain(resp)
       end
 
       def validate_wl_domain(id:, &block)
-        endpoint = SendGrid4r::REST::Whitelabel::Domains.url(id)
-        endpoint = "#{endpoint}/validate"
-        resp = post(@auth, endpoint, &block)
-        SendGrid4r::REST::Whitelabel::Domains.create_result(resp)
+        resp = post(@auth, "#{Domains.url(id)}/validate", &block)
+        Domains.create_result(resp)
       end
 
       def get_associated_wl_domain(username:, &block)
-        endpoint = SendGrid4r::REST::Whitelabel::Domains.url
-        endpoint = "#{endpoint}/subuser"
         params = {}
         params['username'] = username
-        resp = get(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Whitelabel::Domains.create_domain(resp)
+        resp = get(@auth, "#{Domains.url}/subuser", params, &block)
+        Domains.create_domain(resp)
       end
 
       def disassociate_wl_domain(username:, &block)
-        endpoint = SendGrid4r::REST::Whitelabel::Domains.url
-        endpoint = "#{endpoint}/subuser"
         params = {}
         params['username'] = username
-        delete(@auth, endpoint, params, &block)
+        delete(@auth, "#{Domains.url}/subuser", params, &block)
       end
 
       def associate_wl_domain(id:, username:, &block)
-        endpoint = SendGrid4r::REST::Whitelabel::Domains.url(id)
-        endpoint = "#{endpoint}/subuser"
+        endpoint = "#{Domains.url(id)}/subuser"
         params = {}
         params['username'] = username
         resp = post(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Whitelabel::Domains.create_domain(resp)
+        Domains.create_domain(resp)
       end
     end
   end

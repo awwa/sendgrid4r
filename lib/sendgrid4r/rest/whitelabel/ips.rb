@@ -9,7 +9,7 @@ module SendGrid4r::REST
     # SendGrid Web API v3 Whitelabel Ips
     #
     module Ips
-      include SendGrid4r::REST::Request
+      include Request
 
       Ip = Struct.new(
         :id, :ip, :rdns, :users, :subdomain, :domain, :valid, :legacy,
@@ -26,13 +26,7 @@ module SendGrid4r::REST
 
       def self.create_ips(resp)
         return resp if resp.nil?
-        ips = []
-        resp.each do |ip|
-          ips.push(
-            SendGrid4r::REST::Whitelabel::Ips.create_ip(ip)
-          )
-        end
-        ips
+        resp.map { |ip| Ips.create_ip(ip) }
       end
 
       def self.create_ip(resp)
@@ -41,22 +35,18 @@ module SendGrid4r::REST
           resp['id'],
           resp['ip'],
           resp['rdns'],
-          SendGrid4r::REST::Whitelabel::Ips.create_users(resp['users']),
+          Ips.create_users(resp['users']),
           resp['subdomain'],
           resp['domain'],
           resp['valid'],
           resp['legacy'],
-          SendGrid4r::REST::Whitelabel::Ips.create_a_record(resp['a_record'])
+          Ips.create_a_record(resp['a_record'])
         )
       end
 
       def self.create_users(resp)
         return resp if resp.nil?
-        users = []
-        resp.each do |user|
-          users.push(SendGrid4r::REST::Whitelabel::Ips.create_a_record(user))
-        end
-        users
+        resp.map { |user| Ips.create_a_record(user) }
       end
 
       def self.create_a_record(resp)
@@ -73,18 +63,14 @@ module SendGrid4r::REST
         Result.new(
           resp['id'],
           resp['valid'],
-          SendGrid4r::REST::Whitelabel::Ips.create_validation_results(
-            resp['validation_results']
-          )
+          Ips.create_validation_results(resp['validation_results'])
         )
       end
 
       def self.create_validation_results(resp)
         return resp if resp.nil?
         ValidationResults.new(
-          SendGrid4r::REST::Whitelabel::Ips.create_validation_result(
-            resp['a_record']
-          )
+          Ips.create_validation_result(resp['a_record'])
         )
       end
 
@@ -98,9 +84,8 @@ module SendGrid4r::REST
         params['ip'] = ip unless ip.nil?
         params['limit'] = limit unless limit.nil?
         params['offset'] = offset unless offset.nil?
-        endpoint = SendGrid4r::REST::Whitelabel::Ips.url
-        resp = get(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Whitelabel::Ips.create_ips(resp)
+        resp = get(@auth, Ips.url, params, &block)
+        Ips.create_ips(resp)
       end
 
       def post_wl_ip(ip:, subdomain:, domain:, &block)
@@ -108,27 +93,22 @@ module SendGrid4r::REST
         params['ip'] = ip
         params['subdomain'] = subdomain
         params['domain'] = domain
-        endpoint = SendGrid4r::REST::Whitelabel::Ips.url
-        resp = post(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Whitelabel::Ips.create_ip(resp)
+        resp = post(@auth, Ips.url, params, &block)
+        Ips.create_ip(resp)
       end
 
       def get_wl_ip(id:, &block)
-        endpoint = SendGrid4r::REST::Whitelabel::Ips.url(id)
-        resp = get(@auth, endpoint, nil, &block)
-        SendGrid4r::REST::Whitelabel::Ips.create_ip(resp)
+        resp = get(@auth, Ips.url(id), nil, &block)
+        Ips.create_ip(resp)
       end
 
       def delete_wl_ip(id:, &block)
-        endpoint = SendGrid4r::REST::Whitelabel::Ips.url(id)
-        delete(@auth, endpoint, &block)
+        delete(@auth, Ips.url(id), &block)
       end
 
       def validate_wl_ip(id:, &block)
-        endpoint = SendGrid4r::REST::Whitelabel::Ips.url(id)
-        endpoint = "#{endpoint}/validate"
-        resp = post(@auth, endpoint, &block)
-        SendGrid4r::REST::Whitelabel::Ips.create_result(resp)
+        resp = post(@auth, "#{Ips.url(id)}/validate", &block)
+        Ips.create_result(resp)
       end
     end
   end

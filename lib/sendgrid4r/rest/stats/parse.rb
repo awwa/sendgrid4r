@@ -6,7 +6,7 @@ module SendGrid4r::REST
     # SendGrid Web API v3 Stats - Parse
     #
     module Parse
-      include SendGrid4r::REST::Request
+      include Request
 
       def get_parse_stats(
         start_date:, end_date: nil, aggregated_by: nil, &block
@@ -18,7 +18,7 @@ module SendGrid4r::REST
         }
         endpoint = "#{BASE_URL}/user/webhooks/parse/stats"
         resp = get(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Stats.create_top_stats(resp)
+        Stats.create_top_stats(resp)
       end
     end
   end

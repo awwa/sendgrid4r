@@ -30,11 +30,8 @@ module SendGrid4r::REST
 
       def self.create_campaigns(resp)
         return resp if resp.nil?
-        result = []
-        resp['result'].each do |campaign|
-          result.push(
-            SendGrid4r::REST::Campaigns::Campaigns.create_campaign(campaign)
-          )
+        result = resp['result'].map do |campaign|
+          SendGrid4r::REST::Campaigns::Campaigns.create_campaign(campaign)
         end
         Campaigns.new(result)
       end

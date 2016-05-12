@@ -5,11 +5,9 @@ module SendGrid4r::REST
   # SendGrid Web API v3 Blocks
   #
   module Blocks
-    include SendGrid4r::REST::Request
+    include Request
 
-    Block = Struct.new(
-      :created, :email, :reason, :status
-    )
+    Block = Struct.new(:created, :email, :reason, :status)
 
     def self.url(email = nil)
       url = "#{BASE_URL}/suppression/blocks"
@@ -20,21 +18,14 @@ module SendGrid4r::REST
     def self.create_blocks(resp)
       return resp if resp.nil?
       blocks = []
-      resp.each do |block|
-        blocks.push(SendGrid4r::REST::Blocks.create_block(block))
-      end
+      resp.each { |block| blocks.push(Blocks.create_block(block)) }
       blocks
     end
 
     def self.create_block(resp)
       return resp if resp.nil?
       created = Time.at(resp['created']) unless resp['created'].nil?
-      Block.new(
-        created,
-        resp['email'],
-        resp['reason'],
-        resp['status']
-      )
+      Block.new(created, resp['email'], resp['reason'], resp['status'])
     end
 
     def get_blocks(
@@ -45,34 +36,31 @@ module SendGrid4r::REST
       params['end_time'] = end_time.to_i unless end_time.nil?
       params['limit'] = limit.to_i unless limit.nil?
       params['offset'] = offset.to_i unless offset.nil?
-      resp = get(@auth, SendGrid4r::REST::Blocks.url, params, &block)
-      SendGrid4r::REST::Blocks.create_blocks(resp)
+      resp = get(@auth, Blocks.url, params, &block)
+      Blocks.create_blocks(resp)
     end
 
     def delete_blocks(delete_all: nil, emails: nil, &block)
-      endpoint = SendGrid4r::REST::Blocks.url
       payload = {}
-      if delete_all == true
+      if delete_all
         payload['delete_all'] = delete_all
       else
         payload['emails'] = emails
       end
-      delete(@auth, endpoint, nil, payload, &block)
+      delete(@auth, Blocks.url, nil, payload, &block)
     end
 
     def get_block(email:, &block)
-      endpoint = SendGrid4r::REST::Blocks.url(email)
       params = {}
       params['email'] = email
-      resp = get(@auth, endpoint, params, &block)
-      SendGrid4r::REST::Blocks.create_blocks(resp)
+      resp = get(@auth, Blocks.url(email), params, &block)
+      Blocks.create_blocks(resp)
     end
 
     def delete_block(email:, &block)
-      endpoint = SendGrid4r::REST::Blocks.url(email)
       params = {}
       params['email'] = email
-      delete(@auth, endpoint, params, &block)
+      delete(@auth, Blocks.url(email), params, &block)
     end
   end
 end

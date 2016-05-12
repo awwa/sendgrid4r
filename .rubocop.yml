@@ -23,3 +23,7 @@ AbcSize:
 # Change numeric literals
 NumericLiterals:
   MinDigits: 20
+
+# Disable force module and class style
+ClassAndModuleChildren:
+  Enabled: false

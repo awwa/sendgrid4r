@@ -6,7 +6,8 @@ module SendGrid4r::REST
     # SendGrid Web API v3 Settings - EnforcedTls
     #
     module EnforcedTls
-      include SendGrid4r::REST::Request
+      include Request
+
       EnforcedTls = Struct.new(:require_tls, :require_valid_cert)
 
       def self.create_enforced_tls(resp)
@@ -19,15 +20,13 @@ module SendGrid4r::REST
       end
 
       def get_enforced_tls(&block)
-        endpoint = SendGrid4r::REST::Settings::EnforcedTls.url
-        resp = get(@auth, endpoint, &block)
-        SendGrid4r::REST::Settings::EnforcedTls.create_enforced_tls(resp)
+        resp = get(@auth, Settings::EnforcedTls.url, &block)
+        Settings::EnforcedTls.create_enforced_tls(resp)
       end
 
       def patch_enforced_tls(params:, &block)
-        endpoint = SendGrid4r::REST::Settings::EnforcedTls.url
-        resp = patch(@auth, endpoint, params.to_h, &block)
-        SendGrid4r::REST::Settings::EnforcedTls.create_enforced_tls(resp)
+        resp = patch(@auth, Settings::EnforcedTls.url, params.to_h, &block)
+        Settings::EnforcedTls.create_enforced_tls(resp)
       end
     end
   end

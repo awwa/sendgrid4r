@@ -5,7 +5,7 @@ module SendGrid4r::REST
   # SendGrid Web API v3 IpAccessManagement
   #
   module IpAccessManagement
-    include SendGrid4r::REST::Request
+    include Request
 
     IpActivities = Struct.new(:result)
 
@@ -33,9 +33,7 @@ module SendGrid4r::REST
       return resp if resp.nil?
       result = []
       resp['result'].each do |activity|
-        result.push(
-          SendGrid4r::REST::IpAccessManagement.create_ip_activity(activity)
-        )
+        result.push(IpAccessManagement.create_ip_activity(activity))
       end
       IpActivities.new(result)
     end
@@ -59,9 +57,7 @@ module SendGrid4r::REST
       result = []
       resp['result'].each do |whitelisted_ip|
         result.push(
-          SendGrid4r::REST::IpAccessManagement.create_whitelisted_ip_result(
-            whitelisted_ip
-          )
+          IpAccessManagement.create_whitelisted_ip_result(whitelisted_ip)
         )
       end
       WhitelistedIps.new(result)
@@ -70,9 +66,7 @@ module SendGrid4r::REST
     def self.create_whitelisted_ip(resp)
       return resp if resp.nil?
       WhitelistedIp.new(
-        SendGrid4r::REST::IpAccessManagement.create_whitelisted_ip_result(
-          resp['result']
-        )
+        IpAccessManagement.create_whitelisted_ip_result(resp['result'])
       )
     end
 
@@ -84,21 +78,18 @@ module SendGrid4r::REST
     end
 
     def get_ip_activities(limit: nil, &block)
-      endpoint = SendGrid4r::REST::IpAccessManagement.url_activity
       params = {}
       params['limit'] = limit unless limit.nil?
-      resp = get(@auth, endpoint, params, &block)
-      SendGrid4r::REST::IpAccessManagement.create_ip_activities(resp)
+      resp = get(@auth, IpAccessManagement.url_activity, params, &block)
+      IpAccessManagement.create_ip_activities(resp)
     end
 
     def get_whitelisted_ips(&block)
-      endpoint = SendGrid4r::REST::IpAccessManagement.url_whitelist
-      resp = get(@auth, endpoint, &block)
-      SendGrid4r::REST::IpAccessManagement.create_whitelisted_ips(resp)
+      resp = get(@auth, IpAccessManagement.url_whitelist, &block)
+      IpAccessManagement.create_whitelisted_ips(resp)
     end
 
     def post_whitelisted_ips(ips:, &block)
-      endpoint = SendGrid4r::REST::IpAccessManagement.url_whitelist
       ips_param = []
       ips.each do |ip|
         ip_param = {}
@@ -107,26 +98,23 @@ module SendGrid4r::REST
       end
       params = {}
       params['ips'] = ips_param
-      resp = post(@auth, endpoint, params, &block)
-      SendGrid4r::REST::IpAccessManagement.create_whitelisted_ips(resp)
+      resp = post(@auth, IpAccessManagement.url_whitelist, params, &block)
+      IpAccessManagement.create_whitelisted_ips(resp)
     end
 
     def delete_whitelisted_ips(ids:, &block)
-      endpoint = SendGrid4r::REST::IpAccessManagement.url_whitelist
       payload = {}
       payload['ids'] = ids
-      delete(@auth, endpoint, nil, payload, &block)
+      delete(@auth, IpAccessManagement.url_whitelist, nil, payload, &block)
     end
 
     def get_whitelisted_ip(rule_id:, &block)
-      endpoint = SendGrid4r::REST::IpAccessManagement.url_whitelist(rule_id)
-      resp = get(@auth, endpoint, nil, &block)
-      SendGrid4r::REST::IpAccessManagement.create_whitelisted_ip(resp)
+      resp = get(@auth, IpAccessManagement.url_whitelist(rule_id), nil, &block)
+      IpAccessManagement.create_whitelisted_ip(resp)
     end
 
     def delete_whitelisted_ip(rule_id:, &block)
-      endpoint = SendGrid4r::REST::IpAccessManagement.url_whitelist(rule_id)
-      delete(@auth, endpoint, nil, &block)
+      delete(@auth, IpAccessManagement.url_whitelist(rule_id), nil, &block)
     end
   end
 end

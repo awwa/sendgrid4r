@@ -6,7 +6,7 @@ module SendGrid4r::REST
     # SendGrid Web API v3 Categories - Categories
     #
     module Categories
-      include SendGrid4r::REST::Request
+      include Request
 
       Category = Struct.new(:category)
 
@@ -17,15 +17,7 @@ module SendGrid4r::REST
 
       def self.create_categories(resp)
         return resp if resp.nil?
-        categories = []
-        resp.each do |category|
-          categories.push(
-            SendGrid4r::REST::Categories::Categories.create_category(
-              category
-            )
-          )
-        end
-        categories
+        resp.map { |category| Categories.create_category(category) }
       end
 
       def get_categories(category: nil, limit: nil, offset: nil, &block)
@@ -34,7 +26,7 @@ module SendGrid4r::REST
         params['limit'] = limit unless limit.nil?
         params['offset'] = offset unless limit.nil?
         resp = get(@auth, "#{BASE_URL}/categories", params, &block)
-        SendGrid4r::REST::Categories::Categories.create_categories(resp)
+        Categories.create_categories(resp)
       end
     end
   end

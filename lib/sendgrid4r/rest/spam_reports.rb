@@ -5,11 +5,9 @@ module SendGrid4r::REST
   # SendGrid Web API v3 SpamReports
   #
   module SpamReports
-    include SendGrid4r::REST::Request
+    include Request
 
-    SpamReport = Struct.new(
-      :created, :email, :ip
-    )
+    SpamReport = Struct.new(:created, :email, :ip)
 
     def self.url(email = nil)
       url = "#{BASE_URL}/suppression/spam_reports"
@@ -21,9 +19,7 @@ module SendGrid4r::REST
       return resp if resp.nil?
       spam_reports = []
       resp.each do |spam_report|
-        spam_reports.push(
-          SendGrid4r::REST::SpamReports.create_spam_report(spam_report)
-        )
+        spam_reports.push(SpamReports.create_spam_report(spam_report))
       end
       spam_reports
     end
@@ -31,11 +27,7 @@ module SendGrid4r::REST
     def self.create_spam_report(resp)
       return resp if resp.nil?
       created = Time.at(resp['created']) unless resp['created'].nil?
-      SpamReport.new(
-        created,
-        resp['email'],
-        resp['ip']
-      )
+      SpamReport.new(created, resp['email'], resp['ip'])
     end
 
     def get_spam_reports(
@@ -46,34 +38,31 @@ module SendGrid4r::REST
       params['end_time'] = end_time.to_i unless end_time.nil?
       params['limit'] = limit.to_i unless limit.nil?
       params['offset'] = offset.to_i unless offset.nil?
-      resp = get(@auth, SendGrid4r::REST::SpamReports.url, params, &block)
-      SendGrid4r::REST::SpamReports.create_spam_reports(resp)
+      resp = get(@auth, SpamReports.url, params, &block)
+      SpamReports.create_spam_reports(resp)
     end
 
     def delete_spam_reports(delete_all: nil, emails: nil, &block)
-      endpoint = SendGrid4r::REST::SpamReports.url
       payload = {}
       if delete_all == true
         payload['delete_all'] = delete_all
       else
         payload['emails'] = emails
       end
-      delete(@auth, endpoint, nil, payload, &block)
+      delete(@auth, SpamReports.url, nil, payload, &block)
     end
 
     def get_spam_report(email:, &block)
-      endpoint = SendGrid4r::REST::SpamReports.url(email)
       params = {}
       params['email'] = email
-      resp = get(@auth, endpoint, params, &block)
-      SendGrid4r::REST::SpamReports.create_spam_reports(resp)
+      resp = get(@auth, SpamReports.url(email), params, &block)
+      SpamReports.create_spam_reports(resp)
     end
 
     def delete_spam_report(email:, &block)
-      endpoint = SendGrid4r::REST::SpamReports.url(email)
       params = {}
       params['email'] = email
-      delete(@auth, endpoint, params, &block)
+      delete(@auth, SpamReports.url(email), params, &block)
     end
   end
 end

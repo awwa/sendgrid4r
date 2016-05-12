@@ -10,10 +10,7 @@ module SendGrid4r::REST
 
     def self.create_results(resp)
       return resp if resp.nil?
-      results = []
-      resp['result'].each do |result|
-        results.push(SendGrid4r::REST::Settings.create_result(result))
-      end
+      results = resp['result'].map { |result| Settings.create_result(result) }
       Results.new(results)
     end
 

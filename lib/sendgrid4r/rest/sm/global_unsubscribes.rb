@@ -6,7 +6,7 @@ module SendGrid4r::REST
     # SendGrid Web API v3 Suppression Management - Global Unsubscribes
     #
     module GlobalUnsubscribes
-      include SendGrid4r::REST::Request
+      include Request
 
       Unsubscribe = Struct.new(:created, :email)
 
@@ -22,12 +22,10 @@ module SendGrid4r::REST
 
       def self.create_supressions(resp)
         return resp if resp.nil?
-        suppressions = []
-        resp.each do |suppression|
+        resp.map do |suppression|
           created = Time.at(suppression['created'])
-          suppressions.push(Unsubscribe.new(created, suppression['email']))
+          Unsubscribe.new(created, suppression['email'])
         end
-        suppressions
       end
 
       def get_global_unsubscribes(
@@ -38,29 +36,25 @@ module SendGrid4r::REST
         params['end_time'] = end_time.to_i unless end_time.nil?
         params['limit'] = limit.to_i unless limit.nil?
         params['offset'] = offset.to_i unless offset.nil?
-        endpoint = SendGrid4r::REST::Sm::GlobalUnsubscribes.url_unsubscribes
+        endpoint = Sm::GlobalUnsubscribes.url_unsubscribes
         resp = get(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Sm::GlobalUnsubscribes.create_supressions(resp)
+        Sm::GlobalUnsubscribes.create_supressions(resp)
       end
 
       def post_global_suppressed_emails(recipient_emails:, &block)
         params = { recipient_emails: recipient_emails }
-        endpoint = SendGrid4r::REST::Sm::GlobalUnsubscribes.url
+        endpoint = Sm::GlobalUnsubscribes.url
         resp = post(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Sm.create_recipient_emails(resp)
+        Sm.create_recipient_emails(resp)
       end
 
       def get_global_suppressed_email(email_address:, &block)
-        endpoint =
-          SendGrid4r::REST::Sm::GlobalUnsubscribes.url(email_address)
-        resp = get(@auth, endpoint, &block)
-        SendGrid4r::REST::Sm.create_recipient_email(resp)
+        resp = get(@auth, Sm::GlobalUnsubscribes.url(email_address), &block)
+        Sm.create_recipient_email(resp)
       end
 
       def delete_global_suppressed_email(email_address:, &block)
-        endpoint =
-          SendGrid4r::REST::Sm::GlobalUnsubscribes.url(email_address)
-        delete(@auth, endpoint, &block)
+        delete(@auth, Sm::GlobalUnsubscribes.url(email_address), &block)
       end
 
       alias_method(:post_global_unsubscribes, :post_global_suppressed_emails)

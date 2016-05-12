@@ -6,7 +6,7 @@ module SendGrid4r::REST
     # SendGrid Web API v3 Stats - Category
     #
     module Category
-      include SendGrid4r::REST::Request
+      include Request
 
       def get_categories_stats(
           start_date:, end_date: nil, aggregated_by: nil, categories:, &block)
@@ -17,7 +17,7 @@ module SendGrid4r::REST
           categories: categories
         }
         resp = get(@auth, "#{BASE_URL}/categories/stats", params, &block)
-        SendGrid4r::REST::Stats.create_top_stats(resp)
+        Stats.create_top_stats(resp)
       end
 
       def get_categories_stats_sums(
@@ -32,7 +32,7 @@ module SendGrid4r::REST
           offset: offset
         }
         resp = get(@auth, "#{BASE_URL}/categories/stats/sums", params, &block)
-        SendGrid4r::REST::Stats.create_top_stat(resp)
+        Stats.create_top_stat(resp)
       end
     end
   end

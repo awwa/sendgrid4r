@@ -9,7 +9,7 @@ module SendGrid4r::REST
     # SendGrid Web API v3 Whitelabel Links
     #
     module Links
-      include SendGrid4r::REST::Request
+      include Request
 
       Link = Struct.new(
         :id, :domain, :subdomain, :username, :user_id, :default,
@@ -26,13 +26,7 @@ module SendGrid4r::REST
 
       def self.create_links(resp)
         return resp if resp.nil?
-        links = []
-        resp.each do |link|
-          links.push(
-            SendGrid4r::REST::Whitelabel::Links.create_link(link)
-          )
-        end
-        links
+        resp.map { |link| Links.create_link(link) }
       end
 
       def self.create_link(resp)
@@ -46,19 +40,15 @@ module SendGrid4r::REST
           resp['default'],
           resp['valid'],
           resp['legacy'],
-          SendGrid4r::REST::Whitelabel::Links.create_dns(resp['dns'])
+          Links.create_dns(resp['dns'])
         )
       end
 
       def self.create_dns(resp)
         return resp if resp.nil?
         Dns.new(
-          SendGrid4r::REST::Whitelabel::Links.create_record(
-            resp['domain_cname']
-          ),
-          SendGrid4r::REST::Whitelabel::Links.create_record(
-            resp['owner_cname']
-          )
+          Links.create_record(resp['domain_cname']),
+          Links.create_record(resp['owner_cname'])
         )
       end
 
@@ -76,21 +66,15 @@ module SendGrid4r::REST
         Result.new(
           resp['id'],
           resp['valid'],
-          SendGrid4r::REST::Whitelabel::Links.create_validation_results(
-            resp['validation_results']
-          )
+          Links.create_validation_results(resp['validation_results'])
         )
       end
 
       def self.create_validation_results(resp)
         return resp if resp.nil?
         ValidationResults.new(
-          SendGrid4r::REST::Whitelabel::Links.create_validation_result(
-            resp['domain_cname']
-          ),
-          SendGrid4r::REST::Whitelabel::Links.create_validation_result(
-            resp['owner_cname']
-          )
+          Links.create_validation_result(resp['domain_cname']),
+          Links.create_validation_result(resp['owner_cname'])
         )
       end
 
@@ -111,9 +95,8 @@ module SendGrid4r::REST
         end
         params['username'] = username unless username.nil?
         params['domain'] = domain unless domain.nil?
-        endpoint = SendGrid4r::REST::Whitelabel::Links.url
-        resp = get(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Whitelabel::Links.create_links(resp)
+        resp = get(@auth, Links.url, params, &block)
+        Links.create_links(resp)
       end
 
       def post_wl_link(subdomain:, domain:, default: nil, &block)
@@ -121,70 +104,56 @@ module SendGrid4r::REST
         params['subdomain'] = subdomain
         params['domain'] = domain
         params['default'] = default unless default.nil?
-        endpoint = SendGrid4r::REST::Whitelabel::Links.url
-        resp = post(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Whitelabel::Links.create_link(resp)
+        resp = post(@auth, Links.url, params, &block)
+        Links.create_link(resp)
       end
 
       def get_wl_link(id:, &block)
-        endpoint = SendGrid4r::REST::Whitelabel::Links.url(id)
-        resp = get(@auth, endpoint, nil, &block)
-        SendGrid4r::REST::Whitelabel::Links.create_link(resp)
+        resp = get(@auth, Links.url(id), nil, &block)
+        Links.create_link(resp)
       end
 
       def patch_wl_link(id:, default:, &block)
-        endpoint = SendGrid4r::REST::Whitelabel::Links.url(id)
         params = {}
         params['default'] = default
-        resp = patch(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Whitelabel::Links.create_link(resp)
+        resp = patch(@auth, Links.url(id), params, &block)
+        Links.create_link(resp)
       end
 
       def delete_wl_link(id:, &block)
-        endpoint = SendGrid4r::REST::Whitelabel::Links.url(id)
-        delete(@auth, endpoint, &block)
+        delete(@auth, Links.url(id), &block)
       end
 
       def get_default_wl_link(domain: nil, &block)
         params = {}
         params['domain'] = domain unless domain.nil?
-        endpoint = SendGrid4r::REST::Whitelabel::Links.url
-        endpoint = "#{endpoint}/default"
-        resp = get(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Whitelabel::Links.create_link(resp)
+        resp = get(@auth, "#{Links.url}/default", params, &block)
+        Links.create_link(resp)
       end
 
       def validate_wl_link(id:, &block)
-        endpoint = SendGrid4r::REST::Whitelabel::Links.url(id)
-        endpoint = "#{endpoint}/validate"
-        resp = post(@auth, endpoint, &block)
-        SendGrid4r::REST::Whitelabel::Links.create_result(resp)
+        resp = post(@auth, "#{Links.url(id)}/validate", &block)
+        Links.create_result(resp)
       end
 
       def get_associated_wl_link(username:, &block)
-        endpoint = SendGrid4r::REST::Whitelabel::Links.url
-        endpoint = "#{endpoint}/subuser"
         params = {}
         params['username'] = username
-        resp = get(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Whitelabel::Links.create_link(resp)
+        resp = get(@auth, "#{Links.url}/subuser", params, &block)
+        Links.create_link(resp)
       end
 
       def disassociate_wl_link(username:, &block)
-        endpoint = SendGrid4r::REST::Whitelabel::Links.url
-        endpoint = "#{endpoint}/subuser"
         params = {}
         params['username'] = username
-        delete(@auth, endpoint, params, &block)
+        delete(@auth, "#{Links.url}/subuser", params, &block)
       end
 
       def associate_wl_link(id:, username:, &block)
-        endpoint = SendGrid4r::REST::Whitelabel::Links.url(id)
-        endpoint = "#{endpoint}/subuser"
         params = {}
         params['username'] = username
-        resp = post(@auth, endpoint, params, &block)
-        SendGrid4r::REST::Whitelabel::Links.create_link(resp)
+        resp = post(@auth, "#{Links.url(id)}/subuser", params, &block)
+        Links.create_link(resp)
       end
     end
   end

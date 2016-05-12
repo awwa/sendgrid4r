@@ -6,7 +6,7 @@ module SendGrid4r::REST
     # SendGrid Web API v3 Suppression Management - Groups
     #
     module Groups
-      include SendGrid4r::REST::Request
+      include Request
 
       Group = Struct.new(
         :id, :name, :description, :last_email_sent_at, :is_default,
@@ -21,11 +21,7 @@ module SendGrid4r::REST
 
       def self.create_groups(resp)
         return resp if resp.nil?
-        groups = []
-        resp.each do |group|
-          groups.push(SendGrid4r::REST::Sm::Groups.create_group(group))
-        end
-        groups
+        resp.map { |group| Sm::Groups.create_group(group) }
       end
 
       def self.create_group(resp)
@@ -43,28 +39,28 @@ module SendGrid4r::REST
       def post_group(name:, description:, is_default: nil, &block)
         params = { name: name, description: description }
         params['is_default'] = is_default unless is_default.nil?
-        resp = post(@auth, SendGrid4r::REST::Sm::Groups.url, params, &block)
-        SendGrid4r::REST::Sm::Groups.create_group(resp)
+        resp = post(@auth, Sm::Groups.url, params, &block)
+        Sm::Groups.create_group(resp)
       end
 
       def get_groups(&block)
-        resp = get(@auth, SendGrid4r::REST::Sm::Groups.url, &block)
-        SendGrid4r::REST::Sm::Groups.create_groups(resp)
+        resp = get(@auth, Sm::Groups.url, &block)
+        Sm::Groups.create_groups(resp)
       end
 
       def get_group(group_id:, &block)
-        resp = get(@auth, SendGrid4r::REST::Sm::Groups.url(group_id), &block)
-        SendGrid4r::REST::Sm::Groups.create_group(resp)
+        resp = get(@auth, Sm::Groups.url(group_id), &block)
+        Sm::Groups.create_group(resp)
       end
 
       def patch_group(group_id:, group:, &block)
-        endpoint = SendGrid4r::REST::Sm::Groups.url(group_id)
+        endpoint = Sm::Groups.url(group_id)
         resp = patch(@auth, endpoint, group.to_h, &block)
-        SendGrid4r::REST::Sm::Groups.create_group(resp)
+        Sm::Groups.create_group(resp)
       end
 
       def delete_group(group_id:, &block)
-        delete(@auth, SendGrid4r::REST::Sm::Groups.url(group_id), &block)
+        delete(@auth, Sm::Groups.url(group_id), &block)
       end
     end
   end
