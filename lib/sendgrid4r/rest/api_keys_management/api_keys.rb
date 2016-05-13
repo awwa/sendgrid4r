@@ -5,7 +5,7 @@ module SendGrid4r::REST
   # SendGrid Web API v3 ApiKeysManagement
   #
   module ApiKeysManagement
-    include SendGrid4r::REST::Request
+    include Request
 
     ApiKeys = Struct.new(:result)
     ApiKey = Struct.new(:name, :api_key_id, :api_key, :scopes)
