@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
 module SendGrid4r::REST::Webhooks
-  describe SendGrid4r::REST::Webhooks::Event do
+  describe Event do
     describe 'integration test', :it do
       before do
         Dotenv.load

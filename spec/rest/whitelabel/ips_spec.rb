@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
 module SendGrid4r::REST::Whitelabel
-  describe SendGrid4r::REST::Whitelabel::Ips do
+  describe Ips do
     describe 'integration test', :it do
       before do
         Dotenv.load

@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
 module SendGrid4r::REST::TransactionalTemplates
-  describe SendGrid4r::REST::TransactionalTemplates::Versions do
+  describe Versions do
     describe 'integration test', :it do
       before do
         Dotenv.load

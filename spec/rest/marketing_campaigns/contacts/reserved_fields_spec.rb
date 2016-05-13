@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../../../spec_helper'
 
 module SendGrid4r::REST::MarketingCampaigns::Contacts
-  describe SendGrid4r::REST::MarketingCampaigns::Contacts::ReservedFields do
+  describe ReservedFields do
     describe 'integration test', :it do
       before do
         Dotenv.load

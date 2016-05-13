@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 module SendGrid4r::REST
-  describe SendGrid4r::REST::Categories do
+  describe Categories do
     describe 'integration test', :it do
       before do
         Dotenv.load

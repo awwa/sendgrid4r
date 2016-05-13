@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
 module SendGrid4r::REST::Ips
-  describe SendGrid4r::REST::Ips::Addresses do
+  describe Addresses do
     describe 'integration test', :it do
       before do
         Dotenv.load

@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
 module SendGrid4r::REST::Sm
-  describe SendGrid4r::REST::Sm::GlobalUnsubscribes do
+  describe GlobalUnsubscribes do
     describe 'integration test', :it do
       before do
         Dotenv.load

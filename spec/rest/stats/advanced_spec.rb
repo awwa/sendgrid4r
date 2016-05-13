@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
 module SendGrid4r::REST::Stats
-  describe SendGrid4r::REST::Stats::Advanced do
+  describe Advanced do
     describe 'integration test', :it do
       before do
         Dotenv.load
