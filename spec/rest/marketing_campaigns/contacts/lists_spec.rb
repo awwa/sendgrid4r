@@ -275,7 +275,9 @@ module SendGrid4r::REST::MarketingCampaigns::Contacts
 
       it '#post_recipients_to_list' do
         allow(client).to receive(:execute).and_return('')
-        actual = client.post_recipients_to_list(list_id: 0, recipients: ['', ''])
+        actual = client.post_recipients_to_list(
+          list_id: 0, recipients: ['', '']
+        )
         expect(actual).to eq('')
       end
 

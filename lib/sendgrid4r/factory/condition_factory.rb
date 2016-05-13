@@ -7,7 +7,7 @@ module SendGrid4r
     #
     class ConditionFactory
       def create(field:, value:, operator:, and_or:)
-        SendGrid4r::REST::MarketingCampaigns::Contacts::Segments::Condition.new(
+        REST::MarketingCampaigns::Contacts::Segments::Condition.new(
           field,
           value,
           operator,

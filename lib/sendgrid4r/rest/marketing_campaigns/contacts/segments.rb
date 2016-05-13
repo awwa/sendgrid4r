@@ -10,7 +10,9 @@ module SendGrid4r::REST
         include Request
 
         Condition = Struct.new(:field, :value, :operator, :and_or)
-        Segment = Struct.new(:id, :name, :list_id, :conditions, :recipient_count)
+        Segment = Struct.new(
+          :id, :name, :list_id, :conditions, :recipient_count
+        )
         Segments = Struct.new(:segments)
 
         def self.url(segment_id = nil)
@@ -64,7 +66,8 @@ module SendGrid4r::REST
         end
 
         def patch_segment(segment_id:, params:, &block)
-          resp = patch(@auth, Contacts::Segments.url(segment_id), params, &block)
+          endpoint = Contacts::Segments.url(segment_id)
+          resp = patch(@auth, endpoint, params, &block)
           Contacts::Segments.create_segment(resp)
         end
 

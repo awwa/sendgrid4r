@@ -5,8 +5,8 @@ module SendGrid4r::REST
   # SendGrid Web API v3
   #
   module API
-    include SendGrid4r::REST::Templates
-    include SendGrid4r::REST::Templates::Versions
+    include SendGrid4r::REST::TransactionalTemplates
+    include SendGrid4r::REST::TransactionalTemplates::Versions
     include SendGrid4r::REST::Sm
     include SendGrid4r::REST::Sm::Groups
     include SendGrid4r::REST::Sm::Suppressions
@@ -19,7 +19,7 @@ module SendGrid4r::REST
     include SendGrid4r::REST::Ips::Addresses
     include SendGrid4r::REST::Ips::Warmup
     include SendGrid4r::REST::Ips::Pools
-    include SendGrid4r::REST::Categories::Categories
+    include SendGrid4r::REST::Categories
     include SendGrid4r::REST::Stats::Global
     include SendGrid4r::REST::Stats::Category
     include SendGrid4r::REST::Stats::Subuser
@@ -31,8 +31,8 @@ module SendGrid4r::REST
     include SendGrid4r::REST::MarketingCampaigns::Contacts::Recipients
     include SendGrid4r::REST::MarketingCampaigns::Contacts::ReservedFields
     include SendGrid4r::REST::MarketingCampaigns::Contacts::Segments
-    include SendGrid4r::REST::ApiKeys
-    include SendGrid4r::REST::ApiKeys::Permissions
+    include SendGrid4r::REST::ApiKeysManagement
+    include SendGrid4r::REST::ApiKeysManagement::Permissions
     include SendGrid4r::REST::Subusers
     include SendGrid4r::REST::EmailActivity
     include SendGrid4r::REST::Whitelabel::Domains

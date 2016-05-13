@@ -4,7 +4,7 @@ module SendGrid4r::REST
   #
   # SendGrid Web API v3 Template Engine - Templates
   #
-  module Templates
+  module TransactionalTemplates
     #
     # SendGrid Web API v3 Template Engine - Versions
     #

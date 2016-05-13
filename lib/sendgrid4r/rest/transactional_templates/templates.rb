@@ -4,7 +4,7 @@ module SendGrid4r::REST
   #
   # SendGrid Web API v3 Template Engine - Templates
   #
-  module Templates
+  module TransactionalTemplates
     include Request
 
     Templates = Struct.new(:templates)
@@ -20,7 +20,7 @@ module SendGrid4r::REST
       return resp if resp.nil?
       tmps = []
       resp['templates'].each do |template|
-        tmps.push(SendGrid4r::REST::Templates.create_template(template))
+        tmps.push(TransactionalTemplates.create_template(template))
       end
       Templates.new(tmps)
     end
@@ -29,38 +29,38 @@ module SendGrid4r::REST
       return resp if resp.nil?
       vers = []
       resp['versions'].each do |ver|
-        vers.push(SendGrid4r::REST::Templates::Versions.create_version(ver))
+        vers.push(TransactionalTemplates::Versions.create_version(ver))
       end
       Template.new(resp['id'], resp['name'], vers)
     end
 
     def post_template(name:, &block)
-      endpoint = SendGrid4r::REST::Templates.url
+      endpoint = TransactionalTemplates.url
       resp = post(@auth, endpoint, name: name, &block)
-      SendGrid4r::REST::Templates.create_template(resp)
+      TransactionalTemplates.create_template(resp)
     end
 
     def get_templates(&block)
-      resp = get(@auth, SendGrid4r::REST::Templates.url, &block)
-      SendGrid4r::REST::Templates.create_templates(resp)
+      resp = get(@auth, TransactionalTemplates.url, &block)
+      TransactionalTemplates.create_templates(resp)
     end
 
     def get_template(template_id:, &block)
-      endpoint = SendGrid4r::REST::Templates.url(template_id)
+      endpoint = TransactionalTemplates.url(template_id)
       resp = get(@auth, endpoint, &block)
-      SendGrid4r::REST::Templates.create_template(resp)
+      TransactionalTemplates.create_template(resp)
     end
 
     def patch_template(template_id:, name:, &block)
-      endpoint = SendGrid4r::REST::Templates.url(template_id)
+      endpoint = TransactionalTemplates.url(template_id)
       payload = {}
       payload['name'] = name
       resp = patch(@auth, endpoint, name: name, &block)
-      SendGrid4r::REST::Templates.create_template(resp)
+      TransactionalTemplates.create_template(resp)
     end
 
     def delete_template(template_id:, &block)
-      endpoint = SendGrid4r::REST::Templates.url(template_id)
+      endpoint = TransactionalTemplates.url(template_id)
       delete(@auth, endpoint, &block)
     end
   end

@@ -6,11 +6,11 @@ require 'sendgrid4r/rest/request'
 require 'sendgrid4r/rest/subusers'
 require 'sendgrid4r/rest/users'
 
-require 'sendgrid4r/rest/templates/templates'
-require 'sendgrid4r/rest/templates/versions'
+require 'sendgrid4r/rest/transactional_templates/templates'
+require 'sendgrid4r/rest/transactional_templates/versions'
 
-require 'sendgrid4r/rest/api_keys/api_keys'
-require 'sendgrid4r/rest/api_keys/permissions'
+require 'sendgrid4r/rest/api_keys_management/api_keys'
+require 'sendgrid4r/rest/api_keys_management/permissions'
 
 require 'sendgrid4r/rest/sm/sm'
 require 'sendgrid4r/rest/sm/global_unsubscribes'
@@ -30,7 +30,7 @@ require 'sendgrid4r/rest/marketing_campaigns/contacts/recipients'
 require 'sendgrid4r/rest/marketing_campaigns/contacts/reserved_fields'
 require 'sendgrid4r/rest/marketing_campaigns/contacts/segments'
 
-require 'sendgrid4r/rest/categories/categories'
+require 'sendgrid4r/rest/categories'
 
 require 'sendgrid4r/rest/email_activity'
 

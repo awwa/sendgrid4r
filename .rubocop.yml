@@ -9,7 +9,7 @@ MethodLength:
 
 # Change limitation of module length
 ModuleLength:
-  Max: 300
+  Max: 600
 
 # Change limitation of the number of params
 ParameterLists:

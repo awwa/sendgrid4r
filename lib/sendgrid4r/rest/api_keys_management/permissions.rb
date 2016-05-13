@@ -2,14 +2,14 @@
 
 module SendGrid4r::REST
   #
-  # SendGrid Web API v3 ApiKeys
+  # SendGrid Web API v3 ApiKeysManagement
   #
-  module ApiKeys
+  module ApiKeysManagement
     #
-    # SendGrid Web API v3 ApiKeys Permissions
+    # SendGrid Web API v3 ApiKeysManagement Permissions
     #
     module Permissions
-      include SendGrid4r::REST::Request
+      include Request
 
       Permissions = Struct.new(:scopes)
 
@@ -23,8 +23,8 @@ module SendGrid4r::REST
       end
 
       def get_permissions(&block)
-        resp = get(@auth, SendGrid4r::REST::ApiKeys::Permissions.url, &block)
-        SendGrid4r::REST::ApiKeys::Permissions.create_permissions(resp)
+        resp = get(@auth, ApiKeysManagement::Permissions.url, &block)
+        ApiKeysManagement::Permissions.create_permissions(resp)
       end
     end
   end

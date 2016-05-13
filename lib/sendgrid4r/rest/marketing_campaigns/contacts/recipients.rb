@@ -97,7 +97,8 @@ module SendGrid4r::REST
         end
 
         def search_recipients(params:, &block)
-          resp = get(@auth, "#{Contacts::Recipients.url}/search", params, &block)
+          endpoint = "#{Contacts::Recipients.url}/search"
+          resp = get(@auth, endpoint, params, &block)
           Contacts::Recipients.create_recipients(resp)
         end
 

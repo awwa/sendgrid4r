@@ -69,7 +69,9 @@ module SendGrid4r::REST
           post(@auth, endpoint, recipients, &block)
         end
 
-        def get_recipients_from_list(list_id:, page: nil, page_size: nil, &block)
+        def get_recipients_from_list(
+          list_id:, page: nil, page_size: nil, &block
+        )
           params = {}
           params['page'] = page unless page.nil?
           params['page_size'] = page_size unless page_size.nil?

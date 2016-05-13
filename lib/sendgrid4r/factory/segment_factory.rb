@@ -7,7 +7,7 @@ module SendGrid4r
     #
     class SegmentFactory
       def create(name: nil, list_id: nil, conditions:)
-        segment = SendGrid4r::REST::MarketingCampaigns::Contacts::Segments::Segment.new(
+        segment = REST::MarketingCampaigns::Contacts::Segments::Segment.new(
           nil,
           name,
           list_id,
