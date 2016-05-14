@@ -28,7 +28,7 @@ module SendGrid4r::REST::Stats
           top_stats = @client.get_parse_stats(
             start_date: '2015-01-01',
             end_date: '2015-01-02',
-            aggregated_by: AggregatedBy::WEEK
+            aggregated_by: :week
           )
           expect(top_stats).to be_a(Array)
           top_stats.each do |top_stat|

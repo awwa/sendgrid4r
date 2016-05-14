@@ -34,8 +34,8 @@ module SendGrid4r::REST::Stats
           top_stats = @client.get_geo_stats(
             start_date: '2015-01-01',
             end_date: '2015-01-02',
-            aggregated_by: AggregatedBy::WEEK,
-            country: 'US'
+            aggregated_by: :week,
+            country: :US
           )
           expect(top_stats).to be_a(Array)
           top_stats.each do |top_stat|
@@ -69,7 +69,7 @@ module SendGrid4r::REST::Stats
           top_stats = @client.get_devices_stats(
             start_date: '2015-01-01',
             end_date: '2015-01-02',
-            aggregated_by: AggregatedBy::WEEK
+            aggregated_by: :week
           )
           expect(top_stats).to be_a(Array)
           top_stats.each do |top_stat|
@@ -103,7 +103,7 @@ module SendGrid4r::REST::Stats
           top_stats = @client.get_clients_stats(
             start_date: '2015-01-01',
             end_date: '2015-01-02',
-            aggregated_by: AggregatedBy::WEEK
+            aggregated_by: :week
           )
           expect(top_stats).to be_a(Array)
           top_stats.each do |top_stat|
@@ -139,8 +139,8 @@ module SendGrid4r::REST::Stats
           top_stats = @client.get_clients_type_stats(
             start_date: '2015-01-01',
             end_date: '2015-01-02',
-            aggregated_by: AggregatedBy::WEEK,
-            client_type: 'webmail'
+            aggregated_by: :week,
+            client_type: :webmail
           )
           expect(top_stats).to be_a(Array)
           top_stats.each do |top_stat|
@@ -185,8 +185,8 @@ module SendGrid4r::REST::Stats
           top_stats = @client.get_mailbox_providers_stats(
             start_date: '2015-01-01',
             end_date: '2015-01-02',
-            aggregated_by: AggregatedBy::WEEK,
-            esps: 'sss'
+            aggregated_by: :week,
+            esps: :sss
           )
           expect(top_stats).to be_a(Array)
           top_stats.each do |top_stat|
@@ -219,9 +219,9 @@ module SendGrid4r::REST::Stats
         it '#get_browsers_stats with all params' do
           top_stats = @client.get_browsers_stats(
             start_date: '2015-01-01',
-            end_date: '2015-01-02',
-            aggregated_by: AggregatedBy::WEEK,
-            browsers: 'chrome'
+            end_date: '2015-09-02',
+            aggregated_by: :week,
+            browsers: :chrome
           )
           expect(top_stats).to be_a(Array)
           top_stats.each do |top_stat|

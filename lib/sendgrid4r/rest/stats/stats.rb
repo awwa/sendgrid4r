@@ -6,7 +6,7 @@ module SendGrid4r::REST
   #
   module Stats
     #
-    # SendGrid Web API v3 Stats - AggregatedBy
+    # [DEPRECATED] SendGrid Web API v3 Stats - AggregatedBy
     #
     module AggregatedBy
       DAY = 'day'

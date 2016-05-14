@@ -48,7 +48,7 @@ module SendGrid4r::REST::Stats
           top_stats = @client.get_categories_stats(
             start_date: '2015-01-01',
             end_date: '2015-01-02',
-            aggregated_by: AggregatedBy::WEEK,
+            aggregated_by: :week,
             categories: 'yui'
           )
           expect(top_stats).to be_a(Array)
@@ -95,8 +95,8 @@ module SendGrid4r::REST::Stats
           top_stat = @client.get_categories_stats_sums(
             start_date: '2015-01-01',
             end_date: '2015-01-02',
-            sort_by_metric: 'opens',
-            sort_by_direction: 'desc',
+            sort_by_metric: :opens,
+            sort_by_direction: :desc,
             limit: 5,
             offset: 0
           )
