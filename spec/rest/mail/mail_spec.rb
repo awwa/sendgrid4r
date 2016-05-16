@@ -27,9 +27,11 @@ module SendGrid4r::REST
             )
             per.set_bccs([bcc])
             per.set_ccs([cc])
-            per.set_headers({"X-CUSTOM" => "X-VALUE" })
-            per.set_substitutions({"subkey" => "置換値" , "sectionkey" => 'sectionkey'})
-            per.set_custom_args({"CUSTOM" => "value"})
+            per.set_headers('X-CUSTOM' => 'X-VALUE')
+            per.set_substitutions(
+              'subkey' => '置換値', 'sectionkey' => 'sectionkey'
+            )
+            per.set_custom_args('CUSTOM' => 'value')
             per.set_send_at(Time.local(2016))
             from = SendGrid4r::Factory::MailFactory.create_email(
               email: ENV['FROM'], name: 'From Name'
@@ -40,7 +42,8 @@ module SendGrid4r::REST
             )
             html = SendGrid4r::Factory::MailFactory.create_content(
               type: 'text/html',
-              value: '<h1>こんにちは!HTML subkey sectionkey</h1><br /><a href="https://www.google.com">ぐーぐる</a>'
+              value: '<h1>こんにちは!HTML subkey sectionkey</h1><br />'\
+                '<a href="https://www.google.com">ぐーぐる</a>'
             )
             params = SendGrid4r::Factory::MailFactory.create_params(
               personalizations: [per], from: from, contents: [plain, html]
@@ -54,10 +57,10 @@ module SendGrid4r::REST
             )
             params.set_attachments([attachment])
             params.set_template_id('8481d009-d1a6-4e1b-adae-22d2426da9fe')
-            params.set_sections({'sectionkey' => 'セクション置換'})
-            params.set_headers({'X-GLOBAL' => 'GLOBAL_VALUE'})
-            params.set_categories(['CAT1', 'CAT2'])
-            params.set_custom_args({'CUSTOM1' => 'CUSTOM_VALUE1'})
+            params.set_sections('sectionkey' => 'セクション置換')
+            params.set_headers('X-GLOBAL' => 'GLOBAL_VALUE')
+            params.set_categories(%w('CAT1', 'CAT2'))
+            params.set_custom_args('CUSTOM1' => 'CUSTOM_VALUE1')
             params.set_send_at(Time.local(2016))
             params.set_asm(3581)
 
@@ -91,8 +94,8 @@ module SendGrid4r::REST
 
             @client.send(params: params)
           rescue RestClient::ExceptionWithResponse => e
-             puts e.inspect
-             raise e
+            puts e.inspect
+            raise e
           end
         end
       end

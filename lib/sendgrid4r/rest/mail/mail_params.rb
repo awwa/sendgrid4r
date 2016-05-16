@@ -5,10 +5,9 @@ module SendGrid4r::REST
   # SendGrid Web API v3 Mail
   #
   module Mail
-
     Email = Struct.new(:email, :name) do
       def to_h
-        super.reject { |key, value| value.nil? }
+        super.reject { |_key, value| value.nil? }
       end
     end
 
@@ -46,11 +45,11 @@ module SendGrid4r::REST
       end
 
       def to_h
-        self[:to] = self[:to].map { |to| to.to_h }
-        self[:cc] = self[:cc].map { |cc| cc.to_h } unless self[:cc].nil?
-        self[:bcc] = self[:bcc].map { |bcc| bcc.to_h } unless self[:bcc].nil?
+        self[:to] = self[:to].map(&:to_h)
+        self[:cc] = self[:cc].map(&:to_h) unless self[:cc].nil?
+        self[:bcc] = self[:bcc].map(&:to_h) unless self[:bcc].nil?
         self[:send_at] = self[:send_at].to_i if self[:send_at].class == Time
-        super.reject { |key, value| value.nil? }
+        super.reject { |_key, value| value.nil? }
       end
     end
 
@@ -105,7 +104,7 @@ module SendGrid4r::REST
       end
 
       def set_asm(group_id, groups_to_display = nil)
-        self[:asm] = {group_id: group_id}
+        self[:asm] = { group_id: group_id }
         unless groups_to_display.nil?
           self[:asm][:groups_to_display] = groups_to_display
         end
@@ -128,13 +127,13 @@ module SendGrid4r::REST
       end
 
       def to_h
-        self[:personalizations] = self[:personalizations].map { |per| per.to_h }
+        self[:personalizations] = self[:personalizations].map(&:to_h)
         self[:from] = self[:from].to_h
-        self[:content] = self[:content].map { |content| content.to_h }
+        self[:content] = self[:content].map(&:to_h)
         self[:reply_to] = self[:reply_to].to_h unless self[:reply_to].nil?
-        self[:attachments] = self[:attachments].map do |att|
-          att.to_h
-        end unless self[:attachments].nil?
+        unless self[:attachments].nil?
+          self[:attachments] = self[:attachments].map(&:to_h)
+        end
         self[:send_at] = self[:send_at].to_i if self[:send_at].class == Time
         unless self[:mail_settings].nil?
           self[:mail_settings] = self[:mail_settings].to_h
@@ -142,8 +141,7 @@ module SendGrid4r::REST
         unless self[:tracking_settings].nil?
           self[:tracking_settings] = self[:tracking_settings].to_h
         end
-
-        super.reject { |key, value| value.nil? }
+        super.reject { |_key, value| value.nil? }
       end
     end
 
@@ -168,7 +166,7 @@ module SendGrid4r::REST
       end
 
       def to_h
-        super.reject { |key, value| value.nil? }
+        super.reject { |_key, value| value.nil? }
       end
     end
 
@@ -176,37 +174,37 @@ module SendGrid4r::REST
       :bcc, :bypass_list_management, :footer, :sandbox_mode, :spam_check
     ) do
       def set_bcc(enable, email = nil)
-        self[:bcc] = {enable: enable}
+        self[:bcc] = { enable: enable }
         self[:bcc][:email] = email unless email.nil?
         self
       end
 
       def set_bypass_list_management(enable)
-        self[:bypass_list_management] = {enable: enable}
+        self[:bypass_list_management] = { enable: enable }
         self
       end
 
       def set_footer(enable, text = nil, html = nil)
-        self[:footer] = {enable: enable}
+        self[:footer] = { enable: enable }
         self[:footer][:text] = text unless text.nil?
         self[:footer][:html] = html unless html.nil?
         self
       end
 
       def set_sandbox_mode(enable)
-        self[:sandbox_mode] = {enable: enable}
+        self[:sandbox_mode] = { enable: enable }
         self
       end
 
       def set_spam_check(enable, threshold = nil, post_to_url = nil)
-        self[:spam_check] = {enable: enable}
+        self[:spam_check] = { enable: enable }
         self[:spam_check][:threshold] = threshold unless threshold.nil?
         self[:spam_check][:post_to_url] = post_to_url unless post_to_url.nil?
         self
       end
 
       def to_h
-        super.reject { |key, value| value.nil? }
+        super.reject { |_key, value| value.nil? }
       end
     end
 
@@ -214,7 +212,7 @@ module SendGrid4r::REST
       :click_tracking, :open_tracking, :subscription_tracking, :ganalytics
     ) do
       def set_click_tracking(enable, enable_text = nil)
-        self[:click_tracking] = {enable: enable}
+        self[:click_tracking] = { enable: enable }
         unless enable_text.nil?
           self[:click_tracking][:enable_text] = enable_text
         end
@@ -222,7 +220,7 @@ module SendGrid4r::REST
       end
 
       def set_open_tracking(enable, substitution_tag = nil)
-        self[:open_tracking] = {enable: enable}
+        self[:open_tracking] = { enable: enable }
         unless substitution_tag.nil?
           self[:open_tracking][:substitution_tag] = substitution_tag
         end
@@ -232,7 +230,7 @@ module SendGrid4r::REST
       def set_subscription_tracking(
         enable, text = nil, html = nil, substitution_tag = nil
       )
-        self[:subscription_tracking] = {enable: enable}
+        self[:subscription_tracking] = { enable: enable }
         self[:subscription_tracking][:text] = text unless text.nil?
         self[:subscription_tracking][:html] = html unless html.nil?
         unless substitution_tag.nil?
@@ -245,7 +243,7 @@ module SendGrid4r::REST
         enable, utm_source = nil, utm_medium = nil, utm_term = nil,
         utm_content = nil, utm_campaign = nil
       )
-        self[:ganalytics] = {enable: enable}
+        self[:ganalytics] = { enable: enable }
         self[:ganalytics][:utm_source] = utm_source unless utm_source.nil?
         self[:ganalytics][:utm_medium] = utm_medium unless utm_medium.nil?
         self[:ganalytics][:utm_term] = utm_term unless utm_term.nil?
@@ -255,7 +253,7 @@ module SendGrid4r::REST
       end
 
       def to_h
-        super.reject { |key, value| value.nil? }
+        super.reject { |_key, value| value.nil? }
       end
     end
   end

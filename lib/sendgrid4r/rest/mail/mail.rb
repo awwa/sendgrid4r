@@ -11,7 +11,7 @@ module SendGrid4r::REST
       "#{BASE_URL}/mail/send/beta"
     end
 
-    def send(params: params, &block)
+    def send(params:, &block)
       post(@auth, Mail.url, params.to_h, &block)
     end
   end
