@@ -13,16 +13,16 @@ module SendGrid4r::REST
       context 'without block call' do
         it '#send' do
           begin
-            to = SendGrid4r::Factory::MailParamsFactory.create_email(
+            to = SendGrid4r::Factory::MailFactory.create_email(
               email: ENV['MAIL'], name: 'To name'
             )
-            cc = SendGrid4r::Factory::MailParamsFactory.create_email(
+            cc = SendGrid4r::Factory::MailFactory.create_email(
               email: ENV['CC']
             )
-            bcc = SendGrid4r::Factory::MailParamsFactory.create_email(
+            bcc = SendGrid4r::Factory::MailFactory.create_email(
               email: ENV['BCC'], name: 'Bcc name'
             )
-            per = SendGrid4r::Factory::MailParamsFactory.create_personalization(
+            per = SendGrid4r::Factory::MailFactory.create_personalization(
               tos: [to], subject: 'Hello v3 Mail'
             )
             per.set_bccs([bcc])
@@ -31,23 +31,25 @@ module SendGrid4r::REST
             per.set_substitutions({"subkey" => "置換値" , "sectionkey" => 'sectionkey'})
             per.set_custom_args({"CUSTOM" => "value"})
             per.set_send_at(Time.local(2016))
-            from = SendGrid4r::Factory::MailParamsFactory.create_email(
+            from = SendGrid4r::Factory::MailFactory.create_email(
               email: ENV['FROM'], name: 'From Name'
             )
-            plain = Mail::Content.new(
-              'text/plain', 'こんにちは!TEXT subkey sectionkey\nhttps://www.google.com'
+            plain = SendGrid4r::Factory::MailFactory.create_content(
+              type: 'text/plain',
+              value: 'こんにちは!TEXT subkey sectionkey\nhttps://www.google.com'
             )
-            html = Mail::Content.new(
-              'text/html', '<h1>こんにちは!HTML subkey sectionkey</h1><br /><a href="https://www.google.com">ぐーぐる</a>'
+            html = SendGrid4r::Factory::MailFactory.create_content(
+              type: 'text/html',
+              value: '<h1>こんにちは!HTML subkey sectionkey</h1><br /><a href="https://www.google.com">ぐーぐる</a>'
             )
-            params = SendGrid4r::Factory::MailParamsFactory.create_params(
+            params = SendGrid4r::Factory::MailFactory.create_params(
               personalizations: [per], from: from, contents: [plain, html]
             )
-            reply_to = SendGrid4r::Factory::MailParamsFactory.create_email(
+            reply_to = SendGrid4r::Factory::MailFactory.create_email(
               email: ENV['MAIL']
             )
             params.set_reply_to(reply_to)
-            attachment = SendGrid4r::Factory::MailParamsFactory.create_attachment(
+            attachment = SendGrid4r::Factory::MailFactory.create_attachment(
               content: 'XXX', filename: 'text.txt'
             )
             params.set_attachments([attachment])
@@ -59,25 +61,35 @@ module SendGrid4r::REST
             params.set_send_at(Time.local(2016))
             params.set_asm(3581)
 
-            mail_settings = SendGrid4r::Factory::MailParamsFactory.create_mail_settings
+            mail_settings =
+              SendGrid4r::Factory::MailFactory.create_mail_settings
             mail_settings.set_bcc(true, ENV['MAIL'])
+            mail_settings.set_bcc(false)
             mail_settings.set_bypass_list_management(true)
-            mail_settings.set_footer(true, 'text footer','<p>html footer</p>')
+            mail_settings.set_bypass_list_management(false)
+            mail_settings.set_footer(true, 'text footer', '<p>html footer</p>')
+            mail_settings.set_footer(false)
             mail_settings.set_sandbox_mode(true)
+            mail_settings.set_sandbox_mode(false)
             mail_settings.set_spam_check(true, 10, 'http://www.kke.co.jp')
+            mail_settings.set_spam_check(false)
             params.set_mail_settings(mail_settings)
 
-            tracking_settings =
-              SendGrid4r::Factory::MailParamsFactory.create_tracking_settings
-            tracking_settings.set_click_tracking(true, true)
-            tracking_settings.set_open_tracking(true, 'open_tag')
-            tracking_settings.set_subscription_tracking(true, '', '', 'tag')
-            tracking_settings.set_ganalytics(true, '', '', '', '', '')
-            params.set_tracking_settings(tracking_settings)
+            tracking =
+              SendGrid4r::Factory::MailFactory.create_tracking_settings
+            tracking.set_click_tracking(true, true)
+            tracking.set_click_tracking(false)
+            tracking.set_open_tracking(true, 'open_tag')
+            tracking.set_open_tracking(false)
+            tracking.set_subscription_tracking(true, '', '', 'tag')
+            tracking.set_subscription_tracking(false)
+            tracking.set_ganalytics(true, '', '', '', '', '')
+            tracking.set_ganalytics(false)
+            params.set_tracking_settings(tracking)
 
             puts "= params: #{params.to_h}"
 
-            @client.send(params: params.to_h)
+            @client.send(params: params)
           rescue RestClient::ExceptionWithResponse => e
              puts e.inspect
              raise e

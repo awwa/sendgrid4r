@@ -7,7 +7,7 @@ module SendGrid4r
     #
     # SendGrid Web API v3 Segment Factory Class implementation
     #
-    module MailParamsFactory
+    module MailFactory
       def self.create_params(personalizations:, from:, contents:)
         SendGrid4r::REST::Mail::Params.new(
           personalizations, from, contents,
@@ -37,6 +37,10 @@ module SendGrid4r
 
       def self.create_tracking_settings
         SendGrid4r::REST::Mail::TrackingSettings.new(nil, nil, nil, nil)
+      end
+
+      def self.create_content(type:, value:)
+        SendGrid4r::REST::Mail::Content.new(type, value)
       end
     end
   end

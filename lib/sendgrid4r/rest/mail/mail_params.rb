@@ -105,10 +105,9 @@ module SendGrid4r::REST
       end
 
       def set_asm(group_id, groups_to_display = nil)
-        self[:asm] = {}
-        self[:asm]['group_id'] = group_id
+        self[:asm] = {group_id: group_id}
         unless groups_to_display.nil?
-          self[:asm]['groups_to_display'] = groups_to_display
+          self[:asm][:groups_to_display] = groups_to_display
         end
         self
       end
@@ -176,11 +175,9 @@ module SendGrid4r::REST
     MailSettings = Struct.new(
       :bcc, :bypass_list_management, :footer, :sandbox_mode, :spam_check
     ) do
-      def set_bcc(enable, email)
-        self[:bcc] = {
-          enable: enable,
-          email: email
-        }
+      def set_bcc(enable, email = nil)
+        self[:bcc] = {enable: enable}
+        self[:bcc][:email] = email unless email.nil?
         self
       end
 
@@ -189,12 +186,10 @@ module SendGrid4r::REST
         self
       end
 
-      def set_footer(enable, text, html)
-        self[:footer] = {
-          enable: enable,
-          text: text,
-          html: html
-        }
+      def set_footer(enable, text = nil, html = nil)
+        self[:footer] = {enable: enable}
+        self[:footer][:text] = text unless text.nil?
+        self[:footer][:html] = html unless html.nil?
         self
       end
 
@@ -203,12 +198,10 @@ module SendGrid4r::REST
         self
       end
 
-      def set_spam_check(enable, threshold, post_to_url)
-        self[:spam_check] = {
-          enable: enable,
-          threshold: threshold,
-          post_to_url: post_to_url
-        }
+      def set_spam_check(enable, threshold = nil, post_to_url = nil)
+        self[:spam_check] = {enable: enable}
+        self[:spam_check][:threshold] = threshold unless threshold.nil?
+        self[:spam_check][:post_to_url] = post_to_url unless post_to_url.nil?
         self
       end
 
@@ -220,43 +213,44 @@ module SendGrid4r::REST
     TrackingSettings = Struct.new(
       :click_tracking, :open_tracking, :subscription_tracking, :ganalytics
     ) do
-      def set_click_tracking(enable, enable_text)
-        self[:click_tracking] = {
-          enable: enable,
-          enable_text: enable_text
-        }
+      def set_click_tracking(enable, enable_text = nil)
+        self[:click_tracking] = {enable: enable}
+        unless enable_text.nil?
+          self[:click_tracking][:enable_text] = enable_text
+        end
         self
       end
 
-      def set_open_tracking(enable, substitution_tag)
-        self[:open_tracking] = {
-          enable: enable,
-          substitution_tag: substitution_tag
-        }
+      def set_open_tracking(enable, substitution_tag = nil)
+        self[:open_tracking] = {enable: enable}
+        unless substitution_tag.nil?
+          self[:open_tracking][:substitution_tag] = substitution_tag
+        end
         self
       end
 
-      def set_subscription_tracking(enable, text, html, substitution_tag)
-        self[:subscription_tracking] = {
-          enable: enable,
-          text: text,
-          html: html,
-          substitution_tag: substitution_tag
-        }
+      def set_subscription_tracking(
+        enable, text = nil, html = nil, substitution_tag = nil
+      )
+        self[:subscription_tracking] = {enable: enable}
+        self[:subscription_tracking][:text] = text unless text.nil?
+        self[:subscription_tracking][:html] = html unless html.nil?
+        unless substitution_tag.nil?
+          self[:subscription_tracking][:substitution_tag] = substitution_tag
+        end
         self
       end
 
       def set_ganalytics(
-        enable, utm_source, utm_medium, utm_term, utm_content, utm_campaign
-        )
-        self[:ganalytics] = {
-          enable: enable,
-          utm_source: utm_source,
-          utm_medium: utm_medium,
-          utm_term: utm_term,
-          utm_content: utm_content,
-          utm_campaign: utm_campaign
-        }
+        enable, utm_source = nil, utm_medium = nil, utm_term = nil,
+        utm_content = nil, utm_campaign = nil
+      )
+        self[:ganalytics] = {enable: enable}
+        self[:ganalytics][:utm_source] = utm_source unless utm_source.nil?
+        self[:ganalytics][:utm_medium] = utm_medium unless utm_medium.nil?
+        self[:ganalytics][:utm_term] = utm_term unless utm_term.nil?
+        self[:ganalytics][:utm_content] = utm_content unless utm_content.nil?
+        self[:ganalytics][:utm_campaign] = utm_campaign unless utm_campaign.nil?
         self
       end
 

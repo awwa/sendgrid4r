@@ -12,7 +12,7 @@ module SendGrid4r::REST
     end
 
     def send(params: params, &block)
-      post(@auth, Mail.url, params, &block)
+      post(@auth, Mail.url, params.to_h, &block)
     end
   end
 end

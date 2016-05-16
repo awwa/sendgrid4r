@@ -67,7 +67,7 @@ require 'sendgrid4r/factory/campaign_factory'
 require 'sendgrid4r/factory/condition_factory'
 require 'sendgrid4r/factory/segment_factory'
 require 'sendgrid4r/factory/version_factory'
-require 'sendgrid4r/factory/mail_params_factory'
+require 'sendgrid4r/factory/mail_factory'
 
 require 'sendgrid4r/rest/api'
 
