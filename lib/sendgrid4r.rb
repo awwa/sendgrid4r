@@ -60,10 +60,14 @@ require 'sendgrid4r/rest/whitelabel/domains'
 require 'sendgrid4r/rest/whitelabel/ips'
 require 'sendgrid4r/rest/whitelabel/links'
 
+require 'sendgrid4r/rest/mail/mail'
+require 'sendgrid4r/rest/mail/mail_params'
+
 require 'sendgrid4r/factory/campaign_factory'
 require 'sendgrid4r/factory/condition_factory'
 require 'sendgrid4r/factory/segment_factory'
 require 'sendgrid4r/factory/version_factory'
+require 'sendgrid4r/factory/mail_params_factory'
 
 require 'sendgrid4r/rest/api'
 

@@ -47,5 +47,6 @@ module SendGrid4r::REST
     include SendGrid4r::REST::Webhooks::Event
     include SendGrid4r::REST::Webhooks::Parse
     include SendGrid4r::REST::IpAccessManagement
+    include SendGrid4r::REST::Mail
   end
 end
