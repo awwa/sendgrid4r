@@ -1,18 +1,20 @@
 # -*- encoding: utf-8 -*-
 
-require 'base64'
-
 module SendGrid4r
   module Factory
     #
-    # SendGrid Web API v3 Segment Factory Class implementation
+    # SendGrid Web API v3 MailFactory implementation
     #
     module MailFactory
       def self.create_params(personalizations:, from:, contents:)
-        SendGrid4r::REST::Mail::Params.new(
-          personalizations, from, contents,
+        params = SendGrid4r::REST::Mail::Params.new(
+          nil, nil, nil,
           nil, nil, nil, nil, nil, nil, nil, nil, nil, nil
         )
+        params
+          .set_personalizations(personalizations)
+          .set_from(from)
+          .set_contents(contents)
       end
 
       def self.create_email(email:, name: nil)
@@ -20,15 +22,21 @@ module SendGrid4r
       end
 
       def self.create_personalization(tos:, subject:)
-        SendGrid4r::REST::Mail::Personalization.new(
-          tos, subject, nil, nil, nil, nil, nil, nil
+        per = SendGrid4r::REST::Mail::Personalization.new(
+          nil, nil, nil, nil, nil, nil, nil, nil
         )
+        per
+          .set_tos(tos)
+          .set_subject(subject)
       end
 
       def self.create_attachment(content:, filename:)
-        SendGrid4r::REST::Mail::Attachment.new(
-          Base64.strict_encode64(content), filename, nil, nil, nil
+        attachment = SendGrid4r::REST::Mail::Attachment.new(
+          nil, nil, nil, nil, nil
         )
+        attachment
+          .set_content(content)
+          .set_filename(filename)
       end
 
       def self.create_mail_settings

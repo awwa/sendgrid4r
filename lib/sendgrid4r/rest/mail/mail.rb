@@ -11,8 +11,17 @@ module SendGrid4r::REST
       "#{BASE_URL}/mail/send/beta"
     end
 
+    def self.warn_beta
+      warn(
+        '[WARN] Mail endpoint is currently in beta! We do not recommend '\
+        'use this method in production. When this endpoint is ready for '\
+        'general release, your code will require an update in order to '\
+        'use the official one.'
+      )
+    end
+
     def send(params:, &block)
-      warn '[WARN] Mail endpoint is currently in beta! We do not recommend use this method in production. When this endpoint is ready for general release, your code will require an update in order to use the official one.'
+      Mail.warn_beta
       post(@auth, Mail.url, params.to_h, &block)
     end
   end
