@@ -9,57 +9,51 @@ module SendGrid4r::REST
       :bcc, :bypass_list_management, :footer, :sandbox_mode, :spam_check
     ) do
       def enable_bcc(email)
-        self[:bcc] = {enable: true, email: email}
-        self
+        self.tap { |s| s[:bcc] = {enable: true, email: email} }
       end
 
       def disable_bcc
-        self[:bcc] = { enable: false }
-        self
+        self.tap { |s| s[:bcc] = { enable: false } }
       end
 
       def enable_bypass_list_management
-        self[:bypass_list_management] = { enable: true }
-        self
+        self.tap { |s| s[:bypass_list_management] = { enable: true } }
       end
 
       def disable_bypass_list_management
-        self[:bypass_list_management] = { enable: false }
-        self
+        self.tap { |s| s[:bypass_list_management] = { enable: false } }
       end
 
       def enable_footer(text, html)
-        self[:footer] = {enable: true, text: text, html: html}
-        self
+        self.tap do |s|
+          s[:footer] = {enable: true, text: text, html: html}
+        end
       end
 
       def disable_footer
-        self[:footer] = { enable: false }
-        self
+        self.tap { |s| s[:footer] = { enable: false } }
       end
 
       def enable_sandbox_mode
-        self[:sandbox_mode] = { enable: true }
-        self
+        self.tap { |s| s[:sandbox_mode] = { enable: true } }
       end
 
       def disable_sandbox_mode
-        self[:sandbox_mode] = { enable: false }
-        self
+        self.tap { |s| s[:sandbox_mode] = { enable: false } }
       end
 
       def enable_spam_check(threshold, post_to_url)
-        self[:spam_check] = {
-          enable: true,
-          threshold: threshold,
-          post_to_url: post_to_url
-        }
-        self
+        self.tap do |s|
+          s[:spam_check] = {
+            enable: true,
+            threshold: threshold,
+            post_to_url: post_to_url
+          }
+        end
       end
 
       def disable_spam_check
-        self[:spam_check] = { enable: false }
-        self
+        self.tap { |s| s[:spam_check] = { enable: false } }
       end
 
       def to_h
