@@ -65,7 +65,7 @@ module SendGrid4r::REST
         tap do |s|
           s[:asm] = { group_id: group_id }
           unless groups_to_display.nil?
-            self[:asm][:groups_to_display] = groups_to_display
+            s[:asm][:groups_to_display] = groups_to_display
           end
         end
       end
