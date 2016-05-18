@@ -9,41 +9,39 @@ module SendGrid4r::REST
       :bcc, :bypass_list_management, :footer, :sandbox_mode, :spam_check
     ) do
       def enable_bcc(email)
-        self.tap { |s| s[:bcc] = {enable: true, email: email} }
+        tap { |s| s[:bcc] = { enable: true, email: email } }
       end
 
       def disable_bcc
-        self.tap { |s| s[:bcc] = { enable: false } }
+        tap { |s| s[:bcc] = { enable: false } }
       end
 
       def enable_bypass_list_management
-        self.tap { |s| s[:bypass_list_management] = { enable: true } }
+        tap { |s| s[:bypass_list_management] = { enable: true } }
       end
 
       def disable_bypass_list_management
-        self.tap { |s| s[:bypass_list_management] = { enable: false } }
+        tap { |s| s[:bypass_list_management] = { enable: false } }
       end
 
       def enable_footer(text, html)
-        self.tap do |s|
-          s[:footer] = {enable: true, text: text, html: html}
-        end
+        tap { |s| s[:footer] = { enable: true, text: text, html: html } }
       end
 
       def disable_footer
-        self.tap { |s| s[:footer] = { enable: false } }
+        tap { |s| s[:footer] = { enable: false } }
       end
 
       def enable_sandbox_mode
-        self.tap { |s| s[:sandbox_mode] = { enable: true } }
+        tap { |s| s[:sandbox_mode] = { enable: true } }
       end
 
       def disable_sandbox_mode
-        self.tap { |s| s[:sandbox_mode] = { enable: false } }
+        tap { |s| s[:sandbox_mode] = { enable: false } }
       end
 
       def enable_spam_check(threshold, post_to_url)
-        self.tap do |s|
+        tap do |s|
           s[:spam_check] = {
             enable: true,
             threshold: threshold,
@@ -53,7 +51,7 @@ module SendGrid4r::REST
       end
 
       def disable_spam_check
-        self.tap { |s| s[:spam_check] = { enable: false } }
+        tap { |s| s[:spam_check] = { enable: false } }
       end
 
       def to_h

@@ -12,86 +12,74 @@ module SendGrid4r::REST
       :tracking_settings
     ) do
       def set_personalizations(personalizations)
-        self[:personalizations] = personalizations.map(&:to_h)
-        self
+        tap do |s|
+          s[:personalizations] = personalizations.map(&:to_h)
+        end
       end
 
       def set_from(from)
-        self[:from] = from.to_h
-        self
+        tap { |s| s[:from] = from.to_h }
       end
 
       def set_contents(contents)
-        self[:content] = contents.map(&:to_h)
-        self
+        tap { |s| s[:content] = contents.map(&:to_h) }
       end
 
       def set_reply_to(reply_to)
-        self[:reply_to] = reply_to.to_h
-        self
+        tap { |s| s[:reply_to] = reply_to.to_h }
       end
 
       def set_attachments(attachments)
-        self[:attachments] = attachments.map(&:to_h)
-        self
+        tap { |s| s[:attachments] = attachments.map(&:to_h) }
       end
 
       def set_template_id(template_id)
-        self[:template_id] = template_id
-        self
+        tap { |s| s[:template_id] = template_id }
       end
 
       def set_sections(sections)
-        self[:sections] = sections
-        self
+        tap { |s| s[:sections] = sections }
       end
 
       def set_headers(headers)
-        self[:headers] = headers
-        self
+        tap { |s| s[:headers] = headers }
       end
 
       def set_categories(categories)
-        self[:categories] = categories
-        self
+        tap { |s| s[:categories] = categories }
       end
 
       def set_custom_args(custom_args)
-        self[:custom_args] = custom_args
-        self
+        tap { |s| s[:custom_args] = custom_args }
       end
 
       def set_send_at(send_at)
-        self[:send_at] = send_at.to_i
-        self
+        tap { |s| s[:send_at] = send_at.to_i }
       end
 
       def set_batch_id(batch_id)
-        self[:batch_id] = batch_id
-        self
+        tap { |s| s[:batch_id] = batch_id }
       end
 
       def set_asm(group_id, groups_to_display = nil)
-        self[:asm] = { group_id: group_id }
-        unless groups_to_display.nil?
-          self[:asm][:groups_to_display] = groups_to_display
+        tap do |s|
+          s[:asm] = { group_id: group_id }
+          unless groups_to_display.nil?
+            self[:asm][:groups_to_display] = groups_to_display
+          end
         end
-        self
       end
 
       def set_ip_pool_name(ip_pool_name)
-        self[:ip_pool_name] = ip_pool_name
-        self
+        tap { |s| s[:ip_pool_name] = ip_pool_name }
       end
 
       def set_mail_settings(mail_settings)
-        self[:mail_settings] = mail_settings.to_h
-        self
+        tap { |s| s[:mail_settings] = mail_settings.to_h }
       end
 
       def set_tracking_settings(tracking_settings)
-        self[:tracking_settings] = tracking_settings.to_h
-        self
+        tap { |s| s[:tracking_settings] = tracking_settings.to_h }
       end
 
       def to_h

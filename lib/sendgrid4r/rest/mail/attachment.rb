@@ -11,28 +11,23 @@ module SendGrid4r::REST
       :content, :filename, :type, :disposition, :content_id
     ) do
       def set_content(content)
-        self[:content] = Base64.strict_encode64(content)
-        self
+        tap { |s| s[:content] = Base64.strict_encode64(content) }
       end
 
       def set_filename(filename)
-        self[:filename] = filename
-        self
+        tap { |s| s[:filename] = filename }
       end
 
       def set_type(type)
-        self[:type] = type
-        self
+        tap { |s| s[:type] = type }
       end
 
       def set_disposition(disposition)
-        self[:disposition] = disposition
-        self
+        tap { |s| s[:disposition] = disposition }
       end
 
       def set_content_id(content_id)
-        self[:content_id] = content_id
-        self
+        tap { |s| s[:content_id] = content_id }
       end
 
       def to_h

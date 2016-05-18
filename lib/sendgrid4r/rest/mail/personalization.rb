@@ -10,43 +10,35 @@ module SendGrid4r::REST
       :send_at
     ) do
       def set_tos(tos)
-        self[:to] = tos.map(&:to_h)
-        self
+        tap { |s| s[:to] = tos.map(&:to_h) }
       end
 
       def set_subject(subject)
-        self[:subject] = subject
-        self
+        tap { |s| s[:subject] = subject }
       end
 
       def set_ccs(ccs)
-        self[:cc] = ccs.map(&:to_h)
-        self
+        tap { |s| s[:cc] = ccs.map(&:to_h) }
       end
 
       def set_bccs(bccs)
-        self[:bcc] = bccs.map(&:to_h)
-        self
+        tap { |s| s[:bcc] = bccs.map(&:to_h) }
       end
 
       def set_headers(headers)
-        self[:headers] = headers
-        self
+        tap { |s| s[:headers] = headers }
       end
 
       def set_substitutions(substitutions)
-        self[:substitutions] = substitutions
-        self
+        tap { |s| s[:substitutions] = substitutions }
       end
 
       def set_custom_args(custom_args)
-        self[:custom_args] = custom_args
-        self
+        tap { |s| s[:custom_args] = custom_args }
       end
 
       def set_send_at(send_at)
-        self[:send_at] = send_at.to_i
-        self
+        tap { |s| s[:send_at] = send_at.to_i }
       end
 
       def to_h
