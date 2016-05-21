@@ -8,12 +8,12 @@ module SendGrid4r::Factory
         Dotenv.load
       end
 
-      it 'specify mandatory params' do
+      it 'create with mandatory parameters' do
         campaign = CampaignFactory.new.create
         expect(campaign).to eq({})
       end
 
-      it 'specify all params' do
+      it 'create with full parameters' do
         campaign = CampaignFactory.new.create(
           title: 'March Newsletter',
           subject: 'New Products for Spring!',

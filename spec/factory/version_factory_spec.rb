@@ -8,7 +8,7 @@ module SendGrid4r::Factory
         Dotenv.load
       end
 
-      it 'is simple case' do
+      it 'create with mandatory parameters' do
         version = VersionFactory.new.create(name: 'version_name')
         expect(version.name).to eq('version_name')
         expect(version.subject).to eq('<%subject%>')
@@ -17,7 +17,7 @@ module SendGrid4r::Factory
         expect(version.active).to eq(1)
       end
 
-      it 'is full params case' do
+      it 'create with full parameters' do
         version = VersionFactory.new.create(
           name: 'version_name',
           subject: 'This is subject <%subject%>',

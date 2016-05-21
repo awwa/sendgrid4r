@@ -8,7 +8,7 @@ module SendGrid4r::Factory
         Dotenv.load
       end
 
-      it 'specify all params' do
+      it 'create with full parameters' do
         condition = ConditionFactory.new.create(
           field: 'last_name',
           value: 'Miller',

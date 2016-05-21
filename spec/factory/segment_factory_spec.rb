@@ -13,23 +13,21 @@ module SendGrid4r::Factory
           field: 'last_name',
           value: 'Miller',
           operator: 'eq',
-          and_or: '')
+          and_or: ''
+        )
       end
 
-      it 'specify mandatory params' do
-        segment = SegmentFactory.new.create(
-          conditions: [condition]
-        )
+      it 'create with mandatory parameters' do
+        segment = SegmentFactory.new.create(conditions: [condition])
         expect(segment).to eq(conditions: [condition])
       end
 
-      it 'specify all params' do
+      it 'create with full parameters' do
         segment = SegmentFactory.new.create(
           name: 'Last Name Miller', conditions: [condition]
         )
         expect(segment).to eq(
-          name: 'Last Name Miller',
-          conditions: [condition]
+          name: 'Last Name Miller', conditions: [condition]
         )
       end
     end
