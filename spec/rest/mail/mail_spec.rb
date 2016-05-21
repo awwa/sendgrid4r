@@ -12,13 +12,13 @@ module SendGrid4r::REST
       context 'without block call' do
         it '#send' do
           # Create Personalization
-          to = SendGrid4r::Factory::MailFactory.create_email(
+          to = SendGrid4r::Factory::MailFactory.create_address(
             email: ENV['MAIL'], name: 'To name'
           )
-          cc = SendGrid4r::Factory::MailFactory.create_email(
+          cc = SendGrid4r::Factory::MailFactory.create_address(
             email: ENV['CC']
           )
-          bcc = SendGrid4r::Factory::MailFactory.create_email(
+          bcc = SendGrid4r::Factory::MailFactory.create_address(
             email: ENV['BCC'], name: 'Bcc name'
           )
           per = SendGrid4r::Factory::MailFactory.create_personalization(
@@ -34,7 +34,7 @@ module SendGrid4r::REST
           per.send_at = Time.utc(2016)
 
           # Create Params
-          from = SendGrid4r::Factory::MailFactory.create_email(
+          from = SendGrid4r::Factory::MailFactory.create_address(
             email: ENV['FROM'], name: 'From Name'
           )
           plain = SendGrid4r::Factory::MailFactory.create_content(
@@ -50,7 +50,7 @@ module SendGrid4r::REST
           params = SendGrid4r::Factory::MailFactory.create_params(
             personalizations: [per], from: from, content: [plain, html]
           )
-          reply_to = SendGrid4r::Factory::MailFactory.create_email(
+          reply_to = SendGrid4r::Factory::MailFactory.create_address(
             email: ENV['MAIL']
           )
           params.reply_to = reply_to

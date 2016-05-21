@@ -8,15 +8,21 @@ module SendGrid4r::REST
         Dotenv.load
       end
 
+      let(:to) do
+        SendGrid4r::Factory::MailFactory.create_address(
+          email: ENV['MAIL']
+        )
+      end
+
       let(:from) do
-        SendGrid4r::Factory::MailFactory.create_email(
+        SendGrid4r::Factory::MailFactory.create_address(
           email: ENV['FROM']
         )
       end
 
       let(:per) do
         SendGrid4r::Factory::MailFactory.create_personalization(
-          tos: [to], subject: 'Hello v3 Mail'
+          to: [to], subject: 'Hello v3 Mail'
         )
       end
 
@@ -37,7 +43,7 @@ module SendGrid4r::REST
       end
 
       let(:reply_to) do
-        SendGrid4r::Factory::MailFactory.create_email(
+        SendGrid4r::Factory::MailFactory.create_address(
           email: ENV['FROM']
         )
       end
@@ -132,7 +138,7 @@ module SendGrid4r::REST
             template_id: 'XXX-YYY-ZZZ',
             sections: { 'sectionkey' => 'セクション置換' },
             headers: { 'X-GLOBAL' => 'GLOBAL_VALUE' },
-            categories: %w('CAT1' 'CAT2'),
+            categories: %w(CAT1 CAT2),
             custom_args: { 'CUSTOM1' => 'CUSTOM_VALUE1' },
             send_at: 1451606400,
             batch_id: '1234567890',

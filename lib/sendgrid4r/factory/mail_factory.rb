@@ -19,8 +19,8 @@ module SendGrid4r
         end
       end
 
-      def self.create_email(email:, name: nil)
-        SendGrid4r::REST::Mail::Email.new(email, name)
+      def self.create_address(email:, name: nil)
+        SendGrid4r::REST::Mail::Address.new(email, name)
       end
 
       def self.create_personalization(to:, subject:)

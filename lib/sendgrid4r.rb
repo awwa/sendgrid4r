@@ -62,7 +62,7 @@ require 'sendgrid4r/rest/whitelabel/links'
 
 require 'sendgrid4r/rest/mail/attachment'
 require 'sendgrid4r/rest/mail/content'
-require 'sendgrid4r/rest/mail/email'
+require 'sendgrid4r/rest/mail/address'
 require 'sendgrid4r/rest/mail/mail_settings'
 require 'sendgrid4r/rest/mail/mail'
 require 'sendgrid4r/rest/mail/params'

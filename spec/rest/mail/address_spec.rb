@@ -9,14 +9,14 @@ module SendGrid4r::REST
       end
       context 'without block call' do
         it '#to_h with mandatory parameters' do
-          em = SendGrid4r::Factory::MailFactory.create_email(
+          em = SendGrid4r::Factory::MailFactory.create_address(
             email: ENV['MAIL']
           )
           expect(em.to_h).to eq(email: ENV['MAIL'])
         end
 
         it '#to_h with full parameters' do
-          em = SendGrid4r::Factory::MailFactory.create_email(
+          em = SendGrid4r::Factory::MailFactory.create_address(
             email: ENV['MAIL'], name: 'To name'
           )
           em.email = ENV['FROM']

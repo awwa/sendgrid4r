@@ -9,19 +9,19 @@ module SendGrid4r::REST
       end
 
       let(:to) do
-        SendGrid4r::Factory::MailFactory.create_email(
+        SendGrid4r::Factory::MailFactory.create_address(
           email: ENV['MAIL']
         )
       end
 
       let(:cc) do
-        SendGrid4r::Factory::MailFactory.create_email(
+        SendGrid4r::Factory::MailFactory.create_address(
           email: ENV['CC']
         )
       end
 
       let(:bcc) do
-        SendGrid4r::Factory::MailFactory.create_email(
+        SendGrid4r::Factory::MailFactory.create_address(
           email: ENV['BCC']
         )
       end
