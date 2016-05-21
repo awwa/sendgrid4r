@@ -6,11 +6,10 @@ module SendGrid4r::Factory
     describe 'unit test', :ut do
       before do
         Dotenv.load
-        @factory = VersionFactory.new
       end
 
       it 'is simple case' do
-        version = @factory.create(name: 'version_name')
+        version = VersionFactory.new.create(name: 'version_name')
         expect(version.name).to eq('version_name')
         expect(version.subject).to eq('<%subject%>')
         expect(version.html_content).to eq('<%body%>')
@@ -19,7 +18,7 @@ module SendGrid4r::Factory
       end
 
       it 'is full params case' do
-        version = @factory.create(
+        version = VersionFactory.new.create(
           name: 'version_name',
           subject: 'This is subject <%subject%>',
           html_content: 'This is html content <%body%>',

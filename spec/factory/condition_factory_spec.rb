@@ -6,21 +6,20 @@ module SendGrid4r::Factory
     describe 'unit test', :ut do
       before do
         Dotenv.load
-        @factory = ConditionFactory.new
-        @expect = {}
-        @expect[:field] = 'last_name'
-        @expect[:value] = 'Miller'
-        @expect[:operator] = 'eq'
-        @expect[:and_or] = ''
       end
 
       it 'specify all params' do
-        condition = @factory.create(
+        condition = ConditionFactory.new.create(
           field: 'last_name',
           value: 'Miller',
           operator: 'eq',
           and_or: '')
-        expect(condition).to eq(@expect)
+        expect(condition).to eq(
+          field: 'last_name',
+          value: 'Miller',
+          operator: 'eq',
+          and_or: ''
+        )
       end
     end
   end

@@ -10,16 +10,12 @@ module SendGrid4r
         segment_ids: nil, categories: nil, suppression_group_id: nil,
         custom_unsubscribe_url: nil, ip_pool: nil, html_content: nil,
         plain_content: nil)
-        segment = REST::MarketingCampaigns::Campaign.new(
+        campaign = REST::MarketingCampaigns::Campaign.new(
           nil, title, subject, sender_id, list_ids, segment_ids, categories,
           suppression_group_id, custom_unsubscribe_url, ip_pool, html_content,
           plain_content, nil, nil
         )
-        hash = segment.to_h
-        segment.to_h.each do |key, value|
-          hash.delete(key) if value.nil?
-        end
-        hash
+        campaign.to_h.reject { |_key, value| value.nil? }
       end
     end
   end

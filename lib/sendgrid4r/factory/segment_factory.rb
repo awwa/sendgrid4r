@@ -14,10 +14,7 @@ module SendGrid4r
           conditions,
           nil
         )
-        hash = segment.to_h
-        hash.delete(:id)
-        hash.delete(:list_id) if list_id.nil?
-        hash
+        segment.to_h.reject { |_key, value| value.nil? }
       end
     end
   end

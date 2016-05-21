@@ -6,24 +6,31 @@ module SendGrid4r::Factory
     describe 'unit test', :ut do
       before do
         Dotenv.load
-        @segment_factory = SegmentFactory.new
-        @condition_factory = ConditionFactory.new
-        @condition = @condition_factory.create(
+      end
+
+      let(:condition) do
+        ConditionFactory.new.create(
           field: 'last_name',
           value: 'Miller',
           operator: 'eq',
           and_or: '')
-        @expect = {}
-        @expect[:name] = 'Last Name Miller'
-        @expect[:conditions] = [@condition]
-        @expect[:recipient_count] = nil
+      end
+
+      it 'specify mandatory params' do
+        segment = SegmentFactory.new.create(
+          conditions: [condition]
+        )
+        expect(segment).to eq(conditions: [condition])
       end
 
       it 'specify all params' do
-        segment = @segment_factory.create(
-          name: 'Last Name Miller', conditions: [@condition]
+        segment = SegmentFactory.new.create(
+          name: 'Last Name Miller', conditions: [condition]
         )
-        expect(segment).to eq(@expect)
+        expect(segment).to eq(
+          name: 'Last Name Miller',
+          conditions: [condition]
+        )
       end
     end
   end
