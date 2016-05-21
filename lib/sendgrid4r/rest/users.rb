@@ -40,17 +40,17 @@ module SendGrid4r::REST
     end
 
     def get_user_profile(&block)
-      resp = get(@auth, Users.url('profile'), nil, &block)
+      resp = get(@auth, Users.url(:profile), nil, &block)
       Users.create_profile(resp)
     end
 
     def patch_user_profile(params:, &block)
-      resp = patch(@auth, Users.url('profile'), params, &block)
+      resp = patch(@auth, Users.url(:profile), params, &block)
       Users.create_profile(resp)
     end
 
     def get_user_account(&block)
-      resp = get(@auth, Users.url('account'), nil, &block)
+      resp = get(@auth, Users.url(:account), nil, &block)
       Users.create_account(resp)
     end
   end

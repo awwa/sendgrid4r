@@ -12,11 +12,7 @@ module SendGrid4r::REST
 
       def self.create_warmup_ips(resp)
         return resp if resp.nil?
-        ips = []
-        resp.each do |warmup_ip|
-          ips.push(Ips::Warmup.create_warmup_ip(warmup_ip))
-        end
-        ips
+        resp.map { |warmup_ip| Ips::Warmup.create_warmup_ip(warmup_ip) }
       end
 
       def self.create_warmup_ip(resp)

@@ -17,9 +17,7 @@ module SendGrid4r::REST
 
     def self.create_bounces(resp)
       return resp if resp.nil?
-      bounces = []
-      resp.each { |bounce| bounces.push(Bounces.create_bounce(bounce)) }
-      bounces
+      resp.map { |bounce| Bounces.create_bounce(bounce) }
     end
 
     def self.create_bounce(resp)
@@ -30,32 +28,29 @@ module SendGrid4r::REST
 
     def get_bounces(start_time: nil, end_time: nil, &block)
       params = {}
-      params['start_time'] = start_time.to_i unless start_time.nil?
-      params['end_time'] = end_time.to_i unless end_time.nil?
+      params[:start_time] = start_time.to_i unless start_time.nil?
+      params[:end_time] = end_time.to_i unless end_time.nil?
       resp = get(@auth, Bounces.url, params, &block)
       Bounces.create_bounces(resp)
     end
 
     def delete_bounces(delete_all: nil, emails: nil, &block)
-      payload = {}
       if delete_all
-        payload['delete_all'] = delete_all
+        payload = { delete_all: delete_all }
       else
-        payload['emails'] = emails
+        payload = { emails: emails }
       end
       delete(@auth, Bounces.url, nil, payload, &block)
     end
 
     def get_bounce(email:, &block)
-      params = {}
-      params['email'] = email
+      params = { email: email }
       resp = get(@auth, Bounces.url(email), params, &block)
       Bounces.create_bounces(resp)
     end
 
     def delete_bounce(email:, &block)
-      params = {}
-      params['email'] = email
+      params = { email: email }
       delete(@auth, Bounces.url(email), params, &block)
     end
   end

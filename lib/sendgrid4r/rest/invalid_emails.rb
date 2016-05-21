@@ -17,11 +17,9 @@ module SendGrid4r::REST
 
     def self.create_invalid_emails(resp)
       return resp if resp.nil?
-      invalid_emails = []
-      resp.each do |invalid_email|
-        invalid_emails.push(InvalidEmails.create_invalid_email(invalid_email))
+      resp.map do |invalid_email|
+        InvalidEmails.create_invalid_email(invalid_email)
       end
-      invalid_emails
     end
 
     def self.create_invalid_email(resp)
@@ -34,34 +32,31 @@ module SendGrid4r::REST
       start_time: nil, end_time: nil, limit: nil, offset: nil, &block
     )
       params = {}
-      params['start_time'] = start_time.to_i unless start_time.nil?
-      params['end_time'] = end_time.to_i unless end_time.nil?
-      params['limit'] = limit.to_i unless limit.nil?
-      params['offset'] = offset.to_i unless offset.nil?
+      params[:start_time] = start_time.to_i unless start_time.nil?
+      params[:end_time] = end_time.to_i unless end_time.nil?
+      params[:limit] = limit.to_i unless limit.nil?
+      params[:offset] = offset.to_i unless offset.nil?
       resp = get(@auth, InvalidEmails.url, params, &block)
       InvalidEmails.create_invalid_emails(resp)
     end
 
     def delete_invalid_emails(delete_all: nil, emails: nil, &block)
-      payload = {}
-      if delete_all == true
-        payload['delete_all'] = delete_all
+      if delete_all
+        payload = { delete_all: delete_all }
       else
-        payload['emails'] = emails
+        payload = { emails: emails }
       end
       delete(@auth, InvalidEmails.url, nil, payload, &block)
     end
 
     def get_invalid_email(email:, &block)
-      params = {}
-      params['email'] = email
+      params = { email: email }
       resp = get(@auth, InvalidEmails.url(email), params, &block)
       InvalidEmails.create_invalid_emails(resp)
     end
 
     def delete_invalid_email(email:, &block)
-      params = {}
-      params['email'] = email
+      params = { email: email }
       delete(@auth, InvalidEmails.url(email), params, &block)
     end
   end

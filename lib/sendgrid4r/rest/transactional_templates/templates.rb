@@ -18,18 +18,16 @@ module SendGrid4r::REST
 
     def self.create_templates(resp)
       return resp if resp.nil?
-      tmps = []
-      resp['templates'].each do |template|
-        tmps.push(TransactionalTemplates.create_template(template))
+      tmps = resp['templates'].map do |template|
+        TransactionalTemplates.create_template(template)
       end
       Templates.new(tmps)
     end
 
     def self.create_template(resp)
       return resp if resp.nil?
-      vers = []
-      resp['versions'].each do |ver|
-        vers.push(TransactionalTemplates::Versions.create_version(ver))
+      vers = resp['versions'].map do |ver|
+        TransactionalTemplates::Versions.create_version(ver)
       end
       Template.new(resp['id'], resp['name'], vers)
     end
@@ -53,8 +51,6 @@ module SendGrid4r::REST
 
     def patch_template(template_id:, name:, &block)
       endpoint = TransactionalTemplates.url(template_id)
-      payload = {}
-      payload['name'] = name
       resp = patch(@auth, endpoint, name: name, &block)
       TransactionalTemplates.create_template(resp)
     end

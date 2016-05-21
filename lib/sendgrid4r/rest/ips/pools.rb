@@ -15,11 +15,7 @@ module SendGrid4r::REST
 
       def self.create_pools(resp)
         return resp if resp.nil?
-        pools = []
-        resp.each do |pool|
-          pools.push(Ips::Pools.create_pool(pool))
-        end
-        pools
+        resp.map { |pool| Ips::Pools.create_pool(pool) }
       end
 
       def self.create_pool(resp)

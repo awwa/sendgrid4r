@@ -23,13 +23,9 @@ module SendGrid4r::REST
 
     def self.create_scheduled_sends(resp)
       return resp if resp.nil?
-      scheduled_sends = []
-      resp.each do |scheduled_send|
-        scheduled_sends.push(
-          CancelScheduledSends.create_scheduled_send(scheduled_send)
-        )
+      resp.map do |scheduled_send|
+        CancelScheduledSends.create_scheduled_send(scheduled_send)
       end
-      scheduled_sends
     end
 
     def self.create_scheduled_send(resp)
@@ -49,9 +45,7 @@ module SendGrid4r::REST
 
     def post_scheduled_send(batch_id:, status:, &block)
       endpoint = CancelScheduledSends.scheduled_sends_url
-      payload = {}
-      payload['batch_id'] = batch_id
-      payload['status'] = status
+      payload = { batch_id: batch_id, status: status }
       resp = post(@auth, endpoint, payload, &block)
       CancelScheduledSends.create_scheduled_send(resp)
     end
@@ -64,8 +58,7 @@ module SendGrid4r::REST
 
     def patch_scheduled_send(batch_id:, status:, &block)
       endpoint = CancelScheduledSends.scheduled_sends_url(batch_id)
-      payload = {}
-      payload['status'] = status
+      payload = { status: status }
       patch(@auth, endpoint, payload, &block)
     end
 

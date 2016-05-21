@@ -31,9 +31,8 @@ module SendGrid4r::REST
 
     def self.create_ip_activities(resp)
       return resp if resp.nil?
-      result = []
-      resp['result'].each do |activity|
-        result.push(IpAccessManagement.create_ip_activity(activity))
+      result = resp['result'].map do |activity|
+        IpAccessManagement.create_ip_activity(activity)
       end
       IpActivities.new(result)
     end
@@ -54,11 +53,8 @@ module SendGrid4r::REST
 
     def self.create_whitelisted_ips(resp)
       return resp if resp.nil?
-      result = []
-      resp['result'].each do |whitelisted_ip|
-        result.push(
-          IpAccessManagement.create_whitelisted_ip_result(whitelisted_ip)
-        )
+      result = resp['result'].map do |whitelisted_ip|
+        IpAccessManagement.create_whitelisted_ip_result(whitelisted_ip)
       end
       WhitelistedIps.new(result)
     end
@@ -79,7 +75,7 @@ module SendGrid4r::REST
 
     def get_ip_activities(limit: nil, &block)
       params = {}
-      params['limit'] = limit unless limit.nil?
+      params[:limit] = limit unless limit.nil?
       resp = get(@auth, IpAccessManagement.url_activity, params, &block)
       IpAccessManagement.create_ip_activities(resp)
     end
@@ -90,21 +86,14 @@ module SendGrid4r::REST
     end
 
     def post_whitelisted_ips(ips:, &block)
-      ips_param = []
-      ips.each do |ip|
-        ip_param = {}
-        ip_param['ip'] = ip
-        ips_param.push(ip_param)
-      end
-      params = {}
-      params['ips'] = ips_param
+      ips_param = ips.map { |ip| { ip: ip } }
+      params = { ips: ips_param }
       resp = post(@auth, IpAccessManagement.url_whitelist, params, &block)
       IpAccessManagement.create_whitelisted_ips(resp)
     end
 
     def delete_whitelisted_ips(ids:, &block)
-      payload = {}
-      payload['ids'] = ids
+      payload = { ids: ids }
       delete(@auth, IpAccessManagement.url_whitelist, nil, payload, &block)
     end
 

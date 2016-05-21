@@ -6,7 +6,7 @@ module SendGrid4r::REST::ApiKeysManagement
     describe 'integration test', :it do
       before do
         Dotenv.load
-        @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
+        @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
       end
 
       context 'without block call' do
@@ -42,9 +42,7 @@ module SendGrid4r::REST::ApiKeysManagement
       end
 
       it 'creates permissions instance' do
-        actual = Permissions.create_permissions(
-          permissions
-        )
+        actual = Permissions.create_permissions(permissions)
         expect(actual).to be_a(Permissions::Permissions)
         expect(actual.scopes).to be_a(Array)
         expect(actual.scopes[0]).to eq('alerts.create')
