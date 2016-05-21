@@ -15,13 +15,13 @@ module SendGrid4r::REST
 
         it '#to_h with full parameters enable' do
           settings = SendGrid4r::Factory::MailFactory.create_mail_settings
-          settings.enable_bcc(ENV['MAIL'])
+          settings.enable_bcc('bcc@example.com')
           settings.enable_bypass_list_management
           settings.enable_footer('text', 'html')
           settings.enable_sandbox_mode
           settings.enable_spam_check(5, 'http://post.url')
           expect(settings.to_h).to eq(
-            bcc: { enable: true, email: ENV['MAIL'] },
+            bcc: { enable: true, email: 'bcc@example.com' },
             bypass_list_management: { enable: true },
             footer: { enable: true, text: 'text', html: 'html' },
             sandbox_mode: { enable: true },

@@ -10,19 +10,19 @@ module SendGrid4r::REST
 
       let(:to) do
         SendGrid4r::Factory::MailFactory.create_address(
-          email: ENV['MAIL']
+          email: 'to@example.com'
         )
       end
 
       let(:cc) do
         SendGrid4r::Factory::MailFactory.create_address(
-          email: ENV['CC']
+          email: 'cc@example.com'
         )
       end
 
       let(:bcc) do
         SendGrid4r::Factory::MailFactory.create_address(
-          email: ENV['BCC']
+          email: 'bcc@example.com'
         )
       end
 
@@ -32,7 +32,7 @@ module SendGrid4r::REST
             to: [to], subject: 'This is subject.'
           )
           expect(per.to_h).to eq(
-            to: [{ email: ENV['MAIL'] }], subject: 'This is subject.'
+            to: [{ email: 'to@example.com' }], subject: 'This is subject.'
           )
         end
 
@@ -49,8 +49,9 @@ module SendGrid4r::REST
           per.custom_args = { 'CUSTOM' => 'value' }
           per.send_at = Time.utc(2016)
           expect(per.to_h).to eq(
-            to: [{ email: ENV['MAIL'] }], subject: 'This is subject.',
-            cc: [{ email: ENV['CC'] }], bcc: [{ email: ENV['BCC'] }],
+            to: [{ email: 'to@example.com' }], subject: 'This is subject.',
+            cc: [{ email: 'cc@example.com' }],
+            bcc: [{ email: 'bcc@example.com' }],
             headers: { 'X-CUSTOM' => 'X-VALUE' },
             substitutions: {
               'subkey' => '置換値', 'sectionkey' => 'sectionkey'

@@ -10,13 +10,13 @@ module SendGrid4r::REST
 
       let(:to) do
         SendGrid4r::Factory::MailFactory.create_address(
-          email: ENV['MAIL']
+          email: 'to@example.com'
         )
       end
 
       let(:from) do
         SendGrid4r::Factory::MailFactory.create_address(
-          email: ENV['FROM']
+          email: 'from@example.com'
         )
       end
 
@@ -44,7 +44,7 @@ module SendGrid4r::REST
 
       let(:reply_to) do
         SendGrid4r::Factory::MailFactory.create_address(
-          email: ENV['FROM']
+          email: 'reply_to@example.com'
         )
       end
 
@@ -70,11 +70,11 @@ module SendGrid4r::REST
           expect(params.to_h).to eq(
             personalizations: [
               {
-                to: [{ email: ENV['MAIL'] }],
+                to: [{ email: 'to@example.com' }],
                 subject: 'Hello v3 Mail'
               }
             ],
-            from: { email: ENV['FROM'] },
+            from: { email: 'from@example.com' },
             content: [
               {
                 type: 'text/plain',
@@ -111,11 +111,11 @@ module SendGrid4r::REST
           expect(params.to_h).to eq(
             personalizations: [
               {
-                to: [{ email: ENV['MAIL'] }],
+                to: [{ email: 'to@example.com' }],
                 subject: 'Hello v3 Mail'
               }
             ],
-            from: { email: ENV['FROM'] },
+            from: { email: 'from@example.com' },
             content: [
               {
                 type: 'text/plain',
@@ -128,7 +128,7 @@ module SendGrid4r::REST
                   '<a href="https://www.google.com">ぐーぐる</a>'
               }
             ],
-            reply_to: { email: ENV['FROM'] },
+            reply_to: { email: 'reply_to@example.com' },
             attachments: [
               {
                 content: 'SGVsbG8=',
