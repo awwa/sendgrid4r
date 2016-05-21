@@ -6,37 +6,39 @@ module SendGrid4r
     # SendGrid Web API v3 MailFactory implementation
     #
     module MailFactory
-      def self.create_params(personalizations:, from:, contents:)
-        params = SendGrid4r::REST::Mail::Params.new(
-          nil, nil, nil,
-          nil, nil, nil, nil, nil, nil, nil, nil, nil, nil
-        )
-        params
-          .set_personalizations(personalizations)
-          .set_from(from)
-          .set_contents(contents)
+      def self.create_params(
+        personalizations:, from:, content:
+      )
+        SendGrid4r::REST::Mail::Params.new(
+          nil, nil, nil, nil, nil, nil, nil, nil, nil, nil,
+          nil, nil, nil, nil, nil, nil
+        ).tap do |params|
+          params.personalizations = personalizations
+          params.from = from
+          params.content = content
+        end
       end
 
       def self.create_email(email:, name: nil)
         SendGrid4r::REST::Mail::Email.new(email, name)
       end
 
-      def self.create_personalization(tos:, subject:)
-        per = SendGrid4r::REST::Mail::Personalization.new(
+      def self.create_personalization(to:, subject:)
+        SendGrid4r::REST::Mail::Personalization.new(
           nil, nil, nil, nil, nil, nil, nil, nil
-        )
-        per
-          .set_tos(tos)
-          .set_subject(subject)
+        ).tap do |personalization|
+          personalization.to = to
+          personalization.subject = subject
+        end
       end
 
       def self.create_attachment(content:, filename:)
-        attachment = SendGrid4r::REST::Mail::Attachment.new(
+        SendGrid4r::REST::Mail::Attachment.new(
           nil, nil, nil, nil, nil
-        )
-        attachment
-          .set_content(content)
-          .set_filename(filename)
+        ).tap do |attachment|
+          attachment.content = content
+          attachment.filename = filename
+        end
       end
 
       def self.create_mail_settings

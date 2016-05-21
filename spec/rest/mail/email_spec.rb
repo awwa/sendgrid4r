@@ -7,20 +7,21 @@ module SendGrid4r::REST
       before do
         Dotenv.load
       end
-
       context 'without block call' do
-        it '#to_h with full parameters' do
-          to = SendGrid4r::Factory::MailFactory.create_email(
-            email: ENV['MAIL'], name: 'To name'
-          )
-          expect(to.to_h).to eq({ email: ENV['MAIL'], name: 'To name' })
-        end
-
         it '#to_h with mandatory parameters' do
-          to = SendGrid4r::Factory::MailFactory.create_email(
+          em = SendGrid4r::Factory::MailFactory.create_email(
             email: ENV['MAIL']
           )
-          expect(to.to_h).to eq({ email: ENV['MAIL'] })
+          expect(em.to_h).to eq(email: ENV['MAIL'])
+        end
+
+        it '#to_h with full parameters' do
+          em = SendGrid4r::Factory::MailFactory.create_email(
+            email: ENV['MAIL'], name: 'To name'
+          )
+          em.email = ENV['FROM']
+          em.name = 'To name2'
+          expect(em.to_h).to eq(email: ENV['FROM'], name: 'To name2')
         end
       end
     end

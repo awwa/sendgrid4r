@@ -11,6 +11,7 @@ module SendGrid4r::REST
 
       context 'without block call' do
         it '#send' do
+          # Create Personalization
           to = SendGrid4r::Factory::MailFactory.create_email(
             email: ENV['MAIL'], name: 'To name'
           )
@@ -21,22 +22,25 @@ module SendGrid4r::REST
             email: ENV['BCC'], name: 'Bcc name'
           )
           per = SendGrid4r::Factory::MailFactory.create_personalization(
-            tos: [to], subject: 'Hello v3 Mail'
+            to: [to], subject: 'Hello v3 Mail'
           )
-          per.set_bccs([bcc])
-          per.set_ccs([cc])
-          per.set_headers('X-CUSTOM' => 'X-VALUE')
-          per.set_substitutions(
+          per.bcc = [bcc]
+          per.cc = [cc]
+          per.headers = { 'X-CUSTOM' => 'X-VALUE' }
+          per.substitutions = {
             'subkey' => '置換値', 'sectionkey' => 'sectionkey'
-          )
-          per.set_custom_args('CUSTOM' => 'value')
-          per.set_send_at(Time.local(2016))
+          }
+          per.custom_args = { 'CUSTOM' => 'value' }
+          per.send_at = Time.utc(2016)
+
+          # Create Params
           from = SendGrid4r::Factory::MailFactory.create_email(
             email: ENV['FROM'], name: 'From Name'
           )
           plain = SendGrid4r::Factory::MailFactory.create_content(
             type: 'text/plain',
-            value: 'こんにちは!TEXT subkey sectionkey\nhttps://www.google.com'
+            value: 'こんにちは!TEXT subkey'\
+              'sectionkey\nhttps://www.google.com'
           )
           html = SendGrid4r::Factory::MailFactory.create_content(
             type: 'text/html',
@@ -44,24 +48,25 @@ module SendGrid4r::REST
               '<a href="https://www.google.com">ぐーぐる</a>'
           )
           params = SendGrid4r::Factory::MailFactory.create_params(
-            personalizations: [per], from: from, contents: [plain, html]
+            personalizations: [per], from: from, content: [plain, html]
           )
           reply_to = SendGrid4r::Factory::MailFactory.create_email(
             email: ENV['MAIL']
           )
-          params.set_reply_to(reply_to)
+          params.reply_to = reply_to
           attachment = SendGrid4r::Factory::MailFactory.create_attachment(
             content: 'XXX', filename: 'text.txt'
           )
-          params.set_attachments([attachment])
-          params.set_template_id('8481d009-d1a6-4e1b-adae-22d2426da9fe')
-          params.set_sections('sectionkey' => 'セクション置換')
-          params.set_headers('X-GLOBAL' => 'GLOBAL_VALUE')
-          params.set_categories(%w(CAT1, CAT2))
-          params.set_custom_args('CUSTOM1' => 'CUSTOM_VALUE1')
-          params.set_send_at(Time.local(2016))
-          params.set_asm(3581)
+          params.attachments = [attachment]
+          params.template_id = '8481d009-d1a6-4e1b-adae-22d2426da9fe'
+          params.sections = { 'sectionkey' => 'セクション置換' }
+          params.headers = { 'X-GLOBAL' => 'GLOBAL_VALUE' }
+          params.categories = %w(CAT1 CAT2)
+          params.custom_args = { 'CUSTOM1' => 'CUSTOM_VALUE1' }
+          params.send_at = Time.local(2016)
+          params.asm = 3581
 
+          # Create MailSettings
           mail_settings =
             SendGrid4r::Factory::MailFactory.create_mail_settings
           mail_settings.enable_bcc(ENV['MAIL'])
@@ -74,8 +79,9 @@ module SendGrid4r::REST
           mail_settings.disable_sandbox_mode
           mail_settings.enable_spam_check(10, 'http://www.kke.co.jp')
           mail_settings.disable_spam_check
-          params.set_mail_settings(mail_settings)
+          params.mail_settings = mail_settings
 
+          # Create TrackingSettings
           tracking =
             SendGrid4r::Factory::MailFactory.create_tracking_settings
           tracking.enable_click_tracking(true)
@@ -86,7 +92,7 @@ module SendGrid4r::REST
           tracking.disable_subscription_tracking
           tracking.enable_ganalytics('', '', '', '', '')
           tracking.disable_ganalytics
-          params.set_tracking_settings(tracking)
+          params.tracking_settings = tracking
 
           puts "= params: #{params.to_h}"
 
