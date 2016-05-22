@@ -40,7 +40,7 @@ module SendGrid4r::REST
       end
 
       def post_ip_to_pool(pool_name:, ip:, &block)
-        resp = post(@auth, Ips::Pools.url(pool_name, 'ips'), ip: ip, &block)
+        resp = post(@auth, Ips::Pools.url(pool_name, :ips), ip: ip, &block)
         Ips::Addresses.create_address(resp)
       end
 
@@ -50,7 +50,7 @@ module SendGrid4r::REST
       end
 
       def get_ips_assigned(&block)
-        resp = get(@auth, Ips::Addresses.url('assigned'), &block)
+        resp = get(@auth, Ips::Addresses.url(:assigned), &block)
         Ips::Addresses.create_addresses(resp)
       end
 
@@ -60,7 +60,7 @@ module SendGrid4r::REST
       end
 
       def delete_ip_from_pool(pool_name:, ip:, &block)
-        delete(@auth, Ips::Pools.url(pool_name, 'ips', ip), &block)
+        delete(@auth, Ips::Pools.url(pool_name, :ips, ip), &block)
       end
     end
   end

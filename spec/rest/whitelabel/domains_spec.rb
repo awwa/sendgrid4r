@@ -10,7 +10,7 @@ module SendGrid4r::REST::Whitelabel
         @subdomain_name = ENV['SUBDOMAIN_DOMAIN']
         @domain_name = ENV['DOMAIN']
         @username = ENV['USERNAME']
-        @subuser1 = ENV['SUBUSER1']
+        @subuser = ENV['SUBUSER']
         @email1 = ENV['MAIL']
         @password1 = ENV['PASS']
         @ip = ENV['IP']
@@ -48,17 +48,17 @@ module SendGrid4r::REST::Whitelabel
         )
         @domain2 = @client.post_wl_domain(
           domain: @domain_name, subdomain: @subdomain_name + '2',
-          username: @subuser1, ips: nil,
+          username: @subuser, ips: nil,
           automatic_security: false, custom_spf: false, default: false
         )
         @domain3 = @client.post_wl_domain(
           domain: @domain_name, subdomain: @subdomain_name + '3',
-          username: @subuser1, ips: nil,
+          username: @subuser, ips: nil,
           automatic_security: true, custom_spf: false, default: false
         )
         @domain4 = @client.post_wl_domain(
           domain: @domain_name, subdomain: @subdomain_name + '4',
-          username: @subuser1, ips: [@ip],
+          username: @subuser, ips: [@ip],
           automatic_security: false, custom_spf: true, default: false
         )
       end
@@ -90,7 +90,7 @@ module SendGrid4r::REST::Whitelabel
           expect(@domain2).to be_a(Domains::Domain)
           expect(@domain2.domain).to eq(@domain_name)
           expect(@domain2.subdomain).to eq(@subdomain_name + '2')
-          expect(@domain2.username).to eq(@subuser1)
+          expect(@domain2.username).to eq(@subuser)
           expect(@domain2.user_id).to be_a(Numeric)
           expect(@domain2.ips).to eq([])
           expect(@domain2.automatic_security).to eq(false)
@@ -142,7 +142,7 @@ module SendGrid4r::REST::Whitelabel
           expect(domain2).to be_a(Domains::Domain)
           expect(domain2.domain).to eq(@domain_name)
           expect(domain2.subdomain).to eq(@subdomain_name + '2')
-          expect(domain2.username).to eq(@subuser1)
+          expect(domain2.username).to eq(@subuser)
           expect(domain2.user_id).to be_a(Numeric)
           expect(domain2.ips).to eq([])
           expect(domain2.automatic_security).to eq(false)
@@ -178,7 +178,7 @@ module SendGrid4r::REST::Whitelabel
           expect(domain4).to be_a(Domains::Domain)
           expect(domain4.domain).to eq(@domain_name)
           expect(domain4.subdomain).to eq(@subdomain_name + '4')
-          expect(domain4.username).to eq(@subuser1)
+          expect(domain4.username).to eq(@subuser)
           expect(domain4.user_id).to be_a(Numeric)
           expect(domain4.ips).to eq([@ip])
           expect(domain4.automatic_security).to eq(false)
@@ -269,17 +269,17 @@ module SendGrid4r::REST::Whitelabel
         end
 
         it '#get_associated_wl_domain' do
-          domain1 = @client.get_associated_wl_domain(username: @subuser1)
+          domain1 = @client.get_associated_wl_domain(username: @subuser)
           expect(domain1).to be_a(Domains::Domain)
         end
 
         it '#associate_wl_domain' do
-          @client.associate_wl_domain(id: @domain2.id, username: @subuser1)
+          @client.associate_wl_domain(id: @domain2.id, username: @subuser)
         end
 
         it '#disassociate_wl_domain' do
-          @client.associate_wl_domain(id: @domain2.id, username: @subuser1)
-          @client.disassociate_wl_domain(username: @subuser1)
+          @client.associate_wl_domain(id: @domain2.id, username: @subuser)
+          @client.disassociate_wl_domain(username: @subuser)
         end
       end
     end

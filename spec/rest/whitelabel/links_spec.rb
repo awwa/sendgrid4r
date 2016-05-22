@@ -10,7 +10,7 @@ module SendGrid4r::REST::Whitelabel
         @subdomain_name = ENV['SUBDOMAIN_LINK']
         @domain_name = ENV['DOMAIN']
         @username = ENV['USERNAME']
-        @subuser1 = ENV['SUBUSER1']
+        @subuser = ENV['SUBUSER']
         @email1 = ENV['MAIL']
         @password1 = ENV['PASS']
         @ip = @client.get_ips[0].ip
@@ -45,10 +45,10 @@ module SendGrid4r::REST::Whitelabel
         )
         # create a subuser
         subusers = @client.get_subusers
-        count = subusers.count { |subuser| subuser.username == @subuser1 }
-        @client.delete_subuser(username: @subuser1) if count == 1
+        count = subusers.count { |subuser| subuser.username == @subuser }
+        @client.delete_subuser(username: @subuser) if count == 1
         @client.post_subuser(
-          username: @subuser1,
+          username: @subuser,
           email: @email1,
           password: @password1,
           ips: [@ip]
@@ -126,17 +126,17 @@ module SendGrid4r::REST::Whitelabel
         end
 
         it '#get_associated_wl_link' do
-          link1 = @client.get_associated_wl_link(username: @subuser1)
+          link1 = @client.get_associated_wl_link(username: @subuser)
           expect(link1).to be_a(Links::Link)
         end
 
         it '#associate_wl_link' do
-          @client.associate_wl_link(id: @id1, username: @subuser1)
+          @client.associate_wl_link(id: @id1, username: @subuser)
         end
 
         it '#disassociate_wl_link' do
-          @client.associate_wl_link(id: @id1, username: @subuser1)
-          @client.disassociate_wl_link(username: @subuser1)
+          @client.associate_wl_link(id: @id1, username: @subuser)
+          @client.disassociate_wl_link(username: @subuser)
         end
       end
     end

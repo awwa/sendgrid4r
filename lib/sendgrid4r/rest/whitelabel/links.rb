@@ -88,22 +88,23 @@ module SendGrid4r::REST
         domain: nil, &block
       )
         params = {}
-        params['limit'] = limit unless limit.nil?
-        params['offset'] = offset unless offset.nil?
+        params[:limit] = limit unless limit.nil?
+        params[:offset] = offset unless offset.nil?
         unless exclude_subusers.nil?
-          params['exclude_subusers'] = exclude_subusers
+          params[:exclude_subusers] = exclude_subusers
         end
-        params['username'] = username unless username.nil?
-        params['domain'] = domain unless domain.nil?
+        params[:username] = username unless username.nil?
+        params[:domain] = domain unless domain.nil?
         resp = get(@auth, Links.url, params, &block)
         Links.create_links(resp)
       end
 
       def post_wl_link(subdomain:, domain:, default: nil, &block)
-        params = {}
-        params['subdomain'] = subdomain
-        params['domain'] = domain
-        params['default'] = default unless default.nil?
+        params = {
+          subdomain: subdomain,
+          domain: domain
+        }
+        params[:default] = default unless default.nil?
         resp = post(@auth, Links.url, params, &block)
         Links.create_link(resp)
       end
@@ -114,8 +115,7 @@ module SendGrid4r::REST
       end
 
       def patch_wl_link(id:, default:, &block)
-        params = {}
-        params['default'] = default
+        params = { default: default }
         resp = patch(@auth, Links.url(id), params, &block)
         Links.create_link(resp)
       end
@@ -126,7 +126,7 @@ module SendGrid4r::REST
 
       def get_default_wl_link(domain: nil, &block)
         params = {}
-        params['domain'] = domain unless domain.nil?
+        params[:domain] = domain unless domain.nil?
         resp = get(@auth, "#{Links.url}/default", params, &block)
         Links.create_link(resp)
       end
@@ -137,21 +137,18 @@ module SendGrid4r::REST
       end
 
       def get_associated_wl_link(username:, &block)
-        params = {}
-        params['username'] = username
+        params = { username: username }
         resp = get(@auth, "#{Links.url}/subuser", params, &block)
         Links.create_link(resp)
       end
 
       def disassociate_wl_link(username:, &block)
-        params = {}
-        params['username'] = username
+        params = { username: username }
         delete(@auth, "#{Links.url}/subuser", params, &block)
       end
 
       def associate_wl_link(id:, username:, &block)
-        params = {}
-        params['username'] = username
+        params = { username: username }
         resp = post(@auth, "#{Links.url(id)}/subuser", params, &block)
         Links.create_link(resp)
       end

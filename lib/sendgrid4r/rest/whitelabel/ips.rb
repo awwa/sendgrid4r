@@ -81,18 +81,19 @@ module SendGrid4r::REST
 
       def get_wl_ips(ip: nil, limit: nil, offset: nil, &block)
         params = {}
-        params['ip'] = ip unless ip.nil?
-        params['limit'] = limit unless limit.nil?
-        params['offset'] = offset unless offset.nil?
+        params[:ip] = ip unless ip.nil?
+        params[:limit] = limit unless limit.nil?
+        params[:offset] = offset unless offset.nil?
         resp = get(@auth, Ips.url, params, &block)
         Ips.create_ips(resp)
       end
 
       def post_wl_ip(ip:, subdomain:, domain:, &block)
-        params = {}
-        params['ip'] = ip
-        params['subdomain'] = subdomain
-        params['domain'] = domain
+        params = {
+          ip: ip,
+          subdomain: subdomain,
+          domain: domain
+        }
         resp = post(@auth, Ips.url, params, &block)
         Ips.create_ip(resp)
       end
