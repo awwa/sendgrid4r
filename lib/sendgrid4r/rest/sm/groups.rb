@@ -38,7 +38,7 @@ module SendGrid4r::REST
 
       def post_group(name:, description:, is_default: nil, &block)
         params = { name: name, description: description }
-        params['is_default'] = is_default unless is_default.nil?
+        params[:is_default] = is_default unless is_default.nil?
         resp = post(@auth, Sm::Groups.url, params, &block)
         Sm::Groups.create_group(resp)
       end

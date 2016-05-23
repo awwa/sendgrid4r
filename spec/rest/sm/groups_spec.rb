@@ -6,7 +6,7 @@ module SendGrid4r::REST::Sm
     describe 'integration test', :it do
       before do
         Dotenv.load
-        @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
+        @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
         @group_name1 = 'group_test1'
         @group_name2 = 'group_test2'
         @group_name_edit1 = 'group_edit1'

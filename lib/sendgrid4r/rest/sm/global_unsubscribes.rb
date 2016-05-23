@@ -32,10 +32,10 @@ module SendGrid4r::REST
         start_time: nil, end_time: nil, limit: nil, offset: nil, &block
       )
         params = {}
-        params['start_time'] = start_time.to_i unless start_time.nil?
-        params['end_time'] = end_time.to_i unless end_time.nil?
-        params['limit'] = limit.to_i unless limit.nil?
-        params['offset'] = offset.to_i unless offset.nil?
+        params[:start_time] = start_time.to_i unless start_time.nil?
+        params[:end_time] = end_time.to_i unless end_time.nil?
+        params[:limit] = limit.to_i unless limit.nil?
+        params[:offset] = offset.to_i unless offset.nil?
         endpoint = Sm::GlobalUnsubscribes.url_unsubscribes
         resp = get(@auth, endpoint, params, &block)
         Sm::GlobalUnsubscribes.create_supressions(resp)

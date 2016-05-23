@@ -6,7 +6,7 @@ module SendGrid4r::REST::Settings
     describe 'integration test', :it do
       before do
         Dotenv.load
-        @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
+        @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
       end
 
       context 'without block call' do
@@ -16,13 +16,11 @@ module SendGrid4r::REST::Settings
         end
 
         it '#get_settings_new_relic' do
-          pending 'invalid json received'
           actual = @client.get_settings_new_relic
           expect(actual).to be_a(Partner::Partner)
         end
 
         it '#patch_settings_new_relic' do
-          pending 'invalid json received'
           # get original settings
           actual = @client.get_settings_new_relic
           # patch the value

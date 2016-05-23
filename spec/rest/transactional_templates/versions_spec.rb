@@ -6,7 +6,7 @@ module SendGrid4r::REST::TransactionalTemplates
     describe 'integration test', :it do
       before do
         Dotenv.load
-        @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
+        @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
         @template_name = 'version_test'
         @version1_name = 'version_name1'
         @version2_name = 'version_name2'

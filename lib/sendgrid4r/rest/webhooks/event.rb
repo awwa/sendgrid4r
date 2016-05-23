@@ -32,19 +32,18 @@ module SendGrid4r::REST
       end
 
       def get_settings_event_notification(&block)
-        resp = get(@auth, Event.url_event('settings'), &block)
+        resp = get(@auth, Event.url_event(:settings), &block)
         Event.create_event_notification(resp)
       end
 
       def patch_settings_event_notification(params:, &block)
-        resp = patch(@auth, Event.url_event('settings'), params.to_h, &block)
+        resp = patch(@auth, Event.url_event(:settings), params.to_h, &block)
         Event.create_event_notification(resp)
       end
 
       def test_settings_event_notification(url:, &block)
-        params = {}
-        params['url'] = url
-        post(@auth, Event.url_event('test'), params, &block)
+        params = { url: url }
+        post(@auth, Event.url_event(:test), params, &block)
       end
     end
   end
