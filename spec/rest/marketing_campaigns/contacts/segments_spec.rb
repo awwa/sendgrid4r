@@ -6,7 +6,7 @@ module SendGrid4r::REST::MarketingCampaigns::Contacts
     describe 'integration test', :it do
       before do
         Dotenv.load
-        @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
+        @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
         @name1 = 'test_segment1'
         @name2 = 'test_segment2'
         @edit_name1 = 'test_segment_edit'
