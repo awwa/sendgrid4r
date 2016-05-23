@@ -257,6 +257,12 @@ describe SendGrid4r::Client do
         expect(@client.respond_to?('get_user_profile')).to eq(true)
         expect(@client.respond_to?('patch_user_profile')).to eq(true)
         expect(@client.respond_to?('get_user_account')).to eq(true)
+        expect(@client.respond_to?('get_user_email')).to eq(true)
+        expect(@client.respond_to?('put_user_email')).to eq(true)
+        expect(@client.respond_to?('get_user_username')).to eq(true)
+        expect(@client.respond_to?('put_user_username')).to eq(true)
+        expect(@client.respond_to?('get_user_credits')).to eq(true)
+        expect(@client.respond_to?('put_user_password')).to eq(true)
 
         # Bounces API
         expect(@client.respond_to?('get_bounces')).to eq(true)

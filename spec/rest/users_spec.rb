@@ -26,6 +26,41 @@ module SendGrid4r::REST
           account = @client.get_user_account
           expect(account).to be_a(Users::Account)
         end
+
+        it '#get_user_email' do
+          email = @client.get_user_email
+          expect(email).to be_a(Users::Email)
+        end
+
+        it '#put_user_email' do
+          pending('Access Forbidden')
+          email = @client.put_user_email(email: 'test..example.com')
+          expect(email).to be_a(Users::Email)
+        end
+
+        it '#get_user_username' do
+          username = @client.get_user_username
+          expect(username).to be_a(Users::Username)
+        end
+
+        it '#put_user_username' do
+          pending('Access Forbidden')
+          username = @client.put_user_username
+          expect(username).to be_a(Users::Username)
+        end
+
+        it '#get_user_credits' do
+          credits = @client.get_user_credits
+          expect(credits).to be_a(Users::Credits)
+        end
+
+        it '#put_user_password' do
+          pending('Access Forbidden')
+          password = @client.put_user_password(
+            new_password: '', old_password: ''
+          )
+          expect(password).to be_a(Users::Password)
+        end
       end
     end
 
@@ -56,6 +91,46 @@ module SendGrid4r::REST
           '{'\
             '"type": "free",'\
             '"reputation": 99.7'\
+          '}'
+        )
+      end
+
+      let(:email) do
+        JSON.parse(
+          '{'\
+            '"email": "test@example.com"'\
+          '}'
+        )
+      end
+
+      let(:username) do
+        JSON.parse(
+          '{'\
+            '"username": "test_username",'\
+            '"user_id": 1'\
+          '}'
+        )
+      end
+
+      let(:credits) do
+        JSON.parse(
+          '{'\
+            '"remain": 200,'\
+            '"total": 200,'\
+            '"overage": 0,'\
+            '"used": 0,'\
+            '"last_reset": "2013-01-01",'\
+            '"next_reset": "2013-02-01",'\
+            '"reset_frequency": "monthly"'\
+          '}'
+        )
+      end
+
+      let(:password) do
+        JSON.parse(
+          '{'\
+            '"new_password": "new_password",'\
+            '"old_password": "old_password"'\
           '}'
         )
       end
@@ -97,6 +172,34 @@ module SendGrid4r::REST
         actual = Users.create_account(account)
         expect(actual.type).to eq('free')
         expect(actual.reputation).to eq(99.7)
+      end
+
+      it 'creates email instance' do
+        actual = Users.create_email(email)
+        expect(actual.email).to eq('test@example.com')
+      end
+
+      it 'creates username instance' do
+        actual = Users.create_username(username)
+        expect(actual.username).to eq('test_username')
+        expect(actual.user_id).to eq(1)
+      end
+
+      it 'creates credits instance' do
+        actual = Users.create_credits(credits)
+        expect(actual.remain).to eq(200)
+        expect(actual.total).to eq(200)
+        expect(actual.overage).to eq(0)
+        expect(actual.used).to eq(0)
+        expect(actual.last_reset).to eq('2013-01-01')
+        expect(actual.next_reset).to eq('2013-02-01')
+        expect(actual.reset_frequency).to eq('monthly')
+      end
+
+      it 'creates password instance' do
+        actual = Users.create_password(password)
+        expect(actual.new_password).to eq('new_password')
+        expect(actual.old_password).to eq('old_password')
       end
     end
   end
