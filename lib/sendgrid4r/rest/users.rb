@@ -100,7 +100,7 @@ module SendGrid4r::REST
 
     def put_user_email(email:, &block)
       params = { email: email }
-      resp = put(@auth, Users.url(:email), params,  &block)
+      resp = put(@auth, Users.url(:email), params, &block)
       Users.create_email(resp)
     end
 

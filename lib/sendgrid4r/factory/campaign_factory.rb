@@ -17,6 +17,23 @@ module SendGrid4r
         )
         campaign.to_h.reject { |_key, value| value.nil? }
       end
+
+      def create_sender(
+        nickname:, from:, reply_to:, address:, address_2:, city:, state:,
+        zip:, country:
+      )
+        REST::MarketingCampaigns::Sender.new(
+          nil, nickname, nil, nil, address, address_2,
+          city, state, zip, country, nil, nil, nil, nil
+        ).tap do |sender|
+          sender.from = from
+          sender.reply_to = reply_to
+        end
+      end
+
+      def create_address(email:, name:)
+        REST::MarketingCampaigns::Address.new(email, name)
+      end
     end
   end
 end
