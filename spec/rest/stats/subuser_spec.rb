@@ -94,6 +94,64 @@ module SendGrid4r::REST::Stats
             expect(stat.metrics).to be_a(Metric)
           end
         end
+
+        it '#get_subusers_stats_monthly with mandatory params' do
+          top_stat = @client.get_subusers_stats_monthly(
+            date: '2015-01-01'
+          )
+          expect(top_stat).to be_a(TopStat)
+          top_stat.stats.each do |stat|
+            expect(stat).to be_a(Stat)
+            expect(stat.metrics).to be_a(Metric)
+          end
+        end
+
+        it '#get_subusers_stats_monthly with all params' do
+          begin
+            top_stat = @client.get_subusers_stats_monthly(
+              date: '2015-01-01',
+              subuser: ENV['SUBUSER'],
+              sort_by_metric: :opens,
+              sort_by_direction: :desc,
+              limit: 5,
+              offset: 0
+            )
+            expect(top_stat).to be_a(TopStat)
+            top_stat.stats.each do |stat|
+              expect(stat).to be_a(Stat)
+              expect(stat.metrics).to be_a(Metric)
+            end
+          rescue RestClient::ExceptionWithResponse => e
+            puts e.inspect
+            raise e
+          end
+        end
+
+        it '#get_subuser_stats_monthly with mandatory params' do
+          top_stat = @client.get_subuser_stats_monthly(
+            subuser_name: ENV['SUBUSER'], date: '2015-01-01'
+          )
+          expect(top_stat).to be_a(TopStat)
+          top_stat.stats.each do |stat|
+            expect(stat).to be_a(Stat)
+            expect(stat.metrics).to be_a(Metric)
+          end
+        end
+
+        it '#get_subuser_stats_monthly with all params' do
+          top_stat = @client.get_subuser_stats_monthly(
+            subuser_name: ENV['SUBUSER'], date: '2015-01-01',
+            sort_by_metric: :opens,
+            sort_by_direction: :desc,
+            limit: 5,
+            offset: 0
+          )
+          expect(top_stat).to be_a(TopStat)
+          top_stat.stats.each do |stat|
+            expect(stat).to be_a(Stat)
+            expect(stat.metrics).to be_a(Metric)
+          end
+        end
       end
     end
   end

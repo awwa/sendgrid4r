@@ -161,6 +161,8 @@ describe SendGrid4r::Client do
         expect(@client.respond_to?('get_categories_stats_sums')).to eq(true)
         expect(@client.respond_to?('get_subusers_stats')).to eq(true)
         expect(@client.respond_to?('get_subusers_stats_sums')).to eq(true)
+        expect(@client.respond_to?('get_subusers_stats_monthly')).to eq(true)
+        expect(@client.respond_to?('get_subuser_stats_monthly')).to eq(true)
         expect(@client.respond_to?('get_geo_stats')).to eq(true)
         expect(@client.respond_to?('get_devices_stats')).to eq(true)
         expect(@client.respond_to?('get_clients_stats')).to eq(true)

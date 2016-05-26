@@ -8,6 +8,17 @@ module SendGrid4r::REST
     module Subuser
       include Request
 
+      def self.url(subuser_name = nil, aggregate = nil)
+        url = "#{BASE_URL}/subusers"
+        if subuser_name.nil?
+          url = "#{url}/stats"
+        else
+          url = "#{url}/#{subuser_name}/stats"
+        end
+        url = "#{url}/#{aggregate}" unless aggregate.nil?
+        url
+      end
+
       def get_subusers_stats(
           start_date:, end_date: nil, aggregated_by: nil, subusers:, &block)
         params = {
@@ -16,7 +27,7 @@ module SendGrid4r::REST
           aggregated_by: aggregated_by,
           subusers: subusers
         }
-        resp = get(@auth, "#{BASE_URL}/subusers/stats", params, &block)
+        resp = get(@auth, Subuser.url, params, &block)
         Stats.create_top_stats(resp)
       end
 
@@ -31,7 +42,36 @@ module SendGrid4r::REST
           limit: limit,
           offset: offset
         }
-        resp = get(@auth, "#{BASE_URL}/subusers/stats/sums", params, &block)
+        resp = get(@auth, Subuser.url(nil, :sums), params, &block)
+        Stats.create_top_stat(resp)
+      end
+
+      def get_subusers_stats_monthly(
+          date:, subuser: nil, sort_by_metric: nil, sort_by_direction: nil,
+          limit: nil, offset: nil, &block)
+        params = {
+          date: date,
+          subuser: subuser,
+          sort_by_metric: sort_by_metric,
+          sort_by_direction: sort_by_direction,
+          limit: limit,
+          offset: offset
+        }
+        resp = get(@auth, Subuser.url(nil, :monthly), params, &block)
+        Stats.create_top_stat(resp)
+      end
+
+      def get_subuser_stats_monthly(
+          subuser_name:, date:, sort_by_metric: nil, sort_by_direction: nil,
+          limit: nil, offset: nil, &block)
+        params = {
+          date: date,
+          sort_by_metric: sort_by_metric,
+          sort_by_direction: sort_by_direction,
+          limit: limit,
+          offset: offset
+        }
+        resp = get(@auth, Subuser.url(subuser_name, :monthly), params, &block)
         Stats.create_top_stat(resp)
       end
     end
