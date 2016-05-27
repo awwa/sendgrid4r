@@ -91,6 +91,18 @@ module SendGrid4r::REST::TransactionalTemplates
           end
         end
 
+        it '#post_version without body and subject tag' do
+          ver2 = @factory.create(name: @version2_name, subject: 'Hello', html_content: 'This is the body.', plain_content: 'This is the body.')
+          @client.post_version(
+            template_id: @template.id, version: ver2
+          ) do |resp, req, res|
+            resp = Versions.create_version(JSON.parse(resp))
+            expect(resp).to be_a(Versions::Version)
+            expect(req).to be_a(RestClient::Request)
+            expect(res).to be_a(Net::HTTPCreated)
+          end
+        end
+
         it '#activate_version' do
           @client.activate_version(
             template_id: @template.id, version_id: @version1.id
