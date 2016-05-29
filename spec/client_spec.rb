@@ -316,6 +316,9 @@ describe SendGrid4r::Client do
         expect(@client.respond_to?('delete_whitelisted_ips')).to eq(true)
         expect(@client.respond_to?('get_whitelisted_ip')).to eq(true)
         expect(@client.respond_to?('delete_whitelisted_ip')).to eq(true)
+
+        # Mail
+        expect(@client.respond_to?('send')).to eq(true)
       end
     end
 
