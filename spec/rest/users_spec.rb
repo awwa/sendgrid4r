@@ -45,7 +45,7 @@ module SendGrid4r::REST
 
         it '#put_user_username' do
           pending('Access Forbidden')
-          username = @client.put_user_username
+          username = @client.put_user_username(username: 'abc')
           expect(username).to be_a(Users::Username)
         end
 
