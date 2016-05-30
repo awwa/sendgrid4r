@@ -43,7 +43,7 @@ module SendGrid4r::REST
         per.bcc = [bcc]
         per.headers = { 'X-CUSTOM' => 'X-VALUE' }
         per.substitutions = {
-          'subkey' => '置換値', 'sectionkey' => 'sectionkey'
+          'subkey' => 'subval', 'sectionkey' => 'sectionkey'
         }
         per.custom_args = { 'CUSTOM' => 'value' }
         per.send_at = Time.utc(2016)
@@ -53,7 +53,7 @@ module SendGrid4r::REST
           bcc: [{ email: 'bcc@example.com' }],
           headers: { 'X-CUSTOM' => 'X-VALUE' },
           substitutions: {
-            'subkey' => '置換値', 'sectionkey' => 'sectionkey'
+            'subkey' => 'subval', 'sectionkey' => 'sectionkey'
           },
           custom_args: { 'CUSTOM' => 'value' },
           send_at: 1451606400

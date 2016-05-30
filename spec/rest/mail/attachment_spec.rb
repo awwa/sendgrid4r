@@ -34,6 +34,15 @@ module SendGrid4r::REST
           content_id: 'ii_139db99fdb5c3704'
         )
       end
+
+      it '#to_h with File' do
+        path = File.dirname(__FILE__) + '/../../photo.jpg'
+        binary = File.binread(path)
+        attachment = SendGrid4r::Factory::MailFactory.create_attachment(
+          content: binary, filename: 'photo.jpg'
+        )
+        expect(attachment.filename).to eq('photo.jpg')
+      end
     end
   end
 end

@@ -29,7 +29,7 @@ module SendGrid4r::REST
       let(:plain) do
         SendGrid4r::Factory::MailFactory.create_content(
           type: 'text/plain',
-          value: 'こんにちは!TEXT subkey '\
+          value: 'Hello! TEXT subkey '\
             'sectionkey\nhttps://www.google.com'
         )
       end
@@ -37,8 +37,8 @@ module SendGrid4r::REST
       let(:html) do
         SendGrid4r::Factory::MailFactory.create_content(
           type: 'text/html',
-          value: '<h1>こんにちは!HTML subkey sectionkey</h1><br />'\
-            '<a href="https://www.google.com">ぐーぐる</a>'
+          value: '<h1>Hello! HTML subkey sectionkey</h1><br />'\
+            '<a href="https://www.google.com">Google</a>'
         )
       end
 
@@ -77,13 +77,13 @@ module SendGrid4r::REST
           content: [
             {
               type: 'text/plain',
-              value: 'こんにちは!TEXT subkey '\
+              value: 'Hello! TEXT subkey '\
                 'sectionkey\nhttps://www.google.com'
             },
             {
               type: 'text/html',
-              value: '<h1>こんにちは!HTML subkey sectionkey</h1><br />'\
-                '<a href="https://www.google.com">ぐーぐる</a>'
+              value: '<h1>Hello! HTML subkey sectionkey</h1><br />'\
+                '<a href="https://www.google.com">Google</a>'
             }
           ]
         )
@@ -96,7 +96,7 @@ module SendGrid4r::REST
         params.reply_to = reply_to
         params.attachments = [attachment]
         params.template_id = 'XXX-YYY-ZZZ'
-        params.sections = { 'sectionkey' => 'セクション置換' }
+        params.sections = { 'sectionkey' => 'sectionvalue' }
         params.headers = { 'X-GLOBAL' => 'GLOBAL_VALUE' }
         params.categories = %w(CAT1 CAT2)
         params.custom_args = { 'CUSTOM1' => 'CUSTOM_VALUE1' }
@@ -118,13 +118,13 @@ module SendGrid4r::REST
           content: [
             {
               type: 'text/plain',
-              value: 'こんにちは!TEXT subkey '\
+              value: 'Hello! TEXT subkey '\
                 'sectionkey\nhttps://www.google.com'
             },
             {
               type: 'text/html',
-              value: '<h1>こんにちは!HTML subkey sectionkey</h1><br />'\
-                '<a href="https://www.google.com">ぐーぐる</a>'
+              value: '<h1>Hello! HTML subkey sectionkey</h1><br />'\
+                '<a href="https://www.google.com">Google</a>'
             }
           ],
           reply_to: { email: 'reply_to@example.com' },
@@ -135,7 +135,7 @@ module SendGrid4r::REST
             }
           ],
           template_id: 'XXX-YYY-ZZZ',
-          sections: { 'sectionkey' => 'セクション置換' },
+          sections: { 'sectionkey' => 'sectionvalue' },
           headers: { 'X-GLOBAL' => 'GLOBAL_VALUE' },
           categories: %w(CAT1 CAT2),
           custom_args: { 'CUSTOM1' => 'CUSTOM_VALUE1' },
