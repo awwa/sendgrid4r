@@ -49,7 +49,7 @@ module SendGrid4r::REST
         per.custom_args = { 'CUSTOM' => 'value' }
         per.send_at = Time.utc(2016)
         expect(per.to_h).to eq(
-          to: [{ email: 'to@example.com' }], subject: 'This is subject.',
+          to: [{ email: 'to@example.com' }],
           subject: 'This is subject.',
           cc: [{ email: 'cc@example.com' }],
           bcc: [{ email: 'bcc@example.com' }],
