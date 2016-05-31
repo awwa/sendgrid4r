@@ -21,9 +21,7 @@ module SendGrid4r::REST
       end
 
       let(:per) do
-        SendGrid4r::Factory::MailFactory.create_personalization(
-          to: [to], subject: 'Hello v3 Mail'
-        )
+        SendGrid4r::Factory::MailFactory.create_personalization(to: [to])
       end
 
       let(:plain) do
@@ -64,13 +62,13 @@ module SendGrid4r::REST
 
       it '#to_h with mandatory parameters' do
         params = SendGrid4r::Factory::MailFactory.create_params(
-          personalizations: [per], from: from, content: [plain, html]
+          personalizations: [per], from: from, content: [plain, html],
+          subject: 'This is the subject'
         )
         expect(params.to_h).to eq(
           personalizations: [
             {
-              to: [{ email: 'to@example.com' }],
-              subject: 'Hello v3 Mail'
+              to: [{ email: 'to@example.com' }]
             }
           ],
           from: { email: 'from@example.com' },
@@ -85,13 +83,15 @@ module SendGrid4r::REST
               value: '<h1>Hello! HTML subkey sectionkey</h1><br />'\
                 '<a href="https://www.google.com">Google</a>'
             }
-          ]
+          ],
+          subject: 'This is the subject'
         )
       end
 
       it '#to_h with full parameters' do
         params = SendGrid4r::Factory::MailFactory.create_params(
-          personalizations: [per], from: from, content: [plain, html]
+          personalizations: [per], from: from, content: [plain, html],
+          subject: 'This is the subject'
         )
         params.reply_to = reply_to
         params.attachments = [attachment]
@@ -110,8 +110,7 @@ module SendGrid4r::REST
         expect(params.to_h).to eq(
           personalizations: [
             {
-              to: [{ email: 'to@example.com' }],
-              subject: 'Hello v3 Mail'
+              to: [{ email: 'to@example.com' }]
             }
           ],
           from: { email: 'from@example.com' },
@@ -144,7 +143,8 @@ module SendGrid4r::REST
           asm: { group_id: 3581, groups_to_display: [12, 34] },
           ip_pool_name: 'pool_name',
           mail_settings: {},
-          tracking_settings: {}
+          tracking_settings: {},
+          subject: 'This is the subject'
         )
       end
     end

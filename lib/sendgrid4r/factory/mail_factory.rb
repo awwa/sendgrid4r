@@ -7,15 +7,16 @@ module SendGrid4r
     #
     module MailFactory
       def self.create_params(
-        personalizations:, from:, content:
+        personalizations:, from:, subject:, content:
       )
         SendGrid4r::REST::Mail::Params.new(
           nil, nil, nil, nil, nil, nil, nil, nil, nil, nil,
-          nil, nil, nil, nil, nil, nil
+          nil, nil, nil, nil, nil, nil, nil
         ).tap do |params|
           params.personalizations = personalizations
           params.from = from
           params.content = content
+          params.subject = subject
         end
       end
 
@@ -23,12 +24,11 @@ module SendGrid4r
         SendGrid4r::REST::Mail::Address.new(email, name)
       end
 
-      def self.create_personalization(to:, subject:)
+      def self.create_personalization(to:)
         SendGrid4r::REST::Mail::Personalization.new(
           nil, nil, nil, nil, nil, nil, nil, nil
         ).tap do |personalization|
           personalization.to = to
-          personalization.subject = subject
         end
       end
 

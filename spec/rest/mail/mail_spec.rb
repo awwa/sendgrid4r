@@ -16,7 +16,7 @@ module SendGrid4r::REST
             email: ENV['MAIL']
           )
           per = SendGrid4r::Factory::MailFactory.create_personalization(
-            to: [to], subject: 'Hello v3 Mail'
+            to: [to]
           )
           # Create Params
           from = SendGrid4r::Factory::MailFactory.create_address(
@@ -27,7 +27,8 @@ module SendGrid4r::REST
             value: 'Hello! TEXT'
           )
           params = SendGrid4r::Factory::MailFactory.create_params(
-            personalizations: [per], from: from, content: [plain]
+            personalizations: [per], from: from, content: [plain],
+            subject: 'Hello v3 Mail'
           )
           begin
             @client.send(params: params)
@@ -49,7 +50,7 @@ module SendGrid4r::REST
             email: ENV['BCC'], name: 'Bcc name'
           )
           per = SendGrid4r::Factory::MailFactory.create_personalization(
-            to: [to], subject: 'Hello v3 Mail'
+            to: [to]
           )
           per.bcc = [bcc]
           per.cc = [cc]
@@ -74,7 +75,8 @@ module SendGrid4r::REST
               '<a href="https://www.google.com">Google</a>'
           )
           params = SendGrid4r::Factory::MailFactory.create_params(
-            personalizations: [per], from: from, content: [plain, html]
+            personalizations: [per], from: from, content: [plain, html],
+            subject: 'Hello v3 Mail'
           )
           reply_to = SendGrid4r::Factory::MailFactory.create_address(
             email: ENV['MAIL']

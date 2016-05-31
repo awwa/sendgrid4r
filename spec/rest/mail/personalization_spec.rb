@@ -28,17 +28,18 @@ module SendGrid4r::REST
 
       it '#to_h with mandatory parameters' do
         per = SendGrid4r::Factory::MailFactory.create_personalization(
-          to: [to], subject: 'This is subject.'
+          to: [to]
         )
         expect(per.to_h).to eq(
-          to: [{ email: 'to@example.com' }], subject: 'This is subject.'
+          to: [{ email: 'to@example.com' }]
         )
       end
 
       it '#to_h with full parameters' do
         per = SendGrid4r::Factory::MailFactory.create_personalization(
-          to: [to], subject: 'This is subject.'
+          to: [to]
         )
+        per.subject = 'This is subject.'
         per.cc = [cc]
         per.bcc = [bcc]
         per.headers = { 'X-CUSTOM' => 'X-VALUE' }
@@ -49,6 +50,7 @@ module SendGrid4r::REST
         per.send_at = Time.utc(2016)
         expect(per.to_h).to eq(
           to: [{ email: 'to@example.com' }], subject: 'This is subject.',
+          subject: 'This is subject.',
           cc: [{ email: 'cc@example.com' }],
           bcc: [{ email: 'bcc@example.com' }],
           headers: { 'X-CUSTOM' => 'X-VALUE' },

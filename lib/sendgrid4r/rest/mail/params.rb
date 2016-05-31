@@ -9,7 +9,7 @@ module SendGrid4r::REST
       :personalizations, :from, :content, :reply_to, :attachments,
       :template_id, :sections, :headers, :categories, :custom_args,
       :send_at, :batch_id, :asm, :ip_pool_name, :mail_settings,
-      :tracking_settings
+      :tracking_settings, :subject
     ) do
       def personalizations=(personalizations)
         tap do |s|
