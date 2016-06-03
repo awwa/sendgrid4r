@@ -6,11 +6,11 @@ require 'sendgrid4r/rest/request'
 require 'sendgrid4r/rest/subusers'
 require 'sendgrid4r/rest/users'
 
-require 'sendgrid4r/rest/templates/templates'
-require 'sendgrid4r/rest/templates/versions'
+require 'sendgrid4r/rest/transactional_templates/templates'
+require 'sendgrid4r/rest/transactional_templates/versions'
 
-require 'sendgrid4r/rest/api_keys/api_keys'
-require 'sendgrid4r/rest/api_keys/permissions'
+require 'sendgrid4r/rest/api_keys_management/api_keys'
+require 'sendgrid4r/rest/api_keys_management/permissions'
 
 require 'sendgrid4r/rest/sm/sm'
 require 'sendgrid4r/rest/sm/global_unsubscribes'
@@ -23,17 +23,17 @@ require 'sendgrid4r/rest/invalid_emails'
 require 'sendgrid4r/rest/spam_reports'
 require 'sendgrid4r/rest/cancel_scheduled_sends'
 
-require 'sendgrid4r/rest/campaigns/campaigns'
+require 'sendgrid4r/rest/marketing_campaigns/marketing_campaigns'
+require 'sendgrid4r/rest/marketing_campaigns/senders'
+require 'sendgrid4r/rest/marketing_campaigns/contacts/custom_fields'
+require 'sendgrid4r/rest/marketing_campaigns/contacts/lists'
+require 'sendgrid4r/rest/marketing_campaigns/contacts/recipients'
+require 'sendgrid4r/rest/marketing_campaigns/contacts/reserved_fields'
+require 'sendgrid4r/rest/marketing_campaigns/contacts/segments'
 
-require 'sendgrid4r/rest/categories/categories'
+require 'sendgrid4r/rest/categories'
 
-require 'sendgrid4r/rest/contacts/custom_fields'
-require 'sendgrid4r/rest/contacts/lists'
-require 'sendgrid4r/rest/contacts/recipients'
-require 'sendgrid4r/rest/contacts/reserved_fields'
-require 'sendgrid4r/rest/contacts/segments'
-
-require 'sendgrid4r/rest/email_activity/email_activity'
+require 'sendgrid4r/rest/email_activity'
 
 require 'sendgrid4r/rest/ip_access_management'
 
@@ -61,10 +61,20 @@ require 'sendgrid4r/rest/whitelabel/domains'
 require 'sendgrid4r/rest/whitelabel/ips'
 require 'sendgrid4r/rest/whitelabel/links'
 
+require 'sendgrid4r/rest/mail/attachment'
+require 'sendgrid4r/rest/mail/content'
+require 'sendgrid4r/rest/mail/address'
+require 'sendgrid4r/rest/mail/mail_settings'
+require 'sendgrid4r/rest/mail/mail'
+require 'sendgrid4r/rest/mail/params'
+require 'sendgrid4r/rest/mail/personalization'
+require 'sendgrid4r/rest/mail/tracking_settings'
+
 require 'sendgrid4r/factory/campaign_factory'
 require 'sendgrid4r/factory/condition_factory'
 require 'sendgrid4r/factory/segment_factory'
 require 'sendgrid4r/factory/version_factory'
+require 'sendgrid4r/factory/mail_factory'
 
 require 'sendgrid4r/rest/api'
 

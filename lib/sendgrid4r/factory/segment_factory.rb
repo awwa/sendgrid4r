@@ -7,17 +7,14 @@ module SendGrid4r
     #
     class SegmentFactory
       def create(name: nil, list_id: nil, conditions:)
-        segment = SendGrid4r::REST::Contacts::Segments::Segment.new(
+        segment = REST::MarketingCampaigns::Contacts::Segments::Segment.new(
           nil,
           name,
           list_id,
           conditions,
           nil
         )
-        hash = segment.to_h
-        hash.delete(:id)
-        hash.delete(:list_id) if list_id.nil?
-        hash
+        segment.to_h.reject { |_key, value| value.nil? }
       end
     end
   end

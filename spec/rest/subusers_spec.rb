@@ -1,10 +1,10 @@
 # encoding: utf-8
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe SendGrid4r::REST::Subusers do
-  describe 'integration test', :it do
-    before do
-      begin
+module SendGrid4r::REST
+  describe Subusers do
+    describe 'integration test', :it do
+      before do
         Dotenv.load
         @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
         @username1 = ENV['SUBUSER1']
@@ -28,124 +28,74 @@ describe SendGrid4r::REST::Subusers do
           password: @password1,
           ips: [@ip]
         )
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-        raise e
       end
-    end
 
-    context 'without block call' do
-      it '#get_subusers' do
-        begin
+      context 'without block call' do
+        it '#get_subusers' do
           subusers = @client.get_subusers(limit: 100, offset: 0)
           expect(subusers).to be_a(Array)
           subusers.each do |subuser|
-            expect(subuser).to be_a(SendGrid4r::REST::Subusers::Subuser)
+            expect(subuser).to be_a(Subusers::Subuser)
           end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
         end
-      end
 
-      it '#post_subuser' do
-        begin
-          expect(@subuser3).to be_a(SendGrid4r::REST::Subusers::Subuser)
+        it '#post_subuser' do
+          expect(@subuser3).to be_a(Subusers::Subuser)
           expect(@subuser3.username).to eq(@username3)
           expect(@subuser3.email).to eq(@email1)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
         end
-      end
 
-      it '#patch_subuser' do
-        begin
+        it '#patch_subuser' do
           @client.patch_subuser(username: @username3, disabled: true)
           @client.patch_subuser(username: @username3, disabled: false)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
         end
-      end
 
-      it '#delete_subuser' do
-        begin
+        it '#delete_subuser' do
           @client.delete_subuser(username: @username3)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
         end
-      end
 
-      it '#get_subuser_monitor' do
-        begin
+        it '#get_subuser_monitor' do
           monitor = @client.get_subuser_monitor(
             username: @username3, email: @email1, frequency: 10
           )
-          expect(monitor).to be_a(SendGrid4r::REST::Subusers::Monitor)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
+          expect(monitor).to be_a(Subusers::Monitor)
         end
-      end
 
-      it '#post_subuser_monitor' do
-        begin
+        it '#post_subuser_monitor' do
           monitor = @client.post_subuser_monitor(
             username: @username3, email: @email1, frequency: 10
           )
-          expect(monitor).to be_a(SendGrid4r::REST::Subusers::Monitor)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
+          expect(monitor).to be_a(Subusers::Monitor)
         end
-      end
 
-      it '#put_subuser_monitor' do
-        begin
+        it '#put_subuser_monitor' do
           @client.post_subuser_monitor(
             username: @username3, email: @email1, frequency: 10
           )
           monitor = @client.put_subuser_monitor(
             username: @username3, email: @email1, frequency: 10
           )
-          expect(monitor).to be_a(SendGrid4r::REST::Subusers::Monitor)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
+          expect(monitor).to be_a(Subusers::Monitor)
         end
-      end
 
-      it '#delete_subuser_monitor' do
-        begin
+        it '#delete_subuser_monitor' do
           @client.post_subuser_monitor(
             username: @username3, email: @email1, frequency: 10
           )
           @client.delete_subuser_monitor(username: @username3)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
         end
-      end
 
-      it '#get_subuser_reputation' do
-        begin
+        it '#get_subuser_reputation' do
           params = []
           params.push(@username3)
           subusers = @client.get_subuser_reputation(usernames: params)
           expect(subusers).to be_a(Array)
           subusers.each do |subuser|
-            expect(subuser).to be_a(SendGrid4r::REST::Subusers::Subuser)
+            expect(subuser).to be_a(Subusers::Subuser)
           end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
         end
-      end
 
-      it '#put_subuser_assigned_ips' do
-        begin
+        it '#put_subuser_assigned_ips' do
           subuser = @client.put_subuser_assigned_ips(
             username: @username3, ips: [@ip]
           )
@@ -153,170 +103,167 @@ describe SendGrid4r::REST::Subusers do
           subuser.ips.each do |ip|
             expect(ip).to be_a(String)
           end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
         end
       end
     end
-  end
 
-  describe 'unit test', :ut do
-    let(:client) do
-      SendGrid4r::Client.new(api_key: '')
-    end
+    describe 'unit test', :ut do
+      let(:client) do
+        SendGrid4r::Client.new(api_key: '')
+      end
 
-    let(:subusers) do
-      JSON.parse(
-        '['\
+      let(:subusers) do
+        JSON.parse(
+          '['\
+            '{'\
+              '"id": 1,'\
+              '"username": "Test@example.com",'\
+              '"email": "Test@example.com"'\
+            '},'\
+            '{'\
+              '"id": 2,'\
+              '"username": "John@example.com",'\
+              '"email": "John@example.com"'\
+            '}'\
+          ']'
+        )
+      end
+
+      let(:subuser) do
+        JSON.parse(
           '{'\
-            '"id": 1,'\
-            '"username": "Test@example.com",'\
-            '"email": "Test@example.com"'\
-          '},'\
-          '{'\
-            '"id": 2,'\
             '"username": "John@example.com",'\
-            '"email": "John@example.com"'\
-          '}'\
-        ']'
-      )
-    end
-
-    let(:subuser) do
-      JSON.parse(
-        '{'\
-          '"username": "John@example.com",'\
-          '"email": "John@example.com",'\
-          '"password": "johns_password",'\
-          '"ips": ['\
-            '"1.1.1.1",'\
-            '"2.2.2.2"'\
-          '],'\
-          '"disabled": false'\
-        '}'
-      )
-    end
-
-    let(:ips) do
-      JSON.parse(
-        '{'\
-          '"ips": ['\
-            '"127.0.0.1",'\
-            '"127.0.0.2"'\
-          ']'\
-        '}'
-      )
-    end
-
-    let(:monitor) do
-      JSON.parse(
-        '{'\
-          '"email": "test@example.com",'\
-          '"frequency": 500'\
-        '}'
-      )
-    end
-
-    it '#get_subusers' do
-      allow(client).to receive(:execute).and_return(subusers)
-      actual = client.get_subusers(limit: 0, offset: 0, username: 'aaa')
-      expect(actual).to be_a(Array)
-      actual.each do |subuser|
-        expect(subuser).to be_a(SendGrid4r::REST::Subusers::Subuser)
+            '"email": "John@example.com",'\
+            '"password": "johns_password",'\
+            '"ips": ['\
+              '"1.1.1.1",'\
+              '"2.2.2.2"'\
+            '],'\
+            '"disabled": false'\
+          '}'
+        )
       end
-    end
 
-    it '#post_subuser' do
-      allow(client).to receive(:execute).and_return(subuser)
-      actual = client.post_subuser(
-        username: '', email: '', password: '', ips: []
-      )
-      expect(actual).to be_a(SendGrid4r::REST::Subusers::Subuser)
-    end
-
-    it '#patch_subuser' do
-      allow(client).to receive(:execute).and_return(subuser)
-      actual = client.patch_subuser(username: '', disabled: true)
-      expect(actual).to be_a(SendGrid4r::REST::Subusers::Subuser)
-    end
-
-    it '#delete_subuser' do
-      allow(client).to receive(:execute).and_return('')
-      actual = client.delete_subuser(username: '')
-      expect(actual).to eq('')
-    end
-
-    it '#get_subuser_monitor' do
-      allow(client).to receive(:execute).and_return(monitor)
-      actual = client.get_subuser_monitor(
-        username: '', email: '', frequency: 1
-      )
-      expect(actual).to be_a(SendGrid4r::REST::Subusers::Monitor)
-    end
-
-    it '#post_subuser_monitor' do
-      allow(client).to receive(:execute).and_return(monitor)
-      actual = client.post_subuser_monitor(
-        username: '', email: '', frequency: 1
-      )
-      expect(actual).to be_a(SendGrid4r::REST::Subusers::Monitor)
-    end
-
-    it '#put_subuser_monitor' do
-      allow(client).to receive(:execute).and_return(monitor)
-      actual = client.put_subuser_monitor(
-        username: '', email: '', frequency: 1
-      )
-      expect(actual).to be_a(SendGrid4r::REST::Subusers::Monitor)
-    end
-
-    it '#delete_subuser_monitor' do
-      allow(client).to receive(:execute).and_return('')
-      actual = client.delete_subuser_monitor(username: '')
-      expect(actual).to eq('')
-    end
-
-    it '#get_subuser_reputation' do
-      allow(client).to receive(:execute).and_return(subusers)
-      actual = client.get_subuser_reputation(usernames: [])
-      expect(actual).to be_a(Array)
-      actual.each do |subuser|
-        expect(subuser).to be_a(SendGrid4r::REST::Subusers::Subuser)
+      let(:ips) do
+        JSON.parse(
+          '{'\
+            '"ips": ['\
+              '"127.0.0.1",'\
+              '"127.0.0.2"'\
+            ']'\
+          '}'
+        )
       end
-    end
 
-    it '#put_subuser_assigned_ips' do
-      allow(client).to receive(:execute).and_return(subuser)
-      actual = client.put_subuser_assigned_ips(username: '', ips: [])
-      expect(actual).to be_a(SendGrid4r::REST::Subusers::Subuser)
-    end
-
-    it 'creates subusers instance' do
-      actual = SendGrid4r::REST::Subusers.create_subusers(subusers)
-      expect(actual).to be_a(Array)
-      actual.each do |subuser|
-        expect(subuser).to be_a(SendGrid4r::REST::Subusers::Subuser)
+      let(:monitor) do
+        JSON.parse(
+          '{'\
+            '"email": "test@example.com",'\
+            '"frequency": 500'\
+          '}'
+        )
       end
-    end
 
-    it 'creates subuser instance' do
-      actual = SendGrid4r::REST::Subusers.create_subuser(subuser)
-      expect(actual).to be_a(SendGrid4r::REST::Subusers::Subuser)
-      expect(actual.username).to eq('John@example.com')
-      expect(actual.email).to eq('John@example.com')
-      expect(actual.password).to eq('johns_password')
-      actual.ips do |ip|
-        expect(ip).to be_a(String)
+      it '#get_subusers' do
+        allow(client).to receive(:execute).and_return(subusers)
+        actual = client.get_subusers(limit: 0, offset: 0, username: 'aaa')
+        expect(actual).to be_a(Array)
+        actual.each do |subuser|
+          expect(subuser).to be_a(Subusers::Subuser)
+        end
       end
-      expect(actual.disabled).to eq(false)
-    end
 
-    it 'creates monitor instance' do
-      actual = SendGrid4r::REST::Subusers.create_monitor(monitor)
-      expect(actual).to be_a(SendGrid4r::REST::Subusers::Monitor)
-      expect(actual.email).to eq('test@example.com')
-      expect(actual.frequency).to eq(500)
+      it '#post_subuser' do
+        allow(client).to receive(:execute).and_return(subuser)
+        actual = client.post_subuser(
+          username: '', email: '', password: '', ips: []
+        )
+        expect(actual).to be_a(Subusers::Subuser)
+      end
+
+      it '#patch_subuser' do
+        allow(client).to receive(:execute).and_return(subuser)
+        actual = client.patch_subuser(username: '', disabled: true)
+        expect(actual).to be_a(Subusers::Subuser)
+      end
+
+      it '#delete_subuser' do
+        allow(client).to receive(:execute).and_return('')
+        actual = client.delete_subuser(username: '')
+        expect(actual).to eq('')
+      end
+
+      it '#get_subuser_monitor' do
+        allow(client).to receive(:execute).and_return(monitor)
+        actual = client.get_subuser_monitor(
+          username: '', email: '', frequency: 1
+        )
+        expect(actual).to be_a(Subusers::Monitor)
+      end
+
+      it '#post_subuser_monitor' do
+        allow(client).to receive(:execute).and_return(monitor)
+        actual = client.post_subuser_monitor(
+          username: '', email: '', frequency: 1
+        )
+        expect(actual).to be_a(Subusers::Monitor)
+      end
+
+      it '#put_subuser_monitor' do
+        allow(client).to receive(:execute).and_return(monitor)
+        actual = client.put_subuser_monitor(
+          username: '', email: '', frequency: 1
+        )
+        expect(actual).to be_a(Subusers::Monitor)
+      end
+
+      it '#delete_subuser_monitor' do
+        allow(client).to receive(:execute).and_return('')
+        actual = client.delete_subuser_monitor(username: '')
+        expect(actual).to eq('')
+      end
+
+      it '#get_subuser_reputation' do
+        allow(client).to receive(:execute).and_return(subusers)
+        actual = client.get_subuser_reputation(usernames: [])
+        expect(actual).to be_a(Array)
+        actual.each do |subuser|
+          expect(subuser).to be_a(Subusers::Subuser)
+        end
+      end
+
+      it '#put_subuser_assigned_ips' do
+        allow(client).to receive(:execute).and_return(subuser)
+        actual = client.put_subuser_assigned_ips(username: '', ips: [])
+        expect(actual).to be_a(Subusers::Subuser)
+      end
+
+      it 'creates subusers instance' do
+        actual = Subusers.create_subusers(subusers)
+        expect(actual).to be_a(Array)
+        actual.each do |subuser|
+          expect(subuser).to be_a(Subusers::Subuser)
+        end
+      end
+
+      it 'creates subuser instance' do
+        actual = Subusers.create_subuser(subuser)
+        expect(actual).to be_a(Subusers::Subuser)
+        expect(actual.username).to eq('John@example.com')
+        expect(actual.email).to eq('John@example.com')
+        expect(actual.password).to eq('johns_password')
+        actual.ips do |ip|
+          expect(ip).to be_a(String)
+        end
+        expect(actual.disabled).to eq(false)
+      end
+
+      it 'creates monitor instance' do
+        actual = Subusers.create_monitor(monitor)
+        expect(actual).to be_a(Subusers::Monitor)
+        expect(actual.email).to eq('test@example.com')
+        expect(actual.frequency).to eq(500)
+      end
     end
   end
 end

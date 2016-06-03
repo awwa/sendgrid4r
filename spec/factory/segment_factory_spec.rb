@@ -1,28 +1,35 @@
 # encoding: utf-8
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe SendGrid4r::Factory::SegmentFactory do
-  describe 'unit test', :ut do
-    before do
-      Dotenv.load
-      @segment_factory = SendGrid4r::Factory::SegmentFactory.new
-      @condition_factory = SendGrid4r::Factory::ConditionFactory.new
-      @condition = @condition_factory.create(
-        field: 'last_name',
-        value: 'Miller',
-        operator: 'eq',
-        and_or: '')
-      @expect = {}
-      @expect[:name] = 'Last Name Miller'
-      @expect[:conditions] = [@condition]
-      @expect[:recipient_count] = nil
-    end
+module SendGrid4r::Factory
+  describe SegmentFactory do
+    describe 'unit test', :ut do
+      before do
+        Dotenv.load
+      end
 
-    it 'specify all params' do
-      segment = @segment_factory.create(
-        name: 'Last Name Miller', conditions: [@condition]
-      )
-      expect(segment).to eq(@expect)
+      let(:condition) do
+        ConditionFactory.new.create(
+          field: 'last_name',
+          value: 'Miller',
+          operator: 'eq',
+          and_or: ''
+        )
+      end
+
+      it 'create with mandatory parameters' do
+        segment = SegmentFactory.new.create(conditions: [condition])
+        expect(segment).to eq(conditions: [condition])
+      end
+
+      it 'create with full parameters' do
+        segment = SegmentFactory.new.create(
+          name: 'Last Name Miller', conditions: [condition]
+        )
+        expect(segment).to eq(
+          name: 'Last Name Miller', conditions: [condition]
+        )
+      end
     end
   end
 end

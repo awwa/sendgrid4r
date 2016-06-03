@@ -1,23 +1,23 @@
 # encoding: utf-8
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe SendGrid4r::REST::Stats::Global do
-  describe 'integration test', :it do
-    before do
-      Dotenv.load
-      @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
-    end
+module SendGrid4r::REST::Stats
+  describe Global do
+    describe 'integration test', :it do
+      before do
+        Dotenv.load
+        @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
+      end
 
-    context 'without block call' do
-      it '#get_global_stats with mandatory params' do
-        begin
+      context 'without block call' do
+        it '#get_global_stats with mandatory params' do
           top_stats = @client.get_global_stats(start_date: '2015-01-01')
           expect(top_stats).to be_a(Array)
           top_stats.each do |top_stat|
-            expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
+            expect(top_stat).to be_a(TopStat)
             top_stat.stats.each do |stat|
-              expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
-              expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
+              expect(stat).to be_a(Stat)
+              expect(stat.metrics).to be_a(Metric)
               expect(stat.metrics.blocks.nil?).to be(false)
               expect(stat.metrics.bounce_drops.nil?).to be(false)
               expect(stat.metrics.bounces.nil?).to be(false)
@@ -36,52 +36,44 @@ describe SendGrid4r::REST::Stats::Global do
               expect(stat.metrics.unsubscribes.nil?).to be(false)
             end
           end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
         end
-      end
 
-      it '#get_global_stats with all params' do
-        begin
+        it '#get_global_stats with all params' do
           top_stats = @client.get_global_stats(
             start_date: '2015-01-01',
             end_date: '2015-01-01',
-            aggregated_by: SendGrid4r::REST::Stats::AggregatedBy::WEEK
+            aggregated_by: :week
           )
           expect(top_stats).to be_a(Array)
           top_stats.each do |top_stat|
-            expect(top_stat).to be_a(SendGrid4r::REST::Stats::TopStat)
+            expect(top_stat).to be_a(TopStat)
             stats = top_stat.stats
             stats.each do |stat|
-              expect(stat).to be_a(SendGrid4r::REST::Stats::Stat)
-              expect(stat.metrics).to be_a(SendGrid4r::REST::Stats::Metric)
+              expect(stat).to be_a(Stat)
+              expect(stat.metrics).to be_a(Metric)
             end
           end
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
         end
       end
-    end
 
-    context 'with block call' do
-      it '#get_global_stats with all params' do
-        @client.get_global_stats(
-          start_date: '2015-01-01',
-          end_date: '2015-01-01',
-          aggregated_by: SendGrid4r::REST::Stats::AggregatedBy::WEEK
-        ) do |resp, req, res|
-          resp =
-            SendGrid4r::REST::Stats.create_top_stats(
-              JSON.parse(resp)
-            )
-          expect(resp).to be_a(Array)
-          resp.each do |stat|
-            expect(stat).to be_a(SendGrid4r::REST::Stats::TopStat)
+      context 'with block call' do
+        it '#get_global_stats with all params' do
+          @client.get_global_stats(
+            start_date: '2015-01-01',
+            end_date: '2015-01-01',
+            aggregated_by: :week
+          ) do |resp, req, res|
+            resp =
+              SendGrid4r::REST::Stats.create_top_stats(
+                JSON.parse(resp)
+              )
+            expect(resp).to be_a(Array)
+            resp.each do |stat|
+              expect(stat).to be_a(TopStat)
+            end
+            expect(req).to be_a(RestClient::Request)
+            expect(res).to be_a(Net::HTTPOK)
           end
-          expect(req).to be_a(RestClient::Request)
-          expect(res).to be_a(Net::HTTPOK)
         end
       end
     end

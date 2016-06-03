@@ -1,33 +1,21 @@
 # encoding: utf-8
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe SendGrid4r::REST::Webhooks::Event do
-  describe 'integration test', :it do
-    before do
-      begin
+module SendGrid4r::REST::Webhooks
+  describe Event do
+    describe 'integration test', :it do
+      before do
         Dotenv.load
-        @client = SendGrid4r::Client.new(api_key: ENV['API_KEY'])
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-        raise e
+        @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
       end
-    end
 
-    context 'without block call' do
-      it '#get_settings_event_notification' do
-        begin
+      context 'without block call' do
+        it '#get_settings_event_notification' do
           actual = @client.get_settings_event_notification
-          expect(actual).to be_a(
-            SendGrid4r::REST::Webhooks::Event::EventNotification
-          )
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
+          expect(actual).to be_a(Event::EventNotification)
         end
-      end
 
-      it '#patch_settings_event_notification' do
-        begin
+        it '#patch_settings_event_notification' do
           # get original settings
           actual = @client.get_settings_event_notification
           # patch the value
@@ -58,81 +46,67 @@ describe SendGrid4r::REST::Webhooks::Event do
           expect(edit.open).to eq(true)
           expect(edit.click).to eq(true)
           expect(edit.dropped).to eq(true)
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
         end
-      end
 
-      it '#test_settings_event_notification' do
-        begin
+        it '#test_settings_event_notification' do
           @client.test_settings_event_notification(url: ENV['EVENT_URL'])
-        rescue RestClient::ExceptionWithResponse => e
-          puts e.inspect
-          raise e
         end
       end
     end
-  end
 
-  describe 'unit test', :ut do
-    let(:client) do
-      SendGrid4r::Client.new(api_key: '')
-    end
+    describe 'unit test', :ut do
+      let(:client) do
+        SendGrid4r::Client.new(api_key: '')
+      end
 
-    let(:event_notification) do
-      JSON.parse(
-        '{'\
-          '"enabled": true,'\
-          '"url": "url",'\
-          '"group_resubscribe": true,'\
-          '"delivered": true,'\
-          '"group_unsubscribe": true,'\
-          '"spam_report": true,'\
-          '"bounce": true,'\
-          '"deferred": true,'\
-          '"unsubscribe": true,'\
-          '"processed": true,'\
-          '"open": true,'\
-          '"click": true,'\
-          '"dropped": true'\
-        '}'
-      )
-    end
+      let(:event_notification) do
+        JSON.parse(
+          '{'\
+            '"enabled": true,'\
+            '"url": "url",'\
+            '"group_resubscribe": true,'\
+            '"delivered": true,'\
+            '"group_unsubscribe": true,'\
+            '"spam_report": true,'\
+            '"bounce": true,'\
+            '"deferred": true,'\
+            '"unsubscribe": true,'\
+            '"processed": true,'\
+            '"open": true,'\
+            '"click": true,'\
+            '"dropped": true'\
+          '}'
+        )
+      end
 
-    it '#get_settings_event_notification' do
-      allow(client).to receive(:execute).and_return(event_notification)
-      actual = client.get_settings_event_notification
-      expect(actual).to be_a(
-        SendGrid4r::REST::Webhooks::Event::EventNotification
-      )
-    end
+      it '#get_settings_event_notification' do
+        allow(client).to receive(:execute).and_return(event_notification)
+        actual = client.get_settings_event_notification
+        expect(actual).to be_a(Event::EventNotification)
+      end
 
-    it '#patch_settings_event_notification' do
-      allow(client).to receive(:execute).and_return(event_notification)
-      actual = client.patch_settings_event_notification(params: nil)
-      expect(actual).to be_a(
-        SendGrid4r::REST::Webhooks::Event::EventNotification
-      )
-    end
+      it '#patch_settings_event_notification' do
+        allow(client).to receive(:execute).and_return(event_notification)
+        actual = client.patch_settings_event_notification(params: nil)
+        expect(actual).to be_a(Event::EventNotification)
+      end
 
-    it 'creates event_notification instance' do
-      actual = SendGrid4r::REST::Webhooks::Event.create_event_notification(
-        event_notification
-      )
-      expect(actual.enabled).to eq(true)
-      expect(actual.url).to eq('url')
-      expect(actual.group_resubscribe).to eq(true)
-      expect(actual.delivered).to eq(true)
-      expect(actual.group_unsubscribe).to eq(true)
-      expect(actual.spam_report).to eq(true)
-      expect(actual.bounce).to eq(true)
-      expect(actual.deferred).to eq(true)
-      expect(actual.unsubscribe).to eq(true)
-      expect(actual.processed).to eq(true)
-      expect(actual.open).to eq(true)
-      expect(actual.click).to eq(true)
-      expect(actual.dropped).to eq(true)
+      it 'creates event_notification instance' do
+        actual = Event.create_event_notification(event_notification)
+        expect(actual.enabled).to eq(true)
+        expect(actual.url).to eq('url')
+        expect(actual.group_resubscribe).to eq(true)
+        expect(actual.delivered).to eq(true)
+        expect(actual.group_unsubscribe).to eq(true)
+        expect(actual.spam_report).to eq(true)
+        expect(actual.bounce).to eq(true)
+        expect(actual.deferred).to eq(true)
+        expect(actual.unsubscribe).to eq(true)
+        expect(actual.processed).to eq(true)
+        expect(actual.open).to eq(true)
+        expect(actual.click).to eq(true)
+        expect(actual.dropped).to eq(true)
+      end
     end
   end
 end

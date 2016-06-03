@@ -9,7 +9,7 @@ MethodLength:
 
 # Change limitation of module length
 ModuleLength:
-  Max: 300
+  Max: 600
 
 # Change limitation of the number of params
 ParameterLists:
@@ -18,8 +18,12 @@ ParameterLists:
 
 # Change limitation of AbcSize
 AbcSize:
-  Max: 21
+  Max: 22
 
 # Change numeric literals
 NumericLiterals:
   MinDigits: 20
+
+# Disable force module and class style
+ClassAndModuleChildren:
+  Enabled: false

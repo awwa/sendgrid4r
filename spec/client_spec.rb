@@ -161,6 +161,8 @@ describe SendGrid4r::Client do
         expect(@client.respond_to?('get_categories_stats_sums')).to eq(true)
         expect(@client.respond_to?('get_subusers_stats')).to eq(true)
         expect(@client.respond_to?('get_subusers_stats_sums')).to eq(true)
+        expect(@client.respond_to?('get_subusers_stats_monthly')).to eq(true)
+        expect(@client.respond_to?('get_subuser_stats_monthly')).to eq(true)
         expect(@client.respond_to?('get_geo_stats')).to eq(true)
         expect(@client.respond_to?('get_devices_stats')).to eq(true)
         expect(@client.respond_to?('get_clients_stats')).to eq(true)
@@ -257,6 +259,12 @@ describe SendGrid4r::Client do
         expect(@client.respond_to?('get_user_profile')).to eq(true)
         expect(@client.respond_to?('patch_user_profile')).to eq(true)
         expect(@client.respond_to?('get_user_account')).to eq(true)
+        expect(@client.respond_to?('get_user_email')).to eq(true)
+        expect(@client.respond_to?('put_user_email')).to eq(true)
+        expect(@client.respond_to?('get_user_username')).to eq(true)
+        expect(@client.respond_to?('put_user_username')).to eq(true)
+        expect(@client.respond_to?('get_user_credits')).to eq(true)
+        expect(@client.respond_to?('put_user_password')).to eq(true)
 
         # Bounces API
         expect(@client.respond_to?('get_bounces')).to eq(true)
@@ -308,12 +316,15 @@ describe SendGrid4r::Client do
         expect(@client.respond_to?('delete_whitelisted_ips')).to eq(true)
         expect(@client.respond_to?('get_whitelisted_ip')).to eq(true)
         expect(@client.respond_to?('delete_whitelisted_ip')).to eq(true)
+
+        # Mail
+        expect(@client.respond_to?('send')).to eq(true)
       end
     end
 
     describe 'VERSION' do
       it 'returns VERSION value' do
-        expect(SendGrid4r::VERSION).to eq('1.8.1')
+        expect(SendGrid4r::VERSION).to eq('1.10.0')
       end
     end
   end
