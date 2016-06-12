@@ -1,6 +1,6 @@
 module SendGrid4r::CLI
   module Supressions
-    class GlobalUnsubscribes < SgThor
+    class GlobalUnsubscribe < SgThor
 
       desc 'list', 'List global unsubscribes'
       option :start_time, :type => :numeric

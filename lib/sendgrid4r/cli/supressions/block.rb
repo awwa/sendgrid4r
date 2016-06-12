@@ -1,6 +1,6 @@
 module SendGrid4r::CLI
   module Supressions
-    class Blocks < SgThor
+    class Block < SgThor
 
       desc 'list', 'List blocks'
       option :start_time, :type => :numeric

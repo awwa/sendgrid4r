@@ -1,6 +1,6 @@
 module SendGrid4r::CLI
   module Supressions
-    class GroupUnsubscribes < SgThor
+    class GroupUnsubscribe < SgThor
 
       desc 'add', 'Add email addresses to the group supressions'
       option :group_id, :require => true

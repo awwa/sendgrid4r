@@ -1,6 +1,6 @@
 module SendGrid4r::CLI
   module Supressions
-    class Bounces < SgThor
+    class Bounce < SgThor
 
       desc 'list', 'List bounces'
       option :start_time, :type => :numeric

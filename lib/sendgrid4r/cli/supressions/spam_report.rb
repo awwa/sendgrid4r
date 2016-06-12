@@ -1,6 +1,6 @@
 module SendGrid4r::CLI
   module Supressions
-    class SpamReports < SgThor
+    class SpamReport < SgThor
 
       desc 'list', 'List spam reports'
       option :start_time, :type => :numeric
