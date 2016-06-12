@@ -35,7 +35,7 @@ module SendGrid4r::REST
       params[:limit] = limit.to_i unless limit.nil?
       params[:offset] = offset.to_i unless offset.nil?
       resp = get(@auth, Blocks.url, params, &block)
-      Blocks.create_blocks(resp)
+      finish(resp, @raw_resp) { |r| Blocks.create_blocks(r) }
     end
 
     def delete_blocks(delete_all: nil, emails: nil, &block)
@@ -50,7 +50,7 @@ module SendGrid4r::REST
     def get_block(email:, &block)
       params = { email: email }
       resp = get(@auth, Blocks.url(email), params, &block)
-      Blocks.create_blocks(resp)
+      finish(resp, @raw_resp) { |r| Blocks.create_blocks(r) }
     end
 
     def delete_block(email:, &block)

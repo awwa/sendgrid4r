@@ -39,12 +39,10 @@ module SendGrid4r::REST::Settings
       end
 
       let(:partner) do
-        JSON.parse(
-          '{'\
-            '"enabled": true,'\
-            '"license_key": "key"'\
-          '}'
-        )
+        '{'\
+          '"enabled": true,'\
+          '"license_key": "key"'\
+        '}'
       end
 
       it '#get_settings_new_relic' do
@@ -60,7 +58,7 @@ module SendGrid4r::REST::Settings
       end
 
       it 'creates partner instance' do
-        actual = Partner.create_partner(partner)
+        actual = Partner.create_partner(JSON.parse(partner))
         expect(actual.enabled).to eq(true)
         expect(actual.license_key).to eq('key')
       end

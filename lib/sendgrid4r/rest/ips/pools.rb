@@ -33,22 +33,22 @@ module SendGrid4r::REST
 
       def post_pool(name:, &block)
         resp = post(@auth, Ips::Pools.url, name: name, &block)
-        Ips::Pools.create_pool(resp)
+        finish(resp, @raw_resp) { |r| Ips::Pools.create_pool(r) }
       end
 
       def get_pools(&block)
         resp = get(@auth, Ips::Pools.url, &block)
-        Ips::Pools.create_pools(resp)
+        finish(resp, @raw_resp) { |r| Ips::Pools.create_pools(r) }
       end
 
       def get_pool(name:, &block)
         resp = get(@auth, Ips::Pools.url(name), &block)
-        Ips::Pools.create_pool(resp)
+        finish(resp, @raw_resp) { |r| Ips::Pools.create_pool(r) }
       end
 
       def put_pool(name:, new_name:, &block)
         resp = put(@auth, Ips::Pools.url(name), name: new_name, &block)
-        Ips::Pools.create_pool(resp)
+        finish(resp, @raw_resp) { |r| Ips::Pools.create_pool(r) }
       end
 
       def delete_pool(name:, &block)

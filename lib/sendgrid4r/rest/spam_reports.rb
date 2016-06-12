@@ -35,7 +35,7 @@ module SendGrid4r::REST
       params[:limit] = limit.to_i unless limit.nil?
       params[:offset] = offset.to_i unless offset.nil?
       resp = get(@auth, SpamReports.url, params, &block)
-      SpamReports.create_spam_reports(resp)
+      finish(resp, @raw_resp) { |r| SpamReports.create_spam_reports(r) }
     end
 
     def delete_spam_reports(delete_all: nil, emails: nil, &block)
@@ -50,7 +50,7 @@ module SendGrid4r::REST
     def get_spam_report(email:, &block)
       params = { email: email }
       resp = get(@auth, SpamReports.url(email), params, &block)
-      SpamReports.create_spam_reports(resp)
+      finish(resp, @raw_resp) { |r| SpamReports.create_spam_reports(r) }
     end
 
     def delete_spam_report(email:, &block)

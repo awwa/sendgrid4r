@@ -36,20 +36,20 @@ module SendGrid4r::REST
 
     def get_api_keys(&block)
       resp = get(@auth, ApiKeysManagement.url, &block)
-      ApiKeysManagement.create_api_keys(resp)
+      finish(resp, @raw_resp) { |r| ApiKeysManagement.create_api_keys(r) }
     end
 
     def post_api_key(name:, scopes: nil, &block)
       params = { name: name }
       params[:scopes] = scopes unless scopes.nil?
       resp = post(@auth, ApiKeysManagement.url, params, &block)
-      ApiKeysManagement.create_api_key(resp)
+      finish(resp, @raw_resp) { |r| ApiKeysManagement.create_api_key(r) }
     end
 
     def get_api_key(api_key_id:, &block)
       endpoint = ApiKeysManagement.url(api_key_id)
       resp = get(@auth, endpoint, &block)
-      ApiKeysManagement.create_api_key(resp)
+      finish(resp, @raw_resp) { |r| ApiKeysManagement.create_api_key(r) }
     end
 
     def delete_api_key(api_key_id:, &block)
@@ -60,7 +60,7 @@ module SendGrid4r::REST
       params = { name: name }
       endpoint = ApiKeysManagement.url(api_key_id)
       resp = patch(@auth, endpoint, params, &block)
-      ApiKeysManagement.create_api_key(resp)
+      finish(resp, @raw_resp) { |r| ApiKeysManagement.create_api_key(r) }
     end
 
     def put_api_key(api_key_id:, name:, scopes:, &block)
@@ -69,7 +69,7 @@ module SendGrid4r::REST
       params[:scopes] = scopes unless scopes.nil?
       endpoint = ApiKeysManagement.url(api_key_id)
       resp = put(@auth, endpoint, params, &block)
-      ApiKeysManagement.create_api_key(resp)
+      finish(resp, @raw_resp) { |r| ApiKeysManagement.create_api_key(r) }
     end
   end
 end

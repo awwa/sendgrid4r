@@ -165,18 +165,16 @@ module SendGrid4r::REST::TransactionalTemplates
       end
 
       let(:version) do
-        JSON.parse(
-          '{'\
-            '"id": "8aefe0ee-f12b-4575-b5b7-c97e21cb36f3",'\
-            '"template_id": "ddb96bbc-9b92-425e-8979-99464621b543",'\
-            '"active": 1,'\
-            '"name": "example_version_name",'\
-            '"html_content": "<%body%>",'\
-            '"plain_content": "<%body%>",'\
-            '"subject": "<%subject%>",'\
-            '"updated_at": "2014-03-19 18:56:33"'\
-          '}'
-        )
+        '{'\
+          '"id": "8aefe0ee-f12b-4575-b5b7-c97e21cb36f3",'\
+          '"template_id": "ddb96bbc-9b92-425e-8979-99464621b543",'\
+          '"active": 1,'\
+          '"name": "example_version_name",'\
+          '"html_content": "<%body%>",'\
+          '"plain_content": "<%body%>",'\
+          '"subject": "<%subject%>",'\
+          '"updated_at": "2014-03-19 18:56:33"'\
+        '}'
       end
 
       it '#post_version' do
@@ -212,7 +210,7 @@ module SendGrid4r::REST::TransactionalTemplates
       end
 
       it 'creates version instance' do
-        actual = Versions.create_version(version)
+        actual = Versions.create_version(JSON.parse(version))
         expect(actual).to be_a(Versions::Version)
         expect(actual.id).to eq('8aefe0ee-f12b-4575-b5b7-c97e21cb36f3')
         expect(actual.template_id).to eq('ddb96bbc-9b92-425e-8979-99464621b543')

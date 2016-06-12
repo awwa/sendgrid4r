@@ -33,12 +33,12 @@ module SendGrid4r::REST
 
       def get_settings_event_notification(&block)
         resp = get(@auth, Event.url_event(:settings), &block)
-        Event.create_event_notification(resp)
+        finish(resp, @raw_resp) { |r| Event.create_event_notification(r) }
       end
 
       def patch_settings_event_notification(params:, &block)
         resp = patch(@auth, Event.url_event(:settings), params.to_h, &block)
-        Event.create_event_notification(resp)
+        finish(resp, @raw_resp) { |r| Event.create_event_notification(r) }
       end
 
       def test_settings_event_notification(url:, &block)

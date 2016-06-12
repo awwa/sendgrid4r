@@ -18,7 +18,7 @@ module SendGrid4r::REST
         }
         endpoint = "#{BASE_URL}/user/webhooks/parse/stats"
         resp = get(@auth, endpoint, params, &block)
-        Stats.create_top_stats(resp)
+        finish(resp, @raw_resp) { |r| Stats.create_top_stats(r) }
       end
     end
   end

@@ -9,33 +9,29 @@ module SendGrid4r::REST::Settings
       end
 
       let(:results) do
-        JSON.parse(
-          '{'\
-            '"result": ['\
-              '{'\
-                '"name": "bcc",'\
-                '"title": "BCC",'\
-                '"description": "lorem ipsum... .",'\
-                '"enabled": true'\
-              '}'\
-            ']'\
-          '}'
-        )
+        '{'\
+          '"result": ['\
+            '{'\
+              '"name": "bcc",'\
+              '"title": "BCC",'\
+              '"description": "lorem ipsum... .",'\
+              '"enabled": true'\
+            '}'\
+          ']'\
+        '}'
       end
 
       let(:result) do
-        JSON.parse(
-          '{'\
-            '"name": "bcc",'\
-            '"title": "BCC",'\
-            '"description": "lorem ipsum... .",'\
-            '"enabled": true'\
-          '}'
-        )
+        '{'\
+          '"name": "bcc",'\
+          '"title": "BCC",'\
+          '"description": "lorem ipsum... .",'\
+          '"enabled": true'\
+        '}'
       end
 
       it 'creates results instance' do
-        actual = SendGrid4r::REST::Settings.create_results(results)
+        actual = SendGrid4r::REST::Settings.create_results(JSON.parse(results))
         expect(actual.result).to be_a(Array)
         actual.result.each do |result|
           expect(result).to be_a(Result)
@@ -43,7 +39,7 @@ module SendGrid4r::REST::Settings
       end
 
       it 'creates result instance' do
-        actual = SendGrid4r::REST::Settings.create_result(result)
+        actual = SendGrid4r::REST::Settings.create_result(JSON.parse(result))
         expect(actual).to be_a(Result)
         expect(actual.name).to eq('bcc')
         expect(actual.title).to eq('BCC')

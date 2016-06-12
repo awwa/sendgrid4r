@@ -154,15 +154,13 @@ module SendGrid4r::REST::Settings
       end
 
       let(:address_whitelist) do
-        JSON.parse(
-          '{'\
-            '"enabled": true,'\
-            '"list": ['\
-              '"email1@example.com",'\
-              '"example.com"'\
-            ']'\
-          '}'
-        )
+        '{'\
+          '"enabled": true,'\
+          '"list": ['\
+            '"email1@example.com",'\
+            '"example.com"'\
+          ']'\
+        '}'
       end
 
       it '#get_settings_address_whitelist' do
@@ -178,19 +176,17 @@ module SendGrid4r::REST::Settings
       end
 
       it 'creates address_whitelist instance' do
-        actual = Mail.create_address_whitelist(address_whitelist)
+        actual = Mail.create_address_whitelist(JSON.parse(address_whitelist))
         expect(actual.enabled).to eq(true)
         expect(actual.list).to be_a(Array)
         actual.list.each { |address| expect(address).to be_a(String) }
       end
 
       let(:bcc) do
-        JSON.parse(
-          '{'\
-            '"enabled": true,'\
-            '"email": "email@example.com"'\
-          '}'
-        )
+        '{'\
+          '"enabled": true,'\
+          '"email": "email@example.com"'\
+        '}'
       end
 
       it '#get_settings_bcc' do
@@ -206,19 +202,17 @@ module SendGrid4r::REST::Settings
       end
 
       it 'creates bcc instance' do
-        actual = Mail.create_bcc(bcc)
+        actual = Mail.create_bcc(JSON.parse(bcc))
         expect(actual.enabled).to eq(true)
         expect(actual.email).to eq('email@example.com')
       end
 
       let(:bounce_purge) do
-        JSON.parse(
-          '{'\
-            '"enabled": true,'\
-            '"hard_bounces": 1,'\
-            '"soft_bounces": 1'\
-          '}'
-        )
+        '{'\
+          '"enabled": true,'\
+          '"hard_bounces": 1,'\
+          '"soft_bounces": 1'\
+        '}'
       end
 
       it '#get_settings_bounce_purge' do
@@ -234,20 +228,18 @@ module SendGrid4r::REST::Settings
       end
 
       it 'creates bounce_purge instance' do
-        actual = Mail.create_bounce_purge(bounce_purge)
+        actual = Mail.create_bounce_purge(JSON.parse(bounce_purge))
         expect(actual.enabled).to eq(true)
         expect(actual.hard_bounces).to eq(1)
         expect(actual.soft_bounces).to eq(1)
       end
 
       let(:footer) do
-        JSON.parse(
-          '{'\
-            '"enabled": true,'\
-            '"html_content": "abc...",'\
-            '"plain_content": "xyz..."'\
-          '}'
-        )
+        '{'\
+          '"enabled": true,'\
+          '"html_content": "abc...",'\
+          '"plain_content": "xyz..."'\
+        '}'
       end
 
       it '#get_settings_footer' do
@@ -263,19 +255,17 @@ module SendGrid4r::REST::Settings
       end
 
       it 'creates footer instance' do
-        actual = Mail.create_footer(footer)
+        actual = Mail.create_footer(JSON.parse(footer))
         expect(actual.enabled).to eq(true)
         expect(actual.html_content).to eq('abc...')
         expect(actual.plain_content).to eq('xyz...')
       end
 
       let(:forward_bounce) do
-        JSON.parse(
-          '{'\
-            '"enabled": true,'\
-            '"email": "email address"'\
-          '}'
-        )
+        '{'\
+          '"enabled": true,'\
+          '"email": "email address"'\
+        '}'
       end
 
       it '#get_settings_forward_bounce' do
@@ -291,18 +281,16 @@ module SendGrid4r::REST::Settings
       end
 
       it 'creates forward_bounce instance' do
-        actual = Mail.create_forward_bounce(forward_bounce)
+        actual = Mail.create_forward_bounce(JSON.parse(forward_bounce))
         expect(actual.enabled).to eq(true)
         expect(actual.email).to eq('email address')
       end
 
       let(:forward_spam) do
-        JSON.parse(
-          '{'\
-            '"enabled": true,'\
-            '"email": "email address"'\
-          '}'
-        )
+        '{'\
+          '"enabled": true,'\
+          '"email": "email address"'\
+        '}'
       end
 
       it '#get_settings_forward_spam' do
@@ -318,18 +306,16 @@ module SendGrid4r::REST::Settings
       end
 
       it 'creates forward_spam instance' do
-        actual = Mail.create_forward_spam(forward_spam)
+        actual = Mail.create_forward_spam(JSON.parse(forward_spam))
         expect(actual.enabled).to eq(true)
         expect(actual.email).to eq('email address')
       end
 
       let(:template) do
-        JSON.parse(
-          '{'\
-            '"enabled": true,'\
-            '"html_content": "..."'\
-          '}'
-        )
+        '{'\
+          '"enabled": true,'\
+          '"html_content": "..."'\
+        '}'
       end
 
       it '#get_settings_template' do
@@ -345,17 +331,15 @@ module SendGrid4r::REST::Settings
       end
 
       it 'creates template instance' do
-        actual = Mail.create_template(template)
+        actual = Mail.create_template(JSON.parse(template))
         expect(actual.enabled).to eq(true)
         expect(actual.html_content).to eq('...')
       end
 
       let(:plain_content) do
-        JSON.parse(
-          '{'\
-            '"enabled": true'\
-          '}'
-        )
+        '{'\
+          '"enabled": true'\
+        '}'
       end
 
       it '#get_settings_plain_content' do
@@ -371,7 +355,7 @@ module SendGrid4r::REST::Settings
       end
 
       it 'creates plain_content instance' do
-        actual = Mail.create_plain_content(plain_content)
+        actual = Mail.create_plain_content(JSON.parse(plain_content))
         expect(actual.enabled).to eq(true)
       end
     end

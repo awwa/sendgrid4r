@@ -33,10 +33,7 @@ module SendGrid4r::REST
 
     def execute(method, auth, endpoint, params, payload, &block)
       args = create_args(method, auth, endpoint, params, payload)
-      body = RestClient::Request.execute(args, &block)
-      return nil if block_given?
-      return JSON.parse(body) unless body.nil? || body.length < 2
-      body
+      RestClient::Request.execute(args, &block)
     rescue RestClient::TooManyRequests => e
       duration = e.response.headers[:x_ratelimit_remaining].to_i
       sleep duration if duration > 0
@@ -76,6 +73,11 @@ module SendGrid4r::REST
 
     def process_array_params(v)
       v.is_a?(Array) ? v.join(',') : v.to_s
+    end
+
+    def finish(resp, raw_resp = false)
+      return resp if raw_resp || resp.nil? || resp.length < 2
+      yield(JSON.parse(resp))
     end
   end
 end

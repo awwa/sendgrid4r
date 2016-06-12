@@ -35,25 +35,33 @@ module SendGrid4r::REST
 
     def generate_batch_id(&block)
       resp = post(@auth, CancelScheduledSends.batch_url, nil, &block)
-      CancelScheduledSends.create_scheduled_send(resp)
+      finish(resp, @raw_resp) do |r|
+        CancelScheduledSends.create_scheduled_send(r)
+      end
     end
 
     def validate_batch_id(batch_id:, &block)
       resp = get(@auth, CancelScheduledSends.batch_url(batch_id), nil, &block)
-      CancelScheduledSends.create_scheduled_send(resp)
+      finish(resp, @raw_resp) do |r|
+        CancelScheduledSends.create_scheduled_send(r)
+      end
     end
 
     def post_scheduled_send(batch_id:, status:, &block)
       endpoint = CancelScheduledSends.scheduled_sends_url
       payload = { batch_id: batch_id, status: status }
       resp = post(@auth, endpoint, payload, &block)
-      CancelScheduledSends.create_scheduled_send(resp)
+      finish(resp, @raw_resp) do |r|
+        CancelScheduledSends.create_scheduled_send(r)
+      end
     end
 
     def get_scheduled_sends(batch_id: nil, &block)
       endpoint = CancelScheduledSends.scheduled_sends_url(batch_id)
       resp = get(@auth, endpoint, nil, nil, &block)
-      CancelScheduledSends.create_scheduled_sends(resp)
+      finish(resp, @raw_resp) do |r|
+        CancelScheduledSends.create_scheduled_sends(r)
+      end
     end
 
     def patch_scheduled_send(batch_id:, status:, &block)

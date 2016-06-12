@@ -77,19 +77,25 @@ module SendGrid4r::REST
       params = {}
       params[:limit] = limit unless limit.nil?
       resp = get(@auth, IpAccessManagement.url_activity, params, &block)
-      IpAccessManagement.create_ip_activities(resp)
+      finish(resp, @raw_resp) do |r|
+        IpAccessManagement.create_ip_activities(r)
+      end
     end
 
     def get_whitelisted_ips(&block)
       resp = get(@auth, IpAccessManagement.url_whitelist, &block)
-      IpAccessManagement.create_whitelisted_ips(resp)
+      finish(resp, @raw_resp) do |r|
+        IpAccessManagement.create_whitelisted_ips(r)
+      end
     end
 
     def post_whitelisted_ips(ips:, &block)
       ips_param = ips.map { |ip| { ip: ip } }
       params = { ips: ips_param }
       resp = post(@auth, IpAccessManagement.url_whitelist, params, &block)
-      IpAccessManagement.create_whitelisted_ips(resp)
+      finish(resp, @raw_resp) do |r|
+        IpAccessManagement.create_whitelisted_ips(r)
+      end
     end
 
     def delete_whitelisted_ips(ids:, &block)
@@ -99,7 +105,9 @@ module SendGrid4r::REST
 
     def get_whitelisted_ip(rule_id:, &block)
       resp = get(@auth, IpAccessManagement.url_whitelist(rule_id), nil, &block)
-      IpAccessManagement.create_whitelisted_ip(resp)
+      finish(resp, @raw_resp) do |r|
+        IpAccessManagement.create_whitelisted_ip(r)
+      end
     end
 
     def delete_whitelisted_ip(rule_id:, &block)

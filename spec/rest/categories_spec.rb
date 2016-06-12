@@ -44,15 +44,13 @@ module SendGrid4r::REST
       end
 
       let(:categories) do
-        JSON.parse(
-          '['\
-            '{"category": "cat1"},'\
-            '{"category": "cat2"},'\
-            '{"category": "cat3"},'\
-            '{"category": "cat4"},'\
-            '{"category": "cat5"}'\
-          ']'
-        )
+        '['\
+          '{"category": "cat1"},'\
+          '{"category": "cat2"},'\
+          '{"category": "cat3"},'\
+          '{"category": "cat4"},'\
+          '{"category": "cat5"}'\
+        ']'
       end
 
       it '#get_categories' do
@@ -65,7 +63,7 @@ module SendGrid4r::REST
       end
 
       it 'creates categories instance' do
-        actual = Categories.create_categories(categories)
+        actual = Categories.create_categories(JSON.parse(categories))
         expect(actual).to be_a(Array)
         actual.each do |category|
           expect(category).to be_a(Categories::Category)

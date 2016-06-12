@@ -85,7 +85,7 @@ module SendGrid4r::REST
         params[:limit] = limit unless limit.nil?
         params[:offset] = offset unless offset.nil?
         resp = get(@auth, Ips.url, params, &block)
-        Ips.create_ips(resp)
+        finish(resp, @raw_resp) { |r| Ips.create_ips(r) }
       end
 
       def post_wl_ip(ip:, subdomain:, domain:, &block)
@@ -95,12 +95,12 @@ module SendGrid4r::REST
           domain: domain
         }
         resp = post(@auth, Ips.url, params, &block)
-        Ips.create_ip(resp)
+        finish(resp, @raw_resp) { |r| Ips.create_ip(r) }
       end
 
       def get_wl_ip(id:, &block)
         resp = get(@auth, Ips.url(id), nil, &block)
-        Ips.create_ip(resp)
+        finish(resp, @raw_resp) { |r| Ips.create_ip(r) }
       end
 
       def delete_wl_ip(id:, &block)
@@ -109,7 +109,7 @@ module SendGrid4r::REST
 
       def validate_wl_ip(id:, &block)
         resp = post(@auth, "#{Ips.url(id)}/validate", &block)
-        Ips.create_result(resp)
+        finish(resp, @raw_resp) { |r| Ips.create_result(r) }
       end
     end
   end

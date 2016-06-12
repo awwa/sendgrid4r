@@ -65,31 +65,27 @@ module SendGrid4r::REST::Ips
       end
 
       let(:pool) do
-        JSON.parse(
-          '{'\
-            '"ips":["167.89.21.3"],'\
-            '"name":"new_test5"'\
-          '}'
-        )
+        '{'\
+          '"ips":["167.89.21.3"],'\
+          '"name":"new_test5"'\
+        '}'
       end
 
       let(:pools) do
-        JSON.parse(
-          '['\
-            '{'\
-              '"name": "test1"'\
-            '},'\
-            '{'\
-              '"name": "test2"'\
-            '},'\
-            '{'\
-              '"name": "test3"'\
-            '},'\
-            '{'\
-              '"name": "new_test3"'\
-            '}'\
-          ']'
-        )
+        '['\
+          '{'\
+            '"name": "test1"'\
+          '},'\
+          '{'\
+            '"name": "test2"'\
+          '},'\
+          '{'\
+            '"name": "test3"'\
+          '},'\
+          '{'\
+            '"name": "new_test3"'\
+          '}'\
+        ']'
       end
 
       it '#post_pool' do
@@ -126,7 +122,7 @@ module SendGrid4r::REST::Ips
       end
 
       it 'creates pool instance with ips' do
-        actual = Pools.create_pool(pool)
+        actual = Pools.create_pool(JSON.parse(pool))
         expect(actual).to be_a(Pools::Pool)
         expect(actual.ips).to be_a(Array)
         actual.ips.each do |ip|
@@ -136,7 +132,7 @@ module SendGrid4r::REST::Ips
       end
 
       it 'creates pools instances' do
-        actual = Pools.create_pools(pools)
+        actual = Pools.create_pools(JSON.parse(pools))
         expect(actual).to be_a(Array)
         actual.each do |pool|
           expect(pool).to be_a(Pools::Pool)

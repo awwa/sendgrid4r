@@ -34,12 +34,10 @@ module SendGrid4r::REST::Settings
       end
 
       let(:enforced_tls) do
-        JSON.parse(
-          '{'\
-            '"require_tls": true,'\
-            '"require_valid_cert": false'\
-          '}'
-        )
+        '{'\
+          '"require_tls": true,'\
+          '"require_valid_cert": false'\
+        '}'
       end
 
       it '#get_enforced_tls' do
@@ -55,7 +53,7 @@ module SendGrid4r::REST::Settings
       end
 
       it 'creates enforced_tls instance' do
-        actual = EnforcedTls.create_enforced_tls(enforced_tls)
+        actual = EnforcedTls.create_enforced_tls(JSON.parse(enforced_tls))
         expect(actual.require_tls).to eq(true)
         expect(actual.require_valid_cert).to eq(false)
       end

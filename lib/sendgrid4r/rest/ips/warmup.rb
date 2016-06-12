@@ -31,17 +31,17 @@ module SendGrid4r::REST
 
       def get_warmup_ips(&block)
         resp = get(@auth, Ips::Warmup.url, &block)
-        Ips::Warmup.create_warmup_ips(resp)
+        finish(resp, @raw_resp) { |r| Ips::Warmup.create_warmup_ips(r) }
       end
 
       def get_warmup_ip(ip:, &block)
         resp = get(@auth, Ips::Warmup.url(ip), &block)
-        Ips::Warmup.create_warmup_ip(resp)
+        finish(resp, @raw_resp) { |r| Ips::Warmup.create_warmup_ip(r) }
       end
 
       def post_warmup_ip(ip:, &block)
         resp = post(@auth, Ips::Warmup.url, ip: ip, &block)
-        Ips::Warmup.create_warmup_ip(resp)
+        finish(resp, @raw_resp) { |r| Ips::Warmup.create_warmup_ip(r) }
       end
 
       def delete_warmup_ip(ip:, &block)

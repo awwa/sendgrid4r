@@ -52,7 +52,8 @@ module SendGrid4r::REST
       params[:limit] = limit unless limit.nil?
       params[:offset] = offset unless offset.nil?
       params[:username] = username unless username.nil?
-      Subusers.create_subusers(get(@auth, Subusers.url, params, &block))
+      resp = get(@auth, Subusers.url, params, &block)
+      finish(resp, @raw_resp) { |r| Subusers.create_subusers(r) }
     end
 
     def post_subuser(username:, email:, password:, ips:, &block)
@@ -62,35 +63,40 @@ module SendGrid4r::REST
         password: password,
         ips: ips
       }
-      Subusers.create_subuser(post(@auth, Subusers.url, params, &block))
+      resp = post(@auth, Subusers.url, params, &block)
+      finish(resp, @raw_resp) { |r| Subusers.create_subuser(r) }
     end
 
     def patch_subuser(username:, disabled:, &block)
       payload = { disabled: disabled }
       resp = patch(@auth, Subusers.url(username), payload, &block)
-      Subusers.create_subuser(resp)
+      finish(resp, @raw_resp) { |r| Subusers.create_subuser(r) }
     end
 
     def delete_subuser(username:, &block)
       delete(@auth, Subusers.url(username), &block)
     end
 
+    # TODO remove email and frequency
     def get_subuser_monitor(username:, email:, frequency:, &block)
       endpoint = Subusers.url_monitor(username)
       payload = { email: email, frequency: frequency }
-      Subusers.create_monitor(post(@auth, endpoint, payload, &block))
+      resp = post(@auth, endpoint, payload, &block)
+      finish(resp, @raw_resp) { |r| Subusers.create_monitor(r) }
     end
 
     def post_subuser_monitor(username:, email:, frequency:, &block)
       endpoint = Subusers.url_monitor(username)
       payload = { email: email, frequency: frequency }
-      Subusers.create_monitor(post(@auth, endpoint, payload, &block))
+      resp = post(@auth, endpoint, payload, &block)
+      finish(resp, @raw_resp) { |r| Subusers.create_monitor(r) }
     end
 
     def put_subuser_monitor(username:, email:, frequency:, &block)
       endpoint = Subusers.url_monitor(username)
       payload = { email: email, frequency: frequency }
-      Subusers.create_monitor(put(@auth, endpoint, payload, &block))
+      resp = put(@auth, endpoint, payload, &block)
+      finish(resp, @raw_resp) { |r| Subusers.create_monitor(r) }
     end
 
     def delete_subuser_monitor(username:, &block)
@@ -101,12 +107,13 @@ module SendGrid4r::REST
       params = ''
       usernames.each { |username| params += "usernames=#{username}&" }
       endpoint = "#{Subusers.url}/reputations?#{params}"
-      Subusers.create_subusers(get(@auth, endpoint, usernames, &block))
+      resp = get(@auth, endpoint, usernames, &block)
+      finish(resp, @raw_resp) { |r| Subusers.create_subusers(r) }
     end
 
     def put_subuser_assigned_ips(username:, ips:, &block)
       resp = put(@auth, "#{Subusers.url(username)}/ips", ips, &block)
-      Subusers.create_subuser(resp)
+      finish(resp, @raw_resp) { |r| Subusers.create_subuser(r) }
     end
   end
 end

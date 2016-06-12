@@ -17,7 +17,7 @@ module SendGrid4r::REST
           categories: categories
         }
         resp = get(@auth, "#{BASE_URL}/categories/stats", params, &block)
-        Stats.create_top_stats(resp)
+        finish(resp, @raw_resp) { |r| Stats.create_top_stats(r) }
       end
 
       def get_categories_stats_sums(
@@ -32,7 +32,7 @@ module SendGrid4r::REST
           offset: offset
         }
         resp = get(@auth, "#{BASE_URL}/categories/stats/sums", params, &block)
-        Stats.create_top_stat(resp)
+        finish(resp, @raw_resp) { |r| Stats.create_top_stat(r) }
       end
     end
   end

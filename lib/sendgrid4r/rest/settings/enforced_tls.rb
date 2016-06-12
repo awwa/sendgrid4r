@@ -21,12 +21,16 @@ module SendGrid4r::REST
 
       def get_enforced_tls(&block)
         resp = get(@auth, Settings::EnforcedTls.url, &block)
-        Settings::EnforcedTls.create_enforced_tls(resp)
+        finish(resp, @raw_resp) do |r|
+          Settings::EnforcedTls.create_enforced_tls(r)
+        end
       end
 
       def patch_enforced_tls(params:, &block)
         resp = patch(@auth, Settings::EnforcedTls.url, params.to_h, &block)
-        Settings::EnforcedTls.create_enforced_tls(resp)
+        finish(resp, @raw_resp) do |r|
+          Settings::EnforcedTls.create_enforced_tls(r)
+        end
       end
     end
   end

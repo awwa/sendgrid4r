@@ -85,44 +85,40 @@ module SendGrid4r::REST::Whitelabel
       end
 
       let(:ips) do
-        JSON.parse('[]')
+        '[]'
       end
 
       let(:ip) do
-        JSON.parse(
-          '{'\
-            '"id": 123,'\
-            '"ip": "192.168.1.2",'\
-            '"rdns": "o1.email.example.com",'\
-            '"users": ['\
-            '],'\
-            '"subdomain": "email",'\
-            '"domain": "example.com",'\
+        '{'\
+          '"id": 123,'\
+          '"ip": "192.168.1.2",'\
+          '"rdns": "o1.email.example.com",'\
+          '"users": ['\
+          '],'\
+          '"subdomain": "email",'\
+          '"domain": "example.com",'\
+          '"valid": true,'\
+          '"legacy": false,'\
+          '"a_record": {'\
             '"valid": true,'\
-            '"legacy": false,'\
-            '"a_record": {'\
-              '"valid": true,'\
-              '"type": "a",'\
-              '"host": "o1.email.example.com",'\
-              '"data": "192.168.1.2"'\
-            '}'\
-          '}'
-        )
+            '"type": "a",'\
+            '"host": "o1.email.example.com",'\
+            '"data": "192.168.1.2"'\
+          '}'\
+        '}'
       end
 
       let(:result) do
-        JSON.parse(
-          '{'\
-            '"id": 1,'\
-            '"valid": true,'\
-            '"validation_results": {'\
-              '"a_record": {'\
-                '"valid": true,'\
-                '"reason": null'\
-              '}'\
+        '{'\
+          '"id": 1,'\
+          '"valid": true,'\
+          '"validation_results": {'\
+            '"a_record": {'\
+              '"valid": true,'\
+              '"reason": null'\
             '}'\
-          '}'
-        )
+          '}'\
+        '}'
       end
 
       it '#get_wl_ips' do
@@ -156,7 +152,7 @@ module SendGrid4r::REST::Whitelabel
       end
 
       it 'creates ip instance' do
-        actual = Ips.create_ip(ip)
+        actual = Ips.create_ip(JSON.parse(ip))
         expect(actual).to be_a(Ips::Ip)
         expect(actual.id).to eq(123)
         expect(actual.ip).to eq('192.168.1.2')
@@ -174,7 +170,7 @@ module SendGrid4r::REST::Whitelabel
       end
 
       it 'creates result instance' do
-        actual = Ips.create_result(result)
+        actual = Ips.create_result(JSON.parse(result))
         expect(actual).to be_a(Ips::Result)
         expect(actual.id).to eq(1)
         expect(actual.valid).to eq(true)

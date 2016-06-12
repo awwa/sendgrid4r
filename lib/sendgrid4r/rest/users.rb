@@ -80,44 +80,44 @@ module SendGrid4r::REST
 
     def get_user_profile(&block)
       resp = get(@auth, Users.url(:profile), nil, &block)
-      Users.create_profile(resp)
+      finish(resp, @raw_resp) { |r| Users.create_profile(r) }
     end
 
     def patch_user_profile(params:, &block)
       resp = patch(@auth, Users.url(:profile), params, &block)
-      Users.create_profile(resp)
+      finish(resp, @raw_resp) { |r| Users.create_profile(r) }
     end
 
     def get_user_account(&block)
       resp = get(@auth, Users.url(:account), nil, &block)
-      Users.create_account(resp)
+      finish(resp, @raw_resp) { |r| Users.create_account(r) }
     end
 
     def get_user_email(&block)
       resp = get(@auth, Users.url(:email), nil, &block)
-      Users.create_email(resp)
+      finish(resp, @raw_resp) { |r| Users.create_email(r) }
     end
 
     def put_user_email(email:, &block)
       params = { email: email }
       resp = put(@auth, Users.url(:email), params, &block)
-      Users.create_email(resp)
+      finish(resp, @raw_resp) { |r| Users.create_email(r) }
     end
 
     def get_user_username(&block)
       resp = get(@auth, Users.url(:username), nil, &block)
-      Users.create_username(resp)
+      finish(resp, @raw_resp) { |r| Users.create_username(r) }
     end
 
     def put_user_username(username:, &block)
       params = { username: username }
       resp = put(@auth, Users.url(:username), params, &block)
-      Users.create_username(resp)
+      finish(resp, @raw_resp) { |r| Users.create_username(r) }
     end
 
     def get_user_credits(&block)
       resp = get(@auth, Users.url(:credits), &block)
-      Users.create_credits(resp)
+      finish(resp, @raw_resp) { |r| Users.create_credits(r) }
     end
 
     def put_user_password(new_password:, old_password:, &block)
@@ -126,7 +126,7 @@ module SendGrid4r::REST
         old_password: old_password
       }
       resp = put(@auth, Users.url(:password), params, &block)
-      Users.create_password(resp)
+      finish(resp, @raw_resp) { |r| Users.create_password(r) }
     end
   end
 end

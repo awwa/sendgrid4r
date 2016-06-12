@@ -41,22 +41,22 @@ module SendGrid4r::REST
 
       def post_ip_to_pool(pool_name:, ip:, &block)
         resp = post(@auth, Ips::Pools.url(pool_name, :ips), ip: ip, &block)
-        Ips::Addresses.create_address(resp)
+        finish(resp, @raw_resp) { |r| Ips::Addresses.create_address(r) }
       end
 
       def get_ips(&block)
         resp = get(@auth, Ips::Addresses.url, &block)
-        Ips::Addresses.create_addresses(resp)
+        finish(resp, @raw_resp) { |r| Ips::Addresses.create_addresses(r) }
       end
 
       def get_ips_assigned(&block)
         resp = get(@auth, Ips::Addresses.url(:assigned), &block)
-        Ips::Addresses.create_addresses(resp)
+        finish(resp, @raw_resp) { |r| Ips::Addresses.create_addresses(r) }
       end
 
       def get_ip(ip:, &block)
         resp = get(@auth, Ips::Addresses.url(ip), &block)
-        Ips::Addresses.create_address(resp)
+        finish(resp, @raw_resp) { |r| Ips::Addresses.create_address(r) }
       end
 
       def delete_ip_from_pool(pool_name:, ip:, &block)

@@ -91,40 +91,36 @@ module SendGrid4r::REST::TransactionalTemplates
       end
 
       let(:template) do
-        JSON.parse(
-          '{'\
-            '"id": "733ba07f-ead1-41fc-933a-3976baa23716",'\
-            '"name": "example_name",'\
-            '"versions": []'\
-          '}'
-        )
+        '{'\
+          '"id": "733ba07f-ead1-41fc-933a-3976baa23716",'\
+          '"name": "example_name",'\
+          '"versions": []'\
+        '}'
       end
 
       let(:templates) do
-        JSON.parse(
-          '{'\
-            '"templates": ['\
-              '{'\
-                '"id": "e8ac01d5-a07a-4a71-b14c-4721136fe6aa",'\
-                '"name": "example template name",'\
-                '"versions": ['\
-                  '{'\
-                    '"id": "de37d11b-082a-42c0-9884-c0c143015a47",'\
-                    '"user_id": 1234,'\
-                    '"template_id": "d51480ba-ca3f-465c-bc3e-ceb71d73c38d",'\
-                    '"active": 1,'\
-                    '"name": "example version",'\
-                    '"html_content": "<%body%><strong>Click '\
-                      'to Reset</strong>",'\
-                    '"plain_content": "Click to Reset<%body%>",'\
-                    '"subject": "<%subject%>",'\
-                    '"updated_at": "2014-05-22 20:05:21"'\
-                  '}'\
-                ']'\
-              '}'\
-            ']'\
-          '}'
-        )
+        '{'\
+          '"templates": ['\
+            '{'\
+              '"id": "e8ac01d5-a07a-4a71-b14c-4721136fe6aa",'\
+              '"name": "example template name",'\
+              '"versions": ['\
+                '{'\
+                  '"id": "de37d11b-082a-42c0-9884-c0c143015a47",'\
+                  '"user_id": 1234,'\
+                  '"template_id": "d51480ba-ca3f-465c-bc3e-ceb71d73c38d",'\
+                  '"active": 1,'\
+                  '"name": "example version",'\
+                  '"html_content": "<%body%><strong>Click '\
+                    'to Reset</strong>",'\
+                  '"plain_content": "Click to Reset<%body%>",'\
+                  '"subject": "<%subject%>",'\
+                  '"updated_at": "2014-05-22 20:05:21"'\
+                '}'\
+              ']'\
+            '}'\
+          ']'\
+        '}'
       end
 
       it '#post_template' do
@@ -159,7 +155,7 @@ module SendGrid4r::REST::TransactionalTemplates
 
       it 'creates template instance' do
         actual = SendGrid4r::REST::TransactionalTemplates.create_template(
-          template
+          JSON.parse(template)
         )
         expect(actual).to be_a(Template)
         expect(actual.id).to eq('733ba07f-ead1-41fc-933a-3976baa23716')
@@ -169,7 +165,7 @@ module SendGrid4r::REST::TransactionalTemplates
 
       it 'creates templates instance' do
         actual = SendGrid4r::REST::TransactionalTemplates.create_templates(
-          templates
+          JSON.parse(templates)
         )
         expect(actual).to be_a(Templates)
         expect(actual.templates).to be_a(Array)

@@ -58,52 +58,60 @@ module SendGrid4r::REST
         params[:limit] = limit unless limit.nil?
         params[:offset] = offset unless offset.nil?
         resp = get(@auth, Settings::Tracking.url, params, &block)
-        Settings.create_results(resp)
+        finish(resp, @raw_resp) { |r| Settings.create_results(r) }
       end
 
       def get_settings_click(&block)
         resp = get(@auth, Settings::Tracking.url(:click), &block)
-        Settings::Tracking.create_click(resp)
+        finish(resp, @raw_resp) { |r| Settings::Tracking.create_click(r) }
       end
 
       def patch_settings_click(params:, &block)
         endpoint = Settings::Tracking.url(:click)
         resp = patch(@auth, endpoint, params.to_h, &block)
-        Settings::Tracking.create_click(resp)
+        finish(resp, @raw_resp) { |r| Settings::Tracking.create_click(r) }
       end
 
       def get_settings_google_analytics(&block)
         endpoint = Settings::Tracking.url(:google_analytics)
         resp = get(@auth, endpoint, &block)
-        Settings::Tracking.create_google_analytics(resp)
+        finish(resp, @raw_resp) do |r|
+          Settings::Tracking.create_google_analytics(r)
+        end
       end
 
       def patch_settings_google_analytics(params:, &block)
         endpoint = Settings::Tracking.url(:google_analytics)
         resp = patch(@auth, endpoint, params.to_h, &block)
-        Settings::Tracking.create_google_analytics(resp)
+        finish(resp, @raw_resp) do |r|
+          Settings::Tracking.create_google_analytics(r)
+        end
       end
 
       def get_settings_open(&block)
         resp = get(@auth, Settings::Tracking.url(:open), &block)
-        Settings::Tracking.create_open(resp)
+        finish(resp, @raw_resp) { |r| Settings::Tracking.create_open(r) }
       end
 
       def patch_settings_open(params:, &block)
         resp = patch(@auth, Settings::Tracking.url(:open), params.to_h, &block)
-        Settings::Tracking.create_open(resp)
+        finish(resp, @raw_resp) { |r| Settings::Tracking.create_open(r) }
       end
 
       def get_settings_subscription(&block)
         endpoint = Settings::Tracking.url(:subscription)
         resp = get(@auth, endpoint, &block)
-        Settings::Tracking.create_subscription(resp)
+        finish(resp, @raw_resp) do |r|
+          Settings::Tracking.create_subscription(r)
+        end
       end
 
       def patch_settings_subscription(params:, &block)
         endpoint = Settings::Tracking.url(:subscription)
         resp = patch(@auth, endpoint, params.to_h, &block)
-        Settings::Tracking.create_subscription(resp)
+        finish(resp, @raw_resp) do |r|
+          Settings::Tracking.create_subscription(r)
+        end
       end
     end
   end

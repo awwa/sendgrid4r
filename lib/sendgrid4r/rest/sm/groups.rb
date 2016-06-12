@@ -40,23 +40,23 @@ module SendGrid4r::REST
         params = { name: name, description: description }
         params[:is_default] = is_default unless is_default.nil?
         resp = post(@auth, Sm::Groups.url, params, &block)
-        Sm::Groups.create_group(resp)
+        finish(resp, @raw_resp) { |r| Sm::Groups.create_group(r) }
       end
 
       def get_groups(&block)
         resp = get(@auth, Sm::Groups.url, &block)
-        Sm::Groups.create_groups(resp)
+        finish(resp, @raw_resp) { |r| Sm::Groups.create_groups(r) }
       end
 
       def get_group(group_id:, &block)
         resp = get(@auth, Sm::Groups.url(group_id), &block)
-        Sm::Groups.create_group(resp)
+        finish(resp, @raw_resp) { |r| Sm::Groups.create_group(r) }
       end
 
       def patch_group(group_id:, group:, &block)
         endpoint = Sm::Groups.url(group_id)
         resp = patch(@auth, endpoint, group.to_h, &block)
-        Sm::Groups.create_group(resp)
+        finish(resp, @raw_resp) { |r| Sm::Groups.create_group(r) }
       end
 
       def delete_group(group_id:, &block)

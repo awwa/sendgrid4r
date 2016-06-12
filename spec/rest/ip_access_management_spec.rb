@@ -85,61 +85,55 @@ module SendGrid4r::REST
       end
 
       let(:ip_activities) do
-        JSON.parse(
-          '{'\
-            '"result": ['\
-              '{'\
-                '"allowed": false,'\
-                '"auth_method": "basic",'\
-                '"first_at": 1444087966,'\
-                '"ip": "1.1.1.1",'\
-                '"last_at": 1444406672,'\
-                '"location": "Australia"'\
-              '}, {'\
-                '"allowed": false,'\
-                '"auth_method": "basic",'\
-                '"first_at": 1444087505,'\
-                '"ip": "1.2.3.48",'\
-                '"last_at": 1444087505,'\
-                '"location": "Mukilteo, Washington"'\
-              '}'\
-            ']'\
-          '}'
-        )
+        '{'\
+          '"result": ['\
+            '{'\
+              '"allowed": false,'\
+              '"auth_method": "basic",'\
+              '"first_at": 1444087966,'\
+              '"ip": "1.1.1.1",'\
+              '"last_at": 1444406672,'\
+              '"location": "Australia"'\
+            '}, {'\
+              '"allowed": false,'\
+              '"auth_method": "basic",'\
+              '"first_at": 1444087505,'\
+              '"ip": "1.2.3.48",'\
+              '"last_at": 1444087505,'\
+              '"location": "Mukilteo, Washington"'\
+            '}'\
+          ']'\
+        '}'
       end
 
       let(:whitelisted_ips) do
-        JSON.parse(
-          '{'\
-            '"result": ['\
-              '{'\
-                '"id": 1, "ip": "192.168.1.1/32", '\
-                '"created_at": 1441824715, "updated_at": 1441824715'\
-              '},'\
-              '{'\
-                '"id": 2, "ip": "192.168.1.2/32", '\
-                '"created_at": 1441824715, "updated_at": 1441824715'\
-              '},'\
-              '{'\
-                '"id": 3, "ip": "192.168.1.3/32", '\
-                '"created_at": 1441824715, "updated_at": 1441824715'\
-              '}'\
-            ']'\
-          '}'
-        )
+        '{'\
+          '"result": ['\
+            '{'\
+              '"id": 1, "ip": "192.168.1.1/32", '\
+              '"created_at": 1441824715, "updated_at": 1441824715'\
+            '},'\
+            '{'\
+              '"id": 2, "ip": "192.168.1.2/32", '\
+              '"created_at": 1441824715, "updated_at": 1441824715'\
+            '},'\
+            '{'\
+              '"id": 3, "ip": "192.168.1.3/32", '\
+              '"created_at": 1441824715, "updated_at": 1441824715'\
+            '}'\
+          ']'\
+        '}'
       end
 
       let(:whitelisted_ip) do
-        JSON.parse(
-          '{'\
-            '"result": {'\
-              '"created_at": 1459011215,'\
-              '"id": 1,'\
-              '"ip": "192.168.1.1/32",'\
-              '"updated_at": 1459011215'\
-            '}'\
-          '}'
-        )
+        '{'\
+          '"result": {'\
+            '"created_at": 1459011215,'\
+            '"id": 1,'\
+            '"ip": "192.168.1.1/32",'\
+            '"updated_at": 1459011215'\
+          '}'\
+        '}'
       end
 
       it '#get_ip_activities' do
@@ -201,7 +195,7 @@ module SendGrid4r::REST
 
       it 'creates ip_activities instance' do
         actual = IpAccessManagement.create_ip_activities(
-          ip_activities
+          JSON.parse(ip_activities)
         )
         expect(actual.result.length).to eq(2)
         activity0 = actual.result[0]
@@ -215,7 +209,7 @@ module SendGrid4r::REST
 
       it 'creates whitelisted_ips instance' do
         actual = IpAccessManagement.create_whitelisted_ips(
-          whitelisted_ips
+          JSON.parse(whitelisted_ips)
         )
         expect(actual.result.length).to eq(3)
         ip1 = actual.result[0]
@@ -227,7 +221,7 @@ module SendGrid4r::REST
 
       it 'creates whitelisted_ip instance' do
         actual = IpAccessManagement.create_whitelisted_ip(
-          whitelisted_ip
+          JSON.parse(whitelisted_ip)
         )
         expect(actual.result.id).to eq(1)
         expect(actual.result.ip).to eq('192.168.1.1/32')

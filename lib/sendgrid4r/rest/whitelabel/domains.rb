@@ -120,7 +120,7 @@ module SendGrid4r::REST
         params[:username] = username unless username.nil?
         params[:domain] = domain unless domain.nil?
         resp = get(@auth, Domains.url, params, &block)
-        Domains.create_domains(resp)
+        finish(resp, @raw_resp) { |r| Domains.create_domains(r) }
       end
 
       def post_wl_domain(
@@ -139,12 +139,12 @@ module SendGrid4r::REST
         params[:custom_spf] = custom_spf unless custom_spf.nil?
         params[:default] = default unless default.nil?
         resp = post(@auth, Domains.url, params, &block)
-        Domains.create_domain(resp)
+        finish(resp, @raw_resp) { |r| Domains.create_domain(r) }
       end
 
       def get_wl_domain(id:, &block)
         resp = get(@auth, Domains.url(id), nil, &block)
-        Domains.create_domain(resp)
+        finish(resp, @raw_resp) { |r| Domains.create_domain(r) }
       end
 
       def patch_wl_domain(id:, custom_spf: nil, default: nil, &block)
@@ -152,7 +152,7 @@ module SendGrid4r::REST
         params[:custom_spf] = custom_spf unless custom_spf.nil?
         params[:default] = default unless default.nil?
         resp = patch(@auth, Domains.url(id), params, &block)
-        Domains.create_domain(resp)
+        finish(resp, @raw_resp) { |r| Domains.create_domain(r) }
       end
 
       def delete_wl_domain(id:, &block)
@@ -163,29 +163,29 @@ module SendGrid4r::REST
         params = {}
         params[:domain] = domain unless domain.nil?
         resp = get(@auth, "#{Domains.url}/default", params, &block)
-        Domains.create_domain(resp)
+        finish(resp, @raw_resp) { |r| Domains.create_domain(r) }
       end
 
       def add_ip_to_wl_domain(id:, ip:, &block)
         params = { ip: ip }
         resp = post(@auth, "#{Domains.url(id)}/ips", params, &block)
-        Domains.create_domain(resp)
+        finish(resp, @raw_resp) { |r| Domains.create_domain(r) }
       end
 
       def remove_ip_from_wl_domain(id:, ip:, &block)
         resp = delete(@auth, Domains.url(id, ip), &block)
-        Domains.create_domain(resp)
+        finish(resp, @raw_resp) { |r| Domains.create_domain(r) }
       end
 
       def validate_wl_domain(id:, &block)
         resp = post(@auth, "#{Domains.url(id)}/validate", &block)
-        Domains.create_result(resp)
+        finish(resp, @raw_resp) { |r| Domains.create_result(r) }
       end
 
       def get_associated_wl_domain(username:, &block)
         params = { username: username }
         resp = get(@auth, "#{Domains.url}/subuser", params, &block)
-        Domains.create_domain(resp)
+        finish(resp, @raw_resp) { |r| Domains.create_domain(r) }
       end
 
       def disassociate_wl_domain(username:, &block)
@@ -197,7 +197,7 @@ module SendGrid4r::REST
         endpoint = "#{Domains.url(id)}/subuser"
         params = { username: username }
         resp = post(@auth, endpoint, params, &block)
-        Domains.create_domain(resp)
+        finish(resp, @raw_resp) { |r| Domains.create_domain(r) }
       end
     end
   end

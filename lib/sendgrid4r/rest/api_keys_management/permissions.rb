@@ -24,7 +24,9 @@ module SendGrid4r::REST
 
       def get_permissions(&block)
         resp = get(@auth, ApiKeysManagement::Permissions.url, &block)
-        ApiKeysManagement::Permissions.create_permissions(resp)
+        finish(resp, @raw_resp) do |r|
+          ApiKeysManagement::Permissions.create_permissions(r)
+        end
       end
     end
   end

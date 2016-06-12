@@ -50,41 +50,37 @@ module SendGrid4r::REST
       end
 
       let(:bounces) do
-        JSON.parse(
-          '['\
-            '{'\
-              '"created": 1443651125,'\
-              '"email": "testemail1@test.com",'\
-              '"reason": "550 5.1.1 The email account that you tried to reach '\
-              'does not exist.'\
-              'Please try double-checking the recipient\'s email address for '\
-              'typos or unnecessary spaces. Learn more at '\
-              'https://support.google.com/mail/answer/6596'\
-              'o186si2389584ioe.63 - gsmtp ",'\
-              '"status": "5.1.1"'\
-            '},'\
-            '{'\
-              '"created": 1433800303,'\
-              '"email": "testemail2@testing.com",'\
-              '"reason": "550 5.1.1 <testemail2@testing.com>: '\
-                'Recipient address '\
-              'rejected: User unknown in virtual alias table ",'\
-              '"status": "5.1.1"'\
-            '}'\
-          ']'
-        )
-      end
-
-      let(:bounce) do
-        JSON.parse(
+        '['\
+          '{'\
+            '"created": 1443651125,'\
+            '"email": "testemail1@test.com",'\
+            '"reason": "550 5.1.1 The email account that you tried to reach '\
+            'does not exist.'\
+            'Please try double-checking the recipient\'s email address for '\
+            'typos or unnecessary spaces. Learn more at '\
+            'https://support.google.com/mail/answer/6596'\
+            'o186si2389584ioe.63 - gsmtp ",'\
+            '"status": "5.1.1"'\
+          '},'\
           '{'\
             '"created": 1433800303,'\
             '"email": "testemail2@testing.com",'\
-            '"reason": "550 5.1.1 <testemail2@testing.com>: Recipient address '\
+            '"reason": "550 5.1.1 <testemail2@testing.com>: '\
+              'Recipient address '\
             'rejected: User unknown in virtual alias table ",'\
             '"status": "5.1.1"'\
-          '}'
-        )
+          '}'\
+        ']'
+      end
+
+      let(:bounce) do
+        '{'\
+          '"created": 1433800303,'\
+          '"email": "testemail2@testing.com",'\
+          '"reason": "550 5.1.1 <testemail2@testing.com>: Recipient address '\
+          'rejected: User unknown in virtual alias table ",'\
+          '"status": "5.1.1"'\
+        '}'
       end
 
       it '#get_bounces' do
@@ -123,7 +119,7 @@ module SendGrid4r::REST
       end
 
       it 'creates bounces instance' do
-        actual = Bounces.create_bounces(bounces)
+        actual = Bounces.create_bounces(JSON.parse(bounces))
         expect(actual).to be_a(Array)
         actual.each do |subuser|
           expect(subuser).to be_a(Bounces::Bounce)
@@ -131,7 +127,7 @@ module SendGrid4r::REST
       end
 
       it 'creates bounce instance' do
-        actual = Bounces.create_bounce(bounce)
+        actual = Bounces.create_bounce(JSON.parse(bounce))
         expect(actual).to be_a(Bounces::Bounce)
         expect(actual.created).to eq(Time.at(1433800303))
         expect(actual.email).to eq('testemail2@testing.com')

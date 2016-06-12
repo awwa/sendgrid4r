@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+require 'json'
 
 module SendGrid4r::REST
   module Sm
@@ -39,18 +40,22 @@ module SendGrid4r::REST
           recipient_emails: recipient_emails,
           &block
         )
-        Sm.create_recipient_emails(resp)
+        finish(resp, @raw_resp) { |r| Sm.create_recipient_emails(r) }
       end
 
       def get_suppressed_emails(group_id:, &block)
         endpoint = Sm::Suppressions.url(group_id)
-        get(@auth, endpoint, &block)
+        resp = get(@auth, endpoint, &block)
+        finish(resp, @raw_resp) { |r| r }
       end
 
+      # TODO remove. This endpoint has not been supported already.
       def get_suppressions(email_address:, &block)
         endpoint = "#{BASE_URL}/asm/suppressions/#{email_address}"
         resp = get(@auth, endpoint, &block)
-        Sm::Suppressions.create_suppressions(resp)
+        finish(resp, @raw_resp) do |r|
+          Sm::Suppressions.create_suppressions(r)
+        end
       end
 
       def delete_suppressed_email(group_id:, email_address:, &block)
