@@ -21,8 +21,8 @@ module SendGrid4r::CLI
     desc('subuser SUBCOMMAND ...ARGS', 'Manage subuser')
     subcommand('subuser', Subusers::Subuser)
 
-    desc('supressions SUBCOMMAND ...ARGS', 'Manage supressions')
-    subcommand('suppressions', Supressions::Supressions)
+    desc('supression SUBCOMMAND ...ARGS', 'Manage supressions')
+    subcommand('suppressions', Supressions::Supression)
 
     desc('templates SUBCOMMAND ...ARGS', 'Manage templates')
     subcommand('template', Templates::Template)
