@@ -21,7 +21,7 @@ module SendGrid4r::CLI
       option :email
       option :emails, :type => :array
       def delete
-        if option[:email]
+        if options[:email]
           @client.delete_invalid_email(email: options[:email])
         else
           @client.delete_invalid_emails(

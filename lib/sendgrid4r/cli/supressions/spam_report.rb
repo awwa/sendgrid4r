@@ -21,7 +21,7 @@ module SendGrid4r::CLI
       option :email
       option :emails, :type => :array
       def delete
-        if option[:email]
+        if options[:email]
           @client.delete_spam_report(email: options[:email])
         else
           @client.delete_spam_reports(
@@ -35,7 +35,7 @@ module SendGrid4r::CLI
       desc 'get', 'Get a spam report'
       option :email, :require => true
       def get
-        puts @client.get_email_report(email: options[:email])
+        puts @client.get_spam_report(email: options[:email])
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end

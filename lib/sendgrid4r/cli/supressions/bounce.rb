@@ -18,7 +18,7 @@ module SendGrid4r::CLI
       option :email
       option :emails, :type => :array
       def delete
-        if option[:email]
+        if options[:email]
           puts @client.delete_bounce(email: options[:email])
         else
           puts @client.delete_bounces(

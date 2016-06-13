@@ -29,7 +29,9 @@ module SendGrid4r::CLI
       desc 'delete', 'Delete global unsubscribes'
       option :email, :require => true
       def delete
-        puts @client.delete_global_unsubscribe(email: options[:email])
+        puts @client.delete_global_unsubscribe(
+          email_address: options[:email]
+        )
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -37,7 +39,7 @@ module SendGrid4r::CLI
       desc 'get', 'Get a global unsubscribe'
       option :email, :require => true
       def get
-        puts @client.get_global_unsubscribe(email: options[:email])
+        puts @client.get_global_unsubscribe(email_address: options[:email])
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end

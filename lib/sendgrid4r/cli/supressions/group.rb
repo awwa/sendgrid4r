@@ -6,9 +6,10 @@ module SendGrid4r::CLI
       option :name, :require => true
       option :description, :require => true
       option :is_default, :type => :boolean
-      def add
+      def create
         puts @client.post_group(
-          name: options[:name], description: options[:description],
+          name: options[:name],
+          description: options[:description],
           is_default: options[:is_default]
         )
       rescue RestClient::ExceptionWithResponse => e
@@ -34,7 +35,7 @@ module SendGrid4r::CLI
       option :group_id, :require => true
       option :name
       option :description
-      def get
+      def update
         group = {}
         group[:name] = options[:name] unless options[:name].nil?
         group[:description] = options[:description] unless options[:description].nil?

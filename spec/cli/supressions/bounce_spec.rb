@@ -2,7 +2,7 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
 module SendGrid4r::CLI::Supressions
-  describe Block do
+  describe Bounce do
     describe 'integration test', :it do
       before do
         Dotenv.load
@@ -13,11 +13,9 @@ module SendGrid4r::CLI::Supressions
           'list',
           '--apikey', ENV['SILVER_API_KEY'],
           '--start_time', Time.local(2016, 1, 1).to_i,
-          '--end_time', Time.local(2016, 1, 31).to_i,
-          '--limit', 10,
-          '--offset', 0
+          '--end_time', Time.local(2016, 1, 31).to_i
         ]
-        Block.start(args)
+        Bounce.start(args)
       end
 
       it '#delete with delete_all' do
@@ -26,7 +24,7 @@ module SendGrid4r::CLI::Supressions
           '--apikey', ENV['SILVER_API_KEY'],
           '--delete_all', true
         ]
-        Block.start(args)
+        Bounce.start(args)
       end
 
       it '#delete with email' do
@@ -35,7 +33,7 @@ module SendGrid4r::CLI::Supressions
           '--apikey', ENV['SILVER_API_KEY'],
           '--email', ''
         ]
-        Block.start(args)
+        Bounce.start(args)
       end
 
       it '#delete with emails' do
@@ -44,7 +42,7 @@ module SendGrid4r::CLI::Supressions
           '--apikey', ENV['SILVER_API_KEY'],
           '--emails', 'abc@abc.com', 'cde@cde.com'
         ]
-        Block.start(args)
+        Bounce.start(args)
       end
 
       it '#get' do
@@ -53,7 +51,7 @@ module SendGrid4r::CLI::Supressions
           '--apikey', ENV['SILVER_API_KEY'],
           '--email', ''
         ]
-        Block.start(args)
+        Bounce.start(args)
       end
     end
   end
