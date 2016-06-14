@@ -1,5 +1,5 @@
 module SendGrid4r::CLI
-  module Statistics
+  module Stats
     class Advanced < SgThor
 
       desc 'geo', 'Gets email statistics by country and state/province'
@@ -16,7 +16,7 @@ module SendGrid4r::CLI
         puts e.inspect
       end
 
-      desc 'devices', 'Gets email statistics by device type'
+      desc 'device', 'Gets email statistics by device type'
       option :start_date, :require => true
       option :end_date
       option :aggregated_by
@@ -29,11 +29,11 @@ module SendGrid4r::CLI
         puts e.inspect
       end
 
-      desc 'clients', 'Gets email statistics by client type'
+      desc 'client', 'Gets email statistics by client type'
       option :start_date, :require => true
       option :end_date
       option :aggregated_by
-      def clients
+      def client
         puts @client.get_clients_stats(
           start_date: options[:start_date], end_date: options[:end_date],
           aggregated_by: options[:aggregated_by]
@@ -42,11 +42,11 @@ module SendGrid4r::CLI
         puts e.inspect
       end
 
-      desc 'client', 'Gets email statistics for a single client type'
+      desc 'client_type', 'Gets email statistics for a single client type'
       option :start_date, :require => true
       option :end_date
       option :aggregated_by
-      option :client_type
+      option :client_type, :require => true
       def client_type
         puts @client.get_clients_type_stats(
           start_date: options[:start_date], end_date: options[:end_date],
@@ -57,12 +57,12 @@ module SendGrid4r::CLI
         puts e.inspect
       end
 
-      desc 'mailbox_providers', 'Gets email statistics by mailbox provider'
+      desc 'mailbox_provider', 'Gets email statistics by mailbox provider'
       option :start_date, :require => true
       option :end_date
       option :aggregated_by
       option :mailbox_providers
-      def mailbox_providers
+      def mailbox_provider
         puts @client.get_mailbox_providers_stats(
           start_date: options[:start_date], end_date: options[:end_date],
           aggregated_by: options[:aggregated_by],
@@ -72,12 +72,12 @@ module SendGrid4r::CLI
         puts e.inspect
       end
 
-      desc 'browsers', 'Gets email statistics by browser'
+      desc 'browser', 'Gets email statistics by browser'
       option :start_date, :require => true
       option :end_date
       option :aggregated_by
       option :browsers
-      def browsers
+      def browser
         puts @client.get_browsers_stats(
           start_date: options[:start_date], end_date: options[:end_date],
           aggregated_by: options[:aggregated_by],

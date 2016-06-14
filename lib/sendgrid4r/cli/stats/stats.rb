@@ -1,5 +1,5 @@
 module SendGrid4r::CLI
-  module Statistics
+  module Stats
     class Stats < SgThor
       desc('advanced SUBCOMMAND ...ARGS', 'Get advanced stats')
       subcommand('advanced', Advanced)

@@ -1,5 +1,5 @@
 module SendGrid4r::CLI
-  module Statistics
+  module Stats
     class Global < SgThor
 
       desc 'get', 'Gets all of your user’s email statistics.'

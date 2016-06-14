@@ -57,9 +57,9 @@ module SendGrid4r::CLI
         puts e.inspect
       end
 
-      desc 'reputations', 'Retrieve subusers reputation'
+      desc 'reputation', 'Retrieve subusers reputation'
       option :usernames, :type => :array, :require => true
-      def reputations
+      def reputation
         puts @client.get_subuser_reputation(
           usernames: options[:usernames]
         )

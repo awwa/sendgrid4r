@@ -6,7 +6,7 @@ module SendGrid4r::CLI
       option :username, :require => true
       def list
         puts @client.get_subuser_monitor(
-          username: options[:username], email: nil, frequency: nil
+          username: options[:username]
         )
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
@@ -17,7 +17,7 @@ module SendGrid4r::CLI
       option :email, :require => true
       option :frequency, :type => :numeric, :require => true
       def create
-        puts @client.post_subuser(
+        puts @client.post_subuser_monitor(
           username: options[:username], email: options[:email],
           frequency: options[:frequency]
         )
@@ -40,7 +40,7 @@ module SendGrid4r::CLI
 
       desc 'delete', 'Delete monitor settings'
       option :username, :require => true
-      def reputations
+      def delete
         puts @client.delete_subuser_monitor(
           username: options[:username]
         )

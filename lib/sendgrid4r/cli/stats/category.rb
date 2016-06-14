@@ -1,5 +1,5 @@
 module SendGrid4r::CLI
-  module Statistics
+  module Stats
     class Category < SgThor
 
       desc 'get', 'Gets email statistics for the given categories.'
@@ -25,7 +25,7 @@ module SendGrid4r::CLI
       option :limit
       option :offset
       def sums
-        @client.get_categories_stats_sums(
+        puts @client.get_categories_stats_sums(
           start_date: options[:start_date], end_date: options[:end_date],
           sort_by_metric: options[:sort_by_metric],
           sort_by_direction: options[:sort_by_direction],

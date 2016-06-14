@@ -7,6 +7,8 @@ module SendGrid4r
   class Client
     include SendGrid4r::REST::API
 
+    attr_accessor :raw_resp
+
     def initialize(
       username: nil, password: nil, api_key: nil, raw_response: false
     )

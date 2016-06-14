@@ -39,12 +39,17 @@ module SendGrid4r::CLI
 
       desc 'update', 'Update an API key'
       option :api_key_id, :require => true
-      option :name
-      option :scopes
+      option :name, :require => true
+      option :scopes, :type => :array
+      option :all, :type => :boolean, :default => false
       def update
+        scopes = options[:scopes]
+        @client.raw_resp = false
+        scopes = @client.get_permissions.scopes if options[:all]
+        @client.raw_resp = true
         puts @client.put_api_key(
           api_key_id: options[:api_key_id], name: options[:name],
-          scopes: options[:scopes]
+          scopes: scopes
         )
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect

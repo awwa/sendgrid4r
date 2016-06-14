@@ -77,11 +77,9 @@ module SendGrid4r::REST
       delete(@auth, Subusers.url(username), &block)
     end
 
-    # TODO remove email and frequency
-    def get_subuser_monitor(username:, email:, frequency:, &block)
+    def get_subuser_monitor(username:, &block)
       endpoint = Subusers.url_monitor(username)
-      payload = { email: email, frequency: frequency }
-      resp = post(@auth, endpoint, payload, &block)
+      resp = get(@auth, endpoint, nil, &block)
       finish(resp, @raw_resp) { |r| Subusers.create_monitor(r) }
     end
 
