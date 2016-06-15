@@ -14,26 +14,26 @@ module SendGrid4r::CLI
         puts e.inspect
       end
 
-      desc 'get_new_relic', 'Get new relic settings'
-      def get_new_relic
-        puts @client.get_new_relic
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-      end
-
-      desc 'enable_new_relic', 'Enable new relic settings'
+      desc 'new_relic', 'Get, Enable and Disable new relic settings'
       option :license_key
-      def enable_new_relic
-        options[:enabled] = true
-        puts @client.patch_settings_new_relic(params: options)
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-      end
-
-      desc 'disable_new_relic', 'Disable new relic settings'
-      def disable_new_relic
-        options = { enabled: false }
-        puts @client.patch_settings_new_relic(params: options)
+      def new_relic(action)
+        case action
+        when 'get'
+          puts @client.get_settings_new_relic
+        when 'enable'
+          params = {
+            enabled: true,
+            license_key: options[:license_key]
+          }
+          puts @client.patch_settings_new_relic(params: params)
+        when 'disable'
+          params = {
+            enabled: false
+          }
+          puts @client.patch_settings_new_relic(params: params)
+        else
+          puts "error: #{action} is not supported in action parameter"
+        end
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
