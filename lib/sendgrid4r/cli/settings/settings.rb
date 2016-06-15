@@ -5,13 +5,13 @@ module SendGrid4r::CLI
       subcommand('enforced_tls', EnforcedTls)
 
       desc('mail SUBCOMMAND ...ARGS', 'Manage mail settings')
-      subcommand('mail_settings', Mail)
+      subcommand('mail', Mail)
 
       desc('partner SUBCOMMAND ...ARGS', 'Manage partner settings')
-      subcommand('partner_settings', Partner)
+      subcommand('partner', Partner)
 
       desc('tracking SUBCOMMAND ...ARGS', 'Manage tracking settings')
-      subcommand('tracking_settings', Tracking)
+      subcommand('tracking', Tracking)
     end
   end
 end

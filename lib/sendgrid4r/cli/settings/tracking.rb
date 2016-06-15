@@ -14,104 +14,91 @@ module SendGrid4r::CLI
         puts e.inspect
       end
 
-      desc 'get_click', 'Get click tracking settings'
-      def get_click
-        puts @client.get_settings_click
+      desc 'click', 'Get, Enable and Disable click tracking settings'
+      def click(action)
+        case action
+        when 'get'
+          puts @client.get_settings_click
+        when 'enable'
+          params = { enabled: true }
+          puts @client.patch_settings_click(params: params)
+        when 'disable'
+          params = { enabled: false }
+          puts @client.patch_settings_click(params: params)
+        else
+          puts "error: #{action} is not supported in action parameter"
+        end
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
 
-      desc 'enable_click', 'Enable click tracking settings'
-      def enable_click
-        options[:enabled] = true
-        puts @client.patch_settings_click(params: options)
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-      end
-
-      desc 'disable_click', 'Disable click tracking settings'
-      def disable_click
-        options = { enabled: false }
-        puts @client.patch_settings_click(params: options)
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-      end
-
-      desc 'get_ganalytics', 'Get google analytics settings'
-      def get_ganalytics
-        puts @client.get_settings_google_analytics
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-      end
-
-      desc 'enable_ganalytics', 'Enable google analytics settings'
+      desc 'ganalytics', 'Get, Enable and Disable google analytics settings'
       option :utm_source
       option :utm_medium
       option :utm_term
       option :utm_content
       option :utm_campaign
-      def enable_ganalytics
-        options[:enabled] = true
-        puts @client.patch_settings_google_analytics(params: options)
+      def ganalytics(action)
+        case action
+        when 'get'
+          puts @client.get_settings_google_analytics
+        when 'enable'
+          params = {
+            enabled: true,
+            utm_source: options[:utm_source],
+            utm_medium: options[:utm_medium],
+            utm_term: options[:utm_term],
+            utm_content: options[:utm_content],
+            utm_campaign: options[:utm_campaign]
+          }
+          puts @client.patch_settings_google_analytics(params: params)
+        when 'disable'
+          params = { enabled: false }
+          puts @client.patch_settings_google_analytics(params: params)
+        else
+          puts "error: #{action} is not supported in action parameter"
+        end
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
 
-      desc 'disable_ganalytics', 'Disable google analytics settings'
-      def disable_ganalytics
-        options = { enabled: false }
-        puts @client.patch_settings_google_analytics(params: options)
+      desc 'open', 'Get, Enable and Disable open tracking settings'
+      def open(action)
+        case action
+        when 'get'
+          puts @client.get_settings_open
+        when 'enable'
+          params = { enabled: true }
+          puts @client.patch_settings_open(params: params)
+        when 'disable'
+          params = { enabled: false }
+          puts @client.patch_settings_open(params: params)
+        else
+          puts "error: #{action} is not supported in action parameter"
+        end
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
 
-      desc 'get_open', 'Get open tracking settings'
-      def get_open
-        puts @client.get_settings_open
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-      end
-
-      desc 'enable_open', 'Enable open tracking settings'
-      def enable_open
-        options[:enabled] = true
-        puts @client.patch_settings_open(params: options)
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-      end
-
-      desc 'disable_open', 'Disable open tracking settings'
-      def disable_open
-        options = { enabled: false }
-        puts @client.patch_settings_open(params: options)
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-      end
-
-      desc 'get_subscription', 'Get subscription tracking settings'
-      def get_subscription
-        puts @client.get_settings_subscription
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-      end
-
-      desc 'enable_subscription', 'Enable subscription tracking settings'
+      desc 'subscription', 'Get, Enable and Disable subscription tracking settings'
       option :landing
       option :url
       option :replace
       option :html_content
       option :plain_content
-      def enable_subscription
-        options[:enabled] = true
-        puts @client.patch_settings_subscription(params: options)
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-      end
-
-      desc 'disable_subscription', 'Disable subscription tracking settings'
-      def disable_subscription
-        options = { enabled: false }
-        puts @client.patch_settings_subscription(params: options)
+      def subscription(action)
+        case action
+        when 'get'
+          puts @client.get_settings_subscription
+        when 'enable'
+          params = { enabled: true }
+          puts @client.patch_settings_subscription(params: params)
+        when 'disable'
+          params = { enabled: false }
+          puts @client.patch_settings_subscription(params: params)
+        else
+          puts "error: #{action} is not supported in action parameter"
+        end
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
