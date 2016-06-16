@@ -54,6 +54,13 @@ module SendGrid4r::REST
         ForwardSpam.new(resp['enabled'], resp['email'])
       end
 
+      SpamCheck = Struct.new(:enabled, :url, :max_score)
+
+      def self.create_spam_check(resp)
+        return resp if resp.nil?
+        SpamCheck.new(resp['enabled'], resp['url'], resp['max_score'])
+      end
+
       Template = Struct.new(:enabled, :html_content)
 
       def self.create_template(resp)
@@ -168,6 +175,21 @@ module SendGrid4r::REST
         resp = patch(@auth, endpoint, params.to_h, &block)
         finish(resp, @raw_resp) do |r|
           Settings::Mail.create_forward_spam(r)
+        end
+      end
+
+      def get_settings_spam_check(&block)
+        resp = get(@auth, Settings::Mail.url(:spam_check), &block)
+        finish(resp, @raw_resp) do |r|
+          Settings::Mail.create_spam_check(r)
+        end
+      end
+
+      def patch_settings_spam_check(params:, &block)
+        endpoint = Settings::Mail.url(:spam_check)
+        resp = patch(@auth, endpoint, params.to_h, &block)
+        finish(resp, @raw_resp) do |r|
+          Settings::Mail.create_spam_check(r)
         end
       end
 

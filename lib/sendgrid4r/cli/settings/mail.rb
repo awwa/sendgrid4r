@@ -14,196 +14,175 @@ module SendGrid4r::CLI
         puts e.inspect
       end
 
-      desc 'get_whitelist', 'Get address whitelist settings'
-      def get_whitelist
-        puts @client.get_settings_address_whitelist
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-      end
-
-      desc 'enable_whitelist', 'Enable address whitelist settings'
+      desc 'whitelist', 'Get, Enable and Disable address whitelist settings'
       option :list, :type => :array
-      def enable_whitelist
-        options[:enabled] = true
-        puts @client.patch_settings_address_whitelist(params: options)
+      def whitelist(action)
+        case action
+        when 'get'
+          puts @client.get_settings_address_whitelist
+        when 'enable', 'disable'
+          params = {
+            enabled: action == 'enable',
+            list: options[:list]
+          }
+          puts @client.patch_settings_address_whitelist(params: params)
+        else
+          puts "error: #{action} is not supported in action parameter"
+        end
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
 
-      desc 'disable_whitelist', 'Disable address whitelist settings'
-      def disable_whitelist
-        options = { enabled: false }
-        puts @client.patch_settings_address_whitelist(params: options)
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-      end
-
-      desc 'get_bcc', 'Get bcc settings'
-      def get_bcc
-        puts @client.get_settings_bcc
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-      end
-
-      desc 'enable_bcc', 'Enable bcc settings'
+      desc 'bcc', 'Get, Enable and Disable bcc settings'
       option :email
-      def enable_bcc
-        optios[:enabled] = true
-        puts @client.patch_settings_bcc(params: options)
+      def bcc(action)
+        case action
+        when 'get'
+          puts @client.get_settings_bcc
+        when 'enable', 'disable'
+          params = {
+            enabled: action == 'enable',
+            email: options[:email]
+          }
+          puts @client.patch_settings_bcc(params: params)
+        else
+          puts "error: #{action} is not supported in action parameter"
+        end
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
 
-      desc 'disable_bcc', 'Disable bcc settings'
-      def disable_bcc
-        options = { enabled: false }
-        puts @client.patch_settings_bcc(params: options)
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-      end
-
-      desc 'get_bounce_purge', 'Get bounce purge settings'
-      def get_bounce_purge
-        puts @client.get_settings_bounce_purge
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-      end
-
-      desc 'enable_bounce_purge', 'Enable bounce purge settings'
+      desc 'bounce_purge', 'Get, Enable and Disable bounce purge settings'
       option :hard_bounces, :type => :numeric
       option :soft_bounces, :type => :numeric
-      def enable_bounce_purge
-        options[:enabled] = true
-        puts @client.patch_settings_bounce_purge(params: options)
+      def bounce_purge(action)
+        case action
+        when 'get'
+          puts @client.get_settings_bounce_purge
+        when 'enable', 'disable'
+          params = {
+            enabled: action == 'enable',
+            hard_bounces: options[:hard_bounces],
+            soft_bounces: options[:soft_bounces],
+          }
+          puts @client.patch_settings_bounce_purge(params: params)
+        else
+          puts "error: #{action} is not supported in action parameter"
+        end
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
 
-      desc 'disable_bounce_purge', 'Disable bounce purge settings'
-      def disable_bounce_purge
-        options = { enabled: false }
-        puts @client.patch_settings_bounce_purge(params: options)
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-      end
-
-      desc 'get_footer', 'Get footer settings'
-      def get_footer
-        puts @client.get_settings_footer
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-      end
-
-      desc 'enable_footer', 'Enable footer settings'
+      desc 'footer', 'Get, Enable and Disable footer settings'
       option :html_content
       option :plain_content
-      def enable_footer
-        options[:enabled] = true
-        puts @client.patch_settings_footer(params: options)
+      def footer(action)
+        case action
+        when 'get'
+          puts @client.get_settings_footer
+        when 'enable', 'disable'
+          params = {
+            enabled: action == 'enable',
+            html_content: options[:html_content],
+            plain_content: options[:plain_content]
+          }
+          puts @client.patch_settings_footer(params: params)
+        else
+          puts "error: #{action} is not supported in action parameter"
+        end
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
 
-      desc 'disable_footer', 'Disable footer settings'
-      def disable_footer
-        options = { enabled: false }
-        puts @client.patch_settings_footer(params: options)
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-      end
-
-      desc 'get_forward_bounce', 'Get forward bounce settings'
-      def get_forward_bounce
-        puts @client.get_settings_forward_bounce
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-      end
-
-      desc 'enable_forward_bounce', 'Enable forward bounce settings'
+      desc 'forward_bounce', 'Get, Enable and Disable forward bounce settings'
       option :email
-      def enable_forward_bounce
-        options[:enabled] = true
-        puts @client.patch_settings_forward_bounce(params: options)
+      def forward_bounce(action)
+        case action
+        when 'get'
+          puts @client.get_settings_forward_bounce
+        when 'enable', 'disable'
+          params = {
+            enabled: action == 'enable',
+            email: options[:email]
+          }
+          puts @client.patch_settings_forward_bounce(params: params)
+        else
+          puts "error: #{action} is not supported in action parameter"
+        end
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
 
-      desc 'disable_forward_bounce', 'Disable forward bounce settings'
-      def disable_forward_bounce
-        options = { enabled: false }
-        puts @client.patch_settings_forward_bounce(params: options)
+      desc 'forward_spam', 'Get, Enable and Disable forward spam settings'
+      option :email
+      def forward_spam(action)
+        case action
+        when 'get'
+          puts @client.get_settings_forward_spam
+        when 'enable', 'disable'
+          params = {
+            enabled: action == 'enable',
+            email: options[:email]
+          }
+          puts @client.patch_settings_forward_spam(params: params)
+        else
+          puts "error: #{action} is not supported in action parameter"
+        end
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
 
-      desc 'get_forward_spam', 'Get forward spam settings'
-      def get_forward_spam
-        puts @client.get_settings_forward_spam
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-      end
-
-      desc 'enable_forward_spam', 'Enable forward spam settings'
+      desc 'spam_check', 'Get, Enable and Disable spam check settings'
       option :url
       option :max_score
-      def enable_forward_spam
-        options[:enabled] = true
-        puts @client.patch_settings_forward_spam(params: options)
+      def spam_check(action)
+        case action
+        when 'get'
+          puts @client.get_settings_spam_check
+        when 'enable', 'disable'
+          params = {
+            enabled: action == 'enable',
+            url: options[:url],
+            max_score: options[:max_score]
+          }
+          puts @client.patch_settings_spam_check(params: params)
+        else
+          puts "error: #{action} is not supported in action parameter"
+        end
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
 
-      desc 'disable_forward_spam', 'Disable forward spam settings'
-      def disable_forward_spam
-        options = { enabled: false }
-        puts @client.patch_settings_forward_spam(params: options)
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-      end
-
-      desc 'get_template', 'Get template settings'
-      def get_template
-        puts @client.get_settings_template
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-      end
-
-      desc 'enable_template', 'Enable template settings'
+      desc 'template', 'Get, Enable and Disable template settings'
       option :html_content
-      def enable_template
-        options[:enabled] = true
-        puts @client.patch_settings_template(params: options)
+      def template(action)
+        case action
+        when 'get'
+          puts @client.get_settings_template
+        when 'enable', 'disable'
+          params = {
+            enabled: action == 'enable',
+            html_content: options[:html_content]
+          }
+          puts @client.patch_settings_template(params: params)
+        else
+          puts "error: #{action} is not supported in action parameter"
+        end
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
 
-      desc 'disable_template', 'Disable template settings'
-      def disable_template
-        options = { enabled: false }
-        puts @client.patch_settings_template(params: options)
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-      end
-
-      desc 'get_plain_content', 'Get plain content settings'
-      def get_plain_content
-        puts @client.get_settings_plain_content
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-      end
-
-      desc 'enable_plain_content', 'Enable plain content settings'
-      def enable_plain_content
-        options[:enabled] = true
-        puts @client.patch_settings_plain_content(params: options)
-      rescue RestClient::ExceptionWithResponse => e
-        puts e.inspect
-      end
-
-      desc 'disable_plain_content', 'Disable plain content settings'
-      def disable_plain_content
-        options = { enabled: false }
-        puts @client.patch_settings_plain_content(params: options)
+      desc 'plain_content', 'Get, Enable and Disable plain content settings'
+      def plain_content(action)
+        case action
+        when 'get'
+          puts @client.get_settings_plain_content
+        when 'enable', 'disable'
+          params = { enabled: action == 'enable' }
+          puts @client.patch_settings_plain_content(params: params)
+        else
+          puts "error: #{action} is not supported in action parameter"
+        end
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end

@@ -20,15 +20,10 @@ module SendGrid4r::CLI
         case action
         when 'get'
           puts @client.get_settings_new_relic
-        when 'enable'
+        when 'enable', 'disabple'
           params = {
-            enabled: true,
+            enabled: action == 'enable',
             license_key: options[:license_key]
-          }
-          puts @client.patch_settings_new_relic(params: params)
-        when 'disable'
-          params = {
-            enabled: false
           }
           puts @client.patch_settings_new_relic(params: params)
         else

@@ -116,6 +116,24 @@ module SendGrid4r::REST::Settings
           expect(edit.email).to eq(ENV['MAIL'])
         end
 
+        it '#get_settings_spam_check' do
+          actual = @client.get_settings_spam_check
+          expect(actual).to be_a(Mail::SpamCheck)
+        end
+
+        it '#patch_settings_spam_check' do
+          # get original settings
+          actual = @client.get_settings_spam_check
+          # patch the value
+          actual.enabled = false
+          actual.url = 'http://test.test.test'
+          actual.max_score = 4
+          edit = @client.patch_settings_spam_check(params: actual)
+          expect(edit.enabled).to eq(false)
+          expect(edit.url).to eq('http://test.test.test')
+          expect(edit.max_score).to eq(4)
+        end
+
         it '#get_settings_template' do
           actual = @client.get_settings_template
           expect(actual).to be_a(Mail::Template)
@@ -309,6 +327,33 @@ module SendGrid4r::REST::Settings
         actual = Mail.create_forward_spam(JSON.parse(forward_spam))
         expect(actual.enabled).to eq(true)
         expect(actual.email).to eq('email address')
+      end
+
+      let(:spam_check) do
+        '{'\
+          '"enabled": true,'\
+          '"url": "url",'\
+          '"max_score": 5'\
+        '}'
+      end
+
+      it '#get_settings_spam_check' do
+        allow(client).to receive(:execute).and_return(spam_check)
+        actual = client.get_settings_spam_check
+        expect(actual).to be_a(Mail::SpamCheck)
+      end
+
+      it '#patch_settings_spam_check' do
+        allow(client).to receive(:execute).and_return(spam_check)
+        actual = client.patch_settings_spam_check(params: nil)
+        expect(actual).to be_a(Mail::SpamCheck)
+      end
+
+      it 'creates spam_check instance' do
+        actual = Mail.create_spam_check(JSON.parse(spam_check))
+        expect(actual.enabled).to eq(true)
+        expect(actual.url).to eq('url')
+        expect(actual.max_score).to eq(5)
       end
 
       let(:template) do

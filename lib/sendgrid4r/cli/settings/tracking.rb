@@ -19,11 +19,8 @@ module SendGrid4r::CLI
         case action
         when 'get'
           puts @client.get_settings_click
-        when 'enable'
-          params = { enabled: true }
-          puts @client.patch_settings_click(params: params)
-        when 'disable'
-          params = { enabled: false }
+        when 'enable', 'disable'
+          params = { enabled: action == 'enable' }
           puts @client.patch_settings_click(params: params)
         else
           puts "error: #{action} is not supported in action parameter"
@@ -42,18 +39,15 @@ module SendGrid4r::CLI
         case action
         when 'get'
           puts @client.get_settings_google_analytics
-        when 'enable'
+        when 'enable', 'disable'
           params = {
-            enabled: true,
+            enabled: action == 'enable',
             utm_source: options[:utm_source],
             utm_medium: options[:utm_medium],
             utm_term: options[:utm_term],
             utm_content: options[:utm_content],
             utm_campaign: options[:utm_campaign]
           }
-          puts @client.patch_settings_google_analytics(params: params)
-        when 'disable'
-          params = { enabled: false }
           puts @client.patch_settings_google_analytics(params: params)
         else
           puts "error: #{action} is not supported in action parameter"
@@ -67,11 +61,8 @@ module SendGrid4r::CLI
         case action
         when 'get'
           puts @client.get_settings_open
-        when 'enable'
-          params = { enabled: true }
-          puts @client.patch_settings_open(params: params)
-        when 'disable'
-          params = { enabled: false }
+        when 'enable', 'disable'
+          params = { enabled: action == 'enable' }
           puts @client.patch_settings_open(params: params)
         else
           puts "error: #{action} is not supported in action parameter"
@@ -90,11 +81,15 @@ module SendGrid4r::CLI
         case action
         when 'get'
           puts @client.get_settings_subscription
-        when 'enable'
-          params = { enabled: true }
-          puts @client.patch_settings_subscription(params: params)
-        when 'disable'
-          params = { enabled: false }
+        when 'enable', 'disable'
+          params = {
+            enabled: action == 'enable',
+            landing: options[:landing],
+            url: options[:url],
+            replace: options[:replace],
+            html_content: options[:html_content],
+            plain_content: options[:plain_content]
+          }
           puts @client.patch_settings_subscription(params: params)
         else
           puts "error: #{action} is not supported in action parameter"
