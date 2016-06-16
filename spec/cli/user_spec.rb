@@ -11,7 +11,7 @@ module SendGrid4r::CLI
       it '#profile get with full params' do
         args = [
           'profile', 'get',
-          '--api_key', ENV['SILVER_API_KEY']
+          '--api-key', ENV['SILVER_API_KEY']
         ]
         User.start(args)
       end
@@ -19,7 +19,7 @@ module SendGrid4r::CLI
       it '#profile update' do
         args = [
           'profile', 'update',
-          '--api_key', ENV['SILVER_API_KEY'],
+          '--api-key', ENV['SILVER_API_KEY'],
           '--city', 'Nakano2'
         ]
         User.start(args)
@@ -28,7 +28,7 @@ module SendGrid4r::CLI
       it '#account get' do
         args = [
           'account', 'get',
-          '--api_key', ENV['SILVER_API_KEY']
+          '--api-key', ENV['SILVER_API_KEY']
         ]
         User.start(args)
       end
@@ -36,7 +36,7 @@ module SendGrid4r::CLI
       it '#email get' do
         args = [
           'email', 'get',
-          '--api_key', ENV['SILVER_API_KEY']
+          '--api-key', ENV['SILVER_API_KEY']
         ]
         User.start(args)
       end
@@ -44,7 +44,7 @@ module SendGrid4r::CLI
       it '#email update' do
         args = [
           'email', 'update',
-          '--api_key', ENV['SILVER_API_KEY'],
+          '--api-key', ENV['SILVER_API_KEY'],
           '--email', ENV['MAIL2']
         ]
         User.start(args)
@@ -53,7 +53,7 @@ module SendGrid4r::CLI
       it '#username get' do
         args = [
           'username', 'get',
-          '--api_key', ENV['SILVER_API_KEY']
+          '--api-key', ENV['SILVER_API_KEY']
         ]
         User.start(args)
       end
@@ -61,7 +61,7 @@ module SendGrid4r::CLI
       it '#username update' do
         args = [
           'username', 'update',
-          '--api_key', ENV['SILVER_API_KEY'],
+          '--api-key', ENV['SILVER_API_KEY'],
           '--username', ENV['USERNAME']
         ]
         User.start(args)
@@ -70,9 +70,9 @@ module SendGrid4r::CLI
       it '#password' do
         args = [
           'password', 'update',
-          '--api_key', ENV['SILVER_API_KEY'],
-          '--new_password', ENV['PASS'],
-          '--old_password', ENV['PASS']
+          '--api-key', ENV['SILVER_API_KEY'],
+          '--new-password', ENV['PASS'],
+          '--old-password', ENV['PASS']
         ]
         User.start(args)
       end

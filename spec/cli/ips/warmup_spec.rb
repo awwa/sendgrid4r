@@ -11,7 +11,7 @@ module SendGrid4r::CLI::Ips
       it '#list' do
         args = [
           'list',
-          '--api_key', ENV['SILVER_API_KEY'],
+          '--api-key', ENV['SILVER_API_KEY'],
         ]
         Warmup.start(args)
       end
@@ -19,7 +19,7 @@ module SendGrid4r::CLI::Ips
       it '#get' do
         args = [
           'get',
-          '--api_key', ENV['SILVER_API_KEY'],
+          '--api-key', ENV['SILVER_API_KEY'],
           '--ip', ENV['IP']
         ]
         Warmup.start(args)
@@ -28,7 +28,7 @@ module SendGrid4r::CLI::Ips
       it '#start' do
         args = [
           'start',
-          '--api_key', ENV['SILVER_API_KEY'],
+          '--api-key', ENV['SILVER_API_KEY'],
           '--ip', ENV['IP']
         ]
         Warmup.start(args)
@@ -37,7 +37,7 @@ module SendGrid4r::CLI::Ips
       it '#stop' do
         args = [
           'stop',
-          '--api_key', ENV['SILVER_API_KEY'],
+          '--api-key', ENV['SILVER_API_KEY'],
           '--ip', ENV['IP']
         ]
         Warmup.start(args)

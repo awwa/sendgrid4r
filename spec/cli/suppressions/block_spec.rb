@@ -11,9 +11,9 @@ module SendGrid4r::CLI::Suppressions
       it '#list' do
         args = [
           'list',
-          '--api_key', ENV['SILVER_API_KEY'],
-          '--start_time', Time.local(2016, 1, 1).to_i,
-          '--end_time', Time.local(2016, 1, 31).to_i,
+          '--api-key', ENV['SILVER_API_KEY'],
+          '--start-time', Time.local(2016, 1, 1).to_i,
+          '--end-time', Time.local(2016, 1, 31).to_i,
           '--limit', 10,
           '--offset', 0
         ]
@@ -23,8 +23,8 @@ module SendGrid4r::CLI::Suppressions
       it '#delete with delete_all' do
         args = [
           'delete',
-          '--api_key', ENV['SILVER_API_KEY'],
-          '--delete_all', true
+          '--api-key', ENV['SILVER_API_KEY'],
+          '--delete-all', true
         ]
         Block.start(args)
       end
@@ -32,7 +32,7 @@ module SendGrid4r::CLI::Suppressions
       it '#delete with email' do
         args = [
           'delete',
-          '--api_key', ENV['SILVER_API_KEY'],
+          '--api-key', ENV['SILVER_API_KEY'],
           '--email', ''
         ]
         Block.start(args)
@@ -41,7 +41,7 @@ module SendGrid4r::CLI::Suppressions
       it '#delete with emails' do
         args = [
           'delete',
-          '--api_key', ENV['SILVER_API_KEY'],
+          '--api-key', ENV['SILVER_API_KEY'],
           '--emails', 'abc@abc.com', 'cde@cde.com'
         ]
         Block.start(args)
@@ -50,7 +50,7 @@ module SendGrid4r::CLI::Suppressions
       it '#get' do
         args = [
           'get',
-          '--api_key', ENV['SILVER_API_KEY'],
+          '--api-key', ENV['SILVER_API_KEY'],
           '--email', ''
         ]
         Block.start(args)

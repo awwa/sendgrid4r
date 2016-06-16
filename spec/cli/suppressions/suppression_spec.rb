@@ -11,7 +11,7 @@ module SendGrid4r::CLI::Suppressions
       it '#block subcommand' do
         args = [
           'block',
-          '--api_key', ENV['SILVER_API_KEY']
+          '--api-key', ENV['SILVER_API_KEY']
         ]
         Suppression.start(args)
       end
@@ -19,7 +19,7 @@ module SendGrid4r::CLI::Suppressions
       it '#bounce subcommand' do
         args = [
           'bounce',
-          '--api_key', ENV['SILVER_API_KEY']
+          '--api-key', ENV['SILVER_API_KEY']
         ]
         Suppression.start(args)
       end
@@ -27,7 +27,7 @@ module SendGrid4r::CLI::Suppressions
       it '#invalid_email subcommand' do
         args = [
           'invalid_email',
-          '--api_key', ENV['SILVER_API_KEY']
+          '--api-key', ENV['SILVER_API_KEY']
         ]
         Suppression.start(args)
       end
@@ -35,7 +35,7 @@ module SendGrid4r::CLI::Suppressions
       it '#spam_report subcommand' do
         args = [
           'spam_report',
-          '--api_key', ENV['SILVER_API_KEY']
+          '--api-key', ENV['SILVER_API_KEY']
         ]
         Suppression.start(args)
       end
@@ -43,7 +43,7 @@ module SendGrid4r::CLI::Suppressions
       it '#global_unsubscribe subcommand' do
         args = [
           'global_unsubscribe',
-          '--api_key', ENV['SILVER_API_KEY']
+          '--api-key', ENV['SILVER_API_KEY']
         ]
         Suppression.start(args)
       end
@@ -51,7 +51,7 @@ module SendGrid4r::CLI::Suppressions
       it '#group subcommand' do
         args = [
           'group',
-          '--api_key', ENV['SILVER_API_KEY']
+          '--api-key', ENV['SILVER_API_KEY']
         ]
         Suppression.start(args)
       end
@@ -59,7 +59,7 @@ module SendGrid4r::CLI::Suppressions
       it '#group_unsubscribe subcommand' do
         args = [
           'group_unsubscribe',
-          '--api_key', ENV['SILVER_API_KEY']
+          '--api-key', ENV['SILVER_API_KEY']
         ]
         Suppression.start(args)
       end

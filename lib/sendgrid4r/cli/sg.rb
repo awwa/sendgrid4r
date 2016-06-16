@@ -24,7 +24,7 @@ module SendGrid4r::CLI
     desc('suppression SUBCOMMAND ...ARGS', 'Manage suppressions')
     subcommand('suppressions', Suppressions::Suppression)
 
-    desc('templates SUBCOMMAND ...ARGS', 'Manage templates')
+    desc('template SUBCOMMAND ...ARGS', 'Manage templates')
     subcommand('template', Templates::Template)
 
     desc('webhook SUBCOMMAND ...ARGS', 'Manage webhook settings')

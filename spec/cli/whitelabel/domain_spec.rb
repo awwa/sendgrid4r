@@ -11,10 +11,10 @@ module SendGrid4r::CLI::Whitelabel
       it '#list with full params' do
         args = [
           'list',
-          '--api_key', ENV['SILVER_API_KEY'],
+          '--api-key', ENV['SILVER_API_KEY'],
           '--limit', 10,
           '--offset', 0,
-          '--exclude_subusers', '',
+          '--exclude-subusers', '',
           '--username', '',
           '--domain', ''
         ]
@@ -24,11 +24,11 @@ module SendGrid4r::CLI::Whitelabel
       it '#create with full params' do
         args = [
           'create',
-          '--api_key', ENV['SILVER_API_KEY'],
+          '--api-key', ENV['SILVER_API_KEY'],
           '--domain', 'abc.ab',
           '--subdomain', 'em',
-          '--automatic_security', true,
-          '--custom_spf', false,
+          '--automatic-security', true,
+          '--custom-spf', false,
           '--default', false
         ]
         Domain.start(args)
@@ -37,7 +37,7 @@ module SendGrid4r::CLI::Whitelabel
       it '#get with full params' do
         args = [
           'get',
-          '--api_key', ENV['SILVER_API_KEY'],
+          '--api-key', ENV['SILVER_API_KEY'],
           '--id', 524753
         ]
         Domain.start(args)
@@ -46,7 +46,7 @@ module SendGrid4r::CLI::Whitelabel
       it '#update with full params' do
         args = [
           'update',
-          '--api_key', ENV['SILVER_API_KEY'],
+          '--api-key', ENV['SILVER_API_KEY'],
           '--id', 524753,
           '--default', true
         ]
@@ -56,7 +56,7 @@ module SendGrid4r::CLI::Whitelabel
       it '#delete with full params' do
         args = [
           'delete',
-          '--api_key', ENV['SILVER_API_KEY'],
+          '--api-key', ENV['SILVER_API_KEY'],
           '--id', 524753
         ]
         Domain.start(args)
@@ -65,7 +65,7 @@ module SendGrid4r::CLI::Whitelabel
       it '#default with full params' do
         args = [
           'default',
-          '--api_key', ENV['SILVER_API_KEY'],
+          '--api-key', ENV['SILVER_API_KEY'],
           '--domain', 'abc.ab'
         ]
         Domain.start(args)
@@ -74,7 +74,7 @@ module SendGrid4r::CLI::Whitelabel
       it '#validate with full params' do
         args = [
           'validate',
-          '--api_key', ENV['SILVER_API_KEY'],
+          '--api-key', ENV['SILVER_API_KEY'],
           '--id', 524753
         ]
         Domain.start(args)
@@ -83,7 +83,7 @@ module SendGrid4r::CLI::Whitelabel
       it '#list_associated with full params' do
         args = [
           'list_associate',
-          '--api_key', ENV['SILVER_API_KEY'],
+          '--api-key', ENV['SILVER_API_KEY'],
           '--username', ENV['SUBUSER2']
         ]
         Domain.start(args)
@@ -92,7 +92,7 @@ module SendGrid4r::CLI::Whitelabel
       it '#disassociate with full params' do
         args = [
           'disassociate',
-          '--api_key', ENV['SILVER_API_KEY'],
+          '--api-key', ENV['SILVER_API_KEY'],
           '--username', ENV['SUBUSER2']
         ]
         Domain.start(args)
@@ -101,7 +101,7 @@ module SendGrid4r::CLI::Whitelabel
       it '#associate with full params' do
         args = [
           'associate',
-          '--api_key', ENV['SILVER_API_KEY'],
+          '--api-key', ENV['SILVER_API_KEY'],
           '--id', 524753,
           '--username', ENV['SUBUSER2']
         ]

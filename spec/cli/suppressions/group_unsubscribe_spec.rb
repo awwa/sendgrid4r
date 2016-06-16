@@ -11,8 +11,8 @@ module SendGrid4r::CLI::Suppressions
       it '#add' do
         args = [
           'add',
-          '--api_key', ENV['SILVER_API_KEY'],
-          '--group_id', 889,
+          '--api-key', ENV['SILVER_API_KEY'],
+          '--group-id', 889,
           '--emails', 'abc@abc.com', 'cde@cde.com'
         ]
         GroupUnsubscribe.start(args)
@@ -21,8 +21,8 @@ module SendGrid4r::CLI::Suppressions
       it '#list with no params' do
         args = [
           'list',
-          '--api_key', ENV['SILVER_API_KEY'],
-          '--group_id', 889
+          '--api-key', ENV['SILVER_API_KEY'],
+          '--group-id', 889
         ]
         GroupUnsubscribe.start(args)
       end
@@ -30,8 +30,8 @@ module SendGrid4r::CLI::Suppressions
       it '#remove' do
         args = [
           'remove',
-          '--api_key', ENV['SILVER_API_KEY'],
-          '--group_id', 889,
+          '--api-key', ENV['SILVER_API_KEY'],
+          '--group-id', 889,
           '--email', 'abc@abc.com'
         ]
         GroupUnsubscribe.start(args)

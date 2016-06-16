@@ -11,8 +11,8 @@ module SendGrid4r::CLI::CancelSchedules
       it '#add' do
         args = [
           'add',
-          '--api_key', ENV['SILVER_API_KEY'],
-          '--batch_id', 'NWI4NjAwZWMtMzNjYS0xMWU2LTgxYzktNTI1NDAwYTUxOTdhLTc4ZmZiMGNmMg',
+          '--api-key', ENV['SILVER_API_KEY'],
+          '--batch-id', 'NWI4NjAwZWMtMzNjYS0xMWU2LTgxYzktNTI1NDAwYTUxOTdhLTc4ZmZiMGNmMg',
           '--status', 'cancel'
         ]
         CancelSchedule.start(args)
@@ -21,7 +21,7 @@ module SendGrid4r::CLI::CancelSchedules
       it '#list' do
         args = [
           'list',
-          '--api_key', ENV['SILVER_API_KEY']
+          '--api-key', ENV['SILVER_API_KEY']
         ]
         CancelSchedule.start(args)
       end
@@ -29,8 +29,8 @@ module SendGrid4r::CLI::CancelSchedules
       it '#get' do
         args = [
           'get',
-          '--api_key', ENV['SILVER_API_KEY'],
-          '--batch_id', 'NWI4NjAwZWMtMzNjYS0xMWU2LTgxYzktNTI1NDAwYTUxOTdhLTc4ZmZiMGNmMg'
+          '--api-key', ENV['SILVER_API_KEY'],
+          '--batch-id', 'NWI4NjAwZWMtMzNjYS0xMWU2LTgxYzktNTI1NDAwYTUxOTdhLTc4ZmZiMGNmMg'
         ]
         CancelSchedule.start(args)
       end
@@ -38,8 +38,8 @@ module SendGrid4r::CLI::CancelSchedules
       it '#update' do
         args = [
           'update',
-          '--api_key', ENV['SILVER_API_KEY'],
-          '--batch_id', 'NWI4NjAwZWMtMzNjYS0xMWU2LTgxYzktNTI1NDAwYTUxOTdhLTc4ZmZiMGNmMg',
+          '--api-key', ENV['SILVER_API_KEY'],
+          '--batch-id', 'NWI4NjAwZWMtMzNjYS0xMWU2LTgxYzktNTI1NDAwYTUxOTdhLTc4ZmZiMGNmMg',
           '--status', 'pause'
         ]
         CancelSchedule.start(args)
@@ -48,8 +48,8 @@ module SendGrid4r::CLI::CancelSchedules
       it '#delete' do
         args = [
           'delete',
-          '--api_key', ENV['SILVER_API_KEY'],
-          '--batch_id', 'NWI4NjAwZWMtMzNjYS0xMWU2LTgxYzktNTI1NDAwYTUxOTdhLTc4ZmZiMGNmMg'
+          '--api-key', ENV['SILVER_API_KEY'],
+          '--batch-id', 'NWI4NjAwZWMtMzNjYS0xMWU2LTgxYzktNTI1NDAwYTUxOTdhLTc4ZmZiMGNmMg'
         ]
         CancelSchedule.start(args)
       end

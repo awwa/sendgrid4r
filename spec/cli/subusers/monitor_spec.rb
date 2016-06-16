@@ -11,7 +11,7 @@ module SendGrid4r::CLI::Subusers
       it '#list' do
         args = [
           'list',
-          '--api_key', ENV['SILVER_API_KEY'],
+          '--api-key', ENV['SILVER_API_KEY'],
           '--username', ENV['SUBUSER4'],
         ]
         Monitor.start(args)
@@ -20,7 +20,7 @@ module SendGrid4r::CLI::Subusers
       it '#create' do
         args = [
           'create',
-          '--api_key', ENV['SILVER_API_KEY'],
+          '--api-key', ENV['SILVER_API_KEY'],
           '--username', ENV['SUBUSER4'],
           '--email', ENV['MAIL'],
           '--frequency', 10
@@ -31,7 +31,7 @@ module SendGrid4r::CLI::Subusers
       it '#update' do
         args = [
           'update',
-          '--api_key', ENV['SILVER_API_KEY'],
+          '--api-key', ENV['SILVER_API_KEY'],
           '--username', ENV['SUBUSER4'],
           '--email', ENV['MAIL'],
           '--frequency', 10
@@ -42,7 +42,7 @@ module SendGrid4r::CLI::Subusers
       it '#delete' do
         args = [
           'delete',
-          '--api_key', ENV['SILVER_API_KEY'],
+          '--api-key', ENV['SILVER_API_KEY'],
           '--username', ENV['SUBUSER4']
         ]
         Monitor.start(args)
