@@ -3,6 +3,13 @@ module SendGrid4r::CLI
   # SendGrid Web API v3 ClI
   #
   class SG < Thor
+    map %w[--version -v] => :print_version
+
+    desc "--version, -v", "print the version"
+    def print_version
+      puts SendGrid4r::VERSION
+    end
+
     desc('api_key SUBCOMMAND ...ARGS', 'Manage API keys')
     subcommand('api_key', ApiKeys::ApiKey)
 
