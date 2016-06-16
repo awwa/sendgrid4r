@@ -11,7 +11,7 @@ module SendGrid4r::CLI::Webhooks
       it '#event subcommand' do
         args = [
           'event',
-          '--apikey', ENV['SILVER_API_KEY']
+          '--api_key', ENV['SILVER_API_KEY']
         ]
         Webhook.start(args)
       end
@@ -19,7 +19,7 @@ module SendGrid4r::CLI::Webhooks
       it '#parse subcommand' do
         args = [
           'parse',
-          '--apikey', ENV['SILVER_API_KEY']
+          '--api_key', ENV['SILVER_API_KEY']
         ]
         Webhook.start(args)
       end

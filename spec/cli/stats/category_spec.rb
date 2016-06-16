@@ -11,7 +11,7 @@ module SendGrid4r::CLI::Stats
       it '#get with mandatory params' do
         args = [
           'get',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--start_date', '2016-01-01',
           '--categories', 'cat1'
         ]
@@ -21,7 +21,7 @@ module SendGrid4r::CLI::Stats
       it '#get with full params' do
         args = [
           'get',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--start_date', '2016-01-01',
           '--end_date', '2016-01-02',
           '--aggregated_by', 'day',
@@ -33,7 +33,7 @@ module SendGrid4r::CLI::Stats
       it '#sums with mandatory params' do
         args = [
           'sums',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--start_date', '2016-01-01'
         ]
         Category.start(args)
@@ -42,7 +42,7 @@ module SendGrid4r::CLI::Stats
       it '#sums with full params' do
         args = [
           'sums',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--start_date', '2016-01-01',
           '--end_date', '2016-01-02',
           '--sort_by_metric', 'requests',

@@ -11,7 +11,7 @@ module SendGrid4r::CLI::ApiKeys
       it '#list' do
         args = [
           'list',
-          '--apikey', ENV['SILVER_API_KEY']
+          '--api_key', ENV['SILVER_API_KEY']
         ]
         Permission.start(args)
       end

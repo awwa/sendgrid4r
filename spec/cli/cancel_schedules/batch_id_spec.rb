@@ -11,7 +11,7 @@ module SendGrid4r::CLI::CancelSchedules
       it '#generate' do
         args = [
           'generate',
-          '--apikey', ENV['SILVER_API_KEY']
+          '--api_key', ENV['SILVER_API_KEY']
         ]
         BatchId.start(args)
       end
@@ -19,7 +19,7 @@ module SendGrid4r::CLI::CancelSchedules
       it '#validate' do
         args = [
           'validate',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--batch_id', 'NWI4NjAwZWMtMzNjYS0xMWU2LTgxYzktNTI1NDAwYTUxOTdhLTc4ZmZiMGNmMg'
         ]
         BatchId.start(args)

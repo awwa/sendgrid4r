@@ -11,7 +11,7 @@ module SendGrid4r::CLI::Suppressions
       it '#create' do
         args = [
           'create',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--name', 'thor_test',
           '--description', 'thor test description',
           '--is_default', false
@@ -22,7 +22,7 @@ module SendGrid4r::CLI::Suppressions
       it '#list' do
         args = [
           'list',
-          '--apikey', ENV['SILVER_API_KEY']
+          '--api_key', ENV['SILVER_API_KEY']
         ]
         Group.start(args)
       end
@@ -30,7 +30,7 @@ module SendGrid4r::CLI::Suppressions
       it '#get' do
         args = [
           'get',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--group_id', 967
         ]
         Group.start(args)
@@ -39,7 +39,7 @@ module SendGrid4r::CLI::Suppressions
       it '#update with mandatory params' do
         args = [
           'update',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--group_id', 967
         ]
         Group.start(args)
@@ -48,7 +48,7 @@ module SendGrid4r::CLI::Suppressions
       it '#update with full params' do
         args = [
           'update',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--group_id', 967,
           '--name', 'thor test 2',
           '--description', 'thor test description 2'
@@ -59,7 +59,7 @@ module SendGrid4r::CLI::Suppressions
       it '#delete' do
         args = [
           'delete',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--group_id', 967
         ]
         Group.start(args)

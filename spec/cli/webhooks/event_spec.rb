@@ -11,7 +11,7 @@ module SendGrid4r::CLI::Webhooks
       it '#get' do
         args = [
           'get',
-          '--apikey', ENV['SILVER_API_KEY']
+          '--api_key', ENV['SILVER_API_KEY']
         ]
         Event.start(args)
       end
@@ -19,7 +19,7 @@ module SendGrid4r::CLI::Webhooks
       it '#enable with mandatory params' do
         args = [
           'enable',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--url', 'http://test.test.test',
           '--group_resubscribe', true
         ]
@@ -29,7 +29,7 @@ module SendGrid4r::CLI::Webhooks
       it '#enable with full params' do
         args = [
           'enable',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--url', 'http://test.test.test',
           '--group_resubscribe', false,
           '--delivered', false,
@@ -49,7 +49,7 @@ module SendGrid4r::CLI::Webhooks
       it '#disable with full params' do
         args = [
           'disable',
-          '--apikey', ENV['SILVER_API_KEY']
+          '--api_key', ENV['SILVER_API_KEY']
         ]
         Event.start(args)
       end
@@ -57,7 +57,7 @@ module SendGrid4r::CLI::Webhooks
       it '#test' do
         args = [
           'test',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--url', 'http://test.test.test'
         ]
         Event.start(args)

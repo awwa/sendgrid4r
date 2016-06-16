@@ -11,7 +11,7 @@ module SendGrid4r::CLI::Templates
       it '#create' do
         args = [
           'create',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--template_id', 'b4c57fdc-4ae3-451f-9f09-56bedd4ec6c4',
           '--name', 'cli_version',
           '--subject', 'Hello!<%subject%>',
@@ -25,7 +25,7 @@ module SendGrid4r::CLI::Templates
       it '#activate' do
         args = [
           'activate',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--template_id', 'b4c57fdc-4ae3-451f-9f09-56bedd4ec6c4',
           '--version_id', '811fbaad-9079-4f5c-8c3c-3582a7c100c7'
         ]
@@ -35,7 +35,7 @@ module SendGrid4r::CLI::Templates
       it '#get' do
         args = [
           'get',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--template_id', 'b4c57fdc-4ae3-451f-9f09-56bedd4ec6c4',
           '--version_id', '594a5aef-dbf4-4e27-8bc1-ef3242c96b89'
         ]
@@ -45,7 +45,7 @@ module SendGrid4r::CLI::Templates
       it '#update' do
         args = [
           'update',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--template_id', 'b4c57fdc-4ae3-451f-9f09-56bedd4ec6c4',
           '--version_id', '594a5aef-dbf4-4e27-8bc1-ef3242c96b89',
           '--name', 'cli_version_edit',
@@ -60,7 +60,7 @@ module SendGrid4r::CLI::Templates
       it '#delete' do
         args = [
           'delete',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--template_id', 'b4c57fdc-4ae3-451f-9f09-56bedd4ec6c4',
           '--version_id', '594a5aef-dbf4-4e27-8bc1-ef3242c96b89'
         ]

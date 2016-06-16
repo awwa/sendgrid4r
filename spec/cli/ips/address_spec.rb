@@ -11,7 +11,7 @@ module SendGrid4r::CLI::Ips
       it '#add_to_pool' do
         args = [
           'add_to_pool',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--pool_name', 'test_pool',
           '--ip', ENV['IP']
         ]
@@ -21,7 +21,7 @@ module SendGrid4r::CLI::Ips
       it '#list' do
         args = [
           'list',
-          '--apikey', ENV['SILVER_API_KEY']
+          '--api_key', ENV['SILVER_API_KEY']
         ]
         Address.start(args)
       end
@@ -29,7 +29,7 @@ module SendGrid4r::CLI::Ips
       it '#assigned' do
         args = [
           'assigned',
-          '--apikey', ENV['SILVER_API_KEY']
+          '--api_key', ENV['SILVER_API_KEY']
         ]
         Address.start(args)
       end
@@ -37,7 +37,7 @@ module SendGrid4r::CLI::Ips
       it '#get' do
         args = [
           'get',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--ip', ENV['IP']
         ]
         Address.start(args)
@@ -46,7 +46,7 @@ module SendGrid4r::CLI::Ips
       it '#delete_from_pool' do
         args = [
           'delete_from_pool',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--pool_name', 'test_pool',
           '--ip', ENV['IP']
         ]

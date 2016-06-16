@@ -11,7 +11,7 @@ module SendGrid4r::CLI
       it '#list with full params' do
         args = [
           'list',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--category', 'en',
           '--limit', 2,
           '--offset', 0

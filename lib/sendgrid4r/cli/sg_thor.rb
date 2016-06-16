@@ -1,6 +1,6 @@
 module SendGrid4r::CLI
   class SgThor < Thor
-    class_option :apikey
+    class_option :api_key
     class_option :username
     class_option :password
 
@@ -8,7 +8,7 @@ module SendGrid4r::CLI
       super
       @client = SendGrid4r::Client.new(
         username: options[:username], password: options[:password],
-        api_key: options[:apikey], raw_response: true
+        api_key: options[:api_key], raw_response: true
       )
     end
   end

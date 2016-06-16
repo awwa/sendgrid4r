@@ -11,7 +11,7 @@ module SendGrid4r::CLI::Settings
       it '#get' do
         args = [
           'get',
-          '--apikey', ENV['SILVER_API_KEY']
+          '--api_key', ENV['SILVER_API_KEY']
         ]
         EnforcedTls.start(args)
       end
@@ -19,7 +19,7 @@ module SendGrid4r::CLI::Settings
       it '#update' do
         args = [
           'update',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--require_tls', true,
           '--require_valid_cert', true
         ]

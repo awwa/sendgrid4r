@@ -11,7 +11,7 @@ module SendGrid4r::CLI::Suppressions
       it '#list with no params' do
         args = [
           'list',
-          '--apikey', ENV['SILVER_API_KEY']
+          '--api_key', ENV['SILVER_API_KEY']
         ]
         GlobalUnsubscribe.start(args)
       end
@@ -19,7 +19,7 @@ module SendGrid4r::CLI::Suppressions
       it '#list with full params' do
         args = [
           'list',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--start_time', Time.local(2016, 1, 1).to_i,
           '--end_time', Time.local(2016, 1, 31).to_i,
           '--limit', 10,
@@ -31,7 +31,7 @@ module SendGrid4r::CLI::Suppressions
       it '#add' do
         args = [
           'add',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--emails', 'abc@abc.com', 'cde@cde.com'
         ]
         GlobalUnsubscribe.start(args)
@@ -40,7 +40,7 @@ module SendGrid4r::CLI::Suppressions
       it '#delete with email' do
         args = [
           'delete',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--email', 'abc@abc.com'
         ]
         GlobalUnsubscribe.start(args)
@@ -49,7 +49,7 @@ module SendGrid4r::CLI::Suppressions
       it '#get' do
         args = [
           'get',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--email', 'cde@cde.com'
         ]
         GlobalUnsubscribe.start(args)

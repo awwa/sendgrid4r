@@ -11,7 +11,7 @@ module SendGrid4r::CLI::Stats
       it '#geo with mandatory params' do
         args = [
           'geo',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--start_date', '2016-01-01'
         ]
         Advanced.start(args)
@@ -20,7 +20,7 @@ module SendGrid4r::CLI::Stats
       it '#geo with full params' do
         args = [
           'geo',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--start_date', '2016-01-01',
           '--end_date', '2016-01-02',
           '--aggregated_by', 'day',
@@ -32,7 +32,7 @@ module SendGrid4r::CLI::Stats
       it '#device with mandatory params' do
         args = [
           'device',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--start_date', '2016-01-01'
         ]
         Advanced.start(args)
@@ -41,7 +41,7 @@ module SendGrid4r::CLI::Stats
       it '#device with full params' do
         args = [
           'device',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--start_date', '2016-01-01',
           '--end_date', '2016-01-02',
           '--aggregated_by', 'day'
@@ -52,7 +52,7 @@ module SendGrid4r::CLI::Stats
       it '#client with mandatory params' do
         args = [
           'client',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--start_date', '2016-01-01'
         ]
         Advanced.start(args)
@@ -61,7 +61,7 @@ module SendGrid4r::CLI::Stats
       it '#client with full params' do
         args = [
           'client',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--start_date', '2016-01-01',
           '--end_date', '2016-01-02',
           '--aggregated_by', 'day'
@@ -72,7 +72,7 @@ module SendGrid4r::CLI::Stats
       it '#client_type with mandatory params' do
         args = [
           'client_type',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--start_date', '2016-01-01',
           '--client_type', 'phone'
         ]
@@ -82,7 +82,7 @@ module SendGrid4r::CLI::Stats
       it '#client_type with full params' do
         args = [
           'client_type',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--start_date', '2016-01-01',
           '--end_date', '2016-01-02',
           '--aggregated_by', 'day',
@@ -94,7 +94,7 @@ module SendGrid4r::CLI::Stats
       it '#mailbox_provider with mandatory params' do
         args = [
           'mailbox_provider',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--start_date', '2016-01-01'
         ]
         Advanced.start(args)
@@ -103,7 +103,7 @@ module SendGrid4r::CLI::Stats
       it '#mailbox_provider with full params' do
         args = [
           'mailbox_provider',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--start_date', '2016-01-01',
           '--end_date', '2016-01-02',
           '--aggregated_by', 'day',
@@ -115,7 +115,7 @@ module SendGrid4r::CLI::Stats
       it '#browser with mandatory params' do
         args = [
           'browser',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--start_date', '2016-01-01'
         ]
         Advanced.start(args)
@@ -124,7 +124,7 @@ module SendGrid4r::CLI::Stats
       it '#browser with full params' do
         args = [
           'browser',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--start_date', '2016-01-01',
           '--end_date', '2016-01-02',
           '--aggregated_by', 'day',

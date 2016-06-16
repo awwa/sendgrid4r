@@ -11,7 +11,7 @@ module SendGrid4r::CLI::Settings
       it '#list with full params' do
         args = [
           'list',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--limit', 10,
           '--offset', 0
         ]
@@ -21,7 +21,7 @@ module SendGrid4r::CLI::Settings
       it '#click get' do
         args = [
           'click', 'get',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
         ]
         Tracking.start(args)
       end
@@ -29,7 +29,7 @@ module SendGrid4r::CLI::Settings
       it '#click enable' do
         args = [
           'click', 'enable',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
         ]
         Tracking.start(args)
       end
@@ -37,7 +37,7 @@ module SendGrid4r::CLI::Settings
       it '#click disable' do
         args = [
           'click', 'disable',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
         ]
         Tracking.start(args)
       end
@@ -45,7 +45,7 @@ module SendGrid4r::CLI::Settings
       it '#ganalytics get' do
         args = [
           'ganalytics', 'get',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
         ]
         Tracking.start(args)
       end
@@ -53,7 +53,7 @@ module SendGrid4r::CLI::Settings
       it '#ganalytics enable' do
         args = [
           'ganalytics', 'enable',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--utm_source', 'aaa',
           '--utm_medium', 'bbb',
           '--utm_term', 'ccc',
@@ -66,7 +66,7 @@ module SendGrid4r::CLI::Settings
       it '#ganalytics disable' do
         args = [
           'ganalytics', 'disable',
-          '--apikey', ENV['SILVER_API_KEY']
+          '--api_key', ENV['SILVER_API_KEY']
         ]
         Tracking.start(args)
       end
@@ -74,7 +74,7 @@ module SendGrid4r::CLI::Settings
       it '#open get' do
         args = [
           'open', 'get',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
         ]
         Tracking.start(args)
       end
@@ -82,7 +82,7 @@ module SendGrid4r::CLI::Settings
       it '#open enable' do
         args = [
           'open', 'enable',
-          '--apikey', ENV['SILVER_API_KEY']
+          '--api_key', ENV['SILVER_API_KEY']
         ]
         Tracking.start(args)
       end
@@ -90,7 +90,7 @@ module SendGrid4r::CLI::Settings
       it '#open disable' do
         args = [
           'open', 'disable',
-          '--apikey', ENV['SILVER_API_KEY']
+          '--api_key', ENV['SILVER_API_KEY']
         ]
         Tracking.start(args)
       end
@@ -98,7 +98,7 @@ module SendGrid4r::CLI::Settings
       it '#subscription get' do
         args = [
           'subscription', 'get',
-          '--apikey', ENV['SILVER_API_KEY']
+          '--api_key', ENV['SILVER_API_KEY']
         ]
         Tracking.start(args)
       end
@@ -106,7 +106,7 @@ module SendGrid4r::CLI::Settings
       it '#subscription enable' do
         args = [
           'subscription', 'enable',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--landing', '<p>これまでご購読ありがとうございました。</p>\n\n<p>またのご利用お待ちしております。</p>\n',
           '--url', '',
           '--replace', '',
@@ -119,7 +119,7 @@ module SendGrid4r::CLI::Settings
       it '#subscription disable' do
         args = [
           'subscription', 'disable',
-          '--apikey', ENV['SILVER_API_KEY']
+          '--api_key', ENV['SILVER_API_KEY']
         ]
         Tracking.start(args)
       end

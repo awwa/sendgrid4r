@@ -11,7 +11,7 @@ module SendGrid4r::CLI::ApiKeys
       it '#list' do
         args = [
           'list',
-          '--apikey', ENV['SILVER_API_KEY']
+          '--api_key', ENV['SILVER_API_KEY']
         ]
         ApiKey.start(args)
       end
@@ -19,7 +19,7 @@ module SendGrid4r::CLI::ApiKeys
       it '#create' do
         args = [
           'create',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--name', 'api_key_test3',
           '--scopes', 'mail.send'
         ]
@@ -29,7 +29,7 @@ module SendGrid4r::CLI::ApiKeys
       it '#get' do
         args = [
           'get',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--api_key_id', ENV['TEMP_API_KEY_ID']
         ]
         ApiKey.start(args)
@@ -38,7 +38,7 @@ module SendGrid4r::CLI::ApiKeys
       it '#delete' do
         args = [
           'delete',
-          '--apikey', ENV['SILVER_API_KEY'],
+          '--api_key', ENV['SILVER_API_KEY'],
           '--api_key_id', ENV['TEMP_API_KEY_ID']
         ]
         ApiKey.start(args)
