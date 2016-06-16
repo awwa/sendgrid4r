@@ -19,7 +19,7 @@ module SendGrid4r::CLI
 
       desc 'start', 'Start warmup'
       option :ip, :require => true
-      def rename
+      def start
         puts @client.post_warmup_ip(ip: options[:ip])
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
