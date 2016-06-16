@@ -1,7 +1,9 @@
 module SendGrid4r::CLI
   module Settings
+    #
+    # SendGrid Web API v3 Settings EnforcedTls
+    #
     class EnforcedTls < SgThor
-
       desc 'get', 'Get the current Enforced TLS settings'
       def get
         puts @client.get_enforced_tls

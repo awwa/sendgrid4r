@@ -1,5 +1,8 @@
 module SendGrid4r::CLI
   module Stats
+    #
+    # SendGrid Web API v3 Stats
+    #
     class Stats < SgThor
       desc('advanced SUBCOMMAND ...ARGS', 'Get advanced stats')
       subcommand('advanced', Advanced)

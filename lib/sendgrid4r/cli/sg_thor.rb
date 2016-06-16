@@ -1,4 +1,7 @@
 module SendGrid4r::CLI
+  #
+  # SendGrid Web API v3 SgThor
+  #
   class SgThor < Thor
     class_option :api_key
     class_option :username

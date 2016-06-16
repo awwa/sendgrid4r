@@ -3,9 +3,9 @@ module SendGrid4r::CLI
   # SendGrid Web API v3 ClI
   #
   class SG < Thor
-    map %w[--version -v] => :print_version
+    map %w(--version -v) => :print_version
 
-    desc "--version, -v", "print the version"
+    desc '--version, -v', 'print the version'
     def print_version
       puts SendGrid4r::VERSION
     end

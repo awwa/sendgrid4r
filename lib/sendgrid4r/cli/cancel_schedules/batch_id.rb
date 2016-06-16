@@ -1,7 +1,9 @@
 module SendGrid4r::CLI
   module CancelSchedules
+    #
+    # SendGrid Web API v3 CancelSchedules BatchId
+    #
     class BatchId < SgThor
-
       desc 'generate', 'Generate Batch ID'
       def generate_batch_id
         puts @client.generate_batch_id
@@ -10,7 +12,7 @@ module SendGrid4r::CLI
       end
 
       desc 'validate', 'Validate Batch ID'
-      option :batch_id, :require => true
+      option :batch_id, require: true
       def validate_batch_id
         puts @client.validate_batch_id(batch_id: options[:batch_id])
       rescue RestClient::ExceptionWithResponse => e

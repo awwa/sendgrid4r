@@ -1,10 +1,12 @@
 module SendGrid4r::CLI
   module Settings
+    #
+    # SendGrid Web API v3 Settings Tracking
+    #
     class Tracking < SgThor
-
       desc 'list', 'List tracking settings'
-      option :limit, :type => :numeric
-      option :offset, :type => :numeric
+      option :limit, type: :numeric
+      option :offset, type: :numeric
       def list
         puts @client.get_tracking_settings(
           limit: options[:limit],

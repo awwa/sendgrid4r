@@ -1,5 +1,8 @@
 module SendGrid4r::CLI
   module Settings
+    #
+    # SendGrid Web API v3 Settings
+    #
     class Settings < SgThor
       desc('enforced_tls SUBCOMMAND ...ARGS', 'Manage enforced TLS settings')
       subcommand('enforced_tls', EnforcedTls)

@@ -21,7 +21,7 @@ module SendGrid4r::CLI::Settings
       it '#new_relic get' do
         args = [
           'new_relic', 'get',
-          '--api-key', ENV['SILVER_API_KEY'],
+          '--api-key', ENV['SILVER_API_KEY']
         ]
         Partner.start(args)
       end
@@ -38,7 +38,7 @@ module SendGrid4r::CLI::Settings
       it '#new_relic disable' do
         args = [
           'new_relic', 'disable',
-          '--api-key', ENV['SILVER_API_KEY'],
+          '--api-key', ENV['SILVER_API_KEY']
         ]
         Partner.start(args)
       end

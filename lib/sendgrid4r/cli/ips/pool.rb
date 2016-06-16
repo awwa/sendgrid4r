@@ -1,9 +1,11 @@
 module SendGrid4r::CLI
   module Ips
+    #
+    # SendGrid Web API v3 Ips Pool
+    #
     class Pool < SgThor
-
       desc 'create', 'Create an IP pool'
-      option :name, :require => true
+      option :name, require: true
       def create
         puts @client.post_pool(name: options[:name])
       rescue RestClient::ExceptionWithResponse => e
@@ -18,7 +20,7 @@ module SendGrid4r::CLI
       end
 
       desc 'get', 'Get an IP pool'
-      option :name, :require => true
+      option :name, require: true
       def get
         puts @client.get_pool(name: options[:name])
       rescue RestClient::ExceptionWithResponse => e
@@ -26,8 +28,8 @@ module SendGrid4r::CLI
       end
 
       desc 'rename', 'Rename an IP pool'
-      option :name, :require => true
-      option :new_name, :require => true
+      option :name, require: true
+      option :new_name, require: true
       def rename
         puts @client.put_pool(
           name: options[:name], new_name: options[:new_name]
@@ -37,7 +39,7 @@ module SendGrid4r::CLI
       end
 
       desc 'delete', 'Delete an IP pool'
-      option :name, :require => true
+      option :name, require: true
       def delete
         puts @client.delete_pool(name: options[:name])
       rescue RestClient::ExceptionWithResponse => e

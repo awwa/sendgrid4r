@@ -9,24 +9,17 @@ module SendGrid4r::CLI::Whitelabel
       end
 
       it '#domain subcommand' do
-        args = [
-          'domain',
-          'help'
-        ]
+        args = ['domain' 'help']
         Whitelabel.start(args)
       end
 
       it '#link subcommand' do
-        args = [
-          'link'
-        ]
+        args = ['link']
         Whitelabel.start(args)
       end
 
       it '#ip subcommand' do
-        args = [
-          'ip'
-        ]
+        args = ['ip']
         Whitelabel.start(args)
       end
     end

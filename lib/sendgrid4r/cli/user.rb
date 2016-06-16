@@ -1,6 +1,8 @@
 module SendGrid4r::CLI
+  #
+  # SendGrid Web API v3 User
+  #
   class User < SgThor
-
     desc 'profile', 'Get or Update user Profile'
     option :address
     option :city
@@ -18,18 +20,13 @@ module SendGrid4r::CLI
         puts @client.get_user_profile
       when 'update'
         params = {
-          address: options[:address],
-          city: options[:city],
-          company: options[:company],
-          country: options[:country],
-          first_name: options[:first_name],
-          last_name: options[:last_name],
-          phone: options[:phone],
-          state: options[:state],
-          website: options[:website],
-          zip: options[:zip]
+          address: options[:address],       city: options[:city],
+          company: options[:company],       country: options[:country],
+          first_name: options[:first_name], last_name: options[:last_name],
+          phone: options[:phone],           state: options[:state],
+          website: options[:website],       zip: options[:zip]
         }
-        params.delete_if{|k, v| v.nil?}
+        params.delete_if { |_k, v| v.nil? }
         puts @client.patch_user_profile(params: params)
       else
         puts "error: #{action} is not supported in action parameter"
@@ -81,8 +78,8 @@ module SendGrid4r::CLI
     end
 
     desc('password', 'Update password')
-    option :new_password, :require => true
-    option :old_password, :require => true
+    option :new_password, require: true
+    option :old_password, require: true
     def password(action)
       case action
       when 'update'

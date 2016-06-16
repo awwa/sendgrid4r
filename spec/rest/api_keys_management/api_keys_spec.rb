@@ -146,7 +146,9 @@ module SendGrid4r::REST::ApiKeysManagement
       end
 
       it 'creates api_key instance' do
-        actual = SendGrid4r::REST::ApiKeysManagement.create_api_key(JSON.parse(api_key))
+        actual = SendGrid4r::REST::ApiKeysManagement.create_api_key(
+          JSON.parse(api_key)
+        )
         expect(actual).to be_a(ApiKey)
         expect(actual.api_key).to eq('SG.xxxxxxxx.yyyyyyyy')
         expect(actual.api_key_id).to eq('xxxxxxxx')
@@ -157,7 +159,9 @@ module SendGrid4r::REST::ApiKeysManagement
       end
 
       it 'creates api_keys instance' do
-        actual = SendGrid4r::REST::ApiKeysManagement.create_api_keys(JSON.parse(api_keys))
+        actual = SendGrid4r::REST::ApiKeysManagement.create_api_keys(
+          JSON.parse(api_keys)
+        )
         expect(actual).to be_a(ApiKeys)
         expect(actual.result).to be_a(Array)
         actual.result.each do |api_key|

@@ -21,7 +21,7 @@ module SendGrid4r::CLI::Settings
       it '#whitelist get' do
         args = [
           'whitelist', 'get',
-          '--api-key', ENV['SILVER_API_KEY'],
+          '--api-key', ENV['SILVER_API_KEY']
         ]
         Mail.start(args)
       end

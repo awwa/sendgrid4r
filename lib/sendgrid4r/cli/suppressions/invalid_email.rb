@@ -1,12 +1,14 @@
 module SendGrid4r::CLI
   module Suppressions
+    #
+    # SendGrid Web API v3 Suppressions InvalidEmail
+    #
     class InvalidEmail < SgThor
-
       desc 'list', 'List blocks'
-      option :start_time, :type => :numeric
-      option :end_time, :type => :numeric
-      option :limit, :type => :numeric
-      option :offset, :type => :numeric
+      option :start_time, type: :numeric
+      option :end_time, type: :numeric
+      option :limit, type: :numeric
+      option :offset, type: :numeric
       def list
         puts @client.get_invalid_emails(
           start_time: options[:start_time], end_time: options[:end_time],
@@ -17,9 +19,9 @@ module SendGrid4r::CLI
       end
 
       desc 'delete', 'Delete invalid emails'
-      option :delete_all, :type => :boolean
+      option :delete_all, type: :boolean
       option :email
-      option :emails, :type => :array
+      option :emails, type: :array
       def delete
         if options[:email]
           @client.delete_invalid_email(email: options[:email])
@@ -33,7 +35,7 @@ module SendGrid4r::CLI
       end
 
       desc 'get', 'Get a invalid email'
-      option :email, :require => true
+      option :email, require: true
       def get
         puts @client.get_invalid_email(email: options[:email])
       rescue RestClient::ExceptionWithResponse => e

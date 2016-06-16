@@ -1,5 +1,8 @@
 module SendGrid4r::CLI
   module Webhooks
+    #
+    # SendGrid Web API v3 Webhooks Webhook
+    #
     class Webhook < SgThor
       desc('event SUBCOMMAND ...ARGS', 'Manage event webhook settings')
       subcommand('event', Event)

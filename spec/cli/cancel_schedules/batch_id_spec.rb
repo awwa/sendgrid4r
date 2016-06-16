@@ -8,6 +8,10 @@ module SendGrid4r::CLI::CancelSchedules
         Dotenv.load
       end
 
+      let(:batch_id) do
+        'NWI4NjAwZWMtMzNjYS0xMWU2LTgxYzktNTI1NDAwYTUxOTdhLTc4ZmZiMGNmMg'
+      end
+
       it '#generate' do
         args = [
           'generate',
@@ -20,7 +24,7 @@ module SendGrid4r::CLI::CancelSchedules
         args = [
           'validate',
           '--api-key', ENV['SILVER_API_KEY'],
-          '--batch-id', 'NWI4NjAwZWMtMzNjYS0xMWU2LTgxYzktNTI1NDAwYTUxOTdhLTc4ZmZiMGNmMg'
+          '--batch-id', batch_id
         ]
         BatchId.start(args)
       end

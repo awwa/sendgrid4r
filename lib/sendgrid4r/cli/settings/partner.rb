@@ -1,10 +1,12 @@
 module SendGrid4r::CLI
   module Settings
+    #
+    # SendGrid Web API v3 Settings Partner
+    #
     class Partner < SgThor
-
       desc 'list', 'List partner settings'
-      option :limit, :type => :numeric
-      option :offset, :type => :numeric
+      option :limit, type: :numeric
+      option :offset, type: :numeric
       def list
         puts @client.get_partner_settings(
           limit: options[:limit],

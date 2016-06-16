@@ -1,14 +1,16 @@
 module SendGrid4r::CLI
   module Templates
+    #
+    # SendGrid Web API v3 Templates Version
+    #
     class Version < SgThor
-
       desc 'create', 'Create a version'
-      option :template_id, :require => true
-      option :name, :require => true
-      option :subject, :require => true
-      option :html_content, :require => true
-      option :plain_content, :require => true
-      option :active, :type => :numeric
+      option :template_id, require: true
+      option :name, require: true
+      option :subject, require: true
+      option :html_content, require: true
+      option :plain_content, require: true
+      option :active, type: :numeric
       def create
         factory = SendGrid4r::Factory::VersionFactory.new
         version = factory.create(
@@ -27,8 +29,8 @@ module SendGrid4r::CLI
       end
 
       desc 'activate', 'Activate a version'
-      option :template_id, :require => true
-      option :version_id, :require => true
+      option :template_id, require: true
+      option :version_id, require: true
       def activate
         puts @client.activate_version(
           template_id: options[:template_id],
@@ -39,8 +41,8 @@ module SendGrid4r::CLI
       end
 
       desc 'get', 'Get a version'
-      option :template_id, :require => true
-      option :version_id, :require => true
+      option :template_id, require: true
+      option :version_id, require: true
       def get
         puts @client.get_version(
           template_id: options[:template_id],
@@ -51,8 +53,8 @@ module SendGrid4r::CLI
       end
 
       desc 'update', 'Edit a version'
-      option :template_id, :require => true
-      option :version_id, :require => true
+      option :template_id, require: true
+      option :version_id, require: true
       option :name
       option :subject
       option :html_content
@@ -77,8 +79,8 @@ module SendGrid4r::CLI
       end
 
       desc 'delete', 'Delete a version'
-      option :template_id, :require => true
-      option :version_id, :require => true
+      option :template_id, require: true
+      option :version_id, require: true
       def delete
         puts @client.delete_version(
           template_id: options[:template_id],

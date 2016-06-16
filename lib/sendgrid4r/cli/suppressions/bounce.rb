@@ -1,10 +1,12 @@
 module SendGrid4r::CLI
   module Suppressions
+    #
+    # SendGrid Web API v3 Suppressions Bounce
+    #
     class Bounce < SgThor
-
       desc 'list', 'List bounces'
-      option :start_time, :type => :numeric
-      option :end_time, :type => :numeric
+      option :start_time, type: :numeric
+      option :end_time, type: :numeric
       def list
         puts @client.get_bounces(
           start_time: options[:start_time], end_time: options[:end_time]
@@ -14,9 +16,9 @@ module SendGrid4r::CLI
       end
 
       desc 'delete', 'Delete bounces'
-      option :delete_all, :type => :boolean
+      option :delete_all, type: :boolean
       option :email
-      option :emails, :type => :array
+      option :emails, type: :array
       def delete
         if options[:email]
           puts @client.delete_bounce(email: options[:email])
@@ -30,7 +32,7 @@ module SendGrid4r::CLI
       end
 
       desc 'get', 'Get a bounce'
-      option :email, :require => true
+      option :email, require: true
       def get
         puts @client.get_bounce(email: options[:email])
       rescue RestClient::ExceptionWithResponse => e

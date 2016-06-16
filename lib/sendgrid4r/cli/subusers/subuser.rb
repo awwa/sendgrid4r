@@ -1,10 +1,12 @@
 module SendGrid4r::CLI
   module Subusers
+    #
+    # SendGrid Web API v3 Subusers Subuser
+    #
     class Subuser < SgThor
-
       desc 'list', 'List subusers for a parent'
-      option :limit, :type => :numeric
-      option :offset, :type => :numeric
+      option :limit, type: :numeric
+      option :offset, type: :numeric
       option :username
       def list
         puts @client.get_subusers(
@@ -16,10 +18,10 @@ module SendGrid4r::CLI
       end
 
       desc 'create', 'Create a subuser'
-      option :username, :require => true
-      option :email, :require => true
-      option :password, :require => true
-      option :ips, :type => :array, :require => true
+      option :username, require: true
+      option :email, require: true
+      option :password, require: true
+      option :ips, type: :array, require: true
       def create
         puts @client.post_subuser(
           username: options[:username], email: options[:email],
@@ -30,7 +32,7 @@ module SendGrid4r::CLI
       end
 
       desc 'enable', 'Enable a subuser'
-      option :username, :require => true
+      option :username, require: true
       def enable
         puts @client.patch_subuser(
           username: options[:username], disabled: false
@@ -40,7 +42,7 @@ module SendGrid4r::CLI
       end
 
       desc 'disable', 'Disable a subuser'
-      option :username, :require => true
+      option :username, require: true
       def disable
         puts @client.patch_subuser(
           username: options[:username], disabled: true
@@ -50,7 +52,7 @@ module SendGrid4r::CLI
       end
 
       desc 'delete', 'Delete a subuser'
-      option :username, :require => true
+      option :username, require: true
       def delete
         puts @client.delete_subuser(username: options[:username])
       rescue RestClient::ExceptionWithResponse => e
@@ -58,7 +60,7 @@ module SendGrid4r::CLI
       end
 
       desc 'reputation', 'Retrieve subusers reputation'
-      option :usernames, :type => :array, :require => true
+      option :usernames, type: :array, require: true
       def reputation
         puts @client.get_subuser_reputation(
           usernames: options[:usernames]
@@ -68,8 +70,8 @@ module SendGrid4r::CLI
       end
 
       desc 'assign_ips', 'Update IPs assigned to a subuser'
-      option :username, :require => true
-      option :ips, :type => :array, :require => true
+      option :username, require: true
+      option :ips, type: :array, require: true
       def assign_ips
         puts @client.put_subuser_assigned_ips(
           username: options[:username], ips: options[:ips]

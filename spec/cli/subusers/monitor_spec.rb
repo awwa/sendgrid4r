@@ -12,7 +12,7 @@ module SendGrid4r::CLI::Subusers
         args = [
           'list',
           '--api-key', ENV['SILVER_API_KEY'],
-          '--username', ENV['SUBUSER4'],
+          '--username', ENV['SUBUSER4']
         ]
         Monitor.start(args)
       end

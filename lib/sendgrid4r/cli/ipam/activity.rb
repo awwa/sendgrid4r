@@ -1,9 +1,11 @@
 module SendGrid4r::CLI
   module Ipam
+    #
+    # SendGrid Web API v3 Ipam Activity
+    #
     class Activity < SgThor
-
       desc 'list', 'History Collection'
-      option :limit, :type => :numeric
+      option :limit, type: :numeric
       def list
         puts @client.get_ip_activities(limit: options[:limit])
       rescue RestClient::ExceptionWithResponse => e

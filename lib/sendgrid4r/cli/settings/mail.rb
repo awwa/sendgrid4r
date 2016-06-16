@@ -1,10 +1,12 @@
 module SendGrid4r::CLI
   module Settings
+    #
+    # SendGrid Web API v3 Settings Mail
+    #
     class Mail < SgThor
-
       desc 'list', 'List mail settings'
-      option :limit, :type => :numeric
-      option :offset, :type => :numeric
+      option :limit, type: :numeric
+      option :offset, type: :numeric
       def list
         puts @client.get_mail_settings(
           limit: options[:limit],
@@ -15,7 +17,7 @@ module SendGrid4r::CLI
       end
 
       desc 'whitelist', 'Get, Enable and Disable address whitelist settings'
-      option :list, :type => :array
+      option :list, type: :array
       def whitelist(action)
         case action
         when 'get'
@@ -53,8 +55,8 @@ module SendGrid4r::CLI
       end
 
       desc 'bounce_purge', 'Get, Enable and Disable bounce purge settings'
-      option :hard_bounces, :type => :numeric
-      option :soft_bounces, :type => :numeric
+      option :hard_bounces, type: :numeric
+      option :soft_bounces, type: :numeric
       def bounce_purge(action)
         case action
         when 'get'
@@ -63,7 +65,7 @@ module SendGrid4r::CLI
           params = {
             enabled: action == 'enable',
             hard_bounces: options[:hard_bounces],
-            soft_bounces: options[:soft_bounces],
+            soft_bounces: options[:soft_bounces]
           }
           puts @client.patch_settings_bounce_purge(params: params)
         else

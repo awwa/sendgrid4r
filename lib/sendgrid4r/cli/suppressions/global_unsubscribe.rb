@@ -1,12 +1,14 @@
 module SendGrid4r::CLI
   module Suppressions
+    #
+    # SendGrid Web API v3 Suppressions GlobalUnsubscribe
+    #
     class GlobalUnsubscribe < SgThor
-
       desc 'list', 'List global unsubscribes'
-      option :start_time, :type => :numeric
-      option :end_time, :type => :numeric
-      option :limit, :type => :numeric
-      option :offset, :type => :numeric
+      option :start_time, type: :numeric
+      option :end_time, type: :numeric
+      option :limit, type: :numeric
+      option :offset, type: :numeric
       def list
         puts @client.get_global_unsubscribes(
           start_time: options[:start_time], end_time: options[:end_time],
@@ -17,7 +19,7 @@ module SendGrid4r::CLI
       end
 
       desc 'add', 'Add email addresses to the Global Unsubscribes'
-      option :emails, :type => :array, :require => true
+      option :emails, type: :array, require: true
       def add
         puts @client.post_global_unsubscribes(
           recipient_emails: options[:emails]
@@ -27,7 +29,7 @@ module SendGrid4r::CLI
       end
 
       desc 'delete', 'Delete global unsubscribes'
-      option :email, :require => true
+      option :email, require: true
       def delete
         puts @client.delete_global_unsubscribe(
           email_address: options[:email]
@@ -37,7 +39,7 @@ module SendGrid4r::CLI
       end
 
       desc 'get', 'Get a global unsubscribe'
-      option :email, :require => true
+      option :email, require: true
       def get
         puts @client.get_global_unsubscribe(email_address: options[:email])
       rescue RestClient::ExceptionWithResponse => e

@@ -1,5 +1,8 @@
 module SendGrid4r::CLI
   module Whitelabel
+    #
+    # SendGrid Web API v3 Whitelabel
+    #
     class Whitelabel < SgThor
       desc('domain SUBCOMMAND ...ARGS', 'Manage domain whitelabel settings')
       subcommand('domain', Domain)

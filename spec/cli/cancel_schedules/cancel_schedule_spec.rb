@@ -8,11 +8,15 @@ module SendGrid4r::CLI::CancelSchedules
         Dotenv.load
       end
 
+      let(:batch_id) do
+        'NWI4NjAwZWMtMzNjYS0xMWU2LTgxYzktNTI1NDAwYTUxOTdhLTc4ZmZiMGNmMg'
+      end
+
       it '#add' do
         args = [
           'add',
           '--api-key', ENV['SILVER_API_KEY'],
-          '--batch-id', 'NWI4NjAwZWMtMzNjYS0xMWU2LTgxYzktNTI1NDAwYTUxOTdhLTc4ZmZiMGNmMg',
+          '--batch-id', batch_id,
           '--status', 'cancel'
         ]
         CancelSchedule.start(args)
@@ -30,7 +34,7 @@ module SendGrid4r::CLI::CancelSchedules
         args = [
           'get',
           '--api-key', ENV['SILVER_API_KEY'],
-          '--batch-id', 'NWI4NjAwZWMtMzNjYS0xMWU2LTgxYzktNTI1NDAwYTUxOTdhLTc4ZmZiMGNmMg'
+          '--batch-id', batch_id
         ]
         CancelSchedule.start(args)
       end
@@ -39,7 +43,7 @@ module SendGrid4r::CLI::CancelSchedules
         args = [
           'update',
           '--api-key', ENV['SILVER_API_KEY'],
-          '--batch-id', 'NWI4NjAwZWMtMzNjYS0xMWU2LTgxYzktNTI1NDAwYTUxOTdhLTc4ZmZiMGNmMg',
+          '--batch-id', batch_id,
           '--status', 'pause'
         ]
         CancelSchedule.start(args)
@@ -49,7 +53,7 @@ module SendGrid4r::CLI::CancelSchedules
         args = [
           'delete',
           '--api-key', ENV['SILVER_API_KEY'],
-          '--batch-id', 'NWI4NjAwZWMtMzNjYS0xMWU2LTgxYzktNTI1NDAwYTUxOTdhLTc4ZmZiMGNmMg'
+          '--batch-id', batch_id
         ]
         CancelSchedule.start(args)
       end

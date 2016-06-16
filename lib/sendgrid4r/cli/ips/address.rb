@@ -1,10 +1,12 @@
 module SendGrid4r::CLI
   module Ips
+    #
+    # SendGrid Web API v3 Ips Address
+    #
     class Address < SgThor
-
       desc 'add_to_pool', 'Add an IP address to a pool'
-      option :pool_name, :require => true
-      option :ip, :require => true
+      option :pool_name, require: true
+      option :ip, require: true
       def add_to_pool
         puts @client.post_ip_to_pool(
           pool_name: options[:pool_name], ip: options[:ip]
@@ -28,7 +30,7 @@ module SendGrid4r::CLI
       end
 
       desc 'get', 'Get an IP address'
-      option :ip, :require => true
+      option :ip, require: true
       def get
         puts @client.get_ip(ip: options[:ip])
       rescue RestClient::ExceptionWithResponse => e
@@ -36,8 +38,8 @@ module SendGrid4r::CLI
       end
 
       desc 'delete_from_pool', 'Remove an IP address from a pool'
-      option :pool_name, :require => true
-      option :ip, :require => true
+      option :pool_name, require: true
+      option :ip, require: true
       def delete_from_pool
         puts @client.delete_ip_from_pool(
           pool_name: options[:pool_name], ip: options[:ip]

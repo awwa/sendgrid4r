@@ -1,7 +1,9 @@
 module SendGrid4r::CLI
   module Whitelabel
+    #
+    # SendGrid Web API v3 Whitelabel Link
+    #
     class Link < SgThor
-
       desc 'list', 'List all Link whitelabels'
       option :limit
       option :offset
@@ -19,9 +21,9 @@ module SendGrid4r::CLI
       end
 
       desc 'create', 'Create a link whitelabel'
-      option :domain, :require => true
-      option :subdomain, :require => true
-      option :default, :type => :boolean
+      option :domain, require: true
+      option :subdomain, require: true
+      option :default, type: :boolean
       def create
         puts @client.post_wl_link(
           domain: options[:domain],
@@ -33,7 +35,7 @@ module SendGrid4r::CLI
       end
 
       desc 'get', 'Retrieve a link whitelabel'
-      option :id, :require => true
+      option :id, require: true
       def get
         puts @client.get_wl_link(id: options[:id])
       rescue RestClient::ExceptionWithResponse => e
@@ -41,8 +43,8 @@ module SendGrid4r::CLI
       end
 
       desc 'update', 'Update a link whitelabel'
-      option :id, :require => true
-      option :default, :type => :boolean, :require => true
+      option :id, require: true
+      option :default, type: :boolean, require: true
       def update
         puts @client.patch_wl_link(
           id: options[:id], default: options[:default]
@@ -52,7 +54,7 @@ module SendGrid4r::CLI
       end
 
       desc 'delete', 'Delete a link whitelabel'
-      option :id, :require => true
+      option :id, require: true
       def delete
         puts @client.delete_wl_link(id: options[:id])
       rescue RestClient::ExceptionWithResponse => e
@@ -68,7 +70,7 @@ module SendGrid4r::CLI
       end
 
       desc 'validate', 'Validate a link whitelabel'
-      option :id, :require => true
+      option :id, require: true
       def validate
         puts @client.validate_wl_link(id: options[:id])
       rescue RestClient::ExceptionWithResponse => e
@@ -76,7 +78,7 @@ module SendGrid4r::CLI
       end
 
       desc 'list_associated', 'List Associated link'
-      option :username, :require => true
+      option :username, require: true
       def list_associated
         puts @client.get_associated_wl_link(username: options[:username])
       rescue RestClient::ExceptionWithResponse => e
@@ -84,7 +86,7 @@ module SendGrid4r::CLI
       end
 
       desc 'disassociate', 'Disassociate link'
-      option :username, :require => true
+      option :username, require: true
       def disassociate
         puts @client.disassociate_wl_link(username: options[:username])
       rescue RestClient::ExceptionWithResponse => e
@@ -92,8 +94,8 @@ module SendGrid4r::CLI
       end
 
       desc 'associate', 'Associate link'
-      option :id, :require => true
-      option :username, :require => true
+      option :id, require: true
+      option :username, require: true
       def associate
         puts @client.associate_wl_link(
           id: options[:id], username: options[:username]
