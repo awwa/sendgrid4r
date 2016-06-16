@@ -10,7 +10,7 @@ module SendGrid4r::CLI
     subcommand('cancel_schedule', CancelSchedules::CancelSchedule)
 
     desc('ip SUBCOMMAND ...ARGS', 'Manage ips')
-    subcommand('ip', Ips::Ips)
+    subcommand('ip', Ips::Ip)
 
     desc('ip_access SUBCOMMAND ...ARGS', 'Manage ip access')
     subcommand('ip_access', IpAccessManagement::IpAccess)

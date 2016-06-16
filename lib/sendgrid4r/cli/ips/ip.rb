@@ -1,6 +1,6 @@
 module SendGrid4r::CLI
   module Ips
-    class Ips < SgThor
+    class Ip < SgThor
       desc('address SUBCOMMAND ...ARGS', 'Manage IP addresses')
       subcommand('address', Address)
 
