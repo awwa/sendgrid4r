@@ -2,10 +2,10 @@ module SendGrid4r::CLI
   module CancelSchedules
     class CancelSchedule < SgThor
 
-      desc 'cancel', 'Cancel shceduled sends'
+      desc 'add', 'Cancel shceduled sends'
       option :batch_id, :require => true
-      option :status
-      def cancel
+      option :status, :require => true
+      def add
         puts @client.post_scheduled_send(
           batch_id: options[:batch_id], status: options[:status]
         )
@@ -23,7 +23,7 @@ module SendGrid4r::CLI
       desc 'get', 'Get a single cancel/paused scheduled send information'
       option :batch_id, :require => true
       def get
-        puts @client.get_scheduled_send(batch_id: options[:batch_id])
+        puts @client.get_scheduled_sends(batch_id: options[:batch_id])
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -39,9 +39,9 @@ module SendGrid4r::CLI
         puts e.inspect
       end
 
-      desc 'delete', 'Delete the cancellation/pause of a scheduled send'
+      desc 'delete', 'Delete the cancel/pause of a scheduled send'
       option :batch_id, :require => true
-      def delete_scheduled_send
+      def delete
         puts @client.delete_scheduled_send(batch_id: options[:batch_id])
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
