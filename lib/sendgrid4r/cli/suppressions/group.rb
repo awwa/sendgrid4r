@@ -1,5 +1,5 @@
 module SendGrid4r::CLI
-  module Supressions
+  module Suppressions
     class Group < SgThor
 
       desc 'create', 'Create a new supression group'

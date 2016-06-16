@@ -1,7 +1,7 @@
 # encoding: utf-8
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-module SendGrid4r::CLI::Supressions
+module SendGrid4r::CLI::Suppressions
   describe Group do
     describe 'integration test', :it do
       before do

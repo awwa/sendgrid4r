@@ -1,8 +1,8 @@
 # encoding: utf-8
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-module SendGrid4r::CLI::Supressions
-  describe SpamReport do
+module SendGrid4r::CLI::Suppressions
+  describe InvalidEmail do
     describe 'integration test', :it do
       before do
         Dotenv.load
@@ -17,7 +17,7 @@ module SendGrid4r::CLI::Supressions
           '--limit', 10,
           '--offset', 0
         ]
-        SpamReport.start(args)
+        InvalidEmail.start(args)
       end
 
       it '#delete with delete_all' do
@@ -26,7 +26,7 @@ module SendGrid4r::CLI::Supressions
           '--apikey', ENV['SILVER_API_KEY'],
           '--delete_all', true
         ]
-        SpamReport.start(args)
+        InvalidEmail.start(args)
       end
 
       it '#delete with email' do
@@ -35,7 +35,7 @@ module SendGrid4r::CLI::Supressions
           '--apikey', ENV['SILVER_API_KEY'],
           '--email', 'abc@abc.com'
         ]
-        SpamReport.start(args)
+        InvalidEmail.start(args)
       end
 
       it '#delete with emails' do
@@ -44,7 +44,7 @@ module SendGrid4r::CLI::Supressions
           '--apikey', ENV['SILVER_API_KEY'],
           '--emails', 'abc@abc.com', 'cde@cde.com'
         ]
-        SpamReport.start(args)
+        InvalidEmail.start(args)
       end
 
       it '#get' do
@@ -53,7 +53,7 @@ module SendGrid4r::CLI::Supressions
           '--apikey', ENV['SILVER_API_KEY'],
           '--email', 'abc@abc.com'
         ]
-        SpamReport.start(args)
+        InvalidEmail.start(args)
       end
     end
   end

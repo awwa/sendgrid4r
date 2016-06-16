@@ -1,22 +1,14 @@
 # encoding: utf-8
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-module SendGrid4r::CLI::Supressions
-  describe GlobalUnsubscribe do
+module SendGrid4r::CLI::Suppressions
+  describe SpamReport do
     describe 'integration test', :it do
       before do
         Dotenv.load
       end
 
-      it '#list with no params' do
-        args = [
-          'list',
-          '--apikey', ENV['SILVER_API_KEY']
-        ]
-        GlobalUnsubscribe.start(args)
-      end
-
-      it '#list with full params' do
+      it '#list' do
         args = [
           'list',
           '--apikey', ENV['SILVER_API_KEY'],
@@ -25,16 +17,16 @@ module SendGrid4r::CLI::Supressions
           '--limit', 10,
           '--offset', 0
         ]
-        GlobalUnsubscribe.start(args)
+        SpamReport.start(args)
       end
 
-      it '#add' do
+      it '#delete with delete_all' do
         args = [
-          'add',
+          'delete',
           '--apikey', ENV['SILVER_API_KEY'],
-          '--emails', 'abc@abc.com', 'cde@cde.com'
+          '--delete_all', true
         ]
-        GlobalUnsubscribe.start(args)
+        SpamReport.start(args)
       end
 
       it '#delete with email' do
@@ -43,16 +35,25 @@ module SendGrid4r::CLI::Supressions
           '--apikey', ENV['SILVER_API_KEY'],
           '--email', 'abc@abc.com'
         ]
-        GlobalUnsubscribe.start(args)
+        SpamReport.start(args)
+      end
+
+      it '#delete with emails' do
+        args = [
+          'delete',
+          '--apikey', ENV['SILVER_API_KEY'],
+          '--emails', 'abc@abc.com', 'cde@cde.com'
+        ]
+        SpamReport.start(args)
       end
 
       it '#get' do
         args = [
           'get',
           '--apikey', ENV['SILVER_API_KEY'],
-          '--email', 'cde@cde.com'
+          '--email', 'abc@abc.com'
         ]
-        GlobalUnsubscribe.start(args)
+        SpamReport.start(args)
       end
     end
   end

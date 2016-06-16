@@ -1,6 +1,6 @@
 module SendGrid4r::CLI
-  module Supressions
-    class Supression < SgThor
+  module Suppressions
+    class Suppression < SgThor
       desc('block SUBCOMMAND ...ARGS', 'Manage blocks list')
       subcommand('block', Block)
 

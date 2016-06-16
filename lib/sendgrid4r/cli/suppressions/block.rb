@@ -1,5 +1,5 @@
 module SendGrid4r::CLI
-  module Supressions
+  module Suppressions
     class Block < SgThor
 
       desc 'list', 'List blocks'

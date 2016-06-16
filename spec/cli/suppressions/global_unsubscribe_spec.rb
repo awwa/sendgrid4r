@@ -1,14 +1,22 @@
 # encoding: utf-8
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-module SendGrid4r::CLI::Supressions
-  describe Block do
+module SendGrid4r::CLI::Suppressions
+  describe GlobalUnsubscribe do
     describe 'integration test', :it do
       before do
         Dotenv.load
       end
 
-      it '#list' do
+      it '#list with no params' do
+        args = [
+          'list',
+          '--apikey', ENV['SILVER_API_KEY']
+        ]
+        GlobalUnsubscribe.start(args)
+      end
+
+      it '#list with full params' do
         args = [
           'list',
           '--apikey', ENV['SILVER_API_KEY'],
@@ -17,43 +25,34 @@ module SendGrid4r::CLI::Supressions
           '--limit', 10,
           '--offset', 0
         ]
-        Block.start(args)
+        GlobalUnsubscribe.start(args)
       end
 
-      it '#delete with delete_all' do
+      it '#add' do
         args = [
-          'delete',
+          'add',
           '--apikey', ENV['SILVER_API_KEY'],
-          '--delete_all', true
+          '--emails', 'abc@abc.com', 'cde@cde.com'
         ]
-        Block.start(args)
+        GlobalUnsubscribe.start(args)
       end
 
       it '#delete with email' do
         args = [
           'delete',
           '--apikey', ENV['SILVER_API_KEY'],
-          '--email', ''
+          '--email', 'abc@abc.com'
         ]
-        Block.start(args)
-      end
-
-      it '#delete with emails' do
-        args = [
-          'delete',
-          '--apikey', ENV['SILVER_API_KEY'],
-          '--emails', 'abc@abc.com', 'cde@cde.com'
-        ]
-        Block.start(args)
+        GlobalUnsubscribe.start(args)
       end
 
       it '#get' do
         args = [
           'get',
           '--apikey', ENV['SILVER_API_KEY'],
-          '--email', ''
+          '--email', 'cde@cde.com'
         ]
-        Block.start(args)
+        GlobalUnsubscribe.start(args)
       end
     end
   end

@@ -1,8 +1,8 @@
 # encoding: utf-8
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-module SendGrid4r::CLI::Supressions
-  describe Supression do
+module SendGrid4r::CLI::Suppressions
+  describe Suppression do
     describe 'integration test', :it do
       before do
         Dotenv.load
@@ -13,7 +13,7 @@ module SendGrid4r::CLI::Supressions
           'block',
           '--apikey', ENV['SILVER_API_KEY']
         ]
-        Supression.start(args)
+        Suppression.start(args)
       end
 
       it '#bounce subcommand' do
@@ -21,7 +21,7 @@ module SendGrid4r::CLI::Supressions
           'bounce',
           '--apikey', ENV['SILVER_API_KEY']
         ]
-        Supression.start(args)
+        Suppression.start(args)
       end
 
       it '#invalid_email subcommand' do
@@ -29,7 +29,7 @@ module SendGrid4r::CLI::Supressions
           'invalid_email',
           '--apikey', ENV['SILVER_API_KEY']
         ]
-        Supression.start(args)
+        Suppression.start(args)
       end
 
       it '#spam_report subcommand' do
@@ -37,7 +37,7 @@ module SendGrid4r::CLI::Supressions
           'spam_report',
           '--apikey', ENV['SILVER_API_KEY']
         ]
-        Supression.start(args)
+        Suppression.start(args)
       end
 
       it '#global_unsubscribe subcommand' do
@@ -45,7 +45,7 @@ module SendGrid4r::CLI::Supressions
           'global_unsubscribe',
           '--apikey', ENV['SILVER_API_KEY']
         ]
-        Supression.start(args)
+        Suppression.start(args)
       end
 
       it '#group subcommand' do
@@ -53,7 +53,7 @@ module SendGrid4r::CLI::Supressions
           'group',
           '--apikey', ENV['SILVER_API_KEY']
         ]
-        Supression.start(args)
+        Suppression.start(args)
       end
 
       it '#group_unsubscribe subcommand' do
@@ -61,7 +61,7 @@ module SendGrid4r::CLI::Supressions
           'group_unsubscribe',
           '--apikey', ENV['SILVER_API_KEY']
         ]
-        Supression.start(args)
+        Suppression.start(args)
       end
     end
   end

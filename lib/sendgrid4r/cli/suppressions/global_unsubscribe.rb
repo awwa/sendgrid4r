@@ -1,5 +1,5 @@
 module SendGrid4r::CLI
-  module Supressions
+  module Suppressions
     class GlobalUnsubscribe < SgThor
 
       desc 'list', 'List global unsubscribes'

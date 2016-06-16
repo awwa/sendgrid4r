@@ -1,5 +1,5 @@
 module SendGrid4r::CLI
-  module Supressions
+  module Suppressions
     class GroupUnsubscribe < SgThor
 
       desc 'add', 'Add email addresses to the group supressions'
