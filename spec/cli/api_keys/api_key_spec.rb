@@ -16,12 +16,22 @@ module SendGrid4r::CLI::ApiKeys
         ApiKey.start(args)
       end
 
-      it '#create' do
+      it '#create with scope' do
         args = [
           'create',
           '--api-key', ENV['SILVER_API_KEY'],
           '--name', 'api_key_test3',
           '--scopes', 'mail.send'
+        ]
+        ApiKey.start(args)
+      end
+
+      it '#create with all scope' do
+        args = [
+          'create',
+          '--username', ENV['USERNAME'],
+          '--password', ENV['PASS'],
+          '--name', 'api_key_test4'
         ]
         ApiKey.start(args)
       end
@@ -52,18 +62,6 @@ module SendGrid4r::CLI::ApiKeys
           '--name', 'api_key_test31',
           '--api-key-id', ENV['TEMP_API_KEY_ID'],
           '--scopes', 'mail.batch.create', 'mail.send'
-        ]
-        ApiKey.start(args)
-      end
-
-      it '#update all scopes' do
-        args = [
-          'update',
-          '--username', ENV['USERNAME'],
-          '--password', ENV['PASS'],
-          '--name', 'api_key_test31',
-          '--api-key-id', ENV['TEMP_API_KEY_ID'],
-          '--all', true
         ]
         ApiKey.start(args)
       end
