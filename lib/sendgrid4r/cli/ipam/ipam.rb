@@ -1,6 +1,6 @@
 module SendGrid4r::CLI
-  module IpAccessManagement
-    class IpAccess < SgThor
+  module Ipam
+    class Ipam < SgThor
       desc('activity SUBCOMMAND ...ARGS', 'Manage IP access activity')
       subcommand('activity', Activity)
 

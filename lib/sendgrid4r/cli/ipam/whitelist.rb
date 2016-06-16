@@ -1,5 +1,5 @@
 module SendGrid4r::CLI
-  module IpAccessManagement
+  module Ipam
     class Whitelist < SgThor
 
       desc 'list', 'List Whitelisted IPs'
@@ -19,14 +19,8 @@ module SendGrid4r::CLI
 
       desc 'delete', 'Delete Whitelisted IPs'
       option :ids, :type => :array
-      option :rule_id, :type => :numeric
       def delete
-        if options[:rule_id]
-          puts @client.delete_whitelisted_ip(rule_id: options[:rule_id])
-        end
-        if options[:ids]
-          puts @client.delete_whitelisted_ips(ids: options[:ids])
-        end
+        puts @client.delete_whitelisted_ips(ids: options[:ids])
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end

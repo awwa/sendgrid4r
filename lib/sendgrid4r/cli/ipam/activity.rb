@@ -1,5 +1,5 @@
 module SendGrid4r::CLI
-  module IpAccessManagement
+  module Ipam
     class Activity < SgThor
 
       desc 'list', 'History Collection'

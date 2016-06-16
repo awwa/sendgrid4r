@@ -12,8 +12,8 @@ module SendGrid4r::CLI
     desc('ip SUBCOMMAND ...ARGS', 'Manage ips')
     subcommand('ip', Ips::Ip)
 
-    desc('ip_access SUBCOMMAND ...ARGS', 'Manage ip access')
-    subcommand('ip_access', IpAccessManagement::IpAccess)
+    desc('ipam SUBCOMMAND ...ARGS', 'Manage ip access')
+    subcommand('ipam', Ipam::Ipam)
 
     desc('settings SUBCOMMAND ...ARGS', 'Manage settings')
     subcommand('settings', Settings::Settings)
