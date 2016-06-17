@@ -54,11 +54,11 @@ module SendGrid4r::REST
           @client.delete_subuser(username: @username3)
         end
 
-        # TODO
         it '#get_subuser_monitor' do
-          monitor = @client.get_subuser_monitor(
+          @client.post_subuser_monitor(
             username: @username3, email: @email1, frequency: 10
           )
+          monitor = @client.get_subuser_monitor(username: @username3)
           expect(monitor).to be_a(Subusers::Monitor)
         end
 
