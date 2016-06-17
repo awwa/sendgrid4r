@@ -188,9 +188,7 @@ module SendGrid4r::REST
 
       it '#get_subuser_monitor' do
         allow(client).to receive(:execute).and_return(monitor)
-        actual = client.get_subuser_monitor(
-          username: '', email: '', frequency: 1
-        )
+        actual = client.get_subuser_monitor(username: '')
         expect(actual).to be_a(Subusers::Monitor)
       end
 
