@@ -80,7 +80,7 @@ module SendGrid4r::CLI::Stats
         args = [
           'get_monthly',
           '--api-key', ENV['SILVER_API_KEY'],
-          '--subuser', ENV['SUBUSER4'],
+          '--subuser-name', ENV['SUBUSER4'],
           '--date', '2015-01-01'
         ]
         Subuser.start(args)
@@ -90,7 +90,7 @@ module SendGrid4r::CLI::Stats
         args = [
           'get_monthly',
           '--api-key', ENV['SILVER_API_KEY'],
-          '--subuser', ENV['SUBUSER4'],
+          '--subuser-name', ENV['SUBUSER4'],
           '--date', '2015-01-01',
           '--sort-by-metric', 'requests',
           '--sort-by-direction', 'desc',

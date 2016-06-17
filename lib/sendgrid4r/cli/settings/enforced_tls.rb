@@ -15,11 +15,7 @@ module SendGrid4r::CLI
       option :require_tls
       option :require_valid_cert
       def update
-        params = {
-          require_tls: options[:require_tls],
-          require_valid_cert: options[:require_valid_cert]
-        }
-        puts @client.patch_enforced_tls(params: params)
+        puts @client.patch_enforced_tls(params: parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end

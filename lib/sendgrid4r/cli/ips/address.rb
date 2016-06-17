@@ -8,9 +8,7 @@ module SendGrid4r::CLI
       option :pool_name, require: true
       option :ip, require: true
       def add_to_pool
-        puts @client.post_ip_to_pool(
-          pool_name: options[:pool_name], ip: options[:ip]
-        )
+        puts @client.post_ip_to_pool(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -32,7 +30,7 @@ module SendGrid4r::CLI
       desc 'get', 'Get an IP address'
       option :ip, require: true
       def get
-        puts @client.get_ip(ip: options[:ip])
+        puts @client.get_ip(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -41,9 +39,7 @@ module SendGrid4r::CLI
       option :pool_name, require: true
       option :ip, require: true
       def delete_from_pool
-        puts @client.delete_ip_from_pool(
-          pool_name: options[:pool_name], ip: options[:ip]
-        )
+        puts @client.delete_ip_from_pool(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end

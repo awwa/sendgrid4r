@@ -10,38 +10,31 @@ module SendGrid4r::CLI
       option :limit, type: :numeric
       option :offset, type: :numeric
       def list
-        puts @client.get_global_unsubscribes(
-          start_time: options[:start_time], end_time: options[:end_time],
-          limit: options[:limit], offset: options[:offset]
-        )
+        puts @client.get_global_unsubscribes(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
 
       desc 'add', 'Add email addresses to the Global Unsubscribes'
-      option :emails, type: :array, require: true
+      option :recipient_emails, type: :array, require: true
       def add
-        puts @client.post_global_unsubscribes(
-          recipient_emails: options[:emails]
-        )
+        puts @client.post_global_unsubscribes(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
 
       desc 'delete', 'Delete global unsubscribes'
-      option :email, require: true
+      option :email_address, require: true
       def delete
-        puts @client.delete_global_unsubscribe(
-          email_address: options[:email]
-        )
+        puts @client.delete_global_unsubscribe(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
 
       desc 'get', 'Get a global unsubscribe'
-      option :email, require: true
+      option :email_address, require: true
       def get
-        puts @client.get_global_unsubscribe(email_address: options[:email])
+        puts @client.get_global_unsubscribe(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end

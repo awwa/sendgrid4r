@@ -7,7 +7,7 @@ module SendGrid4r::CLI
       desc 'list', 'History Collection'
       option :limit, type: :numeric
       def list
-        puts @client.get_ip_activities(limit: options[:limit])
+        puts @client.get_ip_activities(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end

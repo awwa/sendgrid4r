@@ -13,7 +13,7 @@ module SendGrid4r::CLI::Suppressions
           'add',
           '--api-key', ENV['SILVER_API_KEY'],
           '--group-id', 889,
-          '--emails', 'abc@abc.com', 'cde@cde.com'
+          '--recipient-emails', 'abc@abc.com', 'cde@cde.com'
         ]
         GroupUnsubscribe.start(args)
       end
@@ -32,7 +32,7 @@ module SendGrid4r::CLI::Suppressions
           'remove',
           '--api-key', ENV['SILVER_API_KEY'],
           '--group-id', 889,
-          '--email', 'abc@abc.com'
+          '--email-address', 'abc@abc.com'
         ]
         GroupUnsubscribe.start(args)
       end

@@ -8,10 +8,7 @@ module SendGrid4r::CLI
       option :limit, type: :numeric
       option :offset, type: :numeric
       def list
-        puts @client.get_mail_settings(
-          limit: options[:limit],
-          offset: options[:offset]
-        )
+        puts @client.get_mail_settings(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -23,10 +20,8 @@ module SendGrid4r::CLI
         when 'get'
           puts @client.get_settings_address_whitelist
         when 'enable', 'disable'
-          params = {
-            enabled: action == 'enable',
-            list: options[:list]
-          }
+          params = parameterise(options)
+          params[:enabled] = action == 'enable'
           puts @client.patch_settings_address_whitelist(params: params)
         else
           puts "error: #{action} is not supported in action parameter"
@@ -42,10 +37,8 @@ module SendGrid4r::CLI
         when 'get'
           puts @client.get_settings_bcc
         when 'enable', 'disable'
-          params = {
-            enabled: action == 'enable',
-            email: options[:email]
-          }
+          params = parameterise(options)
+          params[:enabled] = action == 'enable'
           puts @client.patch_settings_bcc(params: params)
         else
           puts "error: #{action} is not supported in action parameter"
@@ -62,11 +55,8 @@ module SendGrid4r::CLI
         when 'get'
           puts @client.get_settings_bounce_purge
         when 'enable', 'disable'
-          params = {
-            enabled: action == 'enable',
-            hard_bounces: options[:hard_bounces],
-            soft_bounces: options[:soft_bounces]
-          }
+          params = parameterise(options)
+          params[:enabled] = action == 'enable'
           puts @client.patch_settings_bounce_purge(params: params)
         else
           puts "error: #{action} is not supported in action parameter"
@@ -83,11 +73,8 @@ module SendGrid4r::CLI
         when 'get'
           puts @client.get_settings_footer
         when 'enable', 'disable'
-          params = {
-            enabled: action == 'enable',
-            html_content: options[:html_content],
-            plain_content: options[:plain_content]
-          }
+          params = parameterise(options)
+          params[:enabled] = action == 'enable'
           puts @client.patch_settings_footer(params: params)
         else
           puts "error: #{action} is not supported in action parameter"
@@ -103,10 +90,8 @@ module SendGrid4r::CLI
         when 'get'
           puts @client.get_settings_forward_bounce
         when 'enable', 'disable'
-          params = {
-            enabled: action == 'enable',
-            email: options[:email]
-          }
+          params = parameterise(options)
+          params[:enabled] = action == 'enable'
           puts @client.patch_settings_forward_bounce(params: params)
         else
           puts "error: #{action} is not supported in action parameter"
@@ -122,10 +107,8 @@ module SendGrid4r::CLI
         when 'get'
           puts @client.get_settings_forward_spam
         when 'enable', 'disable'
-          params = {
-            enabled: action == 'enable',
-            email: options[:email]
-          }
+          params = parameterise(options)
+          params[:enabled] = action == 'enable'
           puts @client.patch_settings_forward_spam(params: params)
         else
           puts "error: #{action} is not supported in action parameter"
@@ -142,11 +125,8 @@ module SendGrid4r::CLI
         when 'get'
           puts @client.get_settings_spam_check
         when 'enable', 'disable'
-          params = {
-            enabled: action == 'enable',
-            url: options[:url],
-            max_score: options[:max_score]
-          }
+          params = parameterise(options)
+          params[:enabled] = action == 'enable'
           puts @client.patch_settings_spam_check(params: params)
         else
           puts "error: #{action} is not supported in action parameter"
@@ -162,10 +142,8 @@ module SendGrid4r::CLI
         when 'get'
           puts @client.get_settings_template
         when 'enable', 'disable'
-          params = {
-            enabled: action == 'enable',
-            html_content: options[:html_content]
-          }
+          params = parameterise(options)
+          params[:enabled] = action == 'enable'
           puts @client.patch_settings_template(params: params)
         else
           puts "error: #{action} is not supported in action parameter"

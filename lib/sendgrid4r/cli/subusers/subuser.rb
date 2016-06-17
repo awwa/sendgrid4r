@@ -9,10 +9,7 @@ module SendGrid4r::CLI
       option :offset, type: :numeric
       option :username
       def list
-        puts @client.get_subusers(
-          limit: options[:limit], offset: options[:offset],
-          username: options[:username]
-        )
+        puts @client.get_subusers(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -23,10 +20,7 @@ module SendGrid4r::CLI
       option :password, require: true
       option :ips, type: :array, require: true
       def create
-        puts @client.post_subuser(
-          username: options[:username], email: options[:email],
-          password: options[:password], ips: options[:ips]
-        )
+        puts @client.post_subuser(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -34,9 +28,9 @@ module SendGrid4r::CLI
       desc 'enable', 'Enable a subuser'
       option :username, require: true
       def enable
-        puts @client.patch_subuser(
-          username: options[:username], disabled: false
-        )
+        params = parameterise(options)
+        params[:disabled] = false
+        puts @client.patch_subuser(params)
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -44,9 +38,9 @@ module SendGrid4r::CLI
       desc 'disable', 'Disable a subuser'
       option :username, require: true
       def disable
-        puts @client.patch_subuser(
-          username: options[:username], disabled: true
-        )
+        params = parameterise(options)
+        params[:disabled] = false
+        puts @client.patch_subuser(params)
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -54,7 +48,7 @@ module SendGrid4r::CLI
       desc 'delete', 'Delete a subuser'
       option :username, require: true
       def delete
-        puts @client.delete_subuser(username: options[:username])
+        puts @client.delete_subuser(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -62,9 +56,7 @@ module SendGrid4r::CLI
       desc 'reputation', 'Retrieve subusers reputation'
       option :usernames, type: :array, require: true
       def reputation
-        puts @client.get_subuser_reputation(
-          usernames: options[:usernames]
-        )
+        puts @client.get_subuser_reputation(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -73,9 +65,7 @@ module SendGrid4r::CLI
       option :username, require: true
       option :ips, type: :array, require: true
       def assign_ips
-        puts @client.put_subuser_assigned_ips(
-          username: options[:username], ips: options[:ips]
-        )
+        puts @client.put_subuser_assigned_ips(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end

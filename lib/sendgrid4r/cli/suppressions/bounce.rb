@@ -8,9 +8,7 @@ module SendGrid4r::CLI
       option :start_time, type: :numeric
       option :end_time, type: :numeric
       def list
-        puts @client.get_bounces(
-          start_time: options[:start_time], end_time: options[:end_time]
-        )
+        puts @client.get_bounces(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -34,7 +32,7 @@ module SendGrid4r::CLI
       desc 'get', 'Get a bounce'
       option :email, require: true
       def get
-        puts @client.get_bounce(email: options[:email])
+        puts @client.get_bounce(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end

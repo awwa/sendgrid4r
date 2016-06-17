@@ -32,7 +32,7 @@ module SendGrid4r::CLI::Suppressions
         args = [
           'add',
           '--api-key', ENV['SILVER_API_KEY'],
-          '--emails', 'abc@abc.com', 'cde@cde.com'
+          '--recipient_emails', 'abc@abc.com', 'cde@cde.com'
         ]
         GlobalUnsubscribe.start(args)
       end
@@ -41,7 +41,7 @@ module SendGrid4r::CLI::Suppressions
         args = [
           'delete',
           '--api-key', ENV['SILVER_API_KEY'],
-          '--email', 'abc@abc.com'
+          '--email_address', 'abc@abc.com'
         ]
         GlobalUnsubscribe.start(args)
       end
@@ -50,7 +50,7 @@ module SendGrid4r::CLI::Suppressions
         args = [
           'get',
           '--api-key', ENV['SILVER_API_KEY'],
-          '--email', 'cde@cde.com'
+          '--email_address', 'cde@cde.com'
         ]
         GlobalUnsubscribe.start(args)
       end

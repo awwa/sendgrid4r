@@ -36,7 +36,7 @@ module SendGrid4r::CLI::Whitelabel
         args = [
           'get',
           '--api-key', ENV['SILVER_API_KEY'],
-          '--id', 558172
+          '--id', 559099
         ]
         Link.start(args)
       end
@@ -45,7 +45,7 @@ module SendGrid4r::CLI::Whitelabel
         args = [
           'update',
           '--api-key', ENV['SILVER_API_KEY'],
-          '--id', 558172,
+          '--id', 559099,
           '--default', true
         ]
         Link.start(args)
@@ -55,7 +55,7 @@ module SendGrid4r::CLI::Whitelabel
         args = [
           'delete',
           '--api-key', ENV['SILVER_API_KEY'],
-          '--id', 558172
+          '--id', 559099
         ]
         Link.start(args)
       end
@@ -73,7 +73,7 @@ module SendGrid4r::CLI::Whitelabel
         args = [
           'validate',
           '--api-key', ENV['SILVER_API_KEY'],
-          '--id', 558172
+          '--id', 559099
         ]
         Link.start(args)
       end
@@ -100,7 +100,7 @@ module SendGrid4r::CLI::Whitelabel
         args = [
           'associate',
           '--api-key', ENV['SILVER_API_KEY'],
-          '--id', 558172,
+          '--id', 559099,
           '--username', ENV['SUBUSER2']
         ]
         Link.start(args)

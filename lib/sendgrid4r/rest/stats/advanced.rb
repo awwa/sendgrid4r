@@ -77,14 +77,14 @@ module SendGrid4r::REST
           start_date:,
           end_date: nil,
           aggregated_by: nil,
-          esps: nil,
+          mailbox_providers: nil,
           &block
       )
         params = {
           start_date: start_date,
           end_date: end_date,
           aggregated_by: aggregated_by,
-          esps: esps
+          mailbox_providers: mailbox_providers
         }
         endpoint = "#{BASE_URL}/mailbox_providers/stats"
         resp = get(@auth, endpoint, params, &block)

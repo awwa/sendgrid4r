@@ -9,10 +9,7 @@ module SendGrid4r::CLI
       option :end_date
       option :aggregated_by
       def get
-        puts @client.get_parse_stats(
-          start_date: options[:start_date], end_date: options[:end_date],
-          aggregated_by: options[:aggregated_by]
-        )
+        puts @client.get_parse_stats(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end

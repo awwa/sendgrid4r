@@ -13,13 +13,9 @@ module SendGrid4r::CLI
       option :active, type: :numeric
       def create
         factory = SendGrid4r::Factory::VersionFactory.new
-        version = factory.create(
-          name: options[:name],
-          subject: options[:subject],
-          html_content: options[:html_content],
-          plain_content: options[:plain_content],
-          active: options[:active]
-        )
+        params = parameterise(options)
+        params.delete(:template_id)
+        version = factory.create(params)
         puts @client.post_version(
           template_id: options[:template_id],
           version: version
@@ -32,10 +28,7 @@ module SendGrid4r::CLI
       option :template_id, require: true
       option :version_id, require: true
       def activate
-        puts @client.activate_version(
-          template_id: options[:template_id],
-          version_id: options[:version_id]
-        )
+        puts @client.activate_version(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -44,10 +37,7 @@ module SendGrid4r::CLI
       option :template_id, require: true
       option :version_id, require: true
       def get
-        puts @client.get_version(
-          template_id: options[:template_id],
-          version_id: options[:version_id]
-        )
+        puts @client.get_version(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -62,13 +52,10 @@ module SendGrid4r::CLI
       option :active
       def update
         factory = SendGrid4r::Factory::VersionFactory.new
-        version = factory.create(
-          name: options[:name],
-          subject: options[:subject],
-          html_content: options[:html_content],
-          plain_content: options[:plain_content],
-          active: options[:active]
-        )
+        params = parameterise(options)
+        params.delete(:template_id)
+        params.delete(:version_id)
+        version = factory.create(params)
         puts @client.patch_version(
           template_id: options[:template_id],
           version_id: options[:version_id],
@@ -82,10 +69,7 @@ module SendGrid4r::CLI
       option :template_id, require: true
       option :version_id, require: true
       def delete
-        puts @client.delete_version(
-          template_id: options[:template_id],
-          version_id: options[:version_id]
-        )
+        puts @client.delete_version(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end

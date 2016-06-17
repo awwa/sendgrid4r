@@ -23,7 +23,7 @@ module SendGrid4r::CLI::Whitelabel
         args = [
           'create',
           '--api-key', ENV['SILVER_API_KEY'],
-          '--ip', '198.37.155.196',
+          '--ip', ENV['IP'],
           '--domain', 'abc',
           '--subdomain', 'cde'
         ]
@@ -43,7 +43,7 @@ module SendGrid4r::CLI::Whitelabel
         args = [
           'delete',
           '--api-key', ENV['SILVER_API_KEY'],
-          '--id', 1
+          '--id', 24743
         ]
         Ip.start(args)
       end

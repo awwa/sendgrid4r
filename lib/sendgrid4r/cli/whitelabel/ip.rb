@@ -9,10 +9,7 @@ module SendGrid4r::CLI
       option :limit, type: :numeric
       option :offset, type: :numeric
       def list
-        puts @client.get_wl_ips(
-          ip: options[:ip], limit: options[:limit],
-          offset: options[:offset]
-        )
+        puts @client.get_wl_ips(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -22,10 +19,7 @@ module SendGrid4r::CLI
       option :domain, require: true
       option :subdomain, require: true
       def create
-        puts @client.post_wl_ip(
-          ip: options[:ip], domain: options[:domain],
-          subdomain: options[:subdomain]
-        )
+        puts @client.post_wl_ip(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -33,7 +27,7 @@ module SendGrid4r::CLI
       desc 'get', 'Retrieve an IP whitelabel'
       option :id, require: true
       def get
-        puts @client.get_wl_ip(id: options[:id])
+        puts @client.get_wl_ip(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -41,7 +35,7 @@ module SendGrid4r::CLI
       desc 'delete', 'Delete an IP whitelabel'
       option :id, require: true
       def delete
-        puts @client.delete_wl_ip(id: options[:id])
+        puts @client.delete_wl_ip(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -49,7 +43,7 @@ module SendGrid4r::CLI
       desc 'validate', 'Validate IP whitelabel'
       option :id, require: true
       def validate
-        puts @client.validate_wl_ip(id: options[:id])
+        puts @client.validate_wl_ip(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end

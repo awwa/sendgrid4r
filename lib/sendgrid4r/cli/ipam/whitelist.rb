@@ -14,7 +14,7 @@ module SendGrid4r::CLI
       desc 'add', 'Add Whitelisted IPs'
       option :ips, type: :array, require: true
       def add
-        puts @client.post_whitelisted_ips(ips: options[:ips])
+        puts @client.post_whitelisted_ips(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -22,7 +22,7 @@ module SendGrid4r::CLI
       desc 'delete', 'Delete Whitelisted IPs'
       option :ids, type: :array
       def delete
-        puts @client.delete_whitelisted_ips(ids: options[:ids])
+        puts @client.delete_whitelisted_ips(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -30,7 +30,7 @@ module SendGrid4r::CLI
       desc 'get', 'Get a Whitelisted IP'
       option :rule_id, type: :numeric, require: true
       def get
-        puts @client.get_whitelisted_ip(rule_id: options[:rule_id])
+        puts @client.get_whitelisted_ip(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end

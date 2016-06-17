@@ -186,7 +186,7 @@ module SendGrid4r::REST::Stats
             start_date: '2015-01-01',
             end_date: '2015-01-02',
             aggregated_by: :week,
-            esps: :sss
+            mailbox_providers: :sss
           )
           expect(top_stats).to be_a(Array)
           top_stats.each do |top_stat|

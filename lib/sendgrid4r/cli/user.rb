@@ -19,15 +19,7 @@ module SendGrid4r::CLI
       when 'get'
         puts @client.get_user_profile
       when 'update'
-        params = {
-          address: options[:address],       city: options[:city],
-          company: options[:company],       country: options[:country],
-          first_name: options[:first_name], last_name: options[:last_name],
-          phone: options[:phone],           state: options[:state],
-          website: options[:website],       zip: options[:zip]
-        }
-        params.delete_if { |_k, v| v.nil? }
-        puts @client.patch_user_profile(params: params)
+        puts @client.patch_user_profile(params: parameterise(options))
       else
         puts "error: #{action} is not supported in action parameter"
       end
@@ -54,7 +46,7 @@ module SendGrid4r::CLI
       when 'get'
         puts @client.get_user_email
       when 'update'
-        puts @client.put_user_email(email: options[:email])
+        puts @client.put_user_email(parameterise(options))
       else
         puts "error: #{action} is not supported in action parameter"
       end
@@ -69,7 +61,7 @@ module SendGrid4r::CLI
       when 'get'
         puts @client.get_user_username
       when 'update'
-        puts @client.put_user_username(username: options[:username])
+        puts @client.put_user_username(parameterise(options))
       else
         puts "error: #{action} is not supported in action parameter"
       end
@@ -83,10 +75,7 @@ module SendGrid4r::CLI
     def password(action)
       case action
       when 'update'
-        puts @client.put_user_password(
-          new_password: options[:new_password],
-          old_password: options[:old_password]
-        )
+        puts @client.put_user_password(parameterise(options))
       else
         puts "error: #{action} is not supported in action parameter"
       end

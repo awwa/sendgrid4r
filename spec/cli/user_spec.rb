@@ -20,7 +20,8 @@ module SendGrid4r::CLI
         args = [
           'profile', 'update',
           '--api-key', ENV['SILVER_API_KEY'],
-          '--city', 'Nakano2'
+          '--city', 'Nakano2',
+          '--zip', '111-1111'
         ]
         User.start(args)
       end

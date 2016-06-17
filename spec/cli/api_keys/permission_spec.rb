@@ -8,7 +8,7 @@ module SendGrid4r::CLI::ApiKeys
         Dotenv.load
       end
 
-      it '#list' do
+      it '#list with api key' do
         args = [
           'list',
           '--api-key', ENV['SILVER_API_KEY']
@@ -16,11 +16,11 @@ module SendGrid4r::CLI::ApiKeys
         Permission.start(args)
       end
 
-      it '#list' do
+      it '#list with user and pass' do
         args = [
           'list',
-          '--username', ENV['USERNAME'],
-          '--password', ENV['PASS']
+          '--user', ENV['USERNAME'],
+          '--pass', ENV['PASS']
         ]
         Permission.start(args)
       end

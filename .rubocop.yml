@@ -27,3 +27,8 @@ NumericLiterals:
 # Disable force module and class style
 ClassAndModuleChildren:
   Enabled: false
+
+# Change limitation of the class length
+ClassLength:
+  CountComments: false  # count full line comments?
+  Max: 160

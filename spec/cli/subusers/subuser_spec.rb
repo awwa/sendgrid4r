@@ -14,7 +14,7 @@ module SendGrid4r::CLI::Subusers
           '--api-key', ENV['SILVER_API_KEY'],
           '--limit', 10,
           '--offset', 0,
-          '--username', 'blog.sgncsfn9@kke.com'
+          '--username', ENV['SUBUSER4']
         ]
         Subuser.start(args)
       end

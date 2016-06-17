@@ -9,11 +9,7 @@ module SendGrid4r::CLI
       option :description, require: true
       option :is_default, type: :boolean
       def create
-        puts @client.post_group(
-          name: options[:name],
-          description: options[:description],
-          is_default: options[:is_default]
-        )
+        puts @client.post_group(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -28,7 +24,7 @@ module SendGrid4r::CLI
       desc 'get', 'Get a supression group'
       option :group_id, require: true
       def get
-        puts @client.get_group(group_id: options[:group_id])
+        puts @client.get_group(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -38,11 +34,8 @@ module SendGrid4r::CLI
       option :name
       option :description
       def update
-        group = {}
-        group[:name] = options[:name] unless options[:name].nil?
-        unless options[:description].nil?
-          group[:description] = options[:description]
-        end
+        group = parameterise(options)
+        group.delete(:group_id)
         puts @client.patch_group(
           group_id: options[:group_id],
           group: group
@@ -54,7 +47,7 @@ module SendGrid4r::CLI
       desc 'delete', 'Delete a supression group'
       option :group_id, require: true
       def delete
-        puts @client.delete_group(group_id: options[:group_id])
+        puts @client.delete_group(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end

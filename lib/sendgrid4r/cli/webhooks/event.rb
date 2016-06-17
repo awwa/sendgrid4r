@@ -25,21 +25,9 @@ module SendGrid4r::CLI
       option :click, type: :boolean
       option :dropped, type: :boolean
       def enable
-        event = SendGrid4r::Factory::EventFactory.create(
-          enabled: true,
-          url: options[:url],
-          group_resubscribe: options[:group_resubscribe],
-          delivered: options[:delivered],
-          group_unsubscribe: options[:group_unsubscribe],
-          spam_report: options[:spam_report],
-          bounce: options[:bounce],
-          deferred: options[:deferred],
-          unsubscribe: options[:unsubscribe],
-          processed: options[:processed],
-          open: options[:open],
-          click: options[:click],
-          dropped: options[:dropped]
-        )
+        params = parameterise(options)
+        params[:enabled] = true
+        event = SendGrid4r::Factory::EventFactory.create(params)
         puts @client.patch_settings_event_notification(params: event)
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
@@ -56,7 +44,7 @@ module SendGrid4r::CLI
       desc 'test', 'Sends a fake event notification post to the provided URL'
       option :url
       def test
-        puts @client.test_settings_event_notification(url: options[:url])
+        puts @client.test_settings_event_notification(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end

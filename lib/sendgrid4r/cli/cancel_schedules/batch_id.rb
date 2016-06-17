@@ -14,7 +14,7 @@ module SendGrid4r::CLI
       desc 'validate', 'Validate Batch ID'
       option :batch_id, require: true
       def validate_batch_id
-        puts @client.validate_batch_id(batch_id: options[:batch_id])
+        puts @client.validate_batch_id(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end

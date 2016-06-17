@@ -10,10 +10,7 @@ module SendGrid4r::CLI
       option :aggregated_by
       option :country
       def geo
-        puts @client.get_geo_stats(
-          start_date: options[:start_date], end_date: options[:end_date],
-          aggregated_by: options[:aggregated_by], country: options[:country]
-        )
+        puts @client.get_geo_stats(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -23,10 +20,7 @@ module SendGrid4r::CLI
       option :end_date
       option :aggregated_by
       def device
-        puts @client.get_devices_stats(
-          start_date: options[:start_date], end_date: options[:end_date],
-          aggregated_by: options[:aggregated_by]
-        )
+        puts @client.get_devices_stats(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -36,10 +30,7 @@ module SendGrid4r::CLI
       option :end_date
       option :aggregated_by
       def client
-        puts @client.get_clients_stats(
-          start_date: options[:start_date], end_date: options[:end_date],
-          aggregated_by: options[:aggregated_by]
-        )
+        puts @client.get_clients_stats(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -50,11 +41,7 @@ module SendGrid4r::CLI
       option :aggregated_by
       option :client_type, require: true
       def client_type
-        puts @client.get_clients_type_stats(
-          start_date: options[:start_date], end_date: options[:end_date],
-          aggregated_by: options[:aggregated_by],
-          client_type: options[:client_type]
-        )
+        puts @client.get_clients_type_stats(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -65,11 +52,7 @@ module SendGrid4r::CLI
       option :aggregated_by
       option :mailbox_providers
       def mailbox_provider
-        puts @client.get_mailbox_providers_stats(
-          start_date: options[:start_date], end_date: options[:end_date],
-          aggregated_by: options[:aggregated_by],
-          esps: options[:mailbox_providers]
-        )
+        puts @client.get_mailbox_providers_stats(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -80,11 +63,7 @@ module SendGrid4r::CLI
       option :aggregated_by
       option :browsers
       def browser
-        puts @client.get_browsers_stats(
-          start_date: options[:start_date], end_date: options[:end_date],
-          aggregated_by: options[:aggregated_by],
-          browsers: options[:browsers]
-        )
+        puts @client.get_browsers_stats(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end

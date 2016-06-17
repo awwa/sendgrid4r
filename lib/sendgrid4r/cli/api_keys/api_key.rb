@@ -15,10 +15,7 @@ module SendGrid4r::CLI
       option :name, require: true
       option :scopes, type: :array
       def create
-        puts @client.post_api_key(
-          name: options[:name],
-          scopes: options[:scopes]
-        )
+        puts @client.post_api_key(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -26,7 +23,7 @@ module SendGrid4r::CLI
       desc 'get', 'Get an API key'
       option :api_key_id, require: true
       def get
-        puts @client.get_api_key(api_key_id: options[:api_key_id])
+        puts @client.get_api_key(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -34,7 +31,7 @@ module SendGrid4r::CLI
       desc 'delete', 'Delete an API key'
       option :api_key_id, require: true
       def delete
-        puts @client.delete_api_key(api_key_id: options[:api_key_id])
+        puts @client.delete_api_key(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -44,10 +41,7 @@ module SendGrid4r::CLI
       option :name, require: true
       option :scopes, type: :array
       def update
-        puts @client.put_api_key(
-          api_key_id: options[:api_key_id], name: options[:name],
-          scopes: options[:scopes]
-        )
+        puts @client.put_api_key(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end

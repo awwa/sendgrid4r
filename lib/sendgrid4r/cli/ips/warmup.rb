@@ -14,7 +14,7 @@ module SendGrid4r::CLI
       desc 'get', 'Get warmup status for a particular IP address'
       option :ip, require: true
       def get
-        puts @client.get_warmup_ip(ip: options[:ip])
+        puts @client.get_warmup_ip(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -22,7 +22,7 @@ module SendGrid4r::CLI
       desc 'start', 'Start warmup'
       option :ip, require: true
       def start
-        puts @client.post_warmup_ip(ip: options[:ip])
+        puts @client.post_warmup_ip(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -30,7 +30,7 @@ module SendGrid4r::CLI
       desc 'stop', 'Stop warmup'
       option :ip, require: true
       def stop
-        puts @client.delete_warmup_ip(ip: options[:ip])
+        puts @client.delete_warmup_ip(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end

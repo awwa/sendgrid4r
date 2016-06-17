@@ -8,10 +8,7 @@ module SendGrid4r::CLI
       option :limit, type: :numeric
       option :offset, type: :numeric
       def list
-        puts @client.get_partner_settings(
-          limit: options[:limit],
-          offset: options[:offset]
-        )
+        puts @client.get_partner_settings(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -23,10 +20,8 @@ module SendGrid4r::CLI
         when 'get'
           puts @client.get_settings_new_relic
         when 'enable', 'disabple'
-          params = {
-            enabled: action == 'enable',
-            license_key: options[:license_key]
-          }
+          params = parameterise(options)
+          params[:enabled] = action == 'enable'
           puts @client.patch_settings_new_relic(params: params)
         else
           puts "error: #{action} is not supported in action parameter"

@@ -10,10 +10,7 @@ module SendGrid4r::CLI
       option :limit, type: :numeric
       option :offset, type: :numeric
       def list
-        puts @client.get_invalid_emails(
-          start_time: options[:start_time], end_time: options[:end_time],
-          limit: options[:limit], offset: options[:offset]
-        )
+        puts @client.get_invalid_emails(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
@@ -37,7 +34,7 @@ module SendGrid4r::CLI
       desc 'get', 'Get a invalid email'
       option :email, require: true
       def get
-        puts @client.get_invalid_email(email: options[:email])
+        puts @client.get_invalid_email(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end
