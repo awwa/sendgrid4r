@@ -49,7 +49,6 @@ module SendGrid4r::REST
         finish(resp, @raw_resp) { |r| r }
       end
 
-      # TODO: remove. This endpoint has not been supported already.
       def get_suppressions(email_address:, &block)
         endpoint = "#{BASE_URL}/asm/suppressions/#{email_address}"
         resp = get(@auth, endpoint, &block)
