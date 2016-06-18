@@ -117,84 +117,76 @@ module SendGrid4r::REST::MarketingCampaigns::Contacts
       end
 
       let(:condition) do
-        JSON.parse(
-          '{'\
-            '"field": "last_name",'\
-            '"value": "Miller",'\
-            '"operator": "eq",'\
-            '"and_or": ""'\
-          '}'
-        )
+        '{'\
+          '"field": "last_name",'\
+          '"value": "Miller",'\
+          '"operator": "eq",'\
+          '"and_or": ""'\
+        '}'
       end
 
       let(:segment) do
-        JSON.parse(
-          '{'\
-            '"id": 1,'\
-            '"name": "Last Name Miller",'\
-            '"list_id": 4,'\
-            '"conditions": ['\
-              '{'\
-                '"field": "last_name",'\
-                '"value": "Miller",'\
-                '"operator": "eq",'\
-                '"and_or": ""'\
-              '}'\
-            '],'\
-            '"recipient_count": 1'\
-          '}'
-        )
+        '{'\
+          '"id": 1,'\
+          '"name": "Last Name Miller",'\
+          '"list_id": 4,'\
+          '"conditions": ['\
+            '{'\
+              '"field": "last_name",'\
+              '"value": "Miller",'\
+              '"operator": "eq",'\
+              '"and_or": ""'\
+            '}'\
+          '],'\
+          '"recipient_count": 1'\
+        '}'
       end
 
       let(:segments) do
-        JSON.parse(
-          '{'\
-            '"segments": ['\
-              '{'\
-                '"id": 1,'\
-                '"name": "Last Name Miller",'\
-                '"list_id": 4,'\
-                '"conditions": ['\
-                  '{'\
-                    '"field": "last_name",'\
-                    '"value": "Miller",'\
-                    '"operator": "eq",'\
-                    '"and_or": ""'\
-                  '}'\
-                '],'\
-                '"recipient_count": 1'\
-              '}'\
-            ']'\
-          '}'
-        )
+        '{'\
+          '"segments": ['\
+            '{'\
+              '"id": 1,'\
+              '"name": "Last Name Miller",'\
+              '"list_id": 4,'\
+              '"conditions": ['\
+                '{'\
+                  '"field": "last_name",'\
+                  '"value": "Miller",'\
+                  '"operator": "eq",'\
+                  '"and_or": ""'\
+                '}'\
+              '],'\
+              '"recipient_count": 1'\
+            '}'\
+          ']'\
+        '}'
       end
 
       let(:recipients) do
-        JSON.parse(
-          '{'\
-            '"recipients": ['\
-              '{'\
-                '"created_at": 1422313607,'\
-                '"email": "jones@example.com",'\
-                '"first_name": null,'\
-                '"id": "jones@example.com",'\
-                '"last_clicked": null,'\
-                '"last_emailed": null,'\
-                '"last_name": "Jones",'\
-                '"last_opened": null,'\
-                '"updated_at": 1422313790,'\
-                '"custom_fields": ['\
-                  '{'\
-                    '"id": 23,'\
-                    '"name": "pet",'\
-                    '"value": "Fluffy",'\
-                    '"type": "text"'\
-                  '}'\
-                ']'\
-              '}'\
-            ']'\
-          '}'
-        )
+        '{'\
+          '"recipients": ['\
+            '{'\
+              '"created_at": 1422313607,'\
+              '"email": "jones@example.com",'\
+              '"first_name": null,'\
+              '"id": "jones@example.com",'\
+              '"last_clicked": null,'\
+              '"last_emailed": null,'\
+              '"last_name": "Jones",'\
+              '"last_opened": null,'\
+              '"updated_at": 1422313790,'\
+              '"custom_fields": ['\
+                '{'\
+                  '"id": 23,'\
+                  '"name": "pet",'\
+                  '"value": "Fluffy",'\
+                  '"type": "text"'\
+                '}'\
+              ']'\
+            '}'\
+          ']'\
+        '}'
       end
 
       it '#post_segment' do
@@ -234,7 +226,7 @@ module SendGrid4r::REST::MarketingCampaigns::Contacts
       end
 
       it 'creates condition instance' do
-        actual = Segments.create_condition(condition)
+        actual = Segments.create_condition(JSON.parse(condition))
         expect(actual).to be_a(Segments::Condition)
         expect(actual.field).to eq('last_name')
         expect(actual.value).to eq('Miller')
@@ -243,7 +235,7 @@ module SendGrid4r::REST::MarketingCampaigns::Contacts
       end
 
       it 'creates segment instance' do
-        actual = Segments.create_segment(segment)
+        actual = Segments.create_segment(JSON.parse(segment))
         expect(actual).to be_a(Segments::Segment)
         expect(actual.id).to eq(1)
         expect(actual.name).to eq('Last Name Miller')
@@ -256,7 +248,7 @@ module SendGrid4r::REST::MarketingCampaigns::Contacts
       end
 
       it 'creates segments instance' do
-        actual = Segments.create_segments(segments)
+        actual = Segments.create_segments(JSON.parse(segments))
         expect(actual).to be_a(Segments::Segments)
         expect(actual.segments).to be_a(Array)
         actual.segments.each do |segment|

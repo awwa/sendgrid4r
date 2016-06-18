@@ -128,102 +128,92 @@ module SendGrid4r::REST::MarketingCampaigns::Contacts
       end
 
       let(:recipient) do
-        JSON.parse(
-          '{'\
-            '"created_at": 1422313607,'\
-            '"email": "jones@example.com",'\
-            '"first_name": null,'\
-            '"id": "YUBh",'\
-            '"last_clicked": null,'\
-            '"last_emailed": null,'\
-            '"last_name": "Jones",'\
-            '"last_opened": null,'\
-            '"updated_at": 1422313790,'\
-            '"custom_fields": ['\
-              '{'\
-                '"id": 23,'\
-                '"name": "pet",'\
-                '"value": "Fluffy",'\
-                '"type": "text"'\
-              '}'\
-            ']'\
-          '}'
-        )
+        '{'\
+          '"created_at": 1422313607,'\
+          '"email": "jones@example.com",'\
+          '"first_name": null,'\
+          '"id": "YUBh",'\
+          '"last_clicked": null,'\
+          '"last_emailed": null,'\
+          '"last_name": "Jones",'\
+          '"last_opened": null,'\
+          '"updated_at": 1422313790,'\
+          '"custom_fields": ['\
+            '{'\
+              '"id": 23,'\
+              '"name": "pet",'\
+              '"value": "Fluffy",'\
+              '"type": "text"'\
+            '}'\
+          ']'\
+        '}'
       end
 
       let(:recipients) do
-        JSON.parse(
-          '{'\
-            '"recipients": ['\
-              '{'\
-                '"created_at": 1422313607,'\
-                '"email": "jones@example.com",'\
-                '"first_name": null,'\
-                '"id": "YUBh",'\
-                '"last_clicked": null,'\
-                '"last_emailed": null,'\
-                '"last_name": "Jones",'\
-                '"last_opened": null,'\
-                '"updated_at": 1422313790,'\
-                '"custom_fields": ['\
-                  '{'\
-                    '"id": 23,'\
-                    '"name": "pet",'\
-                    '"value": "Fluffy",'\
-                    '"type": "text"'\
-                  '}'\
-                ']'\
-              '}'\
-            ']'\
-          '}'
-        )
+        '{'\
+          '"recipients": ['\
+            '{'\
+              '"created_at": 1422313607,'\
+              '"email": "jones@example.com",'\
+              '"first_name": null,'\
+              '"id": "YUBh",'\
+              '"last_clicked": null,'\
+              '"last_emailed": null,'\
+              '"last_name": "Jones",'\
+              '"last_opened": null,'\
+              '"updated_at": 1422313790,'\
+              '"custom_fields": ['\
+                '{'\
+                  '"id": 23,'\
+                  '"name": "pet",'\
+                  '"value": "Fluffy",'\
+                  '"type": "text"'\
+                '}'\
+              ']'\
+            '}'\
+          ']'\
+        '}'
       end
 
       let(:recipient_count) do
-        JSON.parse(
-          '{'\
-            '"recipient_count": 2'\
-          '}'
-        )
+        '{'\
+          '"recipient_count": 2'\
+        '}'
       end
 
       let(:lists) do
-        JSON.parse(
-          '{'\
-            '"lists": ['\
-              '{'\
-                '"id": 1,'\
-                '"name": "the jones",'\
-                '"recipient_count": 1'\
-              '}'\
-            ']'\
-          '}'
-        )
+        '{'\
+          '"lists": ['\
+            '{'\
+              '"id": 1,'\
+              '"name": "the jones",'\
+              '"recipient_count": 1'\
+            '}'\
+          ']'\
+        '}'
       end
 
       let(:result) do
-        JSON.parse(
-          '{'\
-            '"error_count": 1,'\
-            '"error_indices": ['\
-              '2'\
-            '],'\
-            '"new_count": 2,'\
-            '"persisted_recipients": ['\
-              '"YUBh",'\
-              '"bWlsbGVyQG1pbGxlci50ZXN0"'\
-            '],'\
-            '"updated_count": 0,'\
-            '"errors": ['\
-              '{'\
-                '"message": "Invalid email.",'\
-                '"error_indices": ['\
-                  '2'\
-                ']'\
-              '}'\
-            ']'\
-          '}'
-        )
+        '{'\
+          '"error_count": 1,'\
+          '"error_indices": ['\
+            '2'\
+          '],'\
+          '"new_count": 2,'\
+          '"persisted_recipients": ['\
+            '"YUBh",'\
+            '"bWlsbGVyQG1pbGxlci50ZXN0"'\
+          '],'\
+          '"updated_count": 0,'\
+          '"errors": ['\
+            '{'\
+              '"message": "Invalid email.",'\
+              '"error_indices": ['\
+                '2'\
+              ']'\
+            '}'\
+          ']'\
+        '}'
       end
 
       it '#post_recipients' do
@@ -282,7 +272,7 @@ module SendGrid4r::REST::MarketingCampaigns::Contacts
 
       it 'creates recipient instance' do
         actual = Recipients.create_recipient(
-          recipient
+          JSON.parse(recipient)
         )
         expect(actual).to be_a(Recipients::Recipient)
         expect(actual.created_at).to eq(Time.at(1422313607))
@@ -302,7 +292,7 @@ module SendGrid4r::REST::MarketingCampaigns::Contacts
       end
 
       it 'creates recipients instance' do
-        actual = Recipients.create_recipients(recipients)
+        actual = Recipients.create_recipients(JSON.parse(recipients))
         expect(actual.recipients).to be_a(Array)
         actual.recipients.each do |recipient|
           expect(recipient).to be_a(Recipients::Recipient)
@@ -310,7 +300,7 @@ module SendGrid4r::REST::MarketingCampaigns::Contacts
       end
 
       it 'creates result instance' do
-        actual = Recipients.create_result(result)
+        actual = Recipients.create_result(JSON.parse(result))
         expect(actual.error_count).to eq(1)
         expect(actual.error_indices).to be_a(Array)
         expect(actual.error_indices[0]).to eq(2)

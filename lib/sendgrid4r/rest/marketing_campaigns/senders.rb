@@ -67,19 +67,19 @@ module SendGrid4r::REST
     def post_sender(params:, &block)
       endpoint = MarketingCampaigns.url_sender
       resp = post(@auth, endpoint, params.to_h, &block)
-      MarketingCampaigns.create_sender(resp)
+      finish(resp, @raw_resp) { |r| MarketingCampaigns.create_sender(r) }
     end
 
     def get_senders(&block)
       endpoint = MarketingCampaigns.url_sender
       resp = get(@auth, endpoint, &block)
-      MarketingCampaigns.create_senders(resp)
+      finish(resp, @raw_resp) { |r| MarketingCampaigns.create_senders(r) }
     end
 
     def patch_sender(sender_id:, params:, &block)
       endpoint = MarketingCampaigns.url_sender(sender_id)
       resp = patch(@auth, endpoint, params.to_h, &block)
-      MarketingCampaigns.create_sender(resp)
+      finish(resp, @raw_resp) { |r| MarketingCampaigns.create_sender(r) }
     end
 
     def delete_sender(sender_id:, &block)
@@ -95,7 +95,7 @@ module SendGrid4r::REST
     def get_sender(sender_id:, &block)
       endpoint = MarketingCampaigns.url_sender(sender_id)
       resp = get(@auth, endpoint, &block)
-      MarketingCampaigns.create_sender(resp)
+      finish(resp, @raw_resp) { |r| MarketingCampaigns.create_sender(r) }
     end
   end
 end

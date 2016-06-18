@@ -45,5 +45,8 @@ module SendGrid4r::CLI
 
     desc('user SUBCOMMAND ...ARGS', 'Manage user')
     subcommand('user', User)
+
+    desc('campaign SUBCOMMAND ...ARGS', 'Manage Marketing Campaigns')
+    subcommand('campaign', Campaign::Campaign)
   end
 end

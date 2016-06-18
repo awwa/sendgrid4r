@@ -41,57 +41,53 @@ module SendGrid4r::REST::MarketingCampaigns::Contacts
       end
 
       let(:field) do
-        JSON.parse(
-          '{'\
-            '"name": "first_name",'\
-            '"type": "text"'\
-          '}'
-        )
+        '{'\
+          '"name": "first_name",'\
+          '"type": "text"'\
+        '}'
       end
 
       let(:fields) do
-        JSON.parse(
-          '{'\
-            '"reserved_fields": ['\
-              '{'\
-                '"name": "first_name",'\
-                '"type": "text"'\
-              '},'\
-              '{'\
-                '"name": "last_name",'\
-                '"type": "text"'\
-              '},'\
-              '{'\
-                '"name": "email",'\
-                '"type": "text"'\
-              '},'\
-              '{'\
-                '"name": "created_at",'\
-                '"type": "date"'\
-              '},'\
-              '{'\
-                '"name": "updated_at",'\
-                '"type": "date"'\
-              '},'\
-              '{'\
-                '"name": "last_emailed",'\
-                '"type": "date"'\
-              '},'\
-              '{'\
-                '"name": "last_clicked",'\
-                '"type": "date"'\
-              '},'\
-              '{'\
-                '"name": "last_opened",'\
-                '"type": "date"'\
-              '},'\
-              '{'\
-                '"name": "my_custom_field",'\
-                '"type": "text"'\
-              '}'\
-            ']'\
-          '}'
-        )
+        '{'\
+          '"reserved_fields": ['\
+            '{'\
+              '"name": "first_name",'\
+              '"type": "text"'\
+            '},'\
+            '{'\
+              '"name": "last_name",'\
+              '"type": "text"'\
+            '},'\
+            '{'\
+              '"name": "email",'\
+              '"type": "text"'\
+            '},'\
+            '{'\
+              '"name": "created_at",'\
+              '"type": "date"'\
+            '},'\
+            '{'\
+              '"name": "updated_at",'\
+              '"type": "date"'\
+            '},'\
+            '{'\
+              '"name": "last_emailed",'\
+              '"type": "date"'\
+            '},'\
+            '{'\
+              '"name": "last_clicked",'\
+              '"type": "date"'\
+            '},'\
+            '{'\
+              '"name": "last_opened",'\
+              '"type": "date"'\
+            '},'\
+            '{'\
+              '"name": "my_custom_field",'\
+              '"type": "text"'\
+            '}'\
+          ']'\
+        '}'
       end
 
       it '#get_reserved_fields' do
@@ -101,13 +97,13 @@ module SendGrid4r::REST::MarketingCampaigns::Contacts
       end
 
       it 'creates field instance' do
-        actual = CustomFields.create_field(field)
+        actual = CustomFields.create_field(JSON.parse(field))
         expect(actual.name).to eq('first_name')
         expect(actual.type).to eq('text')
       end
 
       it 'creates fields instance' do
-        actual = ReservedFields.create_fields(fields)
+        actual = ReservedFields.create_fields(JSON.parse(fields))
         expect(actual).to be_a(ReservedFields::Fields)
         expect(actual.reserved_fields).to be_a(Array)
         actual.reserved_fields.each do |field|

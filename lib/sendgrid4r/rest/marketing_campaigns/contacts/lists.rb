@@ -39,24 +39,24 @@ module SendGrid4r::REST
           params = {}
           params['name'] = name
           resp = post(@auth, Contacts::Lists.url, params, &block)
-          Contacts::Lists.create_list(resp)
+          finish(resp, @raw_resp) { |r| Contacts::Lists.create_list(r) }
         end
 
         def get_lists(&block)
           resp = get(@auth, Contacts::Lists.url, &block)
-          Contacts::Lists.create_lists(resp)
+          finish(resp, @raw_resp) { |r| Contacts::Lists.create_lists(r) }
         end
 
         def get_list(list_id:, &block)
           resp = get(@auth, Contacts::Lists.url(list_id), &block)
-          Contacts::Lists.create_list(resp)
+          finish(resp, @raw_resp) { |r| Contacts::Lists.create_list(r) }
         end
 
         def patch_list(list_id:, name:, &block)
           params = {}
           params['name'] = name
           resp = patch(@auth, Contacts::Lists.url(list_id), params, &block)
-          Contacts::Lists.create_list(resp)
+          finish(resp, @raw_resp) { |r| Contacts::Lists.create_list(r) }
         end
 
         def delete_list(list_id:, &block)
@@ -77,7 +77,9 @@ module SendGrid4r::REST
           params['page_size'] = page_size unless page_size.nil?
           endpoint = Contacts::Lists.recipients_url(list_id)
           resp = get(@auth, endpoint, params, &block)
-          Contacts::Recipients.create_recipients(resp)
+          finish(resp, @raw_resp) do |r|
+            Contacts::Recipients.create_recipients(r)
+          end
         end
 
         def post_recipient_to_list(list_id:, recipient_id:, &block)

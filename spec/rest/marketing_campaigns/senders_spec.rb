@@ -87,61 +87,57 @@ module SendGrid4r::REST::MarketingCampaigns
       end
 
       let(:sender) do
-        JSON.parse(
-          '{'\
-            '"id": 1,'\
-            '"nickname": "My Sender ID",'\
-            '"from": {'\
-              '"email": "from@example.com",'\
-              '"name": "Example INC"'\
-            '},'\
-            '"reply_to": {'\
-              '"email": "replyto@example.com",'\
-              '"name": "Example INC"'\
-            '},'\
-            '"address": "123 Elm St.",'\
-            '"address_2": "Apt. 456",'\
-            '"city": "Denver",'\
-            '"state": "Colorado",'\
-            '"zip": "80202",'\
-            '"country": "United States",'\
-            '"verified":{'\
-              '"status":false,"reason":null'\
-            '},'\
-            '"updated_at": 1449872165,'\
-            '"created_at": 1449872165,'\
-            '"locked": false'\
-          '}'
-        )
+        '{'\
+          '"id": 1,'\
+          '"nickname": "My Sender ID",'\
+          '"from": {'\
+            '"email": "from@example.com",'\
+            '"name": "Example INC"'\
+          '},'\
+          '"reply_to": {'\
+            '"email": "replyto@example.com",'\
+            '"name": "Example INC"'\
+          '},'\
+          '"address": "123 Elm St.",'\
+          '"address_2": "Apt. 456",'\
+          '"city": "Denver",'\
+          '"state": "Colorado",'\
+          '"zip": "80202",'\
+          '"country": "United States",'\
+          '"verified":{'\
+            '"status":false,"reason":null'\
+          '},'\
+          '"updated_at": 1449872165,'\
+          '"created_at": 1449872165,'\
+          '"locked": false'\
+        '}'
       end
 
       let(:senders) do
-        JSON.parse(
-          '['\
-            '{'\
-              '"id":1,'\
-              '"nickname":"My Sender ID",'\
-              '"from":{'\
-                '"email":"from@example.com","name":"Example INC"'\
-              '},'\
-              '"reply_to":{'\
-                '"email":"replyto@example.com","name":"Example INC"'\
-              '},'\
-              '"address":"123 Elm St.",'\
-              '"address_2":"Apt. 456",'\
-              '"city":"Denver",'\
-              '"state":"Co",'\
-              '"zip":"80202",'\
-              '"country":"United States",'\
-              '"verified":{'\
-                '"status":false,"reason":null'\
-              '},'\
-              '"updated_at":1464187035,'\
-              '"created_at":1464187035,'\
-              '"locked":false'\
-            '}'\
-          ']'
-        )
+        '['\
+          '{'\
+            '"id":1,'\
+            '"nickname":"My Sender ID",'\
+            '"from":{'\
+              '"email":"from@example.com","name":"Example INC"'\
+            '},'\
+            '"reply_to":{'\
+              '"email":"replyto@example.com","name":"Example INC"'\
+            '},'\
+            '"address":"123 Elm St.",'\
+            '"address_2":"Apt. 456",'\
+            '"city":"Denver",'\
+            '"state":"Co",'\
+            '"zip":"80202",'\
+            '"country":"United States",'\
+            '"verified":{'\
+              '"status":false,"reason":null'\
+            '},'\
+            '"updated_at":1464187035,'\
+            '"created_at":1464187035,'\
+            '"locked":false'\
+          '}'\
+        ']'
       end
 
       it '#post_sender' do
@@ -182,7 +178,9 @@ module SendGrid4r::REST::MarketingCampaigns
       end
 
       it 'creates sender instance' do
-        actual = SendGrid4r::REST::MarketingCampaigns.create_sender(sender)
+        actual = SendGrid4r::REST::MarketingCampaigns.create_sender(
+          JSON.parse(sender)
+        )
         expect(actual).to be_a(Sender)
         expect(actual.id).to eq(1)
         expect(actual.nickname).to eq('My Sender ID')
@@ -204,7 +202,9 @@ module SendGrid4r::REST::MarketingCampaigns
       end
 
       it 'creates senders instance' do
-        actual = SendGrid4r::REST::MarketingCampaigns.create_senders(senders)
+        actual = SendGrid4r::REST::MarketingCampaigns.create_senders(
+          JSON.parse(senders)
+        )
         expect(actual).to be_a(Array)
         sender = actual[0]
         expect(sender.id).to eq(1)
