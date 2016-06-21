@@ -105,8 +105,8 @@ module SendGrid4r::REST
         def get_recipients_count(&block)
           resp = get(@auth, "#{Contacts::Recipients.url}/count", &block)
           finish(resp, @raw_resp) do |r|
-            Contacts::Recipients.create_recipient_count(r)
-          end.recipient_count
+            Contacts::Recipients.create_recipient_count(r).recipient_count
+          end
         end
 
         def search_recipients(params:, &block)

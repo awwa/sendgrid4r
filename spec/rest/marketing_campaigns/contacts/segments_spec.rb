@@ -37,11 +37,15 @@ module SendGrid4r::REST::MarketingCampaigns::Contacts
         end
         # post a custom field and a segment
         @client.post_custom_field(name: @field, type: 'text')
-        @condition = @condition_factory.create(
-          field: @field, value: @value, operator: @operator, and_or: @and_or
+        @condition1 = @condition_factory.create(
+          field: @field, value: @value, operator: @operator
+        )
+        @condition2 = @condition_factory.create(
+          field: @field, value: @value, operator: @operator, and_or: 'and'
         )
         params1 = @segment_factory.create(
-          name: @name1, list_id: nil, conditions: [@condition]
+          name: @name1, list_id: nil,
+          conditions: [@condition1, @condition2]
         )
         @segment1 = @client.post_segment(params: params1)
       end
@@ -50,13 +54,14 @@ module SendGrid4r::REST::MarketingCampaigns::Contacts
         it '#post_segment' do
           lists = @client.get_lists
           params2 = @segment_factory.create(
-            name: @name2, list_id: lists.lists[0].id, conditions: [@condition]
+            name: @name2, list_id: lists.lists[0].id,
+            conditions: [@condition1, @condition2]
           )
           segment = @client.post_segment(params: params2)
           expect(segment.id).to be_a(Fixnum)
           expect(segment.name).to eq(@name2)
           expect(segment.list_id).to eq(lists.lists[0].id)
-          expect(segment.conditions.length).to eq(1)
+          expect(segment.conditions.length).to eq(2)
           expect(segment.recipient_count).to eq(0)
           condition = segment.conditions[0]
           expect(condition.field).to eq(@field)
@@ -88,7 +93,7 @@ module SendGrid4r::REST::MarketingCampaigns::Contacts
 
         it '#patch_segment' do
           edit_params = @segment_factory.create(
-            name: @edit_name1, conditions: [@condition]
+            name: @edit_name1, conditions: [@condition1, @condition2]
           )
           edit_segment = @client.patch_segment(
             segment_id: @segment1.id, params: edit_params
