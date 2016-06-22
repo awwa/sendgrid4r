@@ -9,7 +9,7 @@ module SendGrid4r::CLI
       option :subject
       option :sender_id, type: :numeric
       option :list_ids, type: :array
-      # TODO Add segment_ids
+      option :segment_ids, type: :array
       option :categories, type: :array
       option :suppression_group_id, type: :numeric
       option :html_content

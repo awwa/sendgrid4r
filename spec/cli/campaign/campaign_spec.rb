@@ -16,6 +16,7 @@ module SendGrid4r::CLI::Campaign
           '--subject', 'cli_subject',
           '--sender-id', 493,
           '--list-ids', 402704,
+          '--segment-ids', 147305,
           '--categories', 'CAT1',
           '--suppression-group-id', 3581,
           '--html-content',
