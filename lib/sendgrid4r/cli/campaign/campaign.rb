@@ -9,8 +9,9 @@ module SendGrid4r::CLI
       option :subject
       option :sender_id, type: :numeric
       option :list_ids, type: :array
+      # TODO Add segment_ids
       option :categories, type: :array
-      option :suppression_group_id
+      option :suppression_group_id, type: :numeric
       option :html_content
       option :plain_content
       def create
@@ -32,7 +33,7 @@ module SendGrid4r::CLI
       end
 
       desc 'get', 'Get a campaign'
-      option :campaign_id, type: :numeric
+      option :campaign_id, type: :numeric, require: true
       def get
         res = @client.get_campaign(parameterise(options))
         puts URI.decode(JSON.load(res).to_s)
@@ -41,7 +42,7 @@ module SendGrid4r::CLI
       end
 
       desc 'delete', 'Delete a campaign'
-      option :campaign_id, type: :numeric
+      option :campaign_id, type: :numeric, require: true
       def delete
         puts @client.delete_campaign(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
@@ -49,13 +50,13 @@ module SendGrid4r::CLI
       end
 
       desc 'update', 'Update a campaign'
-      option :campaign_id, type: :numeric
+      option :campaign_id, type: :numeric, require: true
       option :title
       option :subject
       option :sender_id, type: :numeric
       option :list_ids, type: :array
       option :categories, type: :array
-      option :suppression_group_id
+      option :suppression_group_id, type: :numeric
       option :html_content
       option :plain_content
       def update
@@ -73,7 +74,7 @@ module SendGrid4r::CLI
       end
 
       desc 'send', 'Send a campaign'
-      option :campaign_id, type: :numeric
+      option :campaign_id, type: :numeric, require: true
       def send
         puts @client.send_campaign(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
@@ -81,8 +82,8 @@ module SendGrid4r::CLI
       end
 
       desc 'schedule', 'Schedule a campaign'
-      option :campaign_id, type: :numeric
-      option :send_at
+      option :campaign_id, type: :numeric, require: true
+      option :send_at, type: :numeric, require: true
       def schedule
         puts @client.schedule_campaign(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
@@ -90,8 +91,8 @@ module SendGrid4r::CLI
       end
 
       desc 'reschedule', 'Reschedule a campaign'
-      option :campaign_id, type: :numeric
-      option :send_at
+      option :campaign_id, type: :numeric, require: true
+      option :send_at, type: :numeric, require: true
       def reschedule
         puts @client.reschedule_campaign(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
@@ -99,7 +100,7 @@ module SendGrid4r::CLI
       end
 
       desc 'unschedule', 'Unschedule a campaign'
-      option :campaign_id, type: :numeric
+      option :campaign_id, type: :numeric, require: true
       def unschedule
         puts @client.unschedule_campaign(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
@@ -107,7 +108,7 @@ module SendGrid4r::CLI
       end
 
       desc 'time', 'View scheduled time of a campaign'
-      option :campaign_id, type: :numeric
+      option :campaign_id, type: :numeric, require: true
       def time
         puts @client.get_schedule_time_campaign(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
@@ -115,8 +116,8 @@ module SendGrid4r::CLI
       end
 
       desc 'test', 'Send a test campaign'
-      option :campaign_id, type: :numeric
-      option :to
+      option :campaign_id, type: :numeric, require: true
+      option :to, require: true
       def test
         puts @client.test_campaign(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e

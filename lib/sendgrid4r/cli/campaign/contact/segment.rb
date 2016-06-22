@@ -19,7 +19,7 @@ module SendGrid4r::CLI
           conditions = options[:conditions].map do |c|
             array = c.delete(' ').split(/[:,]/)
             hash = array.each_slice(2).map do |k, v|
-              [k.to_sym, v ||= '']
+              [k.to_sym, v.nil? ? '' : v]
             end.to_h
             @condition_factory.create(hash)
           end
@@ -56,7 +56,7 @@ module SendGrid4r::CLI
           conditions = options[:conditions].map do |c|
             array = c.delete(' ').split(/[:,]/)
             hash = array.each_slice(2).map do |k, v|
-              [k.to_sym, v ||= '']
+              [k.to_sym, v.nil? ? '' : v]
             end.to_h
             @condition_factory.create(hash)
           end

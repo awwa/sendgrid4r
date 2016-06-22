@@ -19,14 +19,7 @@ module SendGrid4r::CLI
       option :zip
       option :country
       def create
-        from = @factory.create_address(parameterise(options[:from]))
-        reply_to = @factory.create_address(parameterise(options[:reply_to]))
-        sender = @factory.create_sender(
-          nickname: options[:nickname], from: from, reply_to: reply_to,
-          address: options[:address], address_2: options[:address_2],
-          city: options[:city], state: options[:state],
-          zip: options[:zip], country: options[:country]
-        )
+        sender = @factory.create_sender(parameterise(options))
         puts @client.post_sender(params: sender)
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
@@ -40,7 +33,7 @@ module SendGrid4r::CLI
       end
 
       desc 'update', 'Update a sender'
-      option :sender_id, type: :numeric
+      option :sender_id, type: :numeric, require: true
       option :nickname
       option :from, type: :hash
       option :reply_to, type: :hash
@@ -51,14 +44,9 @@ module SendGrid4r::CLI
       option :zip
       option :country
       def update
-        from = @factory.create_address(parameterise(options[:from]))
-        reply_to = @factory.create_address(parameterise(options[:reply_to]))
-        sender = @factory.create_sender(
-          nickname: options[:nickname], from: from, reply_to: reply_to,
-          address: options[:address], address_2: options[:address_2],
-          city: options[:city], state: options[:state],
-          zip: options[:zip], country: options[:country]
-        )
+        params = parameterise(options)
+        params.delete(:sender_id)
+        sender = @factory.create_sender(params)
         puts @client.patch_sender(
           sender_id: options[:sender_id],
           params: sender
@@ -68,7 +56,7 @@ module SendGrid4r::CLI
       end
 
       desc 'delete', 'Delete a sender'
-      option :sender_id, type: :numeric
+      option :sender_id, type: :numeric, require: true
       def delete
         puts @client.delete_sender(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
@@ -76,7 +64,7 @@ module SendGrid4r::CLI
       end
 
       desc 'verify', 'Resend sender identity verification'
-      option :sender_id, type: :numeric
+      option :sender_id, type: :numeric, require: true
       def verify
         puts @client.resend_sender_verification(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
@@ -84,7 +72,7 @@ module SendGrid4r::CLI
       end
 
       desc 'get', 'Get a sender'
-      option :sender_id, type: :numeric
+      option :sender_id, type: :numeric, require: true
       def get
         puts @client.get_sender(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e

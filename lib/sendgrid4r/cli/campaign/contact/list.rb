@@ -54,21 +54,11 @@ module SendGrid4r::CLI
         def recipient(action)
           case action
           when 'add'
-            puts @client.post_recipients_to_list(
-              list_id: options[:list_id],
-              recipients: options[:recipients]
-            )
+            puts @client.post_recipients_to_list(parameterise(options))
           when 'remove'
-            puts @client.delete_recipient_from_list(
-              list_id: options[:list_id],
-              recipient_id: options[:recipient_id]
-            )
+            puts @client.delete_recipient_from_list(parameterise(options))
           when 'list'
-            puts @client.get_recipients_from_list(
-              list_id: options[:list_id],
-              page: options[:page],
-              page_size: options[:page_size]
-            )
+            puts @client.get_recipients_from_list(parameterise(options))
           else
             puts "error: #{action} is not supported in action parameter"
           end
