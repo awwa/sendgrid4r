@@ -22,7 +22,7 @@ module SendGrid4r::CLI
         end
 
         desc 'get', 'Get a custom field'
-        option :custom_field_id
+        option :custom_field_id, require: true
         def get
           puts @client.get_custom_field(parameterise(options))
         rescue RestClient::ExceptionWithResponse => e
@@ -30,7 +30,7 @@ module SendGrid4r::CLI
         end
 
         desc 'delete', 'Delete a custom field'
-        option :custom_field_id
+        option :custom_field_id, require: true
         def delete
           puts @client.delete_custom_field(parameterise(options))
         rescue RestClient::ExceptionWithResponse => e

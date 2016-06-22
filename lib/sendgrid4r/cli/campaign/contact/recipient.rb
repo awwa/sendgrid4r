@@ -26,7 +26,7 @@ module SendGrid4r::CLI
         end
 
         desc 'delete', 'Delete recipients'
-        option :recipient_ids, type: :array
+        option :recipient_ids, type: :array, require: true
         def delete
           puts @client.delete_recipients(parameterise(options))
         rescue RestClient::ExceptionWithResponse => e
@@ -43,7 +43,7 @@ module SendGrid4r::CLI
         end
 
         desc 'get', 'Get a recipient'
-        option :recipient_id
+        option :recipient_id, require: true
         def get
           puts @client.get_recipient(parameterise(options))
         rescue RestClient::ExceptionWithResponse => e
@@ -66,7 +66,7 @@ module SendGrid4r::CLI
         end
 
         desc 'belong', 'List lists a recipient belongs to'
-        option :recipient_id
+        option :recipient_id, require: true
         def belong
           puts @client.get_lists_recipient_belong(parameterise(options))
         rescue RestClient::ExceptionWithResponse => e

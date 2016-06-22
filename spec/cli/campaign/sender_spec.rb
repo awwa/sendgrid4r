@@ -14,9 +14,9 @@ module SendGrid4r::CLI::Campaign
           '--api-key', ENV['API_KEY'],
           '--nickname', 'cli_sender',
           '--from', 'email:from@abc.abc', 'name:from_name',
-          '--reply_to', 'email:reply_to@abc.abc', 'name:reply_to_name',
+          '--reply-to', 'email:reply_to@abc.abc', 'name:reply_to_name',
           '--address', 'Address',
-          '--address_2', 'Address2',
+          '--address-2', 'Address2',
           '--city', 'City',
           '--state', 'State',
           '--zip', 'Zip',
@@ -56,7 +56,7 @@ module SendGrid4r::CLI::Campaign
         args = [
           'verify',
           '--api-key', ENV['API_KEY'],
-          '--sender_id', 41280
+          '--sender-id', 41280
         ]
         Sender.start(args)
       end
@@ -65,7 +65,7 @@ module SendGrid4r::CLI::Campaign
         args = [
           'get',
           '--api-key', ENV['API_KEY'],
-          '--sender_id', 41280
+          '--sender-id', 41280
         ]
         Sender.start(args)
       end
@@ -74,7 +74,7 @@ module SendGrid4r::CLI::Campaign
         args = [
           'delete',
           '--api-key', ENV['API_KEY'],
-          '--sender_id', 41280
+          '--sender-id', 41280
         ]
         Sender.start(args)
       end
