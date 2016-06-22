@@ -1,5 +1,4 @@
 # -*- encoding: utf-8 -*-
-require 'json'
 
 module SendGrid4r::REST
   module Sm
