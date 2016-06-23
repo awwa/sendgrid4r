@@ -35,24 +35,32 @@ module SendGrid4r::REST
     def post_template(name:, &block)
       endpoint = TransactionalTemplates.url
       resp = post(@auth, endpoint, name: name, &block)
-      TransactionalTemplates.create_template(resp)
+      finish(resp, @raw_resp) do |r|
+        TransactionalTemplates.create_template(r)
+      end
     end
 
     def get_templates(&block)
       resp = get(@auth, TransactionalTemplates.url, &block)
-      TransactionalTemplates.create_templates(resp)
+      finish(resp, @raw_resp) do |r|
+        TransactionalTemplates.create_templates(r)
+      end
     end
 
     def get_template(template_id:, &block)
       endpoint = TransactionalTemplates.url(template_id)
       resp = get(@auth, endpoint, &block)
-      TransactionalTemplates.create_template(resp)
+      finish(resp, @raw_resp) do |r|
+        TransactionalTemplates.create_template(r)
+      end
     end
 
     def patch_template(template_id:, name:, &block)
       endpoint = TransactionalTemplates.url(template_id)
       resp = patch(@auth, endpoint, name: name, &block)
-      TransactionalTemplates.create_template(resp)
+      finish(resp, @raw_resp) do |r|
+        TransactionalTemplates.create_template(r)
+      end
     end
 
     def delete_template(template_id:, &block)

@@ -52,30 +52,26 @@ module SendGrid4r::REST
       end
 
       let(:invalid_emails) do
-        JSON.parse(
-          '['\
-            '{'\
-              '"created": 1449953655,'\
-              '"email": "user1@example.com",'\
-              '"reason": "Mail domain mentioned in email address is unknown"'\
-            '},'\
-            '{'\
-              '"created": 1449939373,'\
-              '"email": "user1@example.com",'\
-              '"reason": "Mail domain mentioned in email address is unknown"'\
-            '}'\
-          ']'
-        )
+        '['\
+          '{'\
+            '"created": 1449953655,'\
+            '"email": "user1@example.com",'\
+            '"reason": "Mail domain mentioned in email address is unknown"'\
+          '},'\
+          '{'\
+            '"created": 1449939373,'\
+            '"email": "user1@example.com",'\
+            '"reason": "Mail domain mentioned in email address is unknown"'\
+          '}'\
+        ']'
       end
 
       let(:invalid_email) do
-        JSON.parse(
-          '{'\
-            '"created": 1454433146,'\
-            '"email": "test1@example.com",'\
-            '"reason": "Mail domain mentioned in email address is unknown"'\
-          '}'\
-        )
+        '{'\
+          '"created": 1454433146,'\
+          '"email": "test1@example.com",'\
+          '"reason": "Mail domain mentioned in email address is unknown"'\
+        '}'\
       end
 
       it '#get_invalid_emails' do
@@ -115,7 +111,7 @@ module SendGrid4r::REST
 
       it 'creates invalid_emails instance' do
         actual = InvalidEmails.create_invalid_emails(
-          invalid_emails
+          JSON.parse(invalid_emails)
         )
         expect(actual).to be_a(Array)
         actual.each do |subuser|
@@ -125,7 +121,7 @@ module SendGrid4r::REST
 
       it 'creates invalid_email instance' do
         actual = InvalidEmails.create_invalid_email(
-          invalid_email
+          JSON.parse(invalid_email)
         )
         expect(actual).to be_a(InvalidEmails::InvalidEmail)
         expect(actual.created).to eq(Time.at(1454433146))

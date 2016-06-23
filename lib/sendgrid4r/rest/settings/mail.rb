@@ -54,6 +54,13 @@ module SendGrid4r::REST
         ForwardSpam.new(resp['enabled'], resp['email'])
       end
 
+      SpamCheck = Struct.new(:enabled, :url, :max_score)
+
+      def self.create_spam_check(resp)
+        return resp if resp.nil?
+        SpamCheck.new(resp['enabled'], resp['url'], resp['max_score'])
+      end
+
       Template = Struct.new(:enabled, :html_content)
 
       def self.create_template(resp)
@@ -79,94 +86,141 @@ module SendGrid4r::REST
         params[:limit] = limit unless limit.nil?
         params[:offset] = offset unless offset.nil?
         resp = get(@auth, Settings::Mail.url, params, &block)
-        Settings.create_results(resp)
+        finish(resp, @raw_resp) { |r| Settings.create_results(r) }
       end
 
       def get_settings_address_whitelist(&block)
         resp = get(@auth, Settings::Mail.url(:address_whitelist), &block)
-        Settings::Mail.create_address_whitelist(resp)
+        finish(resp, @raw_resp) do |r|
+          Settings::Mail.create_address_whitelist(r)
+        end
       end
 
       def patch_settings_address_whitelist(params:, &block)
         endpoint = Settings::Mail.url(:address_whitelist)
         resp = patch(@auth, endpoint, params.to_h, &block)
-        Settings::Mail.create_address_whitelist(resp)
+        finish(resp, @raw_resp) do |r|
+          Settings::Mail.create_address_whitelist(r)
+        end
       end
 
       def get_settings_bcc(&block)
         resp = get(@auth, Settings::Mail.url(:bcc), &block)
-        Settings::Mail.create_bcc(resp)
+        finish(resp, @raw_resp) do |r|
+          Settings::Mail.create_bcc(r)
+        end
       end
 
       def patch_settings_bcc(params:, &block)
         endpoint = Settings::Mail.url(:bcc)
         resp = patch(@auth, endpoint, params.to_h, &block)
-        Settings::Mail.create_bcc(resp)
+        finish(resp, @raw_resp) do |r|
+          Settings::Mail.create_bcc(r)
+        end
       end
 
       def get_settings_bounce_purge(&block)
         resp = get(@auth, Settings::Mail.url(:bounce_purge), &block)
-        Settings::Mail.create_bounce_purge(resp)
+        finish(resp, @raw_resp) do |r|
+          Settings::Mail.create_bounce_purge(r)
+        end
       end
 
       def patch_settings_bounce_purge(params:, &block)
         endpoint = Settings::Mail.url(:bounce_purge)
         resp = patch(@auth, endpoint, params.to_h, &block)
-        Settings::Mail.create_bounce_purge(resp)
+        finish(resp, @raw_resp) do |r|
+          Settings::Mail.create_bounce_purge(r)
+        end
       end
 
       def get_settings_footer(&block)
         resp = get(@auth, Settings::Mail.url(:footer), &block)
-        Settings::Mail.create_footer(resp)
+        finish(resp, @raw_resp) do |r|
+          Settings::Mail.create_footer(r)
+        end
       end
 
       def patch_settings_footer(params:, &block)
         resp = patch(@auth, Settings::Mail.url(:footer), params.to_h, &block)
-        Settings::Mail.create_footer(resp)
+        finish(resp, @raw_resp) do |r|
+          Settings::Mail.create_footer(r)
+        end
       end
 
       def get_settings_forward_bounce(&block)
         resp = get(@auth, Settings::Mail.url(:forward_bounce), &block)
-        Settings::Mail.create_forward_bounce(resp)
+        finish(resp, @raw_resp) do |r|
+          Settings::Mail.create_forward_bounce(r)
+        end
       end
 
       def patch_settings_forward_bounce(params:, &block)
         endpoint = Settings::Mail.url(:forward_bounce)
         resp = patch(@auth, endpoint, params.to_h, &block)
-        Settings::Mail.create_forward_bounce(resp)
+        finish(resp, @raw_resp) do |r|
+          Settings::Mail.create_forward_bounce(r)
+        end
       end
 
       def get_settings_forward_spam(&block)
         resp = get(@auth, Settings::Mail.url(:forward_spam), &block)
-        Settings::Mail.create_forward_spam(resp)
+        finish(resp, @raw_resp) do |r|
+          Settings::Mail.create_forward_spam(r)
+        end
       end
 
       def patch_settings_forward_spam(params:, &block)
         endpoint = Settings::Mail.url(:forward_spam)
         resp = patch(@auth, endpoint, params.to_h, &block)
-        Settings::Mail.create_forward_spam(resp)
+        finish(resp, @raw_resp) do |r|
+          Settings::Mail.create_forward_spam(r)
+        end
+      end
+
+      def get_settings_spam_check(&block)
+        resp = get(@auth, Settings::Mail.url(:spam_check), &block)
+        finish(resp, @raw_resp) do |r|
+          Settings::Mail.create_spam_check(r)
+        end
+      end
+
+      def patch_settings_spam_check(params:, &block)
+        endpoint = Settings::Mail.url(:spam_check)
+        resp = patch(@auth, endpoint, params.to_h, &block)
+        finish(resp, @raw_resp) do |r|
+          Settings::Mail.create_spam_check(r)
+        end
       end
 
       def get_settings_template(&block)
         resp = get(@auth, Settings::Mail.url(:template), &block)
-        Settings::Mail.create_template(resp)
+        finish(resp, @raw_resp) do |r|
+          Settings::Mail.create_template(r)
+        end
       end
 
       def patch_settings_template(params:, &block)
         endpoint = Settings::Mail.url(:template)
         resp = patch(@auth, endpoint, params.to_h, &block)
-        Settings::Mail.create_template(resp)
+        finish(resp, @raw_resp) do |r|
+          Settings::Mail.create_template(r)
+        end
       end
 
       def get_settings_plain_content(&block)
         resp = get(@auth, Settings::Mail.url(:plain_content), &block)
-        Settings::Mail.create_plain_content(resp)
+        finish(resp, @raw_resp) do |r|
+          Settings::Mail.create_plain_content(r)
+        end
       end
 
       def patch_settings_plain_content(params:, &block)
         endpoint = Settings::Mail.url(:plain_content)
         resp = patch(@auth, endpoint, params.to_h, &block)
-        Settings::Mail.create_plain_content(resp)
+        finish(resp, @raw_resp) do |r|
+          Settings::Mail.create_plain_content(r)
+        end
       end
     end
   end

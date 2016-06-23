@@ -24,27 +24,23 @@ module SendGrid4r::REST::Webhooks
       end
 
       let(:parse_settings) do
-        JSON.parse(
-          '{'\
-            '"result": ['\
-              '{'\
-                '"url": "http://mydomain.com/parse",'\
-                '"hostname": "mail.mydomain.com",'\
-                '"spam_check_outgoing": true'\
-              '}'\
-            ']'\
-          '}'
-        )
+        '{'\
+          '"result": ['\
+            '{'\
+              '"url": "http://mydomain.com/parse",'\
+              '"hostname": "mail.mydomain.com",'\
+              '"spam_check_outgoing": true'\
+            '}'\
+          ']'\
+        '}'
       end
 
       let(:parse_setting) do
-        JSON.parse(
-          '{'\
-            '"url": "http://mydomain.com/parse",'\
-            '"hostname": "mail.mydomain.com",'\
-            '"spam_check_outgoing": true'\
-          '}'\
-        )
+        '{'\
+          '"url": "http://mydomain.com/parse",'\
+          '"hostname": "mail.mydomain.com",'\
+          '"spam_check_outgoing": true'\
+        '}'\
       end
 
       it '#get_parse_settings' do
@@ -54,7 +50,7 @@ module SendGrid4r::REST::Webhooks
       end
 
       it 'creates parse_setting instance' do
-        actual = Parse.create_parse_setting(parse_setting)
+        actual = Parse.create_parse_setting(JSON.parse(parse_setting))
         expect(actual).to be_a(Parse::ParseSetting)
         expect(actual.url).to eq('http://mydomain.com/parse')
         expect(actual.hostname).to eq('mail.mydomain.com')
@@ -62,7 +58,7 @@ module SendGrid4r::REST::Webhooks
       end
 
       it 'creates parse_settings instance' do
-        actual = Parse.create_parse_settings(parse_settings)
+        actual = Parse.create_parse_settings(JSON.parse(parse_settings))
         expect(actual).to be_a(Parse::ParseSettings)
         expect(actual.result).to be_a(Array)
       end

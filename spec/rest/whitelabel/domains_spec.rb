@@ -241,8 +241,7 @@ module SendGrid4r::REST::Whitelabel
 
         it '#remove_ip_from_wl_domain' do
           @client.add_ip_to_wl_domain(id: @domain2.id, ip: @ip)
-          domain2 = @client.remove_ip_from_wl_domain(id: @domain2.id, ip: @ip)
-          expect(domain2.ips).to eq(nil)
+          @client.remove_ip_from_wl_domain(id: @domain2.id, ip: @ip)
         end
 
         it '#validate_wl_domain' do
@@ -290,111 +289,105 @@ module SendGrid4r::REST::Whitelabel
       end
 
       let(:domains) do
-        JSON.parse('[]')
+        '[]'
       end
 
       let(:domain) do
-        JSON.parse(
-          '{'\
-            '"id": 1,'\
-            '"domain": "example.com",'\
-            '"subdomain": "mail",'\
-            '"username": "john@example.com",'\
-            '"user_id": 7,'\
-            '"ips": ['\
-              '"192.168.1.1",'\
-              '"192.168.1.2"'\
-            '],'\
-            '"custom_spf": true,'\
-            '"default": true,'\
-            '"legacy": false,'\
-            '"automatic_security": true,'\
-            '"valid": true,'\
-            '"dns": {'\
-              '"mail_cname": {'\
-                '"host": "mail.example.com",'\
-                '"type": "cname",'\
-                '"data": "u7.wl.sendgrid.net",'\
-                '"valid": true'\
-              '},'\
-              '"dkim1": {'\
-                '"host": "s1._domainkey.example.com",'\
-                '"type": "cname",'\
-                '"data": "s1._domainkey.u7.wl.sendgrid.net",'\
-                '"valid": true'\
-              '},'\
-              '"dkim2": {'\
-                '"host": "s2._domainkey.example.com",'\
-                '"type": "cname",'\
-                '"data": "s2._domainkey.u7.wl.sendgrid.net",'\
-                '"valid": true'\
-              '}'\
+        '{'\
+          '"id": 1,'\
+          '"domain": "example.com",'\
+          '"subdomain": "mail",'\
+          '"username": "john@example.com",'\
+          '"user_id": 7,'\
+          '"ips": ['\
+            '"192.168.1.1",'\
+            '"192.168.1.2"'\
+          '],'\
+          '"custom_spf": true,'\
+          '"default": true,'\
+          '"legacy": false,'\
+          '"automatic_security": true,'\
+          '"valid": true,'\
+          '"dns": {'\
+            '"mail_cname": {'\
+              '"host": "mail.example.com",'\
+              '"type": "cname",'\
+              '"data": "u7.wl.sendgrid.net",'\
+              '"valid": true'\
+            '},'\
+            '"dkim1": {'\
+              '"host": "s1._domainkey.example.com",'\
+              '"type": "cname",'\
+              '"data": "s1._domainkey.u7.wl.sendgrid.net",'\
+              '"valid": true'\
+            '},'\
+            '"dkim2": {'\
+              '"host": "s2._domainkey.example.com",'\
+              '"type": "cname",'\
+              '"data": "s2._domainkey.u7.wl.sendgrid.net",'\
+              '"valid": true'\
             '}'\
-          '}'
-        )
+          '}'\
+        '}'
       end
 
       let(:domain2) do
-        JSON.parse(
-          '{'\
-            '"id": 2,'\
-            '"user_id": 2,'\
-            '"subdomain": "mail2",'\
-            '"domain": "example.com",'\
-            '"username": "john@example.com",'\
-            '"ips": [],'\
-            '"custom_spf": true,'\
-            '"default": false,'\
-            '"legacy": false,'\
-            '"automatic_security": false,'\
-            '"valid": false,'\
-            '"dns": {'\
-              '"mail_server": {'\
-                '"valid": false,'\
-                '"type": "mx",'\
-                '"host": "mail2.example.com",'\
-                '"data": "mx.sendgrid.net."'\
-              '},'\
-              '"subdomain_spf": {'\
-                '"valid": false,'\
-                '"type": "txt",'\
-                '"host": "mail2.example.com",'\
-                '"data": "v=spf1 include:sendgrid.net ~all"'\
-              '},'\
-              '"dkim": {'\
-                '"valid": false,'\
-                '"type": "txt",'\
-                '"host": "m1._domainkey.example.com",'\
-                '"data": "k=rsa; t=s; '\
-                  'p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQ"'\
-              '}'\
+        '{'\
+          '"id": 2,'\
+          '"user_id": 2,'\
+          '"subdomain": "mail2",'\
+          '"domain": "example.com",'\
+          '"username": "john@example.com",'\
+          '"ips": [],'\
+          '"custom_spf": true,'\
+          '"default": false,'\
+          '"legacy": false,'\
+          '"automatic_security": false,'\
+          '"valid": false,'\
+          '"dns": {'\
+            '"mail_server": {'\
+              '"valid": false,'\
+              '"type": "mx",'\
+              '"host": "mail2.example.com",'\
+              '"data": "mx.sendgrid.net."'\
+            '},'\
+            '"subdomain_spf": {'\
+              '"valid": false,'\
+              '"type": "txt",'\
+              '"host": "mail2.example.com",'\
+              '"data": "v=spf1 include:sendgrid.net ~all"'\
+            '},'\
+            '"dkim": {'\
+              '"valid": false,'\
+              '"type": "txt",'\
+              '"host": "m1._domainkey.example.com",'\
+              '"data": "k=rsa; t=s; '\
+                'p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQ"'\
             '}'\
-          '}'
-        )
+          '}'\
+        '}'
       end
 
       let(:result) do
-        JSON.parse(
-          '{'\
-            '"id": 1,'\
-            '"valid": true,'\
-            '"validation_results": {'\
-              '"mail_cname": {'\
-                '"valid": false,'\
-                '"reason": "Expected your MX record to be \"mx.sendgrid.net\" '\
-                'but found \"example.com\"."'\
-              '},'\
-              '"dkim1": {'\
-                '"valid": true,'\
-                '"reason": null'\
-              '},'\
-              '"dkim2": {'\
-                '"valid": true,'\
-                '"reason": null'\
-              '}'\
+        '{'\
+          '"id": 1,'\
+          '"valid": true,'\
+          '"validation_results": {'\
+            '"mail_cname": {'\
+              '"valid": false,'\
+              '"reason": "Expected your MX record to be \"mx.sendgrid.net\" '\
+              'but found \"example.com\"."'\
+            '},'\
+            '"dkim1": {'\
+              '"valid": true,'\
+              '"reason": null'\
+            '},'\
+            '"dkim2": {'\
+              '"valid": true,'\
+              '"reason": null'\
             '}'\
-          '}'
-        )
+          '}'\
+        '}'
       end
 
       it '#get_domains' do
@@ -442,9 +435,9 @@ module SendGrid4r::REST::Whitelabel
       end
 
       it '#remove_ip_from_domain' do
-        allow(client).to receive(:execute).and_return(domain)
+        allow(client).to receive(:execute).and_return('')
         actual = client.remove_ip_from_wl_domain(id: '', ip: '')
-        expect(actual).to be_a(Domains::Domain)
+        expect(actual).to eq('')
       end
 
       it '#validate_domain' do
@@ -472,7 +465,7 @@ module SendGrid4r::REST::Whitelabel
       end
 
       it 'creates domain instance' do
-        actual = Domains.create_domain(domain)
+        actual = Domains.create_domain(JSON.parse(domain))
         expect(actual).to be_a(Domains::Domain)
         expect(actual.id).to eq(1)
         expect(actual.domain).to eq('example.com')
@@ -506,7 +499,7 @@ module SendGrid4r::REST::Whitelabel
       end
 
       it 'creates domain2 instance' do
-        actual = Domains.create_domain(domain2)
+        actual = Domains.create_domain(JSON.parse(domain2))
         expect(actual).to be_a(Domains::Domain)
         expect(actual.id).to eq(2)
         expect(actual.domain).to eq('example.com')
@@ -542,7 +535,7 @@ module SendGrid4r::REST::Whitelabel
       end
 
       it 'creates result instance' do
-        actual = Domains.create_result(result)
+        actual = Domains.create_result(JSON.parse(result))
         expect(actual).to be_a(Domains::Result)
         expect(actual.id).to eq(1)
         expect(actual.valid).to eq(true)

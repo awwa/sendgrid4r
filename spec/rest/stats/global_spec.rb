@@ -55,27 +55,6 @@ module SendGrid4r::REST::Stats
           end
         end
       end
-
-      context 'with block call' do
-        it '#get_global_stats with all params' do
-          @client.get_global_stats(
-            start_date: '2015-01-01',
-            end_date: '2015-01-01',
-            aggregated_by: :week
-          ) do |resp, req, res|
-            resp =
-              SendGrid4r::REST::Stats.create_top_stats(
-                JSON.parse(resp)
-              )
-            expect(resp).to be_a(Array)
-            resp.each do |stat|
-              expect(stat).to be_a(TopStat)
-            end
-            expect(req).to be_a(RestClient::Request)
-            expect(res).to be_a(Net::HTTPOK)
-          end
-        end
-      end
     end
   end
 end

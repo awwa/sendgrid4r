@@ -156,7 +156,7 @@ module SendGrid4r::REST::Stats
 
         it '#get_mailbox_providers_stats with mandatory params' do
           top_stats =
-            @client.get_mailbox_providers_stats(start_date: '2015-01-01')
+            @client.get_mailbox_providers_stats(start_date: '2015-01-23')
           expect(top_stats).to be_a(Array)
           top_stats.each do |top_stat|
             expect(top_stat).to be_a(TopStat)
@@ -175,7 +175,7 @@ module SendGrid4r::REST::Stats
               expect(stat.metrics.spam_reports.nil?).to be(false)
               expect(stat.metrics.unique_clicks.nil?).to be(false)
               expect(stat.metrics.unique_opens.nil?).to be(false)
-              expect(stat.name).to be_a(String)
+              expect(stat.name).to eq(nil)
               expect(stat.type).to eq('mailbox_provider')
             end
           end
@@ -184,9 +184,9 @@ module SendGrid4r::REST::Stats
         it '#get_mailbox_providers_stats with all params' do
           top_stats = @client.get_mailbox_providers_stats(
             start_date: '2015-01-01',
-            end_date: '2015-01-02',
+            end_date: '2015-01-31',
             aggregated_by: :week,
-            esps: :sss
+            mailbox_providers: :Other
           )
           expect(top_stats).to be_a(Array)
           top_stats.each do |top_stat|

@@ -77,86 +77,6 @@ module SendGrid4r::REST::TransactionalTemplates
           )
         end
       end
-
-      context 'with block call' do
-        it '#post_version' do
-          ver2 = @factory.create(name: @version2_name)
-          @client.post_version(
-            template_id: @template.id, version: ver2
-          ) do |resp, req, res|
-            resp = Versions.create_version(JSON.parse(resp))
-            expect(resp).to be_a(Versions::Version)
-            expect(req).to be_a(RestClient::Request)
-            expect(res).to be_a(Net::HTTPCreated)
-          end
-        end
-
-        it '#post_version without body and subject tag' do
-          ver2 = @factory.create(
-            name: @version2_name, subject: 'Hello',
-            html_content: 'This is the body.',
-            plain_content: 'This is the body.'
-          )
-          @client.post_version(
-            template_id: @template.id, version: ver2
-          ) do |resp, req, res|
-            resp = Versions.create_version(JSON.parse(resp))
-            expect(resp).to be_a(Versions::Version)
-            expect(req).to be_a(RestClient::Request)
-            expect(res).to be_a(Net::HTTPCreated)
-          end
-        end
-
-        it '#activate_version' do
-          @client.activate_version(
-            template_id: @template.id, version_id: @version1.id
-          ) do |resp, req, res|
-            resp = Versions.create_version(JSON.parse(resp))
-            expect(resp).to be_a(Versions::Version)
-            expect(req).to be_a(RestClient::Request)
-            expect(res).to be_a(Net::HTTPOK)
-          end
-        end
-
-        it '#get_version' do
-          @client.get_version(
-            template_id: @template.id, version_id: @version1.id
-          ) do |resp, req, res|
-            resp = Versions.create_version(JSON.parse(resp))
-            expect(resp).to be_a(Versions::Version)
-            expect(req).to be_a(RestClient::Request)
-            expect(res).to be_a(Net::HTTPOK)
-          end
-        end
-
-        it '#patch_version' do
-          edit_ver1 = @version1.dup
-          edit_ver1.name = 'edit_version'
-          edit_ver1.subject = 'edit<%subject%>edit'
-          edit_ver1.html_content = 'edit<%body%>edit'
-          edit_ver1.plain_content = 'edit<%body%>edit'
-          edit_ver1.active = 0
-          @client.patch_version(
-            template_id: @template.id, version_id: @version1.id,
-            version: edit_ver1
-          ) do |resp, req, res|
-            resp = Versions.create_version(JSON.parse(resp))
-            expect(resp).to be_a(Versions::Version)
-            expect(req).to be_a(RestClient::Request)
-            expect(res).to be_a(Net::HTTPOK)
-          end
-        end
-
-        it '#delete_version' do
-          @client.delete_version(
-            template_id: @template.id, version_id: @version1.id
-          ) do |resp, req, res|
-            expect(resp).to eq('')
-            expect(req).to be_a(RestClient::Request)
-            expect(res).to be_a(Net::HTTPNoContent)
-          end
-        end
-      end
     end
 
     describe 'unit test', :ut do
@@ -165,18 +85,16 @@ module SendGrid4r::REST::TransactionalTemplates
       end
 
       let(:version) do
-        JSON.parse(
-          '{'\
-            '"id": "8aefe0ee-f12b-4575-b5b7-c97e21cb36f3",'\
-            '"template_id": "ddb96bbc-9b92-425e-8979-99464621b543",'\
-            '"active": 1,'\
-            '"name": "example_version_name",'\
-            '"html_content": "<%body%>",'\
-            '"plain_content": "<%body%>",'\
-            '"subject": "<%subject%>",'\
-            '"updated_at": "2014-03-19 18:56:33"'\
-          '}'
-        )
+        '{'\
+          '"id": "8aefe0ee-f12b-4575-b5b7-c97e21cb36f3",'\
+          '"template_id": "ddb96bbc-9b92-425e-8979-99464621b543",'\
+          '"active": 1,'\
+          '"name": "example_version_name",'\
+          '"html_content": "<%body%>",'\
+          '"plain_content": "<%body%>",'\
+          '"subject": "<%subject%>",'\
+          '"updated_at": "2014-03-19 18:56:33"'\
+        '}'
       end
 
       it '#post_version' do
@@ -212,7 +130,7 @@ module SendGrid4r::REST::TransactionalTemplates
       end
 
       it 'creates version instance' do
-        actual = Versions.create_version(version)
+        actual = Versions.create_version(JSON.parse(version))
         expect(actual).to be_a(Versions::Version)
         expect(actual.id).to eq('8aefe0ee-f12b-4575-b5b7-c97e21cb36f3')
         expect(actual.template_id).to eq('ddb96bbc-9b92-425e-8979-99464621b543')

@@ -28,7 +28,7 @@ module SendGrid4r::REST
           subusers: subusers
         }
         resp = get(@auth, Subuser.url, params, &block)
-        Stats.create_top_stats(resp)
+        finish(resp, @raw_resp) { |r| Stats.create_top_stats(r) }
       end
 
       def get_subusers_stats_sums(
@@ -43,7 +43,7 @@ module SendGrid4r::REST
           offset: offset
         }
         resp = get(@auth, Subuser.url(nil, :sums), params, &block)
-        Stats.create_top_stat(resp)
+        finish(resp, @raw_resp) { |r| Stats.create_top_stat(r) }
       end
 
       def get_subusers_stats_monthly(
@@ -58,7 +58,7 @@ module SendGrid4r::REST
           offset: offset
         }
         resp = get(@auth, Subuser.url(nil, :monthly), params, &block)
-        Stats.create_top_stat(resp)
+        finish(resp, @raw_resp) { |r| Stats.create_top_stat(r) }
       end
 
       def get_subuser_stats_monthly(
@@ -72,7 +72,7 @@ module SendGrid4r::REST
           offset: offset
         }
         resp = get(@auth, Subuser.url(subuser_name, :monthly), params, &block)
-        Stats.create_top_stat(resp)
+        finish(resp, @raw_resp) { |r| Stats.create_top_stat(r) }
       end
     end
   end

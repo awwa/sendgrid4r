@@ -32,7 +32,7 @@ module SendGrid4r
       end
 
       def create_address(email:, name:)
-        REST::MarketingCampaigns::Address.new(email, name)
+        REST::MarketingCampaigns::Address.new(email, name).to_h
       end
     end
   end

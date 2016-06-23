@@ -65,26 +65,22 @@ module SendGrid4r::REST
       end
 
       let(:scheduled_send) do
-        JSON.parse(
-          '{'\
-            '"batch_id": "YOUR_BATCH_ID"'\
-          '}'
-        )
+        '{'\
+          '"batch_id": "YOUR_BATCH_ID"'\
+        '}'
       end
 
       let(:scheduled_sends) do
-        JSON.parse(
-          '['\
-            '{'\
-              '"batch_id": "BATCH_ID_1",'\
-              '"status": "cancel"'\
-            '},'\
-            '{'\
-              '"batch_id": "BATCH_ID_2",'\
-              '"status": "pause"'\
-            '}'\
-          ']'
-        )
+        '['\
+          '{'\
+            '"batch_id": "BATCH_ID_1",'\
+            '"status": "cancel"'\
+          '},'\
+          '{'\
+            '"batch_id": "BATCH_ID_2",'\
+            '"status": "pause"'\
+          '}'\
+        ']'
       end
 
       it '#generate_batch_id' do
@@ -131,7 +127,7 @@ module SendGrid4r::REST
 
       it 'creates scheduled_sends instance' do
         actual = CancelScheduledSends.create_scheduled_sends(
-          scheduled_sends
+          JSON.parse(scheduled_sends)
         )
         expect(actual).to be_a(Array)
         actual.each do |scheduled_send|
@@ -145,7 +141,7 @@ module SendGrid4r::REST
 
       it 'creates scheduled_send instance' do
         actual = CancelScheduledSends.create_scheduled_send(
-          scheduled_send
+          JSON.parse(scheduled_send)
         )
         expect(actual).to be_a(CancelScheduledSends::ScheduledSend)
         expect(actual.batch_id).to eq('YOUR_BATCH_ID')

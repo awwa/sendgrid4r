@@ -92,31 +92,27 @@ module SendGrid4r::REST::ApiKeysManagement
       end
 
       let(:api_keys) do
-        JSON.parse(
-          '{'\
-            '"result": ['\
-              '{'\
-                '"name": "A New Hope",'\
-                '"api_key_id": "xxxxxxxx"'\
-              '}'\
-            ']'\
-          '}'
-        )
+        '{'\
+          '"result": ['\
+            '{'\
+              '"name": "A New Hope",'\
+              '"api_key_id": "xxxxxxxx"'\
+            '}'\
+          ']'\
+        '}'
       end
 
       let(:api_key) do
-        JSON.parse(
-          '{'\
-            '"api_key": "SG.xxxxxxxx.yyyyyyyy",'\
-            '"api_key_id": "xxxxxxxx",'\
-            '"name": "My API Key",'\
-            '"scopes": ['\
-              '"mail.send",'\
-              '"alerts.create",'\
-              '"alerts.read"'\
-            ']'\
-          '}'
-        )
+        '{'\
+          '"api_key": "SG.xxxxxxxx.yyyyyyyy",'\
+          '"api_key_id": "xxxxxxxx",'\
+          '"name": "My API Key",'\
+          '"scopes": ['\
+            '"mail.send",'\
+            '"alerts.create",'\
+            '"alerts.read"'\
+          ']'\
+        '}'
       end
 
       it '#get_api_keys' do
@@ -150,7 +146,9 @@ module SendGrid4r::REST::ApiKeysManagement
       end
 
       it 'creates api_key instance' do
-        actual = SendGrid4r::REST::ApiKeysManagement.create_api_key(api_key)
+        actual = SendGrid4r::REST::ApiKeysManagement.create_api_key(
+          JSON.parse(api_key)
+        )
         expect(actual).to be_a(ApiKey)
         expect(actual.api_key).to eq('SG.xxxxxxxx.yyyyyyyy')
         expect(actual.api_key_id).to eq('xxxxxxxx')
@@ -161,7 +159,9 @@ module SendGrid4r::REST::ApiKeysManagement
       end
 
       it 'creates api_keys instance' do
-        actual = SendGrid4r::REST::ApiKeysManagement.create_api_keys(api_keys)
+        actual = SendGrid4r::REST::ApiKeysManagement.create_api_keys(
+          JSON.parse(api_keys)
+        )
         expect(actual).to be_a(ApiKeys)
         expect(actual.result).to be_a(Array)
         actual.result.each do |api_key|

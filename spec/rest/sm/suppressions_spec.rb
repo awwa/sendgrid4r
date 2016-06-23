@@ -80,60 +80,50 @@ module SendGrid4r::REST::Sm
       end
 
       let(:recipient_emails) do
-        JSON.parse(
-          '{'\
-            '"recipient_emails": ['\
-              '"test1@example.com",'\
-              '"test2@example.com"'\
-            ']'\
-          '}'
-        )
+        '{'\
+          '"recipient_emails": ['\
+            '"test1@example.com",'\
+            '"test2@example.com"'\
+          ']'\
+        '}'
       end
 
       let(:recipient_email) do
-        JSON.parse(
-          '{'\
-            '"recipient_email": "test1@example.com"'\
-          '}'
-        )
+        '{'\
+          '"recipient_email": "test1@example.com"'\
+        '}'
       end
 
       let(:emails) do
-        JSON.parse(
-          '["test1@example.com","test2@example.com"]'
-        )
+        '["test1@example.com","test2@example.com"]'
       end
 
       let(:suppression) do
-        JSON.parse(
-          '{'\
-            '"id": 4,'\
-            '"name": "Special Offers",'\
-            '"description": "Special offers and coupons",'\
-            '"suppressed": false'\
-          '}'
-        )
+        '{'\
+          '"id": 4,'\
+          '"name": "Special Offers",'\
+          '"description": "Special offers and coupons",'\
+          '"suppressed": false'\
+        '}'
       end
 
       let(:suppressions) do
-        JSON.parse(
-          '{'\
-            '"suppressions": ['\
-              '{'\
-                '"id": 1,'\
-                '"name": "Weekly Newsletter",'\
-                '"description": "The weekly newsletter",'\
-                '"suppressed": false'\
-              '},'\
-              '{'\
-                '"id": 4,'\
-                '"name": "Special Offers",'\
-                '"description": "Special offers and coupons",'\
-                '"suppressed": false'\
-              '}'\
-            ']'\
-          '}'
-        )
+        '{'\
+          '"suppressions": ['\
+            '{'\
+              '"id": 1,'\
+              '"name": "Weekly Newsletter",'\
+              '"description": "The weekly newsletter",'\
+              '"suppressed": false'\
+            '},'\
+            '{'\
+              '"id": 4,'\
+              '"name": "Special Offers",'\
+              '"description": "Special offers and coupons",'\
+              '"suppressed": false'\
+            '}'\
+          ']'\
+        '}'
       end
 
       it '#post_suppressed_emails' do
@@ -166,7 +156,7 @@ module SendGrid4r::REST::Sm
       end
 
       it 'creates suppression instance' do
-        actual = Suppressions.create_suppression(suppression)
+        actual = Suppressions.create_suppression(JSON.parse(suppression))
         expect(actual).to be_a(Suppressions::Suppression)
         expect(actual.id).to eq(4)
         expect(actual.name).to eq('Special Offers')
@@ -175,7 +165,7 @@ module SendGrid4r::REST::Sm
       end
 
       it 'creates suppressions instance' do
-        actual = Suppressions.create_suppressions(suppressions)
+        actual = Suppressions.create_suppressions(JSON.parse(suppressions))
         expect(actual).to be_a(Suppressions::Suppressions)
         expect(actual.suppressions).to be_a(Array)
         actual.suppressions.each do |suppression|

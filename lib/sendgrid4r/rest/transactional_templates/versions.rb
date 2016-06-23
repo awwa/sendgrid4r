@@ -42,13 +42,13 @@ module SendGrid4r::REST
           remove_uneditable_keys(version.to_h),
           &block
         )
-        Versions.create_version(resp)
+        finish(resp, @raw_resp) { |r| Versions.create_version(r) }
       end
 
       def activate_version(template_id:, version_id:, &block)
         url = Versions.url(template_id, version_id)
         resp = post(@auth, "#{url}/activate", &block)
-        Versions.create_version(resp)
+        finish(resp, @raw_resp) { |r| Versions.create_version(r) }
       end
 
       def get_version(template_id:, version_id:, &block)
@@ -57,7 +57,7 @@ module SendGrid4r::REST
           Versions.url(template_id, version_id),
           &block
         )
-        Versions.create_version(resp)
+        finish(resp, @raw_resp) { |r| Versions.create_version(r) }
       end
 
       def patch_version(template_id:, version_id:, version:, &block)
@@ -67,7 +67,7 @@ module SendGrid4r::REST
           remove_uneditable_keys(version.to_h),
           &block
         )
-        Versions.create_version(resp)
+        finish(resp, @raw_resp) { |r| Versions.create_version(r) }
       end
 
       def delete_version(template_id:, version_id:, &block)

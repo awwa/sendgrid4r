@@ -37,7 +37,7 @@ module SendGrid4r::REST
       params[:limit] = limit.to_i unless limit.nil?
       params[:offset] = offset.to_i unless offset.nil?
       resp = get(@auth, InvalidEmails.url, params, &block)
-      InvalidEmails.create_invalid_emails(resp)
+      finish(resp, @raw_resp) { |r| InvalidEmails.create_invalid_emails(r) }
     end
 
     def delete_invalid_emails(delete_all: nil, emails: nil, &block)
@@ -52,7 +52,7 @@ module SendGrid4r::REST
     def get_invalid_email(email:, &block)
       params = { email: email }
       resp = get(@auth, InvalidEmails.url(email), params, &block)
-      InvalidEmails.create_invalid_emails(resp)
+      finish(resp, @raw_resp) { |r| InvalidEmails.create_invalid_emails(r) }
     end
 
     def delete_invalid_email(email:, &block)

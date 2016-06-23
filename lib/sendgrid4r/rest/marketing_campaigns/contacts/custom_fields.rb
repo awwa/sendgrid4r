@@ -45,17 +45,23 @@ module SendGrid4r::REST
           params['name'] = name
           params['type'] = type
           resp = post(@auth, Contacts::CustomFields.url, params, &block)
-          Contacts::CustomFields.create_field(resp)
+          finish(resp, @raw_resp) do |r|
+            Contacts::CustomFields.create_field(r)
+          end
         end
 
         def get_custom_fields(&block)
           resp = get(@auth, Contacts::CustomFields.url, &block)
-          Contacts::CustomFields.create_fields(resp)
+          finish(resp, @raw_resp) do |r|
+            Contacts::CustomFields.create_fields(r)
+          end
         end
 
         def get_custom_field(custom_field_id:, &block)
           resp = get(@auth, Contacts::CustomFields.url(custom_field_id), &block)
-          Contacts::CustomFields.create_field(resp)
+          finish(resp, @raw_resp) do |r|
+            Contacts::CustomFields.create_field(r)
+          end
         end
 
         def delete_custom_field(custom_field_id:, &block)

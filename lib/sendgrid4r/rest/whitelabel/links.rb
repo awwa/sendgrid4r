@@ -96,7 +96,7 @@ module SendGrid4r::REST
         params[:username] = username unless username.nil?
         params[:domain] = domain unless domain.nil?
         resp = get(@auth, Links.url, params, &block)
-        Links.create_links(resp)
+        finish(resp, @raw_resp) { |r| Links.create_links(r) }
       end
 
       def post_wl_link(subdomain:, domain:, default: nil, &block)
@@ -106,18 +106,18 @@ module SendGrid4r::REST
         }
         params[:default] = default unless default.nil?
         resp = post(@auth, Links.url, params, &block)
-        Links.create_link(resp)
+        finish(resp, @raw_resp) { |r| Links.create_link(r) }
       end
 
       def get_wl_link(id:, &block)
         resp = get(@auth, Links.url(id), nil, &block)
-        Links.create_link(resp)
+        finish(resp, @raw_resp) { |r| Links.create_link(r) }
       end
 
       def patch_wl_link(id:, default:, &block)
         params = { default: default }
         resp = patch(@auth, Links.url(id), params, &block)
-        Links.create_link(resp)
+        finish(resp, @raw_resp) { |r| Links.create_link(r) }
       end
 
       def delete_wl_link(id:, &block)
@@ -128,18 +128,18 @@ module SendGrid4r::REST
         params = {}
         params[:domain] = domain unless domain.nil?
         resp = get(@auth, "#{Links.url}/default", params, &block)
-        Links.create_link(resp)
+        finish(resp, @raw_resp) { |r| Links.create_link(r) }
       end
 
       def validate_wl_link(id:, &block)
         resp = post(@auth, "#{Links.url(id)}/validate", &block)
-        Links.create_result(resp)
+        finish(resp, @raw_resp) { |r| Links.create_result(r) }
       end
 
       def get_associated_wl_link(username:, &block)
         params = { username: username }
         resp = get(@auth, "#{Links.url}/subuser", params, &block)
-        Links.create_link(resp)
+        finish(resp, @raw_resp) { |r| Links.create_link(r) }
       end
 
       def disassociate_wl_link(username:, &block)
@@ -150,7 +150,7 @@ module SendGrid4r::REST
       def associate_wl_link(id:, username:, &block)
         params = { username: username }
         resp = post(@auth, "#{Links.url(id)}/subuser", params, &block)
-        Links.create_link(resp)
+        finish(resp, @raw_resp) { |r| Links.create_link(r) }
       end
     end
   end

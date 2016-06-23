@@ -50,21 +50,7 @@ module SendGrid4r::REST
       end
 
       let(:blocks) do
-        JSON.parse(
-          '['\
-            '{'\
-              '"created": 1443651154,'\
-              '"email": "user1@example.com",'\
-              '"reason": "error dialing remote address: dial tcp '\
-              '10.57.152.165:25: no route to host",'\
-              '"status": "4.0.0"'\
-            '}'\
-          ']'
-        )
-      end
-
-      let(:block) do
-        JSON.parse(
+        '['\
           '{'\
             '"created": 1443651154,'\
             '"email": "user1@example.com",'\
@@ -72,7 +58,17 @@ module SendGrid4r::REST
             '10.57.152.165:25: no route to host",'\
             '"status": "4.0.0"'\
           '}'\
-        )
+        ']'
+      end
+
+      let(:block) do
+        '{'\
+          '"created": 1443651154,'\
+          '"email": "user1@example.com",'\
+          '"reason": "error dialing remote address: dial tcp '\
+          '10.57.152.165:25: no route to host",'\
+          '"status": "4.0.0"'\
+        '}'\
       end
 
       it '#get_blocks' do
@@ -111,7 +107,7 @@ module SendGrid4r::REST
       end
 
       it 'creates blocks instance' do
-        actual = Blocks.create_blocks(blocks)
+        actual = Blocks.create_blocks(JSON.parse(blocks))
         expect(actual).to be_a(Array)
         actual.each do |subuser|
           expect(subuser).to be_a(Blocks::Block)
@@ -119,7 +115,7 @@ module SendGrid4r::REST
       end
 
       it 'creates block instance' do
-        actual = Blocks.create_block(block)
+        actual = Blocks.create_block(JSON.parse(block))
         expect(actual).to be_a(Blocks::Block)
         expect(actual.created).to eq(Time.at(1443651154))
         expect(actual.email).to eq('user1@example.com')

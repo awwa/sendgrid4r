@@ -68,37 +68,33 @@ module SendGrid4r::REST::MarketingCampaigns::Contacts
       end
 
       let(:field) do
-        JSON.parse(
-          '{'\
-            '"id": 1,'\
-            '"name": "pet",'\
-            '"type": "text"'\
-          '}'
-        )
+        '{'\
+          '"id": 1,'\
+          '"name": "pet",'\
+          '"type": "text"'\
+        '}'
       end
 
       let(:fields) do
-        JSON.parse(
-          '{'\
-            '"custom_fields": ['\
-              '{'\
-                '"id": 1,'\
-                '"name": "birthday",'\
-                '"type": "date"'\
-              '},'\
-              '{'\
-                '"id": 2,'\
-                '"name": "middle_name",'\
-                '"type": "text"'\
-              '},'\
-              '{'\
-                '"id": 3,'\
-                '"name": "favorite_number",'\
-                '"type": "number"'\
-              '}'\
-            ']'\
-          '}'
-        )
+        '{'\
+          '"custom_fields": ['\
+            '{'\
+              '"id": 1,'\
+              '"name": "birthday",'\
+              '"type": "date"'\
+            '},'\
+            '{'\
+              '"id": 2,'\
+              '"name": "middle_name",'\
+              '"type": "text"'\
+            '},'\
+            '{'\
+              '"id": 3,'\
+              '"name": "favorite_number",'\
+              '"type": "number"'\
+            '}'\
+          ']'\
+        '}'
       end
 
       it '#post_custom_field' do
@@ -126,7 +122,7 @@ module SendGrid4r::REST::MarketingCampaigns::Contacts
       end
 
       it 'creates field instance' do
-        actual = CustomFields.create_field(field)
+        actual = CustomFields.create_field(JSON.parse(field))
         expect(actual).to be_a(CustomFields::Field)
         expect(actual.id).to eq(1)
         expect(actual.name).to eq('pet')
@@ -134,7 +130,7 @@ module SendGrid4r::REST::MarketingCampaigns::Contacts
       end
 
       it 'creates fields instance' do
-        actual = CustomFields.create_fields(fields)
+        actual = CustomFields.create_fields(JSON.parse(fields))
         expect(actual).to be_a(CustomFields::Fields)
         expect(actual.custom_fields).to be_a(Array)
         actual.custom_fields.each do |field|

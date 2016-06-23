@@ -48,23 +48,19 @@ module SendGrid4r::REST::Ips
       end
 
       let(:warmup_ip) do
-        JSON.parse(
-          '{'\
-            '"ip":"0.0.0.0",'\
-            '"start_date":1409616000'\
-          '}'
-        )
+        '{'\
+          '"ip":"0.0.0.0",'\
+          '"start_date":1409616000'\
+        '}'
       end
 
       let(:warmup_ips) do
-        JSON.parse(
-          '['\
-            '{'\
-              '"ip": "0.0.0.0",'\
-              '"start_date": 1409616000'\
-            '}'\
-          ']'
-        )
+        '['\
+          '{'\
+            '"ip": "0.0.0.0",'\
+            '"start_date": 1409616000'\
+          '}'\
+        ']'
       end
 
       it '#get_warmup_ips' do
@@ -95,7 +91,7 @@ module SendGrid4r::REST::Ips
       end
 
       it 'creates warmup_ips instance' do
-        actual = Warmup.create_warmup_ips(warmup_ips)
+        actual = Warmup.create_warmup_ips(JSON.parse(warmup_ips))
         expect(actual).to be_a(Array)
         actual.each do |warmup_ip|
           expect(warmup_ip).to be_a(Warmup::WarmupIp)

@@ -60,23 +60,21 @@ module SendGrid4r::REST::Webhooks
       end
 
       let(:event_notification) do
-        JSON.parse(
-          '{'\
-            '"enabled": true,'\
-            '"url": "url",'\
-            '"group_resubscribe": true,'\
-            '"delivered": true,'\
-            '"group_unsubscribe": true,'\
-            '"spam_report": true,'\
-            '"bounce": true,'\
-            '"deferred": true,'\
-            '"unsubscribe": true,'\
-            '"processed": true,'\
-            '"open": true,'\
-            '"click": true,'\
-            '"dropped": true'\
-          '}'
-        )
+        '{'\
+          '"enabled": true,'\
+          '"url": "url",'\
+          '"group_resubscribe": true,'\
+          '"delivered": true,'\
+          '"group_unsubscribe": true,'\
+          '"spam_report": true,'\
+          '"bounce": true,'\
+          '"deferred": true,'\
+          '"unsubscribe": true,'\
+          '"processed": true,'\
+          '"open": true,'\
+          '"click": true,'\
+          '"dropped": true'\
+        '}'
       end
 
       it '#get_settings_event_notification' do
@@ -92,7 +90,7 @@ module SendGrid4r::REST::Webhooks
       end
 
       it 'creates event_notification instance' do
-        actual = Event.create_event_notification(event_notification)
+        actual = Event.create_event_notification(JSON.parse(event_notification))
         expect(actual.enabled).to eq(true)
         expect(actual.url).to eq('url')
         expect(actual.group_resubscribe).to eq(true)

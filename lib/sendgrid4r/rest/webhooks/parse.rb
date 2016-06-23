@@ -35,7 +35,7 @@ module SendGrid4r::REST
 
       def get_parse_settings(&block)
         resp = get(@auth, Parse.url, &block)
-        Parse.create_parse_settings(resp)
+        finish(resp, @raw_resp) { |r| Parse.create_parse_settings(r) }
       end
     end
   end

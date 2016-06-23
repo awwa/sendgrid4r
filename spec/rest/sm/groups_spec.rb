@@ -90,7 +90,18 @@ module SendGrid4r::REST::Sm
       end
 
       let(:group) do
-        JSON.parse(
+        '{'\
+          '"id": 100,'\
+          '"name": "Newsletters",'\
+          '"description": "Our monthly newsletter.",'\
+          '"last_email_sent_at": null,'\
+          '"is_default": true,'\
+          '"unsubscribes": 400'\
+        '}'
+      end
+
+      let(:groups) do
+        '['\
           '{'\
             '"id": 100,'\
             '"name": "Newsletters",'\
@@ -98,31 +109,16 @@ module SendGrid4r::REST::Sm
             '"last_email_sent_at": null,'\
             '"is_default": true,'\
             '"unsubscribes": 400'\
-          '}'
-        )
-      end
-
-      let(:groups) do
-        JSON.parse(
-          '['\
-            '{'\
-              '"id": 100,'\
-              '"name": "Newsletters",'\
-              '"description": "Our monthly newsletter.",'\
-              '"last_email_sent_at": null,'\
-              '"is_default": true,'\
-              '"unsubscribes": 400'\
-            '},'\
-            '{'\
-              '"id": 101,'\
-              '"name": "Alerts",'\
-              '"description": "Emails triggered by user-defined rules.",'\
-              '"last_email_sent_at": null,'\
-              '"is_default": false,'\
-              '"unsubscribes": 1'\
-            '}'\
-          ']'
-        )
+          '},'\
+          '{'\
+            '"id": 101,'\
+            '"name": "Alerts",'\
+            '"description": "Emails triggered by user-defined rules.",'\
+            '"last_email_sent_at": null,'\
+            '"is_default": false,'\
+            '"unsubscribes": 1'\
+          '}'\
+        ']'
       end
 
       it '#post_group' do
@@ -159,7 +155,7 @@ module SendGrid4r::REST::Sm
       end
 
       it 'creates group instance' do
-        actual = Groups.create_group(group)
+        actual = Groups.create_group(JSON.parse(group))
         expect(actual).to be_a(Groups::Group)
         expect(actual.id).to eq(100)
         expect(actual.name).to eq('Newsletters')
@@ -170,7 +166,7 @@ module SendGrid4r::REST::Sm
       end
 
       it 'creates groups instance' do
-        actual = Groups.create_groups(groups)
+        actual = Groups.create_groups(JSON.parse(groups))
         expect(actual).to be_a(Array)
         actual.each do |group|
           expect(group).to be_a(Groups::Group)

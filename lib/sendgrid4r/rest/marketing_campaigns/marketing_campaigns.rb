@@ -44,19 +44,19 @@ module SendGrid4r::REST
     def post_campaign(params:, &block)
       endpoint = MarketingCampaigns.url
       resp = post(@auth, endpoint, params, &block)
-      MarketingCampaigns.create_campaign(resp)
+      finish(resp, @raw_resp) { |r| MarketingCampaigns.create_campaign(r) }
     end
 
     def get_campaigns(&block)
       endpoint = MarketingCampaigns.url
       resp = get(@auth, endpoint, &block)
-      MarketingCampaigns.create_campaigns(resp)
+      finish(resp, @raw_resp) { |r| MarketingCampaigns.create_campaigns(r) }
     end
 
     def get_campaign(campaign_id:, &block)
       endpoint = MarketingCampaigns.url(campaign_id)
       resp = get(@auth, endpoint, &block)
-      MarketingCampaigns.create_campaign(resp)
+      finish(resp, @raw_resp) { |r| MarketingCampaigns.create_campaign(r) }
     end
 
     def delete_campaign(campaign_id:, &block)
@@ -67,14 +67,14 @@ module SendGrid4r::REST
     def patch_campaign(campaign_id:, params:, &block)
       endpoint = MarketingCampaigns.url(campaign_id)
       resp = patch(@auth, endpoint, params.to_h, &block)
-      MarketingCampaigns.create_campaign(resp)
+      finish(resp, @raw_resp) { |r| MarketingCampaigns.create_campaign(r) }
     end
 
     def send_campaign(campaign_id:, &block)
       endpoint = MarketingCampaigns.url(campaign_id)
       endpoint = "#{endpoint}/schedules/now"
       resp = post(@auth, endpoint, nil, &block)
-      MarketingCampaigns.create_campaign(resp)
+      finish(resp, @raw_resp) { |r| MarketingCampaigns.create_campaign(r) }
     end
 
     def schedule_campaign(campaign_id:, send_at:, &block)
@@ -83,7 +83,7 @@ module SendGrid4r::REST
       payload = {}
       payload['send_at'] = send_at.to_i
       resp = post(@auth, endpoint, payload, &block)
-      MarketingCampaigns.create_campaign(resp)
+      finish(resp, @raw_resp) { |r| MarketingCampaigns.create_campaign(r) }
     end
 
     def reschedule_campaign(campaign_id:, send_at:, &block)
@@ -92,14 +92,14 @@ module SendGrid4r::REST
       payload = {}
       payload['send_at'] = send_at.to_i
       resp = patch(@auth, endpoint, payload, &block)
-      MarketingCampaigns.create_campaign(resp)
+      finish(resp, @raw_resp) { |r| MarketingCampaigns.create_campaign(r) }
     end
 
     def get_schedule_time_campaign(campaign_id:, &block)
       endpoint = MarketingCampaigns.url(campaign_id)
       endpoint = "#{endpoint}/schedules"
       resp = get(@auth, endpoint, &block)
-      MarketingCampaigns.create_campaign(resp)
+      finish(resp, @raw_resp) { |r| MarketingCampaigns.create_campaign(r) }
     end
 
     def unschedule_campaign(campaign_id:, &block)

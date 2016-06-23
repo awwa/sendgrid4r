@@ -25,7 +25,7 @@ module SendGrid4r::REST
       params['limit'] = limit unless limit.nil?
       params['offset'] = offset unless limit.nil?
       resp = get(@auth, "#{BASE_URL}/categories", params, &block)
-      Categories.create_categories(resp)
+      finish(resp, @raw_resp) { |r| Categories.create_categories(r) }
     end
   end
 end

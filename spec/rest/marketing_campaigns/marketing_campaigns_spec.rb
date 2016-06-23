@@ -210,105 +210,97 @@ module SendGrid4r::REST::MarketingCampaigns
       end
 
       let(:campaign) do
-        JSON.parse(
-          '{'\
-            '"id": 986724,'\
-            '"title": "March Newsletter",'\
-            '"subject": "New Products for Spring!",'\
-            '"sender_id": 124451,'\
-            '"list_ids": ['\
-              '110,'\
-              '124'\
-            '],'\
-            '"segment_ids": ['\
-              '110'\
-            '],'\
-            '"categories": ['\
-              '"spring line"'\
-            '],'\
-            '"suppression_group_id": 42,'\
-            '"custom_unsubscribe_url": "",'\
-            '"ip_pool": "marketing",'\
-            '"html_content": "<html><head><title></title></head><body>'\
-              '<p>Check out our spring line!</p></body></html>",'\
-            '"plain_content": "Check out our spring line!",'\
-            '"status": "Draft"'\
-          '}'
-        )
+        '{'\
+          '"id": 986724,'\
+          '"title": "March Newsletter",'\
+          '"subject": "New Products for Spring!",'\
+          '"sender_id": 124451,'\
+          '"list_ids": ['\
+            '110,'\
+            '124'\
+          '],'\
+          '"segment_ids": ['\
+            '110'\
+          '],'\
+          '"categories": ['\
+            '"spring line"'\
+          '],'\
+          '"suppression_group_id": 42,'\
+          '"custom_unsubscribe_url": "",'\
+          '"ip_pool": "marketing",'\
+          '"html_content": "<html><head><title></title></head><body>'\
+            '<p>Check out our spring line!</p></body></html>",'\
+          '"plain_content": "Check out our spring line!",'\
+          '"status": "Draft"'\
+        '}'
       end
 
       let(:campaigns) do
-        JSON.parse(
-          '{'\
-            '"result": ['\
-              '{'\
-                '"id": 986724,'\
-                '"title": "March Newsletter",'\
-                '"subject": "New Products for Spring!",'\
-                '"sender_id": 124451,'\
-                '"list_ids": ['\
-                  '110,'\
-                  '124'\
-                '],'\
-                '"segment_ids": ['\
-                  '110'\
-                '],'\
-                '"categories": ['\
-                  '"spring line"'\
-                '],'\
-                '"suppression_group_id": 42,'\
-                '"custom_unsubscribe_url": "",'\
-                '"ip_pool": "marketing",'\
-                '"html_content": "<html><head><title></title></head><body>'\
-                  '<p>Check out our spring line!</p></body></html>",'\
-                '"plain_content": "Check out our spring line!",'\
-                '"status": "Draft"'\
-              '},'\
-              '{'\
-                '"id": 986723,'\
-                '"title": "February Newsletter",'\
-                '"subject": "Final Winter Product Sale!",'\
-                '"sender_id": 124451,'\
-                '"list_ids": ['\
-                  '110,'\
-                  '124'\
-                '],'\
-                '"segment_ids": ['\
-                  '110'\
-                '],'\
-                '"categories": ['\
-                  '"winter line"'\
-                '],'\
-                '"suppression_group_id": 42,'\
-                '"custom_unsubscribe_url": "",'\
-                '"ip_pool": "marketing",'\
-                '"html_content": "<html><head><title></title></head><body>'\
-                  '<p>Last call for winter clothes!</p></body></html>",'\
-                '"plain_content": "Last call for winter clothes!",'\
-                '"status": "Sent"'\
-              '}'\
-            ']'\
-          '}'
-        )
+        '{'\
+          '"result": ['\
+            '{'\
+              '"id": 986724,'\
+              '"title": "March Newsletter",'\
+              '"subject": "New Products for Spring!",'\
+              '"sender_id": 124451,'\
+              '"list_ids": ['\
+                '110,'\
+                '124'\
+              '],'\
+              '"segment_ids": ['\
+                '110'\
+              '],'\
+              '"categories": ['\
+                '"spring line"'\
+              '],'\
+              '"suppression_group_id": 42,'\
+              '"custom_unsubscribe_url": "",'\
+              '"ip_pool": "marketing",'\
+              '"html_content": "<html><head><title></title></head><body>'\
+                '<p>Check out our spring line!</p></body></html>",'\
+              '"plain_content": "Check out our spring line!",'\
+              '"status": "Draft"'\
+            '},'\
+            '{'\
+              '"id": 986723,'\
+              '"title": "February Newsletter",'\
+              '"subject": "Final Winter Product Sale!",'\
+              '"sender_id": 124451,'\
+              '"list_ids": ['\
+                '110,'\
+                '124'\
+              '],'\
+              '"segment_ids": ['\
+                '110'\
+              '],'\
+              '"categories": ['\
+                '"winter line"'\
+              '],'\
+              '"suppression_group_id": 42,'\
+              '"custom_unsubscribe_url": "",'\
+              '"ip_pool": "marketing",'\
+              '"html_content": "<html><head><title></title></head><body>'\
+                '<p>Last call for winter clothes!</p></body></html>",'\
+              '"plain_content": "Last call for winter clothes!",'\
+              '"status": "Sent"'\
+            '}'\
+          ']'\
+        '}'
       end
 
       let(:sent) do
-        JSON.parse(
-          '{'\
-            '"id": 986724,'\
-            '"status": "Scheduled"'\
-          '}'
-        )
+        '{'\
+          '"id": 986724,'\
+          '"status": "Scheduled"'\
+        '}'
       end
 
       let(:schedule) do
-        JSON.parse(
-          '{'\
-            '"id": 986724,'\
-            '"send_at": 1489771528,'\
-            '"status": "Scheduled"'\
-          '}'
-        )
+        '{'\
+          '"id": 986724,'\
+          '"send_at": 1489771528,'\
+          '"status": "Scheduled"'\
+        '}'
       end
 
       it '#post_campaign' do
@@ -379,7 +371,9 @@ module SendGrid4r::REST::MarketingCampaigns
       end
 
       it 'creates campaign instance' do
-        actual = SendGrid4r::REST::MarketingCampaigns.create_campaign(campaign)
+        actual = SendGrid4r::REST::MarketingCampaigns.create_campaign(
+          JSON.parse(campaign)
+        )
         expect(actual).to be_a(Campaign)
         expect(actual.id).to eq(986724)
         expect(actual.title).to eq('March Newsletter')
@@ -400,7 +394,7 @@ module SendGrid4r::REST::MarketingCampaigns
 
       it 'creates campaigns instance' do
         actual = SendGrid4r::REST::MarketingCampaigns.create_campaigns(
-          campaigns
+          JSON.parse(campaigns)
         )
         expect(actual).to be_a(Campaigns)
         actual.result.each do |campaign|
@@ -409,14 +403,18 @@ module SendGrid4r::REST::MarketingCampaigns
       end
 
       it 'creates sent instance' do
-        actual = SendGrid4r::REST::MarketingCampaigns.create_campaign(sent)
+        actual = SendGrid4r::REST::MarketingCampaigns.create_campaign(
+          JSON.parse(sent)
+        )
         expect(actual).to be_a(Campaign)
         expect(actual.id).to eq(986724)
         expect(actual.status).to eq('Scheduled')
       end
 
       it 'creates schedule instance' do
-        actual = SendGrid4r::REST::MarketingCampaigns.create_campaign(schedule)
+        actual = SendGrid4r::REST::MarketingCampaigns.create_campaign(
+          JSON.parse(schedule)
+        )
         expect(actual).to be_a(Campaign)
         expect(actual.id).to eq(986724)
         expect(actual.send_at).to eq(Time.at(1489771528))

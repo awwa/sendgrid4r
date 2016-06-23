@@ -24,15 +24,13 @@ module SendGrid4r::REST::ApiKeysManagement
       end
 
       let(:permissions) do
-        JSON.parse(
-          '{'\
-            '"scopes": ['\
-              '"alerts.create",'\
-              '"alerts.read",'\
-              '"alerts.update"'\
-            ']'\
-          '}'
-        )
+        '{'\
+          '"scopes": ['\
+            '"alerts.create",'\
+            '"alerts.read",'\
+            '"alerts.update"'\
+          ']'\
+        '}'
       end
 
       it '#get_permissions' do
@@ -42,7 +40,7 @@ module SendGrid4r::REST::ApiKeysManagement
       end
 
       it 'creates permissions instance' do
-        actual = Permissions.create_permissions(permissions)
+        actual = Permissions.create_permissions(JSON.parse(permissions))
         expect(actual).to be_a(Permissions::Permissions)
         expect(actual.scopes).to be_a(Array)
         expect(actual.scopes[0]).to eq('alerts.create')

@@ -66,7 +66,7 @@ module SendGrid4r::REST
       params['start_time'] = start_time.to_i unless start_time.nil?
       params['end_time'] = end_time.to_i unless end_time.nil?
       resp = get(@auth, EmailActivity.url, params, &block)
-      EmailActivity.create_activities(resp)
+      finish(resp, @raw_resp) { |r| EmailActivity.create_activities(r) }
     end
   end
 end

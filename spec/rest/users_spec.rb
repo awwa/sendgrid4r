@@ -70,69 +70,57 @@ module SendGrid4r::REST
       end
 
       let(:profile) do
-        JSON.parse(
-          '{'\
-            '"address":"814 West Chapman Avenue",'\
-            '"city":"Orange",'\
-            '"company":"SendGrid",'\
-            '"country":"US",'\
-            '"first_name":"Test",'\
-            '"last_name":"User",'\
-            '"phone":"555-555-5555",'\
-            '"state":"CA",'\
-            '"website":"http://www.sendgrid.com",'\
-            '"zip":"92868"'\
-          '}'
-        )
+        '{'\
+          '"address":"814 West Chapman Avenue",'\
+          '"city":"Orange",'\
+          '"company":"SendGrid",'\
+          '"country":"US",'\
+          '"first_name":"Test",'\
+          '"last_name":"User",'\
+          '"phone":"555-555-5555",'\
+          '"state":"CA",'\
+          '"website":"http://www.sendgrid.com",'\
+          '"zip":"92868"'\
+        '}'
       end
 
       let(:account) do
-        JSON.parse(
-          '{'\
-            '"type": "free",'\
-            '"reputation": 99.7'\
-          '}'
-        )
+        '{'\
+          '"type": "free",'\
+          '"reputation": 99.7'\
+        '}'
       end
 
       let(:email) do
-        JSON.parse(
-          '{'\
-            '"email": "test@example.com"'\
-          '}'
-        )
+        '{'\
+          '"email": "test@example.com"'\
+        '}'
       end
 
       let(:username) do
-        JSON.parse(
-          '{'\
-            '"username": "test_username",'\
-            '"user_id": 1'\
-          '}'
-        )
+        '{'\
+          '"username": "test_username",'\
+          '"user_id": 1'\
+        '}'
       end
 
       let(:credits) do
-        JSON.parse(
-          '{'\
-            '"remain": 200,'\
-            '"total": 200,'\
-            '"overage": 0,'\
-            '"used": 0,'\
-            '"last_reset": "2013-01-01",'\
-            '"next_reset": "2013-02-01",'\
-            '"reset_frequency": "monthly"'\
-          '}'
-        )
+        '{'\
+          '"remain": 200,'\
+          '"total": 200,'\
+          '"overage": 0,'\
+          '"used": 0,'\
+          '"last_reset": "2013-01-01",'\
+          '"next_reset": "2013-02-01",'\
+          '"reset_frequency": "monthly"'\
+        '}'
       end
 
       let(:password) do
-        JSON.parse(
-          '{'\
-            '"new_password": "new_password",'\
-            '"old_password": "old_password"'\
-          '}'
-        )
+        '{'\
+          '"new_password": "new_password",'\
+          '"old_password": "old_password"'\
+        '}'
       end
 
       it '#get_user_profile' do
@@ -156,7 +144,7 @@ module SendGrid4r::REST
       end
 
       it 'creates profile instance' do
-        actual = Users.create_profile(profile)
+        actual = Users.create_profile(JSON.parse(profile))
         expect(actual.address).to eq('814 West Chapman Avenue')
         expect(actual.city).to eq('Orange')
         expect(actual.company).to eq('SendGrid')
@@ -169,24 +157,24 @@ module SendGrid4r::REST
       end
 
       it 'creates account instance' do
-        actual = Users.create_account(account)
+        actual = Users.create_account(JSON.parse(account))
         expect(actual.type).to eq('free')
         expect(actual.reputation).to eq(99.7)
       end
 
       it 'creates email instance' do
-        actual = Users.create_email(email)
+        actual = Users.create_email(JSON.parse(email))
         expect(actual.email).to eq('test@example.com')
       end
 
       it 'creates username instance' do
-        actual = Users.create_username(username)
+        actual = Users.create_username(JSON.parse(username))
         expect(actual.username).to eq('test_username')
         expect(actual.user_id).to eq(1)
       end
 
       it 'creates credits instance' do
-        actual = Users.create_credits(credits)
+        actual = Users.create_credits(JSON.parse(credits))
         expect(actual.remain).to eq(200)
         expect(actual.total).to eq(200)
         expect(actual.overage).to eq(0)
@@ -197,7 +185,7 @@ module SendGrid4r::REST
       end
 
       it 'creates password instance' do
-        actual = Users.create_password(password)
+        actual = Users.create_password(JSON.parse(password))
         expect(actual.new_password).to eq('new_password')
         expect(actual.old_password).to eq('old_password')
       end

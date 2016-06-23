@@ -55,9 +55,10 @@ module SendGrid4r::REST
         end
 
         it '#get_subuser_monitor' do
-          monitor = @client.get_subuser_monitor(
+          @client.post_subuser_monitor(
             username: @username3, email: @email1, frequency: 10
           )
+          monitor = @client.get_subuser_monitor(username: @username3)
           expect(monitor).to be_a(Subusers::Monitor)
         end
 
@@ -113,55 +114,47 @@ module SendGrid4r::REST
       end
 
       let(:subusers) do
-        JSON.parse(
-          '['\
-            '{'\
-              '"id": 1,'\
-              '"username": "Test@example.com",'\
-              '"email": "Test@example.com"'\
-            '},'\
-            '{'\
-              '"id": 2,'\
-              '"username": "John@example.com",'\
-              '"email": "John@example.com"'\
-            '}'\
-          ']'
-        )
+        '['\
+          '{'\
+            '"id": 1,'\
+            '"username": "Test@example.com",'\
+            '"email": "Test@example.com"'\
+          '},'\
+          '{'\
+            '"id": 2,'\
+            '"username": "John@example.com",'\
+            '"email": "John@example.com"'\
+          '}'\
+        ']'
       end
 
       let(:subuser) do
-        JSON.parse(
-          '{'\
-            '"username": "John@example.com",'\
-            '"email": "John@example.com",'\
-            '"password": "johns_password",'\
-            '"ips": ['\
-              '"1.1.1.1",'\
-              '"2.2.2.2"'\
-            '],'\
-            '"disabled": false'\
-          '}'
-        )
+        '{'\
+          '"username": "John@example.com",'\
+          '"email": "John@example.com",'\
+          '"password": "johns_password",'\
+          '"ips": ['\
+            '"1.1.1.1",'\
+            '"2.2.2.2"'\
+          '],'\
+          '"disabled": false'\
+        '}'
       end
 
       let(:ips) do
-        JSON.parse(
-          '{'\
-            '"ips": ['\
-              '"127.0.0.1",'\
-              '"127.0.0.2"'\
-            ']'\
-          '}'
-        )
+        '{'\
+          '"ips": ['\
+            '"127.0.0.1",'\
+            '"127.0.0.2"'\
+          ']'\
+        '}'
       end
 
       let(:monitor) do
-        JSON.parse(
-          '{'\
-            '"email": "test@example.com",'\
-            '"frequency": 500'\
-          '}'
-        )
+        '{'\
+          '"email": "test@example.com",'\
+          '"frequency": 500'\
+        '}'
       end
 
       it '#get_subusers' do
@@ -195,9 +188,7 @@ module SendGrid4r::REST
 
       it '#get_subuser_monitor' do
         allow(client).to receive(:execute).and_return(monitor)
-        actual = client.get_subuser_monitor(
-          username: '', email: '', frequency: 1
-        )
+        actual = client.get_subuser_monitor(username: '')
         expect(actual).to be_a(Subusers::Monitor)
       end
 
@@ -239,7 +230,7 @@ module SendGrid4r::REST
       end
 
       it 'creates subusers instance' do
-        actual = Subusers.create_subusers(subusers)
+        actual = Subusers.create_subusers(JSON.parse(subusers))
         expect(actual).to be_a(Array)
         actual.each do |subuser|
           expect(subuser).to be_a(Subusers::Subuser)
@@ -247,7 +238,7 @@ module SendGrid4r::REST
       end
 
       it 'creates subuser instance' do
-        actual = Subusers.create_subuser(subuser)
+        actual = Subusers.create_subuser(JSON.parse(subuser))
         expect(actual).to be_a(Subusers::Subuser)
         expect(actual.username).to eq('John@example.com')
         expect(actual.email).to eq('John@example.com')
@@ -259,7 +250,7 @@ module SendGrid4r::REST
       end
 
       it 'creates monitor instance' do
-        actual = Subusers.create_monitor(monitor)
+        actual = Subusers.create_monitor(JSON.parse(monitor))
         expect(actual).to be_a(Subusers::Monitor)
         expect(actual.email).to eq('test@example.com')
         expect(actual.frequency).to eq(500)

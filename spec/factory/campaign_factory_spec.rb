@@ -48,8 +48,8 @@ module SendGrid4r::Factory
         address = CampaignFactory.new.create_address(
           email: 'from@example.com', name: 'Example INC'
         )
-        expect(address.email).to eq('from@example.com')
-        expect(address.name).to eq('Example INC')
+        expect(address[:email]).to eq('from@example.com')
+        expect(address[:name]).to eq('Example INC')
       end
 
       it 'create sender with full parameters' do

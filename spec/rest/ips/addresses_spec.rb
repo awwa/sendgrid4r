@@ -77,32 +77,28 @@ module SendGrid4r::REST::Ips
         end
 
         let(:address) do
-          JSON.parse(
-            '{'\
-              '"ip": "000.00.00.0",'\
-              '"pools": ['\
-                '"test1"'\
-              '],'\
-              '"start_date": 1409616000,'\
-              '"warmup": true'\
-            '}'
-          )
+          '{'\
+            '"ip": "000.00.00.0",'\
+            '"pools": ['\
+              '"test1"'\
+            '],'\
+            '"start_date": 1409616000,'\
+            '"warmup": true'\
+          '}'
         end
 
         let(:addresses) do
-          JSON.parse(
-            '['\
-              '{'\
-                '"ip":"000.00.00.0",'\
-                '"pools":["new_test5"],'\
-                '"warmup":true,'\
-                '"start_date":1409616000,'\
-                '"subusers": ["username1", "username2"],'\
-                '"rdns": "01.email.test.com",'\
-                '"pools": ["pool1", "pool2"]'\
-              '}'\
-            ']'
-          )
+          '['\
+            '{'\
+              '"ip":"000.00.00.0",'\
+              '"pools":["new_test5"],'\
+              '"warmup":true,'\
+              '"start_date":1409616000,'\
+              '"subusers": ["username1", "username2"],'\
+              '"rdns": "01.email.test.com",'\
+              '"pools": ["pool1", "pool2"]'\
+            '}'\
+          ']'
         end
 
         it '#get_ips' do
@@ -136,7 +132,7 @@ module SendGrid4r::REST::Ips
         end
 
         it 'creates addresses instance' do
-          actual = Addresses.create_addresses(addresses)
+          actual = Addresses.create_addresses(JSON.parse(addresses))
           expect(actual).to be_a(Array)
           actual.each do |address|
             expect(
@@ -146,7 +142,7 @@ module SendGrid4r::REST::Ips
         end
 
         it 'creates address instance' do
-          actual = Addresses.create_address(address)
+          actual = Addresses.create_address(JSON.parse(address))
           expect(actual).to be_a(Addresses::Address)
           expect(actual.ip).to eq('000.00.00.0')
           expect(actual.pools).to be_a(Array)

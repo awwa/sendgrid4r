@@ -147,57 +147,53 @@ module SendGrid4r::REST::Whitelabel
       end
 
       let(:links) do
-        JSON.parse('[]')
+        '[]'
       end
 
       let(:link) do
-        JSON.parse(
-          '{'\
-            '"id": 1,'\
-            '"domain": "example.com",'\
-            '"subdomain": "mail",'\
-            '"username": "john@example.com",'\
-            '"user_id": 7,'\
-            '"default": false,'\
-            '"valid": true,'\
-            '"legacy": false,'\
-            '"dns": {'\
-              '"domain_cname": {'\
-                '"valid": true,'\
-                '"type": "cname",'\
-                '"host": "mail.example.com",'\
-                '"data": "sendgrid.net"'\
-              '},'\
-              '"owner_cname": {'\
-                '"valid": true,'\
-                '"type": "cname",'\
-                '"host": "7.example.com",'\
-                '"data": "sendgrid.net"'\
-              '}'\
+        '{'\
+          '"id": 1,'\
+          '"domain": "example.com",'\
+          '"subdomain": "mail",'\
+          '"username": "john@example.com",'\
+          '"user_id": 7,'\
+          '"default": false,'\
+          '"valid": true,'\
+          '"legacy": false,'\
+          '"dns": {'\
+            '"domain_cname": {'\
+              '"valid": true,'\
+              '"type": "cname",'\
+              '"host": "mail.example.com",'\
+              '"data": "sendgrid.net"'\
+            '},'\
+            '"owner_cname": {'\
+              '"valid": true,'\
+              '"type": "cname",'\
+              '"host": "7.example.com",'\
+              '"data": "sendgrid.net"'\
             '}'\
-          '}'
-        )
+          '}'\
+        '}'
       end
 
       let(:result) do
-        JSON.parse(
-          '{'\
-            '"id": 1,'\
-            '"valid": true,'\
-            '"validation_results": {'\
-              '"domain_cname": {'\
-                '"valid": false,'\
-                '"reason": "Expected CNAME to match '\
-                  '\"sendgrid.net.\" but found'\
-                ' \"example.com.\"."'\
-              '},'\
-              '"owner_cname": {'\
-                '"valid": true,'\
-                '"reason": null'\
-              '}'\
+        '{'\
+          '"id": 1,'\
+          '"valid": true,'\
+          '"validation_results": {'\
+            '"domain_cname": {'\
+              '"valid": false,'\
+              '"reason": "Expected CNAME to match '\
+                '\"sendgrid.net.\" but found'\
+              ' \"example.com.\"."'\
+            '},'\
+            '"owner_cname": {'\
+              '"valid": true,'\
+              '"reason": null'\
             '}'\
-          '}'
-        )
+          '}'\
+        '}'
       end
 
       it '#get_wl_links' do
@@ -261,7 +257,7 @@ module SendGrid4r::REST::Whitelabel
       end
 
       it 'creates link instance' do
-        actual = Links.create_link(link)
+        actual = Links.create_link(JSON.parse(link))
         expect(actual).to be_a(Links::Link)
         expect(actual.id).to eq(1)
         expect(actual.domain).to eq('example.com')
@@ -285,7 +281,7 @@ module SendGrid4r::REST::Whitelabel
       end
 
       it 'creates result instance' do
-        actual = Links.create_result(result)
+        actual = Links.create_result(JSON.parse(result))
         expect(actual).to be_a(Links::Result)
         expect(actual.id).to eq(1)
         expect(actual.valid).to eq(true)

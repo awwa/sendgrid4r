@@ -83,22 +83,18 @@ module SendGrid4r::REST::Sm
       end
 
       let(:recipient_emails) do
-        JSON.parse(
-          '{'\
-            '"recipient_emails": ['\
-              '"test1@example.com",'\
-              '"test2@example.com"'\
-            ']'\
-          '}'
-        )
+        '{'\
+          '"recipient_emails": ['\
+            '"test1@example.com",'\
+            '"test2@example.com"'\
+          ']'\
+        '}'
       end
 
       let(:recipient_email) do
-        JSON.parse(
-          '{'\
-            '"recipient_email": "test1@example.com"'\
-          '}'
-        )
+        '{'\
+          '"recipient_email": "test1@example.com"'\
+        '}'
       end
 
       it '#post_global_suppressed_emails' do

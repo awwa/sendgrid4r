@@ -52,23 +52,23 @@ module SendGrid4r::REST
 
         def post_segment(params:, &block)
           resp = post(@auth, Contacts::Segments.url, params.to_h, &block)
-          Contacts::Segments.create_segment(resp)
+          finish(resp, @raw_resp) { |r| Contacts::Segments.create_segment(r) }
         end
 
         def get_segments(&block)
           resp = get(@auth, Contacts::Segments.url, &block)
-          Contacts::Segments.create_segments(resp)
+          finish(resp, @raw_resp) { |r| Contacts::Segments.create_segments(r) }
         end
 
         def get_segment(segment_id:, &block)
           resp = get(@auth, Contacts::Segments.url(segment_id), &block)
-          Contacts::Segments.create_segment(resp)
+          finish(resp, @raw_resp) { |r| Contacts::Segments.create_segment(r) }
         end
 
         def patch_segment(segment_id:, params:, &block)
           endpoint = Contacts::Segments.url(segment_id)
           resp = patch(@auth, endpoint, params, &block)
-          Contacts::Segments.create_segment(resp)
+          finish(resp, @raw_resp) { |r| Contacts::Segments.create_segment(r) }
         end
 
         def delete_segment(segment_id:, &block)
@@ -78,7 +78,9 @@ module SendGrid4r::REST
         def get_recipients_on_segment(segment_id:, &block)
           endpoint = "#{Contacts::Segments.url(segment_id)}/recipients"
           resp = get(@auth, endpoint, nil, &block)
-          Contacts::Recipients.create_recipients(resp)
+          finish(resp, @raw_resp) do |r|
+            Contacts::Recipients.create_recipients(r)
+          end
         end
       end
     end

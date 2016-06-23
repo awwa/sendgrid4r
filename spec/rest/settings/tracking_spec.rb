@@ -91,11 +91,9 @@ module SendGrid4r::REST::Settings
       end
 
       let(:click) do
-        JSON.parse(
-          '{'\
-            '"enabled": true'\
-          '}'
-        )
+        '{'\
+          '"enabled": true'\
+        '}'
       end
 
       it '#get_settings_click' do
@@ -111,21 +109,19 @@ module SendGrid4r::REST::Settings
       end
 
       it 'creates click instance' do
-        actual = Tracking.create_click(click)
+        actual = Tracking.create_click(JSON.parse(click))
         expect(actual.enabled).to eq(true)
       end
 
       let(:google_analytics) do
-        JSON.parse(
-          '{'\
-            '"enabled": true,'\
-            '"utm_source": "sendgrid.com",'\
-            '"utm_medium": "email",'\
-            '"utm_term": "",'\
-            '"utm_content": "",'\
-            '"utm_campaign": "website"'\
-          '}'
-        )
+        '{'\
+          '"enabled": true,'\
+          '"utm_source": "sendgrid.com",'\
+          '"utm_medium": "email",'\
+          '"utm_term": "",'\
+          '"utm_content": "",'\
+          '"utm_campaign": "website"'\
+        '}'
       end
 
       it '#get_settings_google_analytics' do
@@ -141,7 +137,7 @@ module SendGrid4r::REST::Settings
       end
 
       it 'creates google_analytics instance' do
-        actual = Tracking.create_google_analytics(google_analytics)
+        actual = Tracking.create_google_analytics(JSON.parse(google_analytics))
         expect(actual.enabled).to eq(true)
         expect(actual.utm_source).to eq('sendgrid.com')
         expect(actual.utm_medium).to eq('email')
@@ -151,11 +147,9 @@ module SendGrid4r::REST::Settings
       end
 
       let(:open) do
-        JSON.parse(
-          '{'\
-            '"enabled": true'\
-          '}'
-        )
+        '{'\
+          '"enabled": true'\
+        '}'
       end
 
       it '#get_settings_open' do
@@ -171,21 +165,19 @@ module SendGrid4r::REST::Settings
       end
 
       it 'creates open instance' do
-        actual = Tracking.create_open(open)
+        actual = Tracking.create_open(JSON.parse(open))
         expect(actual.enabled).to eq(true)
       end
 
       let(:subscription) do
-        JSON.parse(
-          '{'\
-            '"enabled": true,'\
-            '"landing": "landing page html",'\
-            '"url": "url",'\
-            '"replace": "replacement tag",'\
-            '"html_content": "html content",'\
-            '"plain_content": "text content"'\
-          '}'
-        )
+        '{'\
+          '"enabled": true,'\
+          '"landing": "landing page html",'\
+          '"url": "url",'\
+          '"replace": "replacement tag",'\
+          '"html_content": "html content",'\
+          '"plain_content": "text content"'\
+        '}'
       end
 
       it '#get_settings_subscription' do
@@ -201,7 +193,7 @@ module SendGrid4r::REST::Settings
       end
 
       it 'creates subscription instance' do
-        actual = Tracking.create_subscription(subscription)
+        actual = Tracking.create_subscription(JSON.parse(subscription))
         expect(actual.enabled).to eq(true)
         expect(actual.landing).to eq('landing page html')
         expect(actual.url).to eq('url')

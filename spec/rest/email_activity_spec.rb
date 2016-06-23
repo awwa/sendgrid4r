@@ -80,25 +80,7 @@ module SendGrid4r::REST
       end
 
       let(:activities) do
-        JSON.parse(
-          '['\
-            '{'\
-              '"email": "test@example.com",'\
-              '"event": "processed",'\
-              '"created": 1431624000,'\
-              '"category": ["my_category"],'\
-              '"smtp_id": "filter001-2348927389",'\
-              '"asm_group_id": null,'\
-              '"msg_id": "xxx-abc-123",'\
-              '"ip": null,'\
-              '"url": null'\
-            '}'\
-          ']'
-        )
-      end
-
-      let(:activity) do
-        JSON.parse(
+        '['\
           '{'\
             '"email": "test@example.com",'\
             '"event": "processed",'\
@@ -110,7 +92,21 @@ module SendGrid4r::REST
             '"ip": null,'\
             '"url": null'\
           '}'\
-        )
+        ']'
+      end
+
+      let(:activity) do
+        '{'\
+          '"email": "test@example.com",'\
+          '"event": "processed",'\
+          '"created": 1431624000,'\
+          '"category": ["my_category"],'\
+          '"smtp_id": "filter001-2348927389",'\
+          '"asm_group_id": null,'\
+          '"msg_id": "xxx-abc-123",'\
+          '"ip": null,'\
+          '"url": null'\
+        '}'\
       end
 
       it '#get_email_activities' do
@@ -123,7 +119,7 @@ module SendGrid4r::REST
       end
 
       it 'creates activity instance' do
-        actual = EmailActivity.create_activity(activity)
+        actual = EmailActivity.create_activity(JSON.parse(activity))
         expect(actual).to be_a(EmailActivity::Activity)
         expect(actual.email).to eq('test@example.com')
         expect(actual.event).to eq('processed')
@@ -140,7 +136,7 @@ module SendGrid4r::REST
       end
 
       it 'creates activities instance' do
-        actual = EmailActivity.create_activities(activities)
+        actual = EmailActivity.create_activities(JSON.parse(activities))
         expect(actual).to be_a(Array)
         actual.each do |activity|
           expect(activity).to be_a(EmailActivity::Activity)

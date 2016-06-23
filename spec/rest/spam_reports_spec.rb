@@ -54,30 +54,26 @@ module SendGrid4r::REST
       end
 
       let(:spam_reports) do
-        JSON.parse(
-          '['\
-            '{'\
-              '"created": 1443651141,'\
-              '"email": "user1@example.com",'\
-              '"ip": "10.63.202.100"'\
-            '},'\
-            '{'\
-              '"created": 1443651154,'\
-              '"email": "user2@example.com",'\
-              '"ip": "10.63.202.100"'\
-            '}'\
-          ']'
-        )
+        '['\
+          '{'\
+            '"created": 1443651141,'\
+            '"email": "user1@example.com",'\
+            '"ip": "10.63.202.100"'\
+          '},'\
+          '{'\
+            '"created": 1443651154,'\
+            '"email": "user2@example.com",'\
+            '"ip": "10.63.202.100"'\
+          '}'\
+        ']'
       end
 
       let(:spam_report) do
-        JSON.parse(
-          '{'\
-            '"created": 1454433146,'\
-            '"email": "test1@example.com",'\
-            '"ip": "10.89.32.5"'\
-          '}'
-        )
+        '{'\
+          '"created": 1454433146,'\
+          '"email": "test1@example.com",'\
+          '"ip": "10.89.32.5"'\
+        '}'
       end
 
       it '#get_spam_reports' do
@@ -116,7 +112,7 @@ module SendGrid4r::REST
       end
 
       it 'creates spam_reports instance' do
-        actual = SpamReports.create_spam_reports(spam_reports)
+        actual = SpamReports.create_spam_reports(JSON.parse(spam_reports))
         expect(actual).to be_a(Array)
         actual.each do |subuser|
           expect(subuser).to be_a(SpamReports::SpamReport)
@@ -124,7 +120,7 @@ module SendGrid4r::REST
       end
 
       it 'creates spam_report instance' do
-        actual = SpamReports.create_spam_report(spam_report)
+        actual = SpamReports.create_spam_report(JSON.parse(spam_report))
         expect(actual).to be_a(SpamReports::SpamReport)
         expect(actual.created).to eq(Time.at(1454433146))
         expect(actual.email).to eq('test1@example.com')

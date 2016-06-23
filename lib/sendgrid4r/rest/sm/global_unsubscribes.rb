@@ -38,19 +38,21 @@ module SendGrid4r::REST
         params[:offset] = offset.to_i unless offset.nil?
         endpoint = Sm::GlobalUnsubscribes.url_unsubscribes
         resp = get(@auth, endpoint, params, &block)
-        Sm::GlobalUnsubscribes.create_supressions(resp)
+        finish(resp, @raw_resp) do |r|
+          Sm::GlobalUnsubscribes.create_supressions(r)
+        end
       end
 
       def post_global_suppressed_emails(recipient_emails:, &block)
         params = { recipient_emails: recipient_emails }
         endpoint = Sm::GlobalUnsubscribes.url
         resp = post(@auth, endpoint, params, &block)
-        Sm.create_recipient_emails(resp)
+        finish(resp, @raw_resp) { |r| Sm.create_recipient_emails(r) }
       end
 
       def get_global_suppressed_email(email_address:, &block)
         resp = get(@auth, Sm::GlobalUnsubscribes.url(email_address), &block)
-        Sm.create_recipient_email(resp)
+        finish(resp, @raw_resp) { |r| Sm.create_recipient_email(r) }
       end
 
       def delete_global_suppressed_email(email_address:, &block)

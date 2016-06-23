@@ -150,79 +150,71 @@ module SendGrid4r::REST::MarketingCampaigns::Contacts
       end
 
       let(:list) do
-        JSON.parse(
-          '{'\
-            '"id": 1,'\
-            '"name": "listname",'\
-            '"recipient_count": 0'\
-          '}'
-        )
+        '{'\
+          '"id": 1,'\
+          '"name": "listname",'\
+          '"recipient_count": 0'\
+        '}'
       end
 
       let(:lists) do
-        JSON.parse(
-          '{'\
-            '"lists": ['\
-              '{'\
-                '"id": 1,'\
-                '"name": "the jones",'\
-                '"recipient_count": 1'\
-              '}'\
-            ']'\
-          '}'
-        )
+        '{'\
+          '"lists": ['\
+            '{'\
+              '"id": 1,'\
+              '"name": "the jones",'\
+              '"recipient_count": 1'\
+            '}'\
+          ']'\
+        '}'
       end
 
       let(:recipient) do
-        JSON.parse(
-          '{'\
-            '"created_at": 1422313607,'\
-            '"email": "jones@example.com",'\
-            '"first_name": null,'\
-            '"id": "jones@example.com",'\
-            '"last_clicked": null,'\
-            '"last_emailed": null,'\
-            '"last_name": "Jones",'\
-            '"last_opened": null,'\
-            '"updated_at": 1422313790,'\
-            '"custom_fields": ['\
-              '{'\
-                '"id": 23,'\
-                '"name": "pet",'\
-                '"value": "Fluffy",'\
-                '"type": "text"'\
-              '}'\
-            ']'\
-          '}'
-        )
+        '{'\
+          '"created_at": 1422313607,'\
+          '"email": "jones@example.com",'\
+          '"first_name": null,'\
+          '"id": "jones@example.com",'\
+          '"last_clicked": null,'\
+          '"last_emailed": null,'\
+          '"last_name": "Jones",'\
+          '"last_opened": null,'\
+          '"updated_at": 1422313790,'\
+          '"custom_fields": ['\
+            '{'\
+              '"id": 23,'\
+              '"name": "pet",'\
+              '"value": "Fluffy",'\
+              '"type": "text"'\
+            '}'\
+          ']'\
+        '}'
       end
 
       let(:recipients) do
-        JSON.parse(
-          '{'\
-            '"recipients": ['\
-              '{'\
-                '"created_at": 1422313607,'\
-                '"email": "jones@example.com",'\
-                '"first_name": null,'\
-                '"id": "jones@example.com",'\
-                '"last_clicked": null,'\
-                '"last_emailed": null,'\
-                '"last_name": "Jones",'\
-                '"last_opened": null,'\
-                '"updated_at": 1422313790,'\
-                '"custom_fields": ['\
-                  '{'\
-                    '"id": 23,'\
-                    '"name": "pet",'\
-                    '"value": "Fluffy",'\
-                    '"type": "text"'\
-                  '}'\
-                ']'\
-              '}'\
-            ']'\
-          '}'
-        )
+        '{'\
+          '"recipients": ['\
+            '{'\
+              '"created_at": 1422313607,'\
+              '"email": "jones@example.com",'\
+              '"first_name": null,'\
+              '"id": "jones@example.com",'\
+              '"last_clicked": null,'\
+              '"last_emailed": null,'\
+              '"last_name": "Jones",'\
+              '"last_opened": null,'\
+              '"updated_at": 1422313790,'\
+              '"custom_fields": ['\
+                '{'\
+                  '"id": 23,'\
+                  '"name": "pet",'\
+                  '"value": "Fluffy",'\
+                  '"type": "text"'\
+                '}'\
+              ']'\
+            '}'\
+          ']'\
+        '}'
       end
 
       it '#post_list' do
@@ -288,7 +280,7 @@ module SendGrid4r::REST::MarketingCampaigns::Contacts
       end
 
       it 'creates list instance' do
-        actual = Lists.create_list(list)
+        actual = Lists.create_list(JSON.parse(list))
         expect(actual).to be_a(Lists::List)
         expect(actual.id).to eq(1)
         expect(actual.name).to eq('listname')
@@ -296,7 +288,7 @@ module SendGrid4r::REST::MarketingCampaigns::Contacts
       end
 
       it 'creates lists instance' do
-        actual = Lists.create_lists(lists)
+        actual = Lists.create_lists(JSON.parse(lists))
         expect(actual.lists).to be_a(Array)
         actual.lists.each do |list|
           expect(list).to be_a(Lists::List)

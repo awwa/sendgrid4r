@@ -17,7 +17,7 @@ module SendGrid4r::REST
           aggregated_by: aggregated_by
         }
         resp = get(@auth, "#{BASE_URL}/stats", params, &block)
-        Stats.create_top_stats(resp)
+        finish(resp, @raw_resp) { |r| Stats.create_top_stats(r) }
       end
     end
   end
