@@ -435,9 +435,9 @@ module SendGrid4r::REST::Whitelabel
       end
 
       it '#remove_ip_from_domain' do
-        allow(client).to receive(:execute).and_return(domain)
+        allow(client).to receive(:execute).and_return('')
         actual = client.remove_ip_from_wl_domain(id: '', ip: '')
-        expect(actual).to be_a(Domains::Domain)
+        expect(actual).to eq('')
       end
 
       it '#validate_domain' do
