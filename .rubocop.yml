@@ -18,7 +18,7 @@ ParameterLists:
 
 # Change limitation of AbcSize
 AbcSize:
-  Max: 22
+  Max: 27
 
 # Change numeric literals
 NumericLiterals:

@@ -72,6 +72,11 @@ module SendGrid4r::CLI
         args = ['campaign']
         SG.start(args)
       end
+
+      it '#mail subcommand' do
+        args = ['mail']
+        SG.start(args)
+      end
     end
   end
 end
