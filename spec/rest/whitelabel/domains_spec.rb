@@ -241,8 +241,7 @@ module SendGrid4r::REST::Whitelabel
 
         it '#remove_ip_from_wl_domain' do
           @client.add_ip_to_wl_domain(id: @domain2.id, ip: @ip)
-          domain2 = @client.remove_ip_from_wl_domain(id: @domain2.id, ip: @ip)
-          expect(domain2.ips).to eq(nil)
+          @client.remove_ip_from_wl_domain(id: @domain2.id, ip: @ip)
         end
 
         it '#validate_wl_domain' do

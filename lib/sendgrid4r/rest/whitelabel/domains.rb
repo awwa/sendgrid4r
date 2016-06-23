@@ -173,8 +173,7 @@ module SendGrid4r::REST
       end
 
       def remove_ip_from_wl_domain(id:, ip:, &block)
-        resp = delete(@auth, Domains.url(id, ip), &block)
-        finish(resp, @raw_resp) { |r| Domains.create_domain(r) }
+        delete(@auth, Domains.url(id, ip), &block)
       end
 
       def validate_wl_domain(id:, &block)
