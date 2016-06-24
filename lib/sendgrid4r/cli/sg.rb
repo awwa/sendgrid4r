@@ -5,7 +5,7 @@ module SendGrid4r::CLI
   class SG < Thor
     map %w(--version -v) => :print_version
 
-    desc '--version, -v', 'print the version'
+    desc '--version, -v', 'Print the version'
     def print_version
       puts SendGrid4r::VERSION
     end
@@ -13,17 +13,23 @@ module SendGrid4r::CLI
     desc('api_key SUBCOMMAND ...ARGS', 'Manage API keys')
     subcommand('api_key', ApiKeys::ApiKey)
 
+    desc('campaign SUBCOMMAND ...ARGS', 'Manage Marketing Campaigns')
+    subcommand('campaign', Campaign::Campaign)
+
     desc('cancel_schedule SUBCOMMAND ...ARGS', 'Manage canceling schedule send')
     subcommand('cancel_schedule', CancelSchedules::CancelSchedule)
-
-    desc('ip SUBCOMMAND ...ARGS', 'Manage ips')
-    subcommand('ip', Ips::Ip)
 
     desc('ipam SUBCOMMAND ...ARGS', 'Manage ip access')
     subcommand('ipam', Ipam::Ipam)
 
+    desc('ip SUBCOMMAND ...ARGS', 'Manage ips')
+    subcommand('ip', Ips::Ip)
+
     desc('settings SUBCOMMAND ...ARGS', 'Manage settings')
     subcommand('settings', Settings::Settings)
+
+    desc('stats SUBCOMMAND ...ARGS', 'Get account statistics')
+    subcommand('stats', Stats::Stats)
 
     desc('subuser SUBCOMMAND ...ARGS', 'Manage subuser')
     subcommand('subuser', Subusers::Subuser)
@@ -43,13 +49,10 @@ module SendGrid4r::CLI
     desc('category SUBCOMMAND ...ARGS', 'Manage categories')
     subcommand('category', Category)
 
-    desc('user SUBCOMMAND ...ARGS', 'Manage user')
-    subcommand('user', User)
-
-    desc('campaign SUBCOMMAND ...ARGS', 'Manage Marketing Campaigns')
-    subcommand('campaign', Campaign::Campaign)
-
     desc('mail SUBCOMMAND ...ARGS', 'Send mail')
     subcommand('mail', Mail)
+
+    desc('user SUBCOMMAND ...ARGS', 'Manage user')
+    subcommand('user', User)
   end
 end
