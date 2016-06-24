@@ -7,7 +7,7 @@ module SendGrid4r::CLI
       class CustomField < SgThor
         desc 'create', 'Create a custom field'
         option :name, require: true
-        option :type, require: true
+        option :type, banner: SgThor::TYP, require: true
         def create
           puts @client.post_custom_field(parameterise(options))
         rescue RestClient::ExceptionWithResponse => e

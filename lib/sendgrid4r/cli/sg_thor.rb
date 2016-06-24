@@ -7,6 +7,7 @@ module SendGrid4r::CLI
     UTS = 'UNIX TIMESTAMP'
     AGG = '[day|week|month]'
     DIR = '[desc|asc]'
+    TYP = '[date|text|number]'
 
     class_option :api_key, aliases: '-k', desc: 'API Key for APIKey Auth'
     class_option :user, aliases: '-u', desc: 'Username for Basic Auth'
