@@ -5,8 +5,8 @@ module SendGrid4r::CLI
     #
     class Global < SgThor
       desc 'get', 'Gets all of your user’s email statistics.'
-      option :start_date, require: true
-      option :end_date
+      option :start_date, banner: SgThor::ISO, require: true
+      option :end_date, banner: SgThor::ISO
       option :aggregated_by
       def get
         puts @client.get_global_stats(parameterise(options))

@@ -3,6 +3,8 @@ module SendGrid4r::CLI
   # SendGrid Web API v3 SgThor
   #
   class SgThor < Thor
+    ISO = 'YYYY-MM-DD'
+
     class_option :api_key, aliases: '-k', desc: 'API Key for APIKey Auth'
     class_option :user, aliases: '-u', desc: 'Username for Basic Auth'
     class_option :pass, aliases: '-p', desc: 'Password for Basic Auth'

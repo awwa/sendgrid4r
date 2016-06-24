@@ -5,8 +5,8 @@ module SendGrid4r::CLI
     #
     class Advanced < SgThor
       desc 'geo', 'Gets email statistics by country and state/province'
-      option :start_date, require: true
-      option :end_date
+      option :start_date, banner: SgThor::ISO, require: true
+      option :end_date, banner: SgThor::ISO
       option :aggregated_by
       option :country
       def geo
@@ -16,8 +16,8 @@ module SendGrid4r::CLI
       end
 
       desc 'device', 'Gets email statistics by device type'
-      option :start_date, require: true
-      option :end_date
+      option :start_date, banner: SgThor::ISO, require: true
+      option :end_date, banner: SgThor::ISO
       option :aggregated_by
       def device
         puts @client.get_devices_stats(parameterise(options))
@@ -26,8 +26,8 @@ module SendGrid4r::CLI
       end
 
       desc 'client', 'Gets email statistics by client type'
-      option :start_date, require: true
-      option :end_date
+      option :start_date, banner: SgThor::ISO, require: true
+      option :end_date, banner: SgThor::ISO
       option :aggregated_by
       def client
         puts @client.get_clients_stats(parameterise(options))
@@ -36,8 +36,8 @@ module SendGrid4r::CLI
       end
 
       desc 'client_type', 'Gets email statistics for a single client type'
-      option :start_date, require: true
-      option :end_date
+      option :start_date, banner: SgThor::ISO, require: true
+      option :end_date, banner: SgThor::ISO
       option :aggregated_by
       option :client_type, require: true
       def client_type
@@ -47,8 +47,8 @@ module SendGrid4r::CLI
       end
 
       desc 'mailbox_provider', 'Gets email statistics by mailbox provider'
-      option :start_date, require: true
-      option :end_date
+      option :start_date, banner: SgThor::ISO, require: true
+      option :end_date, banner: SgThor::ISO
       option :aggregated_by
       option :mailbox_providers
       def mailbox_provider
@@ -58,8 +58,8 @@ module SendGrid4r::CLI
       end
 
       desc 'browser', 'Gets email statistics by browser'
-      option :start_date, require: true
-      option :end_date
+      option :start_date, banner: SgThor::ISO, require: true
+      option :end_date, banner: SgThor::ISO
       option :aggregated_by
       option :browsers
       def browser
