@@ -83,7 +83,7 @@ module SendGrid4r::CLI
 
       desc 'schedule', 'Schedule a campaign'
       option :campaign_id, type: :numeric, require: true
-      option :send_at, type: :numeric, require: true
+      option :send_at, banner: SgThor::UTS, type: :numeric, require: true
       def schedule
         puts @client.schedule_campaign(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
@@ -92,7 +92,7 @@ module SendGrid4r::CLI
 
       desc 'reschedule', 'Reschedule a campaign'
       option :campaign_id, type: :numeric, require: true
-      option :send_at, type: :numeric, require: true
+      option :send_at, banner: SgThor::UTS, type: :numeric, require: true
       def reschedule
         puts @client.reschedule_campaign(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e

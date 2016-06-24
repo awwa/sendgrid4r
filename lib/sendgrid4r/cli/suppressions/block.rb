@@ -5,8 +5,8 @@ module SendGrid4r::CLI
     #
     class Block < SgThor
       desc 'list', 'List blocks'
-      option :start_time, type: :numeric
-      option :end_time, type: :numeric
+      option :start_time, banner: SgThor::UTS, type: :numeric
+      option :end_time, banner: SgThor::UTS, type: :numeric
       option :limit, type: :numeric
       option :offset, type: :numeric
       def list

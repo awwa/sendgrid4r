@@ -4,6 +4,7 @@ module SendGrid4r::CLI
   #
   class SgThor < Thor
     ISO = 'YYYY-MM-DD'
+    UTS = 'UNIX TIMESTAMP'
 
     class_option :api_key, aliases: '-k', desc: 'API Key for APIKey Auth'
     class_option :user, aliases: '-u', desc: 'Username for Basic Auth'
