@@ -7,7 +7,7 @@ module SendGrid4r::CLI
       desc 'get', 'Gets email statistics for the given categories.'
       option :start_date, banner: SgThor::ISO, require: true
       option :end_date, banner: SgThor::ISO
-      option :aggregated_by
+      option :aggregated_by, banner: SgThor::AGG
       option :categories, require: true
       def get
         puts @client.get_categories_stats(parameterise(options))
@@ -22,7 +22,7 @@ module SendGrid4r::CLI
       option :start_date, banner: SgThor::ISO, require: true
       option :end_date, banner: SgThor::ISO
       option :sort_by_metric
-      option :sort_by_direction
+      option :sort_by_direction, banner: SgThor::DIR
       option :limit
       option :offset
       def sums

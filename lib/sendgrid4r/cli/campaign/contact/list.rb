@@ -45,7 +45,7 @@ module SendGrid4r::CLI
           puts e.inspect
         end
 
-        desc 'recipient', 'Add, Remove, List a recipient'
+        desc 'recipient <action>', 'Add, Remove, List a recipient'
         option :list_id, type: :numeric, require: true
         option :recipients, type: :array, desc: 'for add action'
         option :recipient_id, desc: 'for remove action'

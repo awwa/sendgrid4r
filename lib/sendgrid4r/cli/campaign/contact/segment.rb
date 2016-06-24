@@ -80,7 +80,7 @@ module SendGrid4r::CLI
           puts e.inspect
         end
 
-        desc 'recipient', 'List recipients'
+        desc 'recipient <action>', 'List recipients'
         option :segment_id, require: true
         def recipient(action)
           case action

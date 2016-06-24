@@ -3,7 +3,7 @@ module SendGrid4r::CLI
   # SendGrid Web API v3 User
   #
   class User < SgThor
-    desc 'profile', 'Get or Update user Profile'
+    desc 'profile <action>', 'Get or Update user Profile'
     option :address
     option :city
     option :company
@@ -27,7 +27,7 @@ module SendGrid4r::CLI
       puts e.inspect
     end
 
-    desc 'account', 'Get user account'
+    desc 'account <action>', 'Get user account'
     def account(action)
       case action
       when 'get'
@@ -39,7 +39,7 @@ module SendGrid4r::CLI
       puts e.inspect
     end
 
-    desc 'email', 'Get or update user email'
+    desc 'email <action>', 'Get or update user email'
     option :email
     def email(action)
       case action
@@ -54,7 +54,7 @@ module SendGrid4r::CLI
       puts e.inspect
     end
 
-    desc 'username', 'Get or update username'
+    desc 'username <action>', 'Get or update username'
     option :username
     def username(action)
       case action
@@ -69,7 +69,7 @@ module SendGrid4r::CLI
       puts e.inspect
     end
 
-    desc('password', 'Update password')
+    desc('password <action>', 'Update password')
     option :new_password, require: true
     option :old_password, require: true
     def password(action)

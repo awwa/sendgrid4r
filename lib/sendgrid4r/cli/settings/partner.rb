@@ -13,7 +13,7 @@ module SendGrid4r::CLI
         puts e.inspect
       end
 
-      desc 'new_relic', 'Get, Enable and Disable new relic settings'
+      desc 'new_relic <action>', 'Get, Enable and Disable new relic settings'
       option :license_key
       def new_relic(action)
         case action

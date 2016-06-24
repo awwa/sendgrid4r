@@ -13,7 +13,7 @@ module SendGrid4r::CLI
         puts e.inspect
       end
 
-      desc 'click', 'Get, Enable and Disable click tracking settings'
+      desc 'click <action>', 'Get, Enable and Disable click tracking settings'
       def click(action)
         case action
         when 'get'
@@ -28,7 +28,10 @@ module SendGrid4r::CLI
         puts e.inspect
       end
 
-      desc 'ganalytics', 'Get, Enable and Disable google analytics settings'
+      desc(
+        'ganalytics <action>',
+        'Get, Enable and Disable google analytics settings'
+      )
       option :utm_source
       option :utm_medium
       option :utm_term
@@ -49,7 +52,7 @@ module SendGrid4r::CLI
         puts e.inspect
       end
 
-      desc 'open', 'Get, Enable and Disable open tracking settings'
+      desc 'open <action>', 'Get, Enable and Disable open tracking settings'
       def open(action)
         case action
         when 'get'
@@ -65,7 +68,7 @@ module SendGrid4r::CLI
       end
 
       desc(
-        'subscription',
+        'subscription <action>',
         'Get, Enable and Disable subscription tracking settings'
       )
       option :landing
