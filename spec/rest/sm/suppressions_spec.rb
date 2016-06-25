@@ -49,14 +49,23 @@ module SendGrid4r::REST::Sm
           expect(emails[0]).to eq(@email1)
         end
 
-        it '#get_suppressions' do
-          suppressions = @client.get_suppressions(email_address: @email1)
-          expect(suppressions.suppressions).to be_a(Array)
-          suppressions.suppressions.each do |suppression|
-            next unless suppression.name == @group_name
-            expect(suppression.name).to eq(@group_name)
-            expect(suppression.description).to eq(@group_desc)
-            expect(suppression.suppressed).to eq(true)
+        it '#get_suppressions with email' do
+          groups = @client.get_suppressions(email_address: @email1)
+          expect(groups.suppressions).to be_a(Array)
+          groups.suppressions.each do |group|
+            next unless group.name == @group_name
+            expect(group.name).to eq(@group_name)
+            expect(group.description).to eq(@group_desc)
+            expect(group.suppressed).to eq(true)
+            expect(group.is_default).to eq(false)
+          end
+        end
+
+        it '#get_suppressions without email' do
+          suppressions = @client.get_suppressions
+          expect(suppressions).to be_a(Array)
+          suppressions.each do |suppression|
+            expect(suppression).to be_a(Suppressions::Suppression)
           end
         end
 
@@ -98,31 +107,50 @@ module SendGrid4r::REST::Sm
         '["test1@example.com","test2@example.com"]'
       end
 
-      let(:suppression) do
+      let(:group) do
         '{'\
-          '"id": 4,'\
-          '"name": "Special Offers",'\
-          '"description": "Special offers and coupons",'\
-          '"suppressed": false'\
+          '"description": "Optional description.",'\
+          '"id": 1,'\
+          '"is_default": true,'\
+          '"name": "Weekly News",'\
+          '"suppressed": true'\
         '}'
       end
 
-      let(:suppressions) do
+      let(:groups) do
         '{'\
           '"suppressions": ['\
             '{'\
+              '"description": "Optional description.",'\
               '"id": 1,'\
-              '"name": "Weekly Newsletter",'\
-              '"description": "The weekly newsletter",'\
-              '"suppressed": false'\
+              '"is_default": true,'\
+              '"name": "Weekly News",'\
+              '"suppressed": true'\
             '},'\
             '{'\
-              '"id": 4,'\
-              '"name": "Special Offers",'\
-              '"description": "Special offers and coupons",'\
+              '"description": "Some daily news.",'\
+              '"id": 2,'\
+              '"is_default": true,'\
+              '"name": "Daily News",'\
+              '"suppressed": true'\
+            '},'\
+            '{'\
+              '"description": "An old group.",'\
+              '"id": 2,'\
+              '"is_default": false,'\
+              '"name": "Old News",'\
               '"suppressed": false'\
             '}'\
           ']'\
+        '}'
+      end
+
+      let(:suppression) do
+        '{'\
+          '"email":"test@example.com",'\
+          '"group_id": 1,'\
+          '"group_name": "Weekly News",'\
+          '"created_at": 1410986704'\
         '}'
       end
 
@@ -141,11 +169,11 @@ module SendGrid4r::REST::Sm
       end
 
       it '#get_suppressions' do
-        allow(client).to receive(:execute).and_return(suppressions)
+        allow(client).to receive(:execute).and_return(groups)
         actual = client.get_suppressions(email_address: '')
         expect(actual.suppressions).to be_a(Array)
-        actual.suppressions.each do |suppression|
-          expect(suppression).to be_a(Suppressions::Suppression)
+        actual.suppressions.each do |group|
+          expect(group).to be_a(Suppressions::Group)
         end
       end
 
@@ -155,22 +183,32 @@ module SendGrid4r::REST::Sm
         expect(actual).to eq('')
       end
 
-      it 'creates suppression instance' do
-        actual = Suppressions.create_suppression(JSON.parse(suppression))
-        expect(actual).to be_a(Suppressions::Suppression)
-        expect(actual.id).to eq(4)
-        expect(actual.name).to eq('Special Offers')
-        expect(actual.description).to eq('Special offers and coupons')
-        expect(actual.suppressed).to eq(false)
+      it 'creates group instance' do
+        actual = Suppressions.create_group(JSON.parse(group))
+        expect(actual).to be_a(Suppressions::Group)
+        expect(actual.id).to eq(1)
+        expect(actual.name).to eq('Weekly News')
+        expect(actual.description).to eq('Optional description.')
+        expect(actual.suppressed).to eq(true)
+        expect(actual.is_default).to eq(true)
       end
 
-      it 'creates suppressions instance' do
-        actual = Suppressions.create_suppressions(JSON.parse(suppressions))
-        expect(actual).to be_a(Suppressions::Suppressions)
+      it 'creates groups instance' do
+        actual = Suppressions.create_groups(JSON.parse(groups))
+        expect(actual).to be_a(Suppressions::Groups)
         expect(actual.suppressions).to be_a(Array)
-        actual.suppressions.each do |suppression|
-          expect(suppression).to be_a(Suppressions::Suppression)
+        actual.suppressions.each do |group|
+          expect(group).to be_a(Suppressions::Group)
         end
+      end
+
+      it 'create suppression instance' do
+        actual = Suppressions.create_suppression(JSON.parse(suppression))
+        expect(actual).to be_a(Suppressions::Suppression)
+        expect(actual.email).to eq('test@example.com')
+        expect(actual.group_id).to eq(1)
+        expect(actual.group_name).to eq('Weekly News')
+        expect(actual.created_at).to eq(Time.at(1410986704))
       end
     end
   end
