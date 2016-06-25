@@ -13,7 +13,8 @@ module SendGrid4r::CLI
     class_option :user, aliases: '-u', desc: 'Username for Basic Auth'
     class_option :pass, aliases: '-p', desc: 'Password for Basic Auth'
     class_option(
-      :envkey, aliases: '-e',
+      :envkey,
+      aliases: '-e',
       desc: 'Load API Key from environment variable "SG_API_KEY"',
       banner: ''
     )

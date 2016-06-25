@@ -31,4 +31,4 @@ ClassAndModuleChildren:
 # Change limitation of the class length
 ClassLength:
   CountComments: false  # count full line comments?
-  Max: 160
+  Max: 180
