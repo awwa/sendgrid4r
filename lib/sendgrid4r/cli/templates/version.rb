@@ -10,7 +10,7 @@ module SendGrid4r::CLI
       option :subject, require: true
       option :html_content, require: true
       option :plain_content, require: true
-      option :active, type: :numeric
+      option :active, type: :numeric, banner: '[0|1]'
       def create
         factory = SendGrid4r::Factory::VersionFactory.new
         params = parameterise(options)
@@ -49,7 +49,7 @@ module SendGrid4r::CLI
       option :subject
       option :html_content
       option :plain_content
-      option :active
+      option :active, type: :numeric, banner: '[0|1]'
       def update
         factory = SendGrid4r::Factory::VersionFactory.new
         params = parameterise(options)

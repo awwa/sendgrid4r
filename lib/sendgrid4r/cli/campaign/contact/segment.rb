@@ -14,7 +14,10 @@ module SendGrid4r::CLI
         desc 'create', 'Create a segment'
         option :name, require: true
         option :list_id, type: :numeric, require: true
-        option :conditions, type: :array, require: true
+        option(
+          :conditions, type: :array, require: true,
+          banner: 'field:email,value:abc@abc.abc,operator:eq,and_or:'
+        )
         def create
           conditions = options[:conditions].map do |c|
             array = c.delete(' ').split(/[:,]/)
@@ -51,7 +54,10 @@ module SendGrid4r::CLI
         desc 'update', 'Update a segment'
         option :segment_id, require: true
         option :name
-        option :conditions, type: :array
+        option(
+          :conditions, type: :array,
+          banner: 'field:email,value:abc@abc.abc,operator:eq,and_or:'
+        )
         def update
           conditions = options[:conditions].map do |c|
             array = c.delete(' ').split(/[:,]/)

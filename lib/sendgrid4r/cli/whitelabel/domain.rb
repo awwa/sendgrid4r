@@ -5,9 +5,9 @@ module SendGrid4r::CLI
     #
     class Domain < SgThor
       desc 'list', 'List all Domain whitelabels'
-      option :limit
-      option :offset
-      option :exclude_subusers
+      option :limit, type: :numeric
+      option :offset, type: :numeric
+      option :exclude_subusers, type: :boolean
       option :username
       option :domain
       def list

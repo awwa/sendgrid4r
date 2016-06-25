@@ -12,8 +12,8 @@ module SendGrid4r::CLI
       end
 
       desc 'update', 'Change the Enforced TLS settings'
-      option :require_tls
-      option :require_valid_cert
+      option :require_tls, type: :boolean
+      option :require_valid_cert, type: :boolean
       def update
         puts @client.patch_enforced_tls(params: parameterise(options))
       rescue RestClient::ExceptionWithResponse => e
