@@ -21,7 +21,7 @@ module SendGrid4r::CLI
     def initialize(*args)
       super
       api_key = options[:api_key]
-      api_key = ENV['SG_API_KEY'] if options[:e]
+      api_key = ENV['SG_API_KEY'] if options[:envkey]
       @client = SendGrid4r::Client.new(
         username: options[:user], password: options[:pass],
         api_key: api_key, raw_response: true

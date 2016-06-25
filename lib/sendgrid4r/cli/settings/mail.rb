@@ -14,7 +14,7 @@ module SendGrid4r::CLI
       end
 
       desc(
-        'whitelist <action>',
+        'whitelist [get|enable|disable]',
         'Get, Enable and Disable address whitelist settings'
       )
       option :list, type: :array
@@ -33,7 +33,7 @@ module SendGrid4r::CLI
         puts e.inspect
       end
 
-      desc 'bcc <action>', 'Get, Enable and Disable bcc settings'
+      desc 'bcc [get|enable|disable]', 'Get, Enable and Disable bcc settings'
       option :email
       def bcc(action)
         case action
@@ -51,7 +51,8 @@ module SendGrid4r::CLI
       end
 
       desc(
-        'bounce_purge <action>', 'Get, Enable and Disable bounce purge settings'
+        'bounce_purge [get|enable|disable]',
+        'Get, Enable and Disable bounce purge settings'
       )
       option :hard_bounces, type: :numeric
       option :soft_bounces, type: :numeric
@@ -70,7 +71,10 @@ module SendGrid4r::CLI
         puts e.inspect
       end
 
-      desc 'footer <action>', 'Get, Enable and Disable footer settings'
+      desc(
+        'footer [get|enable|disable]',
+        'Get, Enable and Disable footer settings'
+      )
       option :html_content
       option :plain_content
       def footer(action)
@@ -89,7 +93,7 @@ module SendGrid4r::CLI
       end
 
       desc(
-        'forward_bounce <action>',
+        'forward_bounce [get|enable|disable]',
         'Get, Enable and Disable forward bounce settings'
       )
       option :email
@@ -109,7 +113,8 @@ module SendGrid4r::CLI
       end
 
       desc(
-        'forward_spam <action>', 'Get, Enable and Disable forward spam settings'
+        'forward_spam [get|enable|disable]',
+        'Get, Enable and Disable forward spam settings'
       )
       option :email
       def forward_spam(action)
@@ -127,7 +132,10 @@ module SendGrid4r::CLI
         puts e.inspect
       end
 
-      desc 'spam_check <action>', 'Get, Enable and Disable spam check settings'
+      desc(
+        'spam_check [get|enable|disable]',
+        'Get, Enable and Disable spam check settings'
+      )
       option :url
       option :max_score
       def spam_check(action)
@@ -145,7 +153,10 @@ module SendGrid4r::CLI
         puts e.inspect
       end
 
-      desc 'template <action>', 'Get, Enable and Disable template settings'
+      desc(
+        'template [get|enable|disable]',
+        'Get, Enable and Disable template settings'
+      )
       option :html_content
       def template(action)
         case action
@@ -163,7 +174,7 @@ module SendGrid4r::CLI
       end
 
       desc(
-        'plain_content <action>',
+        'plain_content [get|enable|disable]',
         'Get, Enable and Disable plain content settings'
       )
       def plain_content(action)
