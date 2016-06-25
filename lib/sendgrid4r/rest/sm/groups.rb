@@ -43,8 +43,9 @@ module SendGrid4r::REST
         finish(resp, @raw_resp) { |r| Sm::Groups.create_group(r) }
       end
 
-      def get_groups(&block)
-        resp = get(@auth, Sm::Groups.url, &block)
+      def get_groups(ids: nil, &block)
+        i = ids.map { |id| { id: id } } unless ids.nil?
+        resp = get(@auth, Sm::Groups.url, i, &block)
         finish(resp, @raw_resp) { |r| Sm::Groups.create_groups(r) }
       end
 

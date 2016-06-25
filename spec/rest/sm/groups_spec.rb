@@ -58,6 +58,15 @@ module SendGrid4r::REST::Sm
           end
         end
 
+        it '#get_groups with ids' do
+          groups = @client.get_groups(ids: [@group1.id])
+          expect(groups).to be_a(Array)
+          groups.each do |group|
+            expect(group).to be_a(Groups::Group)
+            expect(group.id).to eq(@group1.id)
+          end
+        end
+
         it '#get_group' do
           group = @client.get_group(group_id: @group1.id)
           expect(group.id).to be_a(Fixnum)
