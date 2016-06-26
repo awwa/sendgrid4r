@@ -69,6 +69,16 @@ module SendGrid4r::REST
         finish(resp, @raw_resp) { |r| Sm.create_recipient_emails(r) }
       end
 
+      def search_suppressed_emails(group_id:, recipient_emails:, &block)
+        resp = post(
+          @auth,
+          Sm::Suppressions.url(group_id, :search),
+          recipient_emails: recipient_emails,
+          &block
+        )
+        finish(resp, @raw_resp) { |r| r }
+      end
+
       def get_suppressed_emails(group_id:, &block)
         endpoint = Sm::Suppressions.url(group_id)
         resp = get(@auth, endpoint, &block)

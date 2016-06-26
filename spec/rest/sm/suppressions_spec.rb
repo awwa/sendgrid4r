@@ -43,6 +43,14 @@ module SendGrid4r::REST::Sm
           expect(emails.recipient_emails[1]).to eq(@email3)
         end
 
+        it '#search_suppressed_emails' do
+          emails = @client.search_suppressed_emails(
+            group_id: @group.id, recipient_emails: [@email1]
+          )
+          expect(emails.length).to eq(1)
+          expect(emails[0]).to eq(@email1)
+        end
+
         it '#get_suppressed_emails' do
           emails = @client.get_suppressed_emails(group_id: @group.id)
           expect(emails.length).to eq(1)
@@ -160,6 +168,14 @@ module SendGrid4r::REST::Sm
           group_id: 0, recipient_emails: ['', '']
         )
         expect(actual).to be_a(RecipientEmails)
+      end
+
+      it '#search_suppressed_emails' do
+        allow(client).to receive(:execute).and_return(emails)
+        actual = client.search_suppressed_emails(
+          group_id: 0, recipient_emails: ['', '']
+        )
+        expect(actual).to be_a(Array)
       end
 
       it '#get_suppressed_emails' do

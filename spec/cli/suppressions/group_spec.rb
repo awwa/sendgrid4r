@@ -31,7 +31,7 @@ module SendGrid4r::CLI::Suppressions
         args = [
           'get',
           '--api-key', ENV['SILVER_API_KEY'],
-          '--group-id', 967
+          '--group-id', 889
         ]
         Group.start(args)
       end
