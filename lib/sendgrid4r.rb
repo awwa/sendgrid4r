@@ -32,6 +32,8 @@ require 'sendgrid4r/rest/marketing_campaigns/contacts/recipients'
 require 'sendgrid4r/rest/marketing_campaigns/contacts/reserved_fields'
 require 'sendgrid4r/rest/marketing_campaigns/contacts/segments'
 
+require 'sendgrid4r/rest/alerts'
+
 require 'sendgrid4r/rest/categories'
 
 require 'sendgrid4r/rest/email_activity'
@@ -126,6 +128,7 @@ require 'sendgrid4r/cli/whitelabel/ip'
 require 'sendgrid4r/cli/whitelabel/link'
 require 'sendgrid4r/cli/whitelabel/whitelabel'
 require 'sendgrid4r/cli/category'
+require 'sendgrid4r/cli/alert'
 require 'sendgrid4r/cli/user'
 require 'sendgrid4r/cli/campaign/contact/custom_field'
 require 'sendgrid4r/cli/campaign/contact/list'
