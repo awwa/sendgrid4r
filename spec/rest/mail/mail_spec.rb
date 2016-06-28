@@ -71,7 +71,7 @@ module SendGrid4r::REST
           )
           html = SendGrid4r::Factory::MailFactory.create_content(
             type: 'text/html',
-            value: "<h1>Hello! HTML subkey sectionkey</h1><br />"\
+            value: '<h1>Hello! HTML subkey sectionkey</h1><br />'\
               '<a href="https://www.google.com">Google</a>'
           )
           params = SendGrid4r::Factory::MailFactory.create_params(

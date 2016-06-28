@@ -48,14 +48,12 @@ module SendGrid4r::REST
     end
 
     def get_spam_report(email:, &block)
-      params = { email: email }
-      resp = get(@auth, SpamReports.url(email), params, &block)
+      resp = get(@auth, SpamReports.url(email), &block)
       finish(resp, @raw_resp) { |r| SpamReports.create_spam_reports(r) }
     end
 
     def delete_spam_report(email:, &block)
-      params = { email: email }
-      delete(@auth, SpamReports.url(email), params, &block)
+      delete(@auth, SpamReports.url(email), &block)
     end
   end
 end

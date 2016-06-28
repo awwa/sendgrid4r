@@ -124,7 +124,7 @@ module SendGrid4r::REST::Webhooks
       it '#patch_parse_setting' do
         allow(client).to receive(:execute).and_return(parse_setting)
         actual = client.patch_parse_setting(
-        hostname: '', url: '', spam_check: true, send_raw: true
+          hostname: '', url: '', spam_check: true, send_raw: true
         )
         expect(actual).to be_a(Parse::ParseSetting)
       end

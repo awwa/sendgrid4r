@@ -41,7 +41,7 @@ module SendGrid4r::REST
       def get_parse_settings(limit: nil, offset: nil, &block)
         params = {}
         params[:limit] = limit unless limit.nil?
-        params[:offset] =  offset unless offset.nil?
+        params[:offset] = offset unless offset.nil?
         resp = get(@auth, Parse.url, params, &block)
         finish(resp, @raw_resp) { |r| Parse.create_parse_settings(r) }
       end
