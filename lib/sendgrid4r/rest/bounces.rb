@@ -43,6 +43,7 @@ module SendGrid4r::REST
       delete(@auth, Bounces.url, nil, payload, &block)
     end
 
+    # TODO duplicate email
     def get_bounce(email:, &block)
       params = { email: email }
       resp = get(@auth, Bounces.url(email), params, &block)
