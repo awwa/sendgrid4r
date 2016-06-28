@@ -10,6 +10,9 @@ module SendGrid4r::CLI
       puts SendGrid4r::VERSION
     end
 
+    desc('alert SUBCOMMAND ...ARGS', 'Manage alert settings')
+    subcommand('alert', Alert)
+
     desc('api_key SUBCOMMAND ...ARGS', 'Manage API keys')
     subcommand('api_key', ApiKeys::ApiKey)
 

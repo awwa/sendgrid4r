@@ -8,6 +8,11 @@ module SendGrid4r::CLI
         Dotenv.load
       end
 
+      it '#alert subcommend' do
+        args = ['alert']
+        SG.start(args)
+      end
+
       it '#api_key subcommand' do
         args = ['api_key']
         SG.start(args)
