@@ -62,17 +62,17 @@ module SendGrid4r::REST
           per.send_at = Time.utc(2016)
           # Create Params
           from = SendGrid4r::Factory::MailFactory.create_address(
-            email: ENV['FROM'], name: 'From Name'
+            email: ENV['FROM'], name: 'From 太郎'
           )
           plain = SendGrid4r::Factory::MailFactory.create_content(
             type: 'text/plain',
             value: 'Hello! TEXT 天翔十字鳳 subkey'\
-              'sectionkey\nhttps://www.google.com'
+              'sectionkey\nhttps://abc.abc.abc'
           )
           html = SendGrid4r::Factory::MailFactory.create_content(
             type: 'text/html',
             value: '<h1>Hello! HTML subkey sectionkey</h1><br />'\
-              '<a href="https://www.google.com">Google</a>'
+              '<a href="https://abc.abc.abc">abc</a>'
           )
           params = SendGrid4r::Factory::MailFactory.create_params(
             personalizations: [per], from: from, content: [plain, html],
@@ -108,7 +108,7 @@ module SendGrid4r::REST
           mail_settings.disable_footer
           mail_settings.enable_sandbox_mode
           mail_settings.disable_sandbox_mode
-          mail_settings.enable_spam_check(10, 'http://www.kke.co.jp')
+          mail_settings.enable_spam_check(10, 'http://abc.abc.abc')
           mail_settings.disable_spam_check
           params.mail_settings = mail_settings
           # Create TrackingSettings

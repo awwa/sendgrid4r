@@ -41,7 +41,7 @@ module SendGrid4r::CLI
         p.delete(:api_key)
         p.delete(:user)
         p.delete(:pass)
-        p.delete(:e)
+        p.delete(:envkey)
         # remove empty key and value
         p.delete_if { |_k, v| v.nil? }
       end
