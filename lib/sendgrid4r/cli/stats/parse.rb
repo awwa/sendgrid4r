@@ -5,9 +5,9 @@ module SendGrid4r::CLI
     #
     class Parse < SgThor
       desc 'get', 'Gets statistics for Parse Webhook usage'
-      option :start_date, require: true
-      option :end_date
-      option :aggregated_by
+      option :start_date, banner: SgThor::ISO, require: true
+      option :end_date, banner: SgThor::ISO
+      option :aggregated_by, banner: SgThor::AGG
       def get
         puts @client.get_parse_stats(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e

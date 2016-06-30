@@ -21,6 +21,15 @@ module SendGrid4r::CLI
         puts e.inspect
       end
 
+      desc 'search', 'Search suppressed addresses for a given group'
+      option :group_id, require: true
+      option :recipient_emails, type: :array, require: true
+      def search
+        puts @client.search_suppressed_emails(parameterise(options))
+      rescue RestClient::ExceptionWithResponse => e
+        puts e.inspect
+      end
+
       desc 'remove', 'Remove an email address from the given group'
       option :group_id, require: true
       option :email_address, require: true

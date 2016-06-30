@@ -19,6 +19,7 @@ module SendGrid4r::REST
     include SendGrid4r::REST::Ips::Addresses
     include SendGrid4r::REST::Ips::Warmup
     include SendGrid4r::REST::Ips::Pools
+    include SendGrid4r::REST::Alerts
     include SendGrid4r::REST::Categories
     include SendGrid4r::REST::Stats::Global
     include SendGrid4r::REST::Stats::Category

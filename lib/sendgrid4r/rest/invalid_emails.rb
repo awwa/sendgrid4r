@@ -50,14 +50,12 @@ module SendGrid4r::REST
     end
 
     def get_invalid_email(email:, &block)
-      params = { email: email }
-      resp = get(@auth, InvalidEmails.url(email), params, &block)
+      resp = get(@auth, InvalidEmails.url(email), &block)
       finish(resp, @raw_resp) { |r| InvalidEmails.create_invalid_emails(r) }
     end
 
     def delete_invalid_email(email:, &block)
-      params = { email: email }
-      delete(@auth, InvalidEmails.url(email), params, &block)
+      delete(@auth, InvalidEmails.url(email), &block)
     end
   end
 end

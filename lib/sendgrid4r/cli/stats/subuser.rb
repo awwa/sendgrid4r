@@ -5,9 +5,9 @@ module SendGrid4r::CLI
     #
     class Subuser < SgThor
       desc 'get', 'Gets email statistics for the given subusers'
-      option :start_date, require: true
-      option :end_date
-      option :aggregated_by
+      option :start_date, banner: SgThor::ISO, require: true
+      option :end_date, banner: SgThor::ISO
+      option :aggregated_by, banner: SgThor::AGG
       option :subusers, type: :array, require: true
       def get
         puts @client.get_subusers_stats(parameterise(options))
@@ -19,10 +19,10 @@ module SendGrid4r::CLI
         'sums',
         'Gets the total sums of each email statistic metric for all subusers'
       )
-      option :start_date, require: true
-      option :end_date
+      option :start_date, banner: SgThor::ISO, require: true
+      option :end_date, banner: SgThor::ISO
       option :sort_by_metric
-      option :sort_by_direction
+      option :sort_by_direction, banner: SgThor::DIR
       option :limit, type: :numeric
       option :offset, type: :numeric
       def sums
@@ -35,10 +35,10 @@ module SendGrid4r::CLI
         'list_monthly',
         'Retrieve the monthly email statistics for all subusers'
       )
-      option :date, require: true
+      option :date, banner: SgThor::ISO, require: true
       option :subuser
       option :sort_by_metric
-      option :sort_by_direction
+      option :sort_by_direction, banner: SgThor::DIR
       option :limit, type: :numeric
       option :offset, type: :numeric
       def list_monthly
@@ -52,9 +52,9 @@ module SendGrid4r::CLI
         'Retrieve the monthly email statistics for a single subuser'
       )
       option :subuser_name, require: true
-      option :date, require: true
+      option :date, banner: SgThor::ISO, require: true
       option :sort_by_metric
-      option :sort_by_direction
+      option :sort_by_direction, banner: SgThor::DIR
       option :limit, type: :numeric
       option :offset, type: :numeric
       def get_monthly

@@ -48,14 +48,12 @@ module SendGrid4r::REST
     end
 
     def get_block(email:, &block)
-      params = { email: email }
-      resp = get(@auth, Blocks.url(email), params, &block)
+      resp = get(@auth, Blocks.url(email), &block)
       finish(resp, @raw_resp) { |r| Blocks.create_blocks(r) }
     end
 
     def delete_block(email:, &block)
-      params = { email: email }
-      delete(@auth, Blocks.url(email), params, &block)
+      delete(@auth, Blocks.url(email), &block)
     end
   end
 end

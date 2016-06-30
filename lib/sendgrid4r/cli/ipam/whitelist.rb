@@ -20,7 +20,7 @@ module SendGrid4r::CLI
       end
 
       desc 'delete', 'Delete Whitelisted IPs'
-      option :ids, type: :array
+      option :ids, type: :array, require: true
       def delete
         puts @client.delete_whitelisted_ips(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e

@@ -15,8 +15,13 @@ module SendGrid4r::CLI
       end
 
       desc 'list', 'List supression groups'
+      option :email_address
       def list
-        puts @client.get_groups
+        if options[:email_address].nil?
+          puts @client.get_groups
+        else
+          puts @client.get_groups_by_email(parameterise(options))
+        end
       rescue RestClient::ExceptionWithResponse => e
         puts e.inspect
       end

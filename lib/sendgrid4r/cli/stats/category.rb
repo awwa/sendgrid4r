@@ -5,9 +5,9 @@ module SendGrid4r::CLI
     #
     class Category < SgThor
       desc 'get', 'Gets email statistics for the given categories.'
-      option :start_date, require: true
-      option :end_date
-      option :aggregated_by
+      option :start_date, banner: SgThor::ISO, require: true
+      option :end_date, banner: SgThor::ISO
+      option :aggregated_by, banner: SgThor::AGG
       option :categories, require: true
       def get
         puts @client.get_categories_stats(parameterise(options))
@@ -19,12 +19,12 @@ module SendGrid4r::CLI
         'sums',
         'Gets the total sums of each email statistic metric for all categories'
       )
-      option :start_date, require: true
-      option :end_date
+      option :start_date, banner: SgThor::ISO, require: true
+      option :end_date, banner: SgThor::ISO
       option :sort_by_metric
-      option :sort_by_direction
-      option :limit
-      option :offset
+      option :sort_by_direction, banner: SgThor::DIR
+      option :limit, type: :numeric
+      option :offset, type: :numeric
       def sums
         puts @client.get_categories_stats_sums(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e

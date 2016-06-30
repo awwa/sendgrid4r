@@ -3,15 +3,29 @@ module SendGrid4r::CLI
   # SendGrid Web API v3 SgThor
   #
   class SgThor < Thor
-    class_option :api_key, desc: 'API Key'
-    class_option :user, desc: 'SendGrid username for Basic Auth'
-    class_option :pass, desc: 'SendGrid password for Basic Auth'
+    ISO = 'YYYY-MM-DD'
+    UTS = 'UNIX TIMESTAMP'
+    AGG = '[day|week|month]'
+    DIR = '[desc|asc]'
+    TYP = '[date|text|number]'
+
+    class_option :api_key, aliases: '-k', desc: 'API Key for APIKey Auth'
+    class_option :user, aliases: '-u', desc: 'Username for Basic Auth'
+    class_option :pass, aliases: '-p', desc: 'Password for Basic Auth'
+    class_option(
+      :envkey,
+      aliases: '-e',
+      desc: 'Load API Key from environment variable "SG_API_KEY"',
+      banner: ''
+    )
 
     def initialize(*args)
       super
+      api_key = options[:api_key]
+      api_key = ENV['SG_API_KEY'] if options[:envkey]
       @client = SendGrid4r::Client.new(
         username: options[:user], password: options[:pass],
-        api_key: options[:api_key], raw_response: true
+        api_key: api_key, raw_response: true
       )
     end
 
@@ -22,13 +36,15 @@ module SendGrid4r::CLI
       params = options.each_with_object({}) do |(k, v), memo|
         memo[k.to_s.to_sym] = v
       end
-      # remove auth info
-      params.delete(:api_key)
-      params.delete(:user)
-      params.delete(:pass)
-      # remove empty key and value
-      params.delete_if { |_k, v| v.nil? }
-      params
+      params.tap do |p|
+        # remove auth info
+        p.delete(:api_key)
+        p.delete(:user)
+        p.delete(:pass)
+        p.delete(:envkey)
+        # remove empty key and value
+        p.delete_if { |_k, v| v.nil? }
+      end
     end
   end
 end

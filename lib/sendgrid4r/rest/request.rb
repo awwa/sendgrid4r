@@ -61,14 +61,18 @@ module SendGrid4r::REST
     end
 
     def process_url_params(endpoint, params)
-      if params.nil? || params.empty?
-        endpoint
-      else
-        query_string = params.collect do |k, v|
+      return endpoint if params.nil? || params.empty?
+      if params.is_a?(Array)
+        ary_params = params
+      elsif params.is_a?(Hash)
+        ary_params = [params]
+      end
+      query_string = ary_params.collect do |hash|
+        hash.collect do |k, v|
           "#{k}=#{CGI.escape(process_array_params(v))}"
         end.join('&')
-        endpoint + "?#{query_string}"
-      end
+      end.join('&')
+      "#{endpoint}?#{query_string}"
     end
 
     def process_array_params(v)

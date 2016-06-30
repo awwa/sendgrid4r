@@ -5,8 +5,8 @@ module SendGrid4r::CLI
     #
     class GlobalUnsubscribe < SgThor
       desc 'list', 'List global unsubscribes'
-      option :start_time, type: :numeric
-      option :end_time, type: :numeric
+      option :start_time, banner: SgThor::UTS, type: :numeric
+      option :end_time, banner: SgThor::UTS, type: :numeric
       option :limit, type: :numeric
       option :offset, type: :numeric
       def list

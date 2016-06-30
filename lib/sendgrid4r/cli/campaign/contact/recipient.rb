@@ -34,8 +34,8 @@ module SendGrid4r::CLI
         end
 
         desc 'list', 'List recipients'
-        option :page
-        option :page_size
+        option :page, type: :numeric
+        option :page_size, type: :numeric
         def list
           puts @client.get_recipients(parameterise(options))
         rescue RestClient::ExceptionWithResponse => e

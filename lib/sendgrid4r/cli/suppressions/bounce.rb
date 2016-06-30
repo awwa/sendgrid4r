@@ -5,8 +5,8 @@ module SendGrid4r::CLI
     #
     class Bounce < SgThor
       desc 'list', 'List bounces'
-      option :start_time, type: :numeric
-      option :end_time, type: :numeric
+      option :start_time, banner: SgThor::UTS, type: :numeric
+      option :end_time, banner: SgThor::UTS, type: :numeric
       def list
         puts @client.get_bounces(parameterise(options))
       rescue RestClient::ExceptionWithResponse => e

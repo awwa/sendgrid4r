@@ -29,6 +29,13 @@ describe SendGrid4r::Client do
 
     describe 'methods' do
       it 'available' do
+        # Alerts
+        expect(@client.respond_to?('get_alerts')).to eq(true)
+        expect(@client.respond_to?('post_alert')).to eq(true)
+        expect(@client.respond_to?('get_alert')).to eq(true)
+        expect(@client.respond_to?('delete_alert')).to eq(true)
+        expect(@client.respond_to?('patch_alert')).to eq(true)
+
         # Subusers
         expect(@client.respond_to?('get_subusers')).to eq(true)
         expect(@client.respond_to?('post_subuser')).to eq(true)
@@ -55,8 +62,10 @@ describe SendGrid4r::Client do
         # suppressions
         expect(@client.respond_to?('post_suppressed_emails')).to eq(true)
         expect(@client.respond_to?('get_suppressions')).to eq(true)
+        expect(@client.respond_to?('get_groups_by_email')).to eq(true)
         expect(@client.respond_to?('get_suppressed_emails')).to eq(true)
         expect(@client.respond_to?('delete_suppressed_email')).to eq(true)
+        expect(@client.respond_to?('search_suppressed_emails')).to eq(true)
         # global unsubscribes
         expect(@client.respond_to?('get_global_unsubscribes')).to eq(true)
         expect(@client.respond_to?('post_global_unsubscribes')).to eq(true)
@@ -139,6 +148,13 @@ describe SendGrid4r::Client do
         expect(@client.respond_to?('patch_settings_open')).to eq(true)
         expect(@client.respond_to?('get_settings_subscription')).to eq(true)
         expect(@client.respond_to?('patch_settings_subscription')).to eq(true)
+
+        # Parse Webhooks
+        expect(@client.respond_to?('get_parse_settings')).to eq(true)
+        expect(@client.respond_to?('post_parse_setting')).to eq(true)
+        expect(@client.respond_to?('get_parse_setting')).to eq(true)
+        expect(@client.respond_to?('patch_parse_setting')).to eq(true)
+        expect(@client.respond_to?('delete_parse_setting')).to eq(true)
 
         # Template Engine
         # templates
@@ -324,7 +340,7 @@ describe SendGrid4r::Client do
 
     describe 'VERSION' do
       it 'returns VERSION value' do
-        expect(SendGrid4r::VERSION).to eq('1.12.0')
+        expect(SendGrid4r::VERSION).to eq('1.13.0')
       end
     end
   end

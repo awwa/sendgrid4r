@@ -24,11 +24,11 @@ module SendGrid4r::REST
           )
           plain = SendGrid4r::Factory::MailFactory.create_content(
             type: 'text/plain',
-            value: 'Hello! TEXT'
+            value: 'Hello! TEXT　天翔十字鳳'
           )
           params = SendGrid4r::Factory::MailFactory.create_params(
             personalizations: [per], from: from, content: [plain],
-            subject: 'Hello v3 Mail'
+            subject: 'Hello v3 Mail　天翔十字鳳'
           )
           begin
             @client.send(params: params)
@@ -56,27 +56,27 @@ module SendGrid4r::REST
           per.cc = [cc]
           per.headers = { 'X-CUSTOM' => 'X-VALUE' }
           per.substitutions = {
-            'subkey' => 'subvalue', 'sectionkey' => 'sectionkey'
+            'subkey' => 'subvalueサブ値', 'sectionkey' => 'sectionkey'
           }
           per.custom_args = { 'CUSTOM' => 'value' }
           per.send_at = Time.utc(2016)
           # Create Params
           from = SendGrid4r::Factory::MailFactory.create_address(
-            email: ENV['FROM'], name: 'From Name'
+            email: ENV['FROM'], name: 'From 太郎'
           )
           plain = SendGrid4r::Factory::MailFactory.create_content(
             type: 'text/plain',
-            value: 'Hello! TEXT subkey'\
-              'sectionkey\nhttps://www.google.com'
+            value: 'Hello! TEXT 天翔十字鳳 subkey'\
+              'sectionkey\nhttps://abc.abc.abc'
           )
           html = SendGrid4r::Factory::MailFactory.create_content(
             type: 'text/html',
             value: '<h1>Hello! HTML subkey sectionkey</h1><br />'\
-              '<a href="https://www.google.com">Google</a>'
+              '<a href="https://abc.abc.abc">abc</a>'
           )
           params = SendGrid4r::Factory::MailFactory.create_params(
             personalizations: [per], from: from, content: [plain, html],
-            subject: 'Hello v3 Mail'
+            subject: 'Hello v3 Mail　天翔十字鳳 '
           )
           reply_to = SendGrid4r::Factory::MailFactory.create_address(
             email: ENV['MAIL']
@@ -91,7 +91,7 @@ module SendGrid4r::REST
           )
           params.attachments = [attachment0, attachment1]
           params.template_id = '8481d009-d1a6-4e1b-adae-22d2426da9fe'
-          params.sections = { 'sectionkey' => 'sectionvalue' }
+          params.sections = { 'sectionkey' => 'sectionvalueセクション値' }
           params.headers = { 'X-GLOBAL' => 'GLOBAL_VALUE' }
           params.categories = %w(CAT1 CAT2)
           params.custom_args = { 'CUSTOM1' => 'CUSTOM_VALUE1' }
@@ -108,7 +108,7 @@ module SendGrid4r::REST
           mail_settings.disable_footer
           mail_settings.enable_sandbox_mode
           mail_settings.disable_sandbox_mode
-          mail_settings.enable_spam_check(10, 'http://www.kke.co.jp')
+          mail_settings.enable_spam_check(10, 'http://abc.abc.abc')
           mail_settings.disable_spam_check
           params.mail_settings = mail_settings
           # Create TrackingSettings

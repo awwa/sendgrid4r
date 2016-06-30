@@ -44,14 +44,12 @@ module SendGrid4r::REST
     end
 
     def get_bounce(email:, &block)
-      params = { email: email }
-      resp = get(@auth, Bounces.url(email), params, &block)
+      resp = get(@auth, Bounces.url(email), &block)
       finish(resp, @raw_resp) { |r| Bounces.create_bounces(r) }
     end
 
     def delete_bounce(email:, &block)
-      params = { email: email }
-      delete(@auth, Bounces.url(email), params, &block)
+      delete(@auth, Bounces.url(email), &block)
     end
   end
 end

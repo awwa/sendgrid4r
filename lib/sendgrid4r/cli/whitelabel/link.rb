@@ -5,8 +5,8 @@ module SendGrid4r::CLI
     #
     class Link < SgThor
       desc 'list', 'List all Link whitelabels'
-      option :limit
-      option :offset
+      option :limit, type: :numeric
+      option :offset, type: :numeric
       option :exclude_subusers
       option :username
       option :domain
