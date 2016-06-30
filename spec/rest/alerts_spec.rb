@@ -30,11 +30,19 @@ module SendGrid4r::REST
           alerts.each { |alert| expect(alert).to be_a(Alerts::Alert) }
         end
 
-        it '#post_alert' do
+        it '#post_alert :usage_limit' do
           alert = @client.post_alert(
             type: :usage_limit,
             email_to: ENV['MAIL'],
-            percentage: 66,
+            percentage: 66
+          )
+          expect(alert).to be_a(Alerts::Alert)
+        end
+
+        it '#post_alert :stats_notification' do
+          alert = @client.post_alert(
+            type: :stats_notification,
+            email_to: ENV['MAIL'],
             frequency: :daily
           )
           expect(alert).to be_a(Alerts::Alert)
@@ -52,11 +60,12 @@ module SendGrid4r::REST
         end
 
         it '#patch_alert' do
-          @client.patch_alert(
+          alert = @client.patch_alert(
             alert_id: @alert_stats.id,
             frequency: :weekly,
             email_to: ENV['MAIL']
           )
+          expect(alert).to be_a(Alerts::Alert)
         end
       end
     end

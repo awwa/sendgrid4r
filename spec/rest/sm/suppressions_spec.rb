@@ -57,11 +57,12 @@ module SendGrid4r::REST::Sm
           expect(emails[0]).to eq(@email1)
         end
 
-        it '#get_suppressions with email' do
-          groups = @client.get_suppressions(email_address: @email1)
+        it '#get_groups_by_email' do
+          groups = @client.get_groups_by_email(email_address: @email1)
           expect(groups.suppressions).to be_a(Array)
           groups.suppressions.each do |group|
             next unless group.name == @group_name
+            expect(group.id).to eq(@group.id)
             expect(group.name).to eq(@group_name)
             expect(group.description).to eq(@group_desc)
             expect(group.suppressed).to eq(true)
@@ -69,7 +70,7 @@ module SendGrid4r::REST::Sm
           end
         end
 
-        it '#get_suppressions without email' do
+        it '#get_suppressions' do
           suppressions = @client.get_suppressions
           expect(suppressions).to be_a(Array)
           suppressions.each do |suppression|
@@ -153,6 +154,29 @@ module SendGrid4r::REST::Sm
         '}'
       end
 
+      let(:suppressions) do
+        '['\
+          '{'\
+            '"email":"test@example.com",'\
+            '"group_id": 1,'\
+            '"group_name": "Weekly News",'\
+            '"created_at": 1410986704'\
+          '},'\
+          '{'\
+            '"email":"test1@example.com",'\
+            '"group_id": 2,'\
+            '"group_name": "Daily News",'\
+            '"created_at": 1411493671'\
+          '},'\
+          '{'\
+            '"email":"test2@example.com",'\
+            '"group_id": 2,'\
+            '"group_name": "Daily News",'\
+            '"created_at": 1411493671'\
+          '}'\
+        ']'
+      end
+
       let(:suppression) do
         '{'\
           '"email":"test@example.com",'\
@@ -184,12 +208,21 @@ module SendGrid4r::REST::Sm
         expect(actual).to be_a(Array)
       end
 
-      it '#get_suppressions' do
+      it '#get_groups_by_email' do
         allow(client).to receive(:execute).and_return(groups)
-        actual = client.get_suppressions(email_address: '')
+        actual = client.get_groups_by_email(email_address: '')
         expect(actual.suppressions).to be_a(Array)
         actual.suppressions.each do |group|
           expect(group).to be_a(Suppressions::Group)
+        end
+      end
+
+      it '#get_suppressions' do
+        allow(client).to receive(:execute).and_return(suppressions)
+        actual = client.get_suppressions
+        expect(actual).to be_a(Array)
+        actual.each do |group|
+          expect(group).to be_a(Suppressions::Suppression)
         end
       end
 

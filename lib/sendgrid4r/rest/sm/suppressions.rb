@@ -42,7 +42,7 @@ module SendGrid4r::REST
         :email, :group_id, :group_name, :created_at
       )
 
-      def self.suppressions_url(email)
+      def self.suppressions_url(email = nil)
         url = "#{BASE_URL}/asm/suppressions"
         url = "#{url}/#{email}" unless email.nil?
         url
@@ -59,6 +59,24 @@ module SendGrid4r::REST
         )
       end
 
+      def get_suppressions(&block)
+        endpoint = Sm::Suppressions.suppressions_url
+        resp = get(@auth, endpoint, &block)
+        finish(resp, @raw_resp) do |r|
+          r.map do |suppression|
+            Sm::Suppressions.create_suppression(suppression)
+          end
+        end
+      end
+
+      def get_groups_by_email(email_address:, &block)
+        endpoint = Sm::Suppressions.suppressions_url(email_address)
+        resp = get(@auth, endpoint, &block)
+        finish(resp, @raw_resp) do |r|
+          Sm::Suppressions.create_groups(r)
+        end
+      end
+
       def post_suppressed_emails(group_id:, recipient_emails:, &block)
         resp = post(
           @auth,
@@ -69,34 +87,10 @@ module SendGrid4r::REST
         finish(resp, @raw_resp) { |r| Sm.create_recipient_emails(r) }
       end
 
-      def search_suppressed_emails(group_id:, recipient_emails:, &block)
-        resp = post(
-          @auth,
-          Sm::Suppressions.url(group_id, :search),
-          recipient_emails: recipient_emails,
-          &block
-        )
-        finish(resp, @raw_resp) { |r| r }
-      end
-
       def get_suppressed_emails(group_id:, &block)
         endpoint = Sm::Suppressions.url(group_id)
         resp = get(@auth, endpoint, &block)
         finish(resp, @raw_resp) { |r| r }
-      end
-
-      def get_suppressions(email_address: nil, &block)
-        endpoint = Sm::Suppressions.suppressions_url(email_address)
-        resp = get(@auth, endpoint, &block)
-        finish(resp, @raw_resp) do |r|
-          if email_address.nil?
-            r.map do |suppression|
-              Sm::Suppressions.create_suppression(suppression)
-            end
-          else
-            Sm::Suppressions.create_groups(r)
-          end
-        end
       end
 
       def delete_suppressed_email(group_id:, email_address:, &block)
@@ -105,6 +99,16 @@ module SendGrid4r::REST
           Sm::Suppressions.url(group_id, email_address),
           &block
         )
+      end
+
+      def search_suppressed_emails(group_id:, recipient_emails:, &block)
+        resp = post(
+          @auth,
+          Sm::Suppressions.url(group_id, :search),
+          recipient_emails: recipient_emails,
+          &block
+        )
+        finish(resp, @raw_resp) { |r| r }
       end
     end
   end
