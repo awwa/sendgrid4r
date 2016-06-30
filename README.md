@@ -1,7 +1,8 @@
 # Sendgrid4r
 
 This gem allows you to quickly and easily access to SendGrid Web API v3 for Ruby.
-See [api reference](https://sendgrid.com/docs/API_Reference/Web_API_v3/index.html) for more detail
+See [api reference](https://sendgrid.com/docs/API_Reference/Web_API_v3/index.html) for more details.
+Also this gem provides `sg` command. `sg` is the command line interface to access SendGrid APIs. See [Command line interface Usage](Cli) for more details.
 
 [![Build Status](https://travis-ci.org/awwa/sendgrid4r.svg?branch=master)](https://travis-ci.org/awwa/sendgrid4r)
 [![Gem Version](https://badge.fury.io/rb/sendgrid4r.svg)](https://badge.fury.io/rb/sendgrid4r)
