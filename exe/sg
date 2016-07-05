@@ -1,5 +1,0 @@
-#!/usr/bin/env ruby
-
-require 'sendgrid4r'
-
-SendGrid4r::CLI::SG.start(ARGV)
