@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.add_dependency('rest-client', '>=1.8.0', '<1.9.0')
+  spec.add_dependency('rest-client', '>=1.8.0', '<3.0')
   spec.add_development_dependency('rubocop', '>=0.29.0', '<0.34.3')
   spec.add_development_dependency('bundler', '>=1.6.0', '<1.13.0')
   spec.add_development_dependency('rspec', '3.3.0')
