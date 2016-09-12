@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency('rest-client', '>=1.8.0', '<3.0')
   spec.add_development_dependency('rubocop', '>=0.29.0', '<0.34.3')
-  spec.add_development_dependency('bundler', '>=1.6.0', '<1.13.0')
-  spec.add_development_dependency('rspec', '3.3.0')
-  spec.add_development_dependency('dotenv', '=0.11.0', '<=2.0.2')
+  spec.add_development_dependency('bundler', '>=1.6.0', '<2.0')
+  spec.add_development_dependency('rspec', '>=3.3.0', '<3.6')
+  spec.add_development_dependency('dotenv', '>=0.11.0', '<=2.1.1')
 end

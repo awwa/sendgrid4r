@@ -1,3 +1,7 @@
+AllCops:
+  Exclude:
+    - 'bin/**/*'
+
 # Let prefix of method name set_ and get_
 AccessorMethodName:
   Enabled: false
