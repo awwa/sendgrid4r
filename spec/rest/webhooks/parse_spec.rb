@@ -7,8 +7,8 @@ module SendGrid4r::REST::Webhooks
       before do
         Dotenv.load
         @client = SendGrid4r::Client.new(api_key: ENV['SILVER_API_KEY'])
-        @hostname1 = 'host1.abc.abc'
-        @hostname2 = 'host2.abc.abc'
+        @hostname1 = ENV['PARSE_HOSTNAME1']
+        @hostname2 = ENV['PARSE_HOSTNAME2']
         # clean up test env
         settings = @client.get_parse_settings
         settings.result.each do |setting|

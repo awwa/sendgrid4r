@@ -105,7 +105,7 @@ module SendGrid4r::REST
       params = ''
       usernames.each { |username| params += "usernames=#{username}&" }
       endpoint = "#{Subusers.url}/reputations?#{params}"
-      resp = get(@auth, endpoint, usernames, &block)
+      resp = get(@auth, endpoint, nil, &block)
       finish(resp, @raw_resp) { |r| Subusers.create_subusers(r) }
     end
 
