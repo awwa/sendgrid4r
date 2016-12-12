@@ -27,7 +27,7 @@ module SendGrid4r::REST
 
     Activity = Struct.new(
       :email, :event, :created, :category, :smtp_id, :asm_group_id,
-      :msg_id, :ip, :url, :reason
+      :msg_id, :ip, :url, :reason, :unique_arguments
     )
 
     def self.url
@@ -51,7 +51,8 @@ module SendGrid4r::REST
         resp['msg_id'],
         resp['ip'],
         resp['url'],
-        resp['reason']
+        resp['reason'],
+        resp['unique_arguments']
       )
     end
 
